@@ -35,8 +35,11 @@ class ScreenScrapeController extends Controller {
 
 		$ss = new Scraper();
 
-
-		var_dump($ss->get_players());
+		//var_dump($ss->get_events());
+		var_dump($ss->get_rankings());
+		//var_dump($ss->get_player(8220));
+		//var_dump($ss->get_participants(13654));
+		//var_dump($ss->get_imdb());
 		//return view('admin/scraper');
 	}
 }
