@@ -12,14 +12,17 @@ class CreateTournamentsTable extends Migration {
 	 */
 	public function up()
 	{
-		$table->increments('tournament_id');
-		$table->integer('location_id');	
-		$table->date('start_date');	
-		$table->date('end_date');
-		$table->date('registration_date');	
-		$table->string('url');	
-		$table->integer('max_players');	
-		$table->timestamps();
+		Schema::create('password_resets', function(Blueprint $table)
+		{
+			$table->increments('tournament_id');
+			$table->integer('location_id');	
+			$table->date('start_date');	
+			$table->date('end_date');
+			$table->date('registration_date');	
+			$table->string('url');	
+			$table->integer('max_players');	
+			$table->timestamps();
+		});
 	}
 
 	/**

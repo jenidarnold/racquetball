@@ -12,11 +12,14 @@ class CreateRankingTable extends Migration {
 	 */
 	public function up()
 	{
-		$table->increments('ranking_id');
-		$table->date('ranking_date');	
-		$table->integer('player_id');	
-		$table->integer('ranking');	
-		$table->timestamps();
+		Schema::create('password_resets', function(Blueprint $table)
+		{
+			$table->increments('ranking_id');
+			$table->date('ranking_date');	
+			$table->integer('player_id');	
+			$table->integer('ranking');	
+			$table->timestamps();
+		});
 	}
 
 	/**
