@@ -5,15 +5,17 @@ use App\Scraper;
 class ScreenScraper {
 
 	/**
-	 * Get ScreenScrapes
+	 * Insert new Rankings
 	 *
-	 * @param  none
-	 * @return array Players
+	 * @param  array  $data
+	 * @return User
 	 */
-	public function get_players()
+	public function create_ranking(array $data)
 	{
-		$ss = new Scraper;
-
-		return $ss->get_players();
+		return Ranking::create([
+			'ranking_date' => $data['ranking_date'],
+			'player_id' => $data['player_id'],
+			'ranking' => ($data['ranking']),
+		]);
 	}
 }

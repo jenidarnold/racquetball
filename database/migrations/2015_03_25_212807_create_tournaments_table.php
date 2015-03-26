@@ -12,7 +12,7 @@ class CreateTournamentsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('password_resets', function(Blueprint $table)
+		Schema::create('tournaments', function(Blueprint $table)
 		{
 			$table->increments('tournament_id');
 			$table->integer('location_id');	
