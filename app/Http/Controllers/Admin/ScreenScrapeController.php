@@ -35,11 +35,13 @@ class ScreenScrapeController extends Controller {
 
 		$ss = new Scraper();
 
-		//var_dump($ss->get_events());
-		var_dump($ss->get_rankings());
-		//var_dump($ss->get_player(8220));
-		//var_dump($ss->get_participants(13654));
-		//var_dump($ss->get_imdb());
-		//return view('admin/scraper');
+		//$events = $ss->get_events();
+		$rankings = $ss->get_rankings();
+		//$player = $ss->get_player(8220);
+		//$participants = $ss->get_participants(13654);
+
+		return view('pages/rankings')->with('rankings', $rankings);
+		//return View::make('pages/rankings')->with('rankings', $rankings);
+		//return Redirect::route('pages/rankings')->with('rankings', $rankings);
 	}
 }

@@ -8,7 +8,4 @@
 				<div class="quote">{{ Inspiring::quote() }}</div>
 			</div>
 		</div>
-	</body>
-</html>
-
 @stop

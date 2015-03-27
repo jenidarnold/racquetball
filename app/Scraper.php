@@ -3,6 +3,7 @@
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Gidlov\Copycat\Copycat;
+use App\Ranking;
 
 class Scraper {
  
@@ -25,17 +26,17 @@ class Scraper {
 	 		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
 	 	));
 
+	 					
 	 	$cc->matchAll(
 	 				array(
 	 					'ranking_date' => '/Rankings last updated:(?:.*?)>(.*?)</ms',
-	 					'player_id' => '/&UID=(.*?)">/ms',
+	 					'player_id' => '/&UID=(.*?)">/ms',	 					
 	 				))
 	 		->URLS('http://www.usaracquetballevents.com/rankings.asp');	 		
 
 	 	$result = $cc->get();
 
 	 	return $result;
-	 	//var_dump($result[0]["player"]);
 
  	}
 
@@ -93,6 +94,12 @@ class Scraper {
 
 	 	$result = $cc->get();
 
+
+	 	//Save rankings to database
+	 	foreach ($result as $rankings) {
+	 		create_ranking(rankings);
+	 	}
+	 	
 	 	return $result;
 
  	}
@@ -117,6 +124,17 @@ class Scraper {
 	 	return $result;
  	}
 
+
+	public function create_ranking(array $data)
+	{
+
+			return Ranking::create([
+				'ranking_date' => '1/1/2015', // $data['ranking_date'],
+				'player_id' => '1111', //$data['player_id'],
+				'ranking' =>  '1', //$data['ranking'],
+			]);
+
+	}
 }
 
 
