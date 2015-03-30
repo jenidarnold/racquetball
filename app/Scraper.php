@@ -26,45 +26,58 @@ class Scraper {
 	 		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
 	 	));
 
-	 					
+	 				
+	 	$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp';
+
 	 	$cc->matchAll(
 	 				array(
 	 					'ranking_date' => '/Rankings last updated:(?:.*?)>(.*?)</ms',
-	 					'player_id' => '/&UID=(.*?)">/ms',	 					
+	 					'player_id' => '/&UID=(.*?)">/ms',		 									
 	 				))
-	 		->URLS('http://www.usaracquetballevents.com/rankings.asp');	 		
+	 		->URLS($url_rankings);	 		
 
 	 	$result = $cc->get();
 
 	 	$ss = New ScreenScraper;
 
+		$player_rankings = array();
 	 	$i = 0;
-	 	
+	 	$rdate = date('1/1/0000');
+	 	$prev_pid = -1;
+	 	$curr_pid = 0;
 
+	 	//Save Rankings to database
 	 	foreach ($result as $rankings) {
 	 		foreach ($rankings as $players) {
 	 			foreach ($players as $player) {
 	 				foreach (explode(" ", $player) as $pid) {
 	 				
 		 				if ($i == 0) {
-							$rdate =  $player;
+							$rdate =  date("Y-m-d H:i:s", strtotime($pid));
+							$i = $i + 1;
 						}
 						else {
-					 		$rank = array(
-								'ranking_date' => $rdate,
-								'player_id' => $pid,
-								'ranking' =>  $i,
-							);
-							//var_dump($rank);
-					 		$ss->create_ranking($rank);
-					 		$i = $i + 1;
-					 	}
-					 	$i = $i + 1;
+							$curr_pid = $pid;
+					 		
+							if ($prev_pid != $curr_pid) {
+								$rank = array(
+									'ranking_date' => $rdate,
+									'player_id' => $curr_pid,
+									'ranking' =>  $i,
+								);
+								//Save to database
+								$ss->create_ranking($rank);
+								array_push($player_rankings, $rank);
+								$i = $i + 1;
+							}
+
+					 	}					 	
+					 	$prev_pid = $curr_pid;
 				 	}
 				}
 			}
 	 	}
-	 	return $result;
+	 	return $player_rankings;
 
  	}
 

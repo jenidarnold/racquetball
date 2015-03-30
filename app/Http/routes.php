@@ -14,7 +14,6 @@
 Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
-
 Route::get('admin/scraper', 'Admin\ScreenScrapeController@index');
 
 Route::controllers([
@@ -22,3 +21,18 @@ Route::controllers([
 	'password' => 'Auth\PasswordController',
 	'scraper' => 'Admin\ScreenScrapeController',
 ]);
+
+Route::resource('rankings', 'RankingsController');
+Route::resource('players', 'PlayersController');
+Route::resource('tournaments', 'TournamentsController');
+
+Route::bind('players', function($value, $route){
+	return App\Player::whereSlug($value)->frirst();
+});
+
+Route::bind('tournaments', function($value, $route){
+	return App\Tournamenrt::whereSlug($value)->frirst();
+});
+
+
+
