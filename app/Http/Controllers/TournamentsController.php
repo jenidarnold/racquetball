@@ -14,7 +14,8 @@ class TournamentsController extends Controller {
 	 */
 	public function index()
 	{
-		//
+		$tournaments = Ranking::all();
+		return view('pages/tournaments', compact('tournaments'));
 	}
 
 	/**

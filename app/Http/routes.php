@@ -14,7 +14,10 @@
 Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
-Route::get('admin/scraper', 'Admin\ScreenScrapeController@index');
+Route::get('admin/scraper', 'Admin\ScreenScrapeController@scraper');
+Route::get('admin/rankings', 'Admin\ScreenScrapeController@rankings');
+Route::get('admin/tournaments', 'Admin\ScreenScrapeController@tournaments');
+Route::get('admin/players', 'Admin\ScreenScrapeController@players');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

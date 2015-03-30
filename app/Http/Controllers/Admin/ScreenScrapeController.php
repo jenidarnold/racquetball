@@ -24,6 +24,7 @@ class ScreenScrapeController extends Controller {
 		
 	}
 
+
 	/**
 	 * Show the application welcome screen to the user.
 	 *
@@ -32,16 +33,52 @@ class ScreenScrapeController extends Controller {
 	public function index()
 
 	{	
+		return view('admin.home');
+	}
+
+	/**
+	 * Show the application welcome screen to the user.
+	 *
+	 * @return Response
+	 */
+	public function scraper()
+
+	{	
+		return view('admin.scraper');
+	}
+
+		/**
+	 * Show the application welcome screen to the user.
+	 *
+	 * @return Response
+	 */
+	public function rankings()
+
+	{	
 
 		$ss = new Scraper();
 
-		//$events = $ss->get_events();
 		$rankings = $ss->get_rankings();
-		//$player = $ss->get_player(8220);
-		//$participants = $ss->get_participants(13654);
 
-		return view('pages/rankings')->with('rankings', $rankings);
-		//return View::make('pages/rankings')->with('rankings', $rankings);
-		//return Redirect::route('pages/rankings')->with('rankings', $rankings);
+		return view('pages/rankings'); //->with('rankings', $rankings);
+		//return Redirect::route('rankings'); //->with('rankings', $rankings);
+	}
+
+	/**
+	 * Show the application welcome screen to the user.
+	 *
+	 * @return Response
+	 */
+	public function tournaments()
+
+	{	
+
+		$ss = new Scraper();
+
+		$tournaments = $ss->get_tournaments();
+
+		var_dump($tournaments);
+		return view('pages/tournaments');
+		//return Redirect::route('tournaments');
 	}
 }

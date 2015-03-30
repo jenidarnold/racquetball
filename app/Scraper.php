@@ -137,7 +137,7 @@ class Scraper {
 
  	}
 
- 	public function get_events() 
+ 	public function get_tournaments() 
  	{
 
 	 	$cc = new CopyCat;
@@ -149,7 +149,12 @@ class Scraper {
 	 	));
 
 	 	$cc->matchAll(array(
-	 		'event' => '/TID=(.*?)/ms',))
+	 		'tournament_id' => '/TID=(.*?)">/ms',
+	 		'name' => '/TID=(?:.*?)">(.*?)</ms',
+	 		'location' => '/Location:<\/span>(.*?)</ms',
+	 		'start_date' => '/Date:<\/span>(.*?)-/ms',
+	 		'end_date' => '/Date:<\/span>(?:.*?)-(.*?)</ms',
+	 		))
 	 		->URLS('http://www.usaracquetballevents.com/Texas/future.asp');	 		
 
 	 	$result = $cc->get();
