@@ -2,14 +2,15 @@
 
 use App\Scraper;
 use App\Ranking;
+use App\Tournament;
 
 class ScreenScraper {
 
 	/**
-	 * Insert new Rankings
+	 * Insert new Ranking
 	 *
 	 * @param  array  $data
-	 * @return User
+	 * @return Ranking
 	 */
 
 	public function create_ranking(array $data)
@@ -22,4 +23,25 @@ class ScreenScraper {
 			]);
 
 	}
+
+	/**
+	 * Insert new Tournament
+	 *
+	 * @param  array  $data
+	 * @return Tournament
+	 */
+
+	public function create_tournament(array $data)
+	{
+
+			return Tournament::create([
+				'tournament_id' => $data['tournament_id'],				
+				'name' => $data['name'],
+				'location' =>  $data['location'],
+				'start_date' => $data['start_date'],
+				'end_date' => $data['end_date'],
+			]);
+
+	}
+
 }

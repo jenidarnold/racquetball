@@ -149,8 +149,8 @@ class Scraper {
 	 	));
 
 	 	$cc->matchAll(array(
-	 		'tournament_id' => '/TID=(.*?)">/ms',
-	 		'name' => '/TID=(?:.*?)">(.*?)</ms',
+	 		'tournament_id' => '/<h2>(?:.*?)TID=(.*?)">/ms',
+	 		'name' => '/<h2>(?:.*?)TID=(?:.*?)">(.*?)</ms',
 	 		'location' => '/Location:<\/span>(.*?)</ms',
 	 		'start_date' => '/Date:<\/span>(.*?)-/ms',
 	 		'end_date' => '/Date:<\/span>(?:.*?)-(.*?)</ms',
@@ -159,7 +159,36 @@ class Scraper {
 
 	 	$result = $cc->get();
 
-	 	return $result;
+	 	$ss = New ScreenScraper;
+
+		$tournaments = array();
+	 	$i = 0;
+	 
+	 	//Save Rankings to database
+	 	foreach ($result as $tourneys) {
+	 		//var_dump($tourneys["tournament_id"]);
+        
+            $tid = $tourneys["tournament_id"];
+            $tname = $tourneys["name"];
+
+			//var_dump($tname[0]);
+        
+			$tourney = array(
+				'tournament_id' => $tid,
+				'name' => $tname,
+				//'location' => $t[2],
+				//'start_date' => $t[3],
+				//'end_date' => $t[4],
+			);
+
+			//Save to database
+			//$ss->create_tournament($tourney);
+			array_push($tournaments, $tourney);	
+				
+		 }
+
+	 	var_dump($tournaments);
+	 	return $tournaments;
  	}
 
 }
