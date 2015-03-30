@@ -3,7 +3,7 @@
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Gidlov\Copycat\Copycat;
-use App\Ranking;
+use App\Services\ScreenScraper;
 
 class Scraper {
  
@@ -36,6 +36,34 @@ class Scraper {
 
 	 	$result = $cc->get();
 
+	 	$ss = New ScreenScraper;
+
+	 	$i = 0;
+	 	
+
+	 	foreach ($result as $rankings) {
+	 		foreach ($rankings as $players) {
+	 			foreach ($players as $player) {
+	 				foreach (explode(" ", $player) as $pid) {
+	 				
+		 				if ($i == 0) {
+							$rdate =  $player;
+						}
+						else {
+					 		$rank = array(
+								'ranking_date' => $rdate,
+								'player_id' => $pid,
+								'ranking' =>  $i,
+							);
+							//var_dump($rank);
+					 		$ss->create_ranking($rank);
+					 		$i = $i + 1;
+					 	}
+					 	$i = $i + 1;
+				 	}
+				}
+			}
+	 	}
 	 	return $result;
 
  	}
@@ -64,9 +92,7 @@ class Scraper {
 	 	$result = $cc->get();
 
 	 	return $result;
-	 	//var_dump($result[0]["player"]);
-
- 	}
+	}
 
  	/*
  	 * Param: tid = tournament id
@@ -93,12 +119,6 @@ class Scraper {
 	 		->URLS('http://www.r2sports.com/tourney/home.asp?TID=13654');	 		
 
 	 	$result = $cc->get();
-
-
-	 	//Save rankings to database
-	 	foreach ($result as $rankings) {
-	 		create_ranking(rankings);
-	 	}
 	 	
 	 	return $result;
 
@@ -124,17 +144,6 @@ class Scraper {
 	 	return $result;
  	}
 
-
-	public function create_ranking(array $data)
-	{
-
-			return Ranking::create([
-				'ranking_date' => '1/1/2015', // $data['ranking_date'],
-				'player_id' => '1111', //$data['player_id'],
-				'ranking' =>  '1', //$data['ranking'],
-			]);
-
-	}
 }
 
 
