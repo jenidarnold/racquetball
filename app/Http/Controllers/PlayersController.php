@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Player;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +15,8 @@ class PlayersController extends Controller {
 	 */
 	public function index()
 	{
-		//
+			$players = Player::all();
+		return view('pages/players', compact('players'));
 	}
 
 	/**

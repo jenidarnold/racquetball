@@ -35,12 +35,19 @@
 						</div>
 					</form>
 
-					<form class="form-horizontal" role="form" method="GET" action="{{ url('/admin/players') }}">
+					<form class="form-horizontal" role="form" method="GET" action="{{ url('/admin/participants') }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
-								<button type="submit" class="btn btn-primary">Download Players</button>
-							</div>
+								<div class="form-group">
+									<label for="ddlTournaments">Tournament:</label>
+									<select class="form-control" id="ddlTournaments">
+										<option value="13654">2015 Battle at the Alamo Regional Tournament</option>
+										<option value="13556">2015 Maverick May Racquetball Shootout</option>
+									</select>
+									<button type="submit" class="btn btn-primary">Download Participants</button>
+								</div>
+							</div>													
 						</div>
 					</form>
 				</div>

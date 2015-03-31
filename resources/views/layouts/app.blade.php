@@ -36,7 +36,9 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li><a href="{{ url('/') }}">Home</a></li>
-					<li><a href="{{ url('/pages/rankings') }}">Rankings</a></li>
+					<li><a href="{{ url('/tournaments') }}">Tournaments</a></li>
+					<li><a href="{{ url('/players') }}">Players</a></li>
+					<li><a href="{{ url('/rankings') }}">Rankings</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">

@@ -5,12 +5,13 @@
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="panel panel-default">
-				<div class="panel-heading">Tournaments</div>
+				<div class="panel-heading">Tournament: </div>
 
 				<div class="panel-body">
+					<h1>Participants </h1>
 					<ul>
-						@foreach ($tournaments as $tourney)
-							<li> Tournament: {{ $tourney->name}}   Location: {{ $tourney->location }} Dates: {{ $tourney->start_date}} to {{ $tourney->end_date }}  </li>					
+						@foreach ($participants as $player)
+							<li> Name: {{ $player->ranking}}   Home: {{ $player->player_id }}  </li>
 						@endforeach
 					</ul>
 				</div>

@@ -107,7 +107,9 @@ class Scraper {
 	 	return $result;
 	}
 
- 	/*
+
+
+	/*
  	 * Param: tid = tournament id
 	 */
  	public function get_participants($tid) 
@@ -129,10 +131,10 @@ class Scraper {
 	 					'skill_level' => '//s',
 	 					'name'        => '/<h1>(.*?)<\/h1>/s',
 	 				))
-	 		->URLS('http://www.r2sports.com/tourney/home.asp?TID=13654');	 		
+	 		->URLS('http://www.r2sports.com/tourney/home.asp?TID='. $tid);	 		
 
 	 	$result = $cc->get();
-	 	
+
 	 	return $result;
 
  	}
@@ -166,28 +168,26 @@ class Scraper {
 	 
 	 	//Save Rankings to database
 	 	foreach ($result as $tourneys) {
-	 		//var_dump($tourneys["tournament_id"]);
-        
-            $tid = $tourneys["tournament_id"];
-            $tname = $tourneys["name"];
+	 		for ($x = 0; $x <= count($tourneys); $x++) {
+	            $tid = $tourneys["tournament_id"][$x];
+	            $tname = $tourneys["name"][$x];
 
-			//var_dump($tname[0]);
-        
-			$tourney = array(
-				'tournament_id' => $tid,
-				'name' => $tname,
-				//'location' => $t[2],
-				//'start_date' => $t[3],
-				//'end_date' => $t[4],
-			);
+				//var_dump($tname[0]);
+	        
+				$tourney = array(
+					'tournament_id' =>  $tourneys["tournament_id"][$x],
+					'name' => $tourneys["name"][$x],
+					'location' => $tourneys["location"][$x],
+					'start_date' => $tourneys["start_date"][$x],
+					'end_date' => $tourneys["end_date"][$x],
+				);
 
-			//Save to database
-			//$ss->create_tournament($tourney);
-			array_push($tournaments, $tourney);	
-				
-		 }
+				//Save to database
+				$ss->create_tournament($tourney);
+				array_push($tournaments, $tourney);	
+		 	}
+		}
 
-	 	var_dump($tournaments);
 	 	return $tournaments;
  	}
 

@@ -77,8 +77,26 @@ class ScreenScrapeController extends Controller {
 
 		$tournaments = $ss->get_tournaments();
 
-		var_dump($tournaments);
-		return view('pages/tournaments');
+		//var_dump($tournaments);
+		//return view('pages/tournaments') //->with('tournaments', $tournaments);;
+		//return Redirect::route('tournaments');
+	}
+
+		/**
+	 * Show the application welcome screen to the user.
+	 *
+	 * @return Response
+	 */
+	public function participants($tournament_id)
+
+	{	
+
+		$ss = new Scraper();
+
+		$participants = $ss->get_participants($tournament_id);
+
+		var_dump($participants);
+		return view('pages/participants');
 		//return Redirect::route('tournaments');
 	}
 }

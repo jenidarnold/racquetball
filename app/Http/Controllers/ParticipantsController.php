@@ -1,12 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-use App\Tournament;
+use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class TournamentsController extends Controller {
+class ParticipantsController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -15,8 +15,8 @@ class TournamentsController extends Controller {
 	 */
 	public function index()
 	{
-		$tournaments = Tournament::all();
-		return view('pages/tournaments', compact('tournaments'));
+		$participants = Participant::all();
+		return view('pages/participants'), compact('participants'));
 	}
 
 	/**
@@ -45,7 +45,7 @@ class TournamentsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($tournament_id, $division_id)
 	{
 		//
 	}

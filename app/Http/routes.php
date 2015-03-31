@@ -17,7 +17,7 @@ Route::get('home', 'HomeController@index');
 Route::get('admin/scraper', 'Admin\ScreenScrapeController@scraper');
 Route::get('admin/rankings', 'Admin\ScreenScrapeController@rankings');
 Route::get('admin/tournaments', 'Admin\ScreenScrapeController@tournaments');
-Route::get('admin/players', 'Admin\ScreenScrapeController@players');
+//Route::get('admin/participants', 'Admin\ScreenScrapeController@participants');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
@@ -28,13 +28,15 @@ Route::controllers([
 Route::resource('rankings', 'RankingsController');
 Route::resource('players', 'PlayersController');
 Route::resource('tournaments', 'TournamentsController');
+Route::resource('tournaments.divisions', 'DivisionsController');
+//Route::resource('tournaments.divisions.participaints', 'ParticipantsController');
 
 Route::bind('players', function($value, $route){
-	return App\Player::whereSlug($value)->frirst();
+	return App\Player::whereSlug($value)->first();
 });
 
 Route::bind('tournaments', function($value, $route){
-	return App\Tournamenrt::whereSlug($value)->frirst();
+	return App\Tournament::whereSlug($value)->first();
 });
 
 
