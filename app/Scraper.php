@@ -178,8 +178,8 @@ class Scraper {
 					'tournament_id' =>  $tourneys["tournament_id"][$x],
 					'name' => $tourneys["name"][$x],
 					'location' => $tourneys["location"][$x],
-					'start_date' => $tourneys["start_date"][$x],
-					'end_date' => $tourneys["end_date"][$x],
+					'start_date' => date("Y-m-d H:i:s", strtotime($tourneys["start_date"][$x])),
+					'end_date' => date("Y-m-d H:i:s", strtotime($tourneys["start_date"][$x])),
 				);
 
 				//Save to database

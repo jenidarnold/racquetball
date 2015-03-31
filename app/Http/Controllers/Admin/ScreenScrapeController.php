@@ -77,9 +77,7 @@ class ScreenScrapeController extends Controller {
 
 		$tournaments = $ss->get_tournaments();
 
-		//var_dump($tournaments);
-		//return view('pages/tournaments') //->with('tournaments', $tournaments);;
-		//return Redirect::route('tournaments');
+		return view('pages/tournaments');
 	}
 
 		/**

@@ -15,7 +15,7 @@ class TournamentsController extends Controller {
 	 */
 	public function index()
 	{
-		$tournaments = Tournament::all();
+		$tournaments = Tournament::orderBy("start_date")->get();
 		return view('pages/tournaments', compact('tournaments'));
 	}
 
