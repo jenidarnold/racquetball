@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Scraper;
 
@@ -85,16 +86,17 @@ class ScreenScrapeController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function participants($tournament_id)
+	public function participants(Request $request)
 
 	{	
 
+		$tournament_id = $request->input('tournament_id');
 		$ss = new Scraper();
 
 		$participants = $ss->get_participants($tournament_id);
 
 		var_dump($participants);
-		return view('pages/participants');
+		//return view('pages/participants');
 		//return Redirect::route('tournaments');
 	}
 }

@@ -36,7 +36,8 @@
 					</form>
 
 					<form class="form-horizontal" role="form" method="GET" action="{{ url('/admin/participants') }}">
-						<input type="hidden" name="_token" value="{{ csrf_token() }}">
+						<input type="hidden" name="tournament_id" value="13654">
+						<input type="hidden" name="_token" value="{{ csrf_token() }}">					
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
 								<div class="form-group">
