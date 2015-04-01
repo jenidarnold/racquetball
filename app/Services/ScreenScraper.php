@@ -3,6 +3,7 @@
 use App\Scraper;
 use App\Ranking;
 use App\Tournament;
+use App\Participant;
 
 class ScreenScraper {
 
@@ -44,4 +45,22 @@ class ScreenScraper {
 
 	}
 
+
+	/**
+	 * Insert new Tournament Participant
+	 *
+	 * @param  array  $data
+	 * @return Participant
+	 */
+
+	public function create_participant(array $data)
+	{
+
+			return Participant::create([
+				'tournament_id' => $data['tournament_id'],				
+				'player_id' => $data['player_id'],
+				'division_id' =>  $data['division_id'],
+			]);
+
+	}
 }

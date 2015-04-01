@@ -127,61 +127,56 @@ class Scraper {
 	 	$cc->matchAll(
 	 				array(
 	 					'player_id'   => '/<h1>(?:.*?)profile-player(?:.*?)&UID=(.*?)"/ms',
-	 					//'division_id' => '/drawOut(?:.*?)&divID=(.*?)>/ms',
+	 					'division_id' => '/drawOut(?:.*?)&divID=(.*?)>/ms',
 	 				))
 	 		->URLS('http://www.r2sports.com/tourney/EntryList.asp?TID='. $tid);	 		
 	 	$result_parts = $cc->get();
 
 
 		$participants = array();
+		$ss = New ScreenScraper;
 
-	 	$i = 0;
-	 
-	 	//var_dump($result_parts);
 	 	//Save Participants to database
-	 	foreach ($result_parts as $particips) {
-	 		var_dump($particips);
-	 		for ($x = 0; $x <= count($particips["player_id"]); $x++) {
-	           
-	            $player_id = $particips["player_id"][$x];
-	            //echo $x;
+	 	foreach ($result_parts as $part) {
+	 		for ($x = 0; $x < count($part["player_id"]); $x++) {
 
-	            //Get Player's Divisions
-				$ccDiv = new CopyCat;
-			 	$ccDiv->setCurl(array(
-			 		CURLOPT_RETURNTRANSFER => 1,
-			 		CURLOPT_CONNECTTIMEOUT => 5,
-			 		CURLOPT_HTTPHEADER, "Content-Type: text/html; charset=iso-8859-1",
-			 		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
-			 	));
+		            $player_id = $part["player_id"][$x];
+		            //Get Player's Divisions
+					//$ccDiv = new CopyCat;
+				 	//$ccDiv->setCurl(array(
+				 	//	CURLOPT_RETURNTRANSFER => 1,
+				 	//	CURLOPT_CONNECTTIMEOUT => 5,
+				 	//	CURLOPT_HTTPHEADER, "Content-Type: text/html; charset=iso-8859-1",
+				 	//	CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
+				 	//));
 
-	 			//$ccDiv->matchAll(
-	 			//	array(
-	 			//		'division_id' => '/UID='. $player_id .'"(?:.*?)drawOut(?:.*?)&divID=(.*?)>/ms',
-	 			//	))
-	 			//	->URLS('http://www.r2sports.com/tourney/EntryList.asp?TID='. $tid);	 	
-	 			$//result_divs = $ccDiv->get();
+		 			//$ccDiv->matchAll(
+		 			//	array(
+		 			//		'division_id' => '/UID='. $player_id .'"(?:.*?)drawOut(?:.*?)&divID=(.*?)>/ms',
+		 			//	))
+		 			//	->URLS('http://www.r2sports.com/tourney/EntryList.asp?TID='. $tid);	 	
+		 			//$result_divs = $ccDiv->get();
 
 
-	 			//foreach ($result_divs as $divs) {
-	 			//	for ($d = 0; $d <= count($divs); $d++) {
+		 			//foreach ($result_divs as $divs) {
+		 			//	for ($d = 0; $d <= count($divs); $d++) {
 
-	 					//var_dump($divs);
+		 					//var_dump($divs);
 
-				//		$participant = array(
-				//			'tournament_id' =>  $tid,
-				//			'player_id' => $player_id ,
-				//			'division_id' => $divs["division_id"][$d],
-				//		);
-				//	}
-				//}
-				//Save to database
-				//$ss->create_participant($participant);
-				//array_push($participants, $participant);	
+							$participant = array(
+								'tournament_id' =>  $tid,
+								'player_id' => $player_id,
+								'division_id' =>  '1',//$divs["division_id"][$d],
+							);
+					//	}
+					//}
+					//Save to database
+					$ss->create_participant($participant);
+					array_push($participants, $participant);				
 		 	}
 		}
 
-	   // var_dump($participants);
+	    //var_dump($participants);
 	 	return $participants;
 
  	}
