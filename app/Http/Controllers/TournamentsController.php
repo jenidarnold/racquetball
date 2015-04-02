@@ -42,15 +42,11 @@ class TournamentsController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  Tournament  $tournament
 	 * @return Response
 	 */
 	public function show($tournament)
-	{
-		
-		//$tournament = Tournament::whereTournament_id($id)->first();
-
-		//var_dump($id);
+	{		
 		return view('pages/tournaments.show', compact('tournament'));
 	}
 

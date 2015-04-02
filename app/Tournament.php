@@ -26,7 +26,15 @@ class Tournament extends Model {
 	// protected $hidden = ['password', 'remember_token'];
 
 	public function participants() {
-		return $this->hasMany('App\Participant');
+
+		return $this->hasMany('App\Participant', 'tournament_id', 'tournament_id');
 	}
+
+
+	public function divisions() {
+
+		return $this->hasMany('App\TournamentDivision', 'tournament_id', 'tournament_id');
+	}
+
 
 }

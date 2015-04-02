@@ -25,4 +25,13 @@ class Participant extends Model {
 	 */
 	// protected $hidden = ['password', 'remember_token'];
 
+
+	/**
+	 * Participant's divisions
+	 *
+	 */
+	public function divisions() {
+
+		return $this->hasMany('App\Division', 'division_id', 'id');
+	}
 }

@@ -16,8 +16,6 @@ class ParticipantsController extends Controller {
 	 */
 	public function index(Tournament $tournament)
 	{
-		//$participants = Participant::all();
-		
 		return view('pages.participants.index', compact('tournament'));
 	}
 
@@ -49,7 +47,6 @@ class ParticipantsController extends Controller {
 	 */
 	public function show(Tournament $tournament, Participant $participant) //$tournament_id, $division_id)
 	{
-		//$participants = Participant::where();
 		return view('pages.participants.show', compact('tournament', 'participant'));
 	}
 
