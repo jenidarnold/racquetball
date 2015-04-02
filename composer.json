@@ -6,7 +6,8 @@
 	"type": "project",
 	"require": {
 		"laravel/framework": "5.0.*",
-		"gidlov/copycat":  "dev-master"
+		"gidlov/copycat":  "dev-master",
+		"illuminate/html": "~5.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

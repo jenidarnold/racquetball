@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Scraper;
+use App\Tournament;
 
 class ScreenScrapeController extends Controller {
 
@@ -45,7 +46,9 @@ class ScreenScrapeController extends Controller {
 	public function scraper()
 
 	{	
-		return view('admin.scraper');
+
+		$tournaments = tournament::lists('name','tournament_id');
+		return view('admin.scraper', compact('tournaments'));
 	}
 
 		/**
@@ -94,9 +97,6 @@ class ScreenScrapeController extends Controller {
 		$ss = new Scraper();
 
 		$participants = $ss->get_participants($tournament_id);
-
-		var_dump($participants);
-		//return view('pages/participants');
-		//return Redirect::route('tournaments');
+		return view('pages/participants');
 	}
 }

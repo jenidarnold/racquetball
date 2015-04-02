@@ -35,22 +35,11 @@
 						</div>
 					</form>
 
-					<form class="form-horizontal" role="form" method="GET" action="{{ url('/admin/participants') }}">
-						<input type="hidden" name="tournament_id" value="13654">
-						<input type="hidden" name="_token" value="{{ csrf_token() }}">					
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<div class="form-group">
-									<label for="ddlTournaments">Tournament:</label>
-									<select class="form-control" id="ddlTournaments">
-										<option value="13654">2015 Battle at the Alamo Regional Tournament</option>
-										<option value="13556">2015 Maverick May Racquetball Shootout</option>
-									</select>
-									<button type="submit" class="btn btn-primary">Download Participants</button>
-								</div>
-							</div>													
-						</div>
-					</form>
+					{!! Form::open(array('route' => 'download_participants', 'method' => 'get')) !!}
+						{!! Form::Label('ddlTournaments', 'Tournament:', array('id' => 'lblTournament')) !!}
+						{!! Form::select('tournament_id', $tournaments, null, array('class' => 'form-control')) !!}	
+						{!! Form::submit('Download Participants', array('class' =>'btn btn-primary')) !!}					
+					{!! Form::close() !!}
 				</div>
 			</div>
 		</div>
