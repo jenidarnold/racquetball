@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Tournament;
 use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -13,10 +14,11 @@ class ParticipantsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Tournament $tournament)
 	{
-		$participants = Participant::all();
-		return view('pages/participants'), compact('participants'));
+		//$participants = Participant::all();
+		
+		return view('pages.participants.index', compact('tournament'));
 	}
 
 	/**
@@ -45,9 +47,10 @@ class ParticipantsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($tournament_id, $division_id)
+	public function show(Tournament $tournament, Participant $participant) //$tournament_id, $division_id)
 	{
-		//
+		//$participants = Participant::where();
+		return view('pages.participants.show', compact('tournament', 'participant'));
 	}
 
 	/**

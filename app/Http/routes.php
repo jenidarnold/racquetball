@@ -29,19 +29,29 @@ Route::controllers([
 	'scraper' => 'Admin\ScreenScrapeController',
 ]);
 
-Route::resource('rankings', 'RankingsController');
-Route::resource('players', 'PlayersController');
-Route::resource('tournaments', 'TournamentsController');
-Route::resource('tournaments.divisions', 'DivisionsController');
-//Route::resource('tournaments.divisions.participaints', 'ParticipantsController');
 
+
+Route::model('participants', 'Participant');
+Route::model('tournaments', 'Tournament');
+
+
+//Need to add slug field to database tables
 Route::bind('players', function($value, $route){
 	return App\Player::whereSlug($value)->first();
 });
 
 Route::bind('tournaments', function($value, $route){
-	return App\Tournament::whereSlug($value)->first();
+	return App\Tournament::whereTournament_id($value)->first();
 });
 
+Route::bind('participants', function($value, $route){
+	return App\Participant::whereTournament_id($value)->first();
+});
 
+Route::resource('rankings', 'RankingsController');
+Route::resource('players', 'PlayersController');
+Route::resource('tournaments', 'TournamentsController');
+Route::resource('tournaments.participants', 'ParticipantsController');
+Route::resource('tournaments.divisions', 'DivisionsController');
+//Route::resource('tournaments.divisions.participaints', 'ParticipantsController');
 

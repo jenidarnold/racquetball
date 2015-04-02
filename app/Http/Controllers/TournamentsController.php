@@ -16,7 +16,7 @@ class TournamentsController extends Controller {
 	public function index()
 	{
 		$tournaments = Tournament::orderBy("start_date")->get();
-		return view('pages/tournaments', compact('tournaments'));
+		return view('pages/tournaments.index', compact('tournaments'));
 	}
 
 	/**
@@ -45,9 +45,13 @@ class TournamentsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($tournament)
 	{
-		//
+		
+		//$tournament = Tournament::whereTournament_id($id)->first();
+
+		//var_dump($id);
+		return view('pages/tournaments.show', compact('tournament'));
 	}
 
 	/**

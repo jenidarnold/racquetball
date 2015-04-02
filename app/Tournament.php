@@ -25,4 +25,8 @@ class Tournament extends Model {
 	 */
 	// protected $hidden = ['password', 'remember_token'];
 
+	public function participants() {
+		return $this->hasMany('App\Participant');
+	}
+
 }

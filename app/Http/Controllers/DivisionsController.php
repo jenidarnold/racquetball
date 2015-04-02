@@ -16,7 +16,7 @@ class DivisionsController extends Controller {
 	public function index()
 	{
 		$divisions = Division::all();
-		return view('pages/divisions'), compact('divisions'));
+		return view('pages/divisions', compact('divisions'));
 	}
 
 	/**
