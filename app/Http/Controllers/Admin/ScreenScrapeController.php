@@ -84,7 +84,7 @@ class ScreenScrapeController extends Controller {
 		return view('pages/tournaments');
 	}
 
-		/**
+	/**
 	 * Show the application welcome screen to the user.
 	 *
 	 * @return Response
@@ -98,5 +98,21 @@ class ScreenScrapeController extends Controller {
 
 		$participants = $ss->get_participants($tournament_id);
 		return view('pages/participants');
+	}
+
+	/**
+	 * Show the application welcome screen to the user.
+	 *
+	 * @return Response
+	 */
+	public function player(Request $request)
+
+	{	
+
+		$player_id = $request->input('player_id');
+		$ss = new Scraper();
+
+		$player = $ss->get_player($player_id);
+		return view('pages/players.show');
 	}
 }

@@ -18,6 +18,7 @@ Route::get('admin/scraper', 'Admin\ScreenScrapeController@scraper');
 Route::get('admin/rankings', 'Admin\ScreenScrapeController@rankings');
 Route::get('admin/tournaments', 'Admin\ScreenScrapeController@tournaments');
 Route::get('admin/participants', array('as' => 'download_participants', 'uses' => 'Admin\ScreenScrapeController@participants'));
+Route::get('admin/player', array('as' => 'download_player', 'uses' => 'Admin\ScreenScrapeController@player'));
 
 //Route::get('admin/participants/create', 'Admin\ScreenScrapeController@participants');
 //Route::get('admin/participants/{tournament_id}', 'Admin\ScreenScrapeController@participants');

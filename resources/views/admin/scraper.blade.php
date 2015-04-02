@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-12 col-md-offset-0">
 			<div class="panel panel-default">
 				<div class="panel-heading">Screen Scrape</div>
 				<div class="panel-body">
@@ -39,6 +39,13 @@
 						{!! Form::Label('ddlTournaments', 'Tournament:', array('id' => 'lblTournament')) !!}
 						{!! Form::select('tournament_id', $tournaments, null, array('class' => 'form-control')) !!}	
 						{!! Form::submit('Download Participants', array('class' =>'btn btn-primary')) !!}					
+					{!! Form::close() !!}
+					<br/>
+
+					{!! Form::open(array('route' => 'download_player', 'method' => 'get')) !!}
+						{!! Form::Label('txtPlayer', 'PlayerID:', array('id' => 'lblPlayerID')) !!}
+						{!! Form::text('player_id', '19885', null, array('class' => 'form-control')) !!}	
+						{!! Form::submit('Download Player', array('class' =>'btn btn-primary')) !!}					
 					{!! Form::close() !!}
 				</div>
 			</div>

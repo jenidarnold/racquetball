@@ -95,16 +95,45 @@ class Scraper {
 
 	 	$cc->match(
 	 				array(
+	 					'first_name'  => '/Player Name:(?:.*?)<h1>(.*?) (?:.*?)<\/h1>/s',
+	 					'last_name'   => '/Player Name:(?:.*?)<h1>(?:.*?) (.*?)<\/h1>/s',	 					
 	 					'gender'      =>'/Gender(?:.*?)<h3>(.*?)<\/h3>/s',
-	 					'home'        => '//s',
-	 					'skill_level' => '//s',
-	 					'name'        => '/<h1>(.*?)<\/h1>/s',
+	 					'home'        => '/Player From(?:.*?)<h3>(.*?)<\/h3>/s',
+	 					'skill_level' => '/Skill Level(?:.*?)<h3>(.*?)<\/h3>/s',
+	 					'img_profile' => '/gallery\/player\/(.*?)"/s',
 	 				))
-	 		->URLS('http://www.usaracquetballevents.com/profile-player.asp?UID=8220');	 		
+	 		->URLS('http://www.usaracquetballevents.com/profile-player.asp?UID=' .$uid);	 		
 
 	 	$result = $cc->get();
+		
+		var_dump($result);
 
-	 	return $result;
+		$ss = New ScreenScraper;
+
+		$player = array();
+	 	$i = 0;
+	 
+	 	//Save Player to database
+	 	foreach ($result as $player_info) {
+	 	//	for ($x = 0; $x <= count($tourneys); $x++) {
+	        
+				$player = array(
+					'player_id' =>  $uid,
+					'first_name' => $player_info["first_name"],
+					'last_name' => $player_info["last_name"],
+					'gender' => $player_info["gender"],
+					'home' => $player_info["home"],
+					'skill_level' => $player_info["skill_level"],
+					'img_profile' => $player_info["img_profile"],
+				);
+
+				//Save to database
+				//$ss->create_tournament($tourney);
+		 //	}
+		}
+
+		var_dump($player);
+	 	return $player;
 	}
 
 
