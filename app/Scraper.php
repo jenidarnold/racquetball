@@ -127,8 +127,9 @@ class Scraper {
 					'img_profile' => $player_info["img_profile"],
 				);
 
-				//Save to database
-				//$ss->create_tournament($tourney);
+				//Save to database				
+				//TODO: don't create if already exists in database
+				$ss->create_player($player);
 		 //	}
 		}
 
