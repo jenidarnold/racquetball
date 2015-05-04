@@ -17,7 +17,7 @@ class Group extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['group_id', 'group'];
+	protected $fillable = ['group_id', 'name'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

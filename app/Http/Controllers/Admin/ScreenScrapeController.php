@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Group;
+use App\Location;
 use App\Scraper;
 use App\Tournament;
 use App\Player;
@@ -48,10 +50,10 @@ class ScreenScrapeController extends Controller {
 
 	{	
 
-		$groups = groups::lists('name','group_id');
-		$locations = locations::lists('name','location_id');
+		$groups = group::lists('name','group_id');
+		$locations = location::lists('location','location_id');
 		$tournaments = tournament::lists('name','tournament_id');
-		return view('admin.scraper', compact('groups'), compact('locations'), compact('tournaments'));
+		return view('admin.scraper', compact('groups', 'locations','tournaments'));
 	}
 
 		/**
