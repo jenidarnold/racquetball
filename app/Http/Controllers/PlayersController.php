@@ -15,8 +15,12 @@ class PlayersController extends Controller {
 	 */
 	public function index()
 	{
-			$players = Player::all();
-		return view('pages/players', compact('players'));
+		//$players = Player::all();
+		$players = \DB::table('players')
+				->join('rankings', 'players.player_id', '=', 'rankings.player_id')
+				->distinct()
+				->get();
+		return view('pages/players/index', compact('players'));
 	}
 
 	/**
@@ -45,9 +49,10 @@ class PlayersController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($player)
 	{
-		//
+		//$players = Player::all();
+		return view('pages/players/show', compact('player'));
 	}
 
 	/**

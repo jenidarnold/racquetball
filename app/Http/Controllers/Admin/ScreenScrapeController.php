@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Scraper;
 use App\Tournament;
+use App\Player;
 
 class ScreenScrapeController extends Controller {
 
@@ -47,8 +48,10 @@ class ScreenScrapeController extends Controller {
 
 	{	
 
+		$groups = groups::lists('name','group_id');
+		$locations = locations::lists('name','location_id');
 		$tournaments = tournament::lists('name','tournament_id');
-		return view('admin.scraper', compact('tournaments'));
+		return view('admin.scraper', compact('groups'), compact('locations'), compact('tournaments'));
 	}
 
 		/**
@@ -62,10 +65,14 @@ class ScreenScrapeController extends Controller {
 
 		$ss = new Scraper();
 
-		$rankings = $ss->get_rankings();
+		$new_rankings = $ss->get_rankings();
 
-		return view('pages/rankings'); //->with('rankings', $rankings);
-		//return Redirect::route('rankings'); //->with('rankings', $rankings);
+        $rankings = \DB::table('rankings')
+				->leftJoin('players', 'rankings.player_id', '=', 'players.player_id')
+				->get();
+
+		return view('pages/rankings', compact('rankings'));
+
 	}
 
 	/**
@@ -112,7 +119,9 @@ class ScreenScrapeController extends Controller {
 		$player_id = $request->input('player_id');
 		$ss = new Scraper();
 
-		$player = $ss->get_player($player_id);
-		return view('pages/players.show');
+		$ss->get_player($player_id);
+
+		$player = Player::wherePlayer_id($player_id);
+		return view('pages/players.show', compact('player'));
 	}
 }

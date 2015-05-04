@@ -34,11 +34,12 @@ Route::controllers([
 
 Route::model('participants', 'Participant');
 Route::model('tournaments', 'Tournament');
+Route::model('players', 'Player');
 
 
 //Need to add slug field to database tables
 Route::bind('players', function($value, $route){
-	return App\Player::whereSlug($value)->first();
+	return App\Player::wherePlayer_id($value)->first();
 });
 
 Route::bind('tournaments', function($value, $route){

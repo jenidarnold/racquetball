@@ -18,6 +18,16 @@
 						</div>
 					@endif
 
+					{!! Form::open(array('route' => 'download_rankings', 'method' => 'get')) !!}
+						{!! Form::Label('ddlGroup', 'Group:', array('id' => 'lblGroup')) !!}
+						{!! Form::select('group_id', $groups, null, array('class' => 'form-control')) !!}<br/>
+                        {!! Form::Label('ddlLocation', 'Location:', array('id' => 'lblLocation')) !!}
+						{!! Form::select('location_id', $locations, null, array('class' => 'form-control')) !!}<br/>
+						{!! Form::submit('Download Rankings', array('class' =>'btn btn-primary')) !!}					
+					{!! Form::close() !!}
+					<br/>
+
+
 					<form class="form-horizontal" role="form" method="GET" action="{{ url('/admin/rankings') }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
@@ -44,7 +54,7 @@
 
 					{!! Form::open(array('route' => 'download_player', 'method' => 'get')) !!}
 						{!! Form::Label('txtPlayer', 'PlayerID:', array('id' => 'lblPlayerID')) !!}
-						{!! Form::text('player_id', '19885', null, array('class' => 'form-control')) !!}	
+						{!! Form::text('player_id', '', null, array('class' => 'form-control')) !!}	
 						{!! Form::submit('Download Player', array('class' =>'btn btn-primary')) !!}					
 					{!! Form::close() !!}
 				</div>

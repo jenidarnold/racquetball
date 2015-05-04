@@ -5,6 +5,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+
 class RankingsController extends Controller {
 
 	/**
@@ -14,7 +15,12 @@ class RankingsController extends Controller {
 	 */
 	public function index()
 	{
-		$rankings = Ranking::all();
+		//$rankings = Ranking::all();
+
+		$rankings = \DB::table('rankings')
+				->leftJoin('players', 'rankings.player_id', '=', 'players.player_id')
+				->get();
+
 		return view('pages/rankings', compact('rankings'));
 	}
 

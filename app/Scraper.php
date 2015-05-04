@@ -27,7 +27,19 @@ class Scraper {
 	 	));
 
 	 				
-	 	$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp';
+	 	//Men's National
+	 	//$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&startMembershipNum=458898&sex=M&stateID=0&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount=101';
+	 	
+	 	//Women's National
+	 	$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&sex=F&stateID=0&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount=1';
+
+	 	//Men's Texas
+		//$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&startMembershipNum=458898&sex=M&stateID=1&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount=101';
+
+	 	//Women's Texas
+		//$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&startMembershipNum=458898&sex=F&stateID=1&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount=101';
+
+		//Doubles: sex= MD and FD
 
 	 	$cc->matchAll(
 	 				array(
