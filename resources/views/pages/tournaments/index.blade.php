@@ -6,11 +6,11 @@
 		<div class="col-md-10 col-md-offset-1">
 			<div class="panel panel-success">
 				<div class="panel-heading">
-					<h2>Live Racquetball Tournaments</h2>
+					<h3>Live Racquetball Tournaments</h3>
 				</div>
 				<div class="panel-body">
 					<ul>
-						@foreach ($tournaments as $tourney)
+						@foreach ($live_tournaments as $tourney)
 							<div class="panel panel-default">
 								<div class="panel-heading">				
 									<h3><a href="{{ route('tournaments.show', [$tourney->tournament_id]) }}">{{ $tourney->name}}</a></h3>
@@ -45,11 +45,11 @@
 
 			<div class="panel panel-info">
 				<div class="panel-heading">
-					<h2>Future {State} Racquetball Tournaments</h2>
+					<h3>Future Racquetball Tournaments</h3>
 				</div>
 				<div class="panel-body">
 					<ul>
-						@foreach ($tournaments as $tourney)
+						@foreach ($future_tournaments as $tourney)
 							<div class="panel panel-default">
 								<div class="panel-heading">				
 									<h3>{{ $tourney->name}} </h3>

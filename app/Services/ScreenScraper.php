@@ -36,6 +36,11 @@ class ScreenScraper {
 	public function create_tournament(array $data)
 	{
 
+		$tourney = \DB::table('tournaments')
+			->where('tournament_id', '=', $data['tournament_id'])
+			->first();
+
+		if (is_null($tourney)) {
 			return Tournament::create([
 				'tournament_id' => $data['tournament_id'],				
 				'name' => $data['name'],
@@ -43,7 +48,7 @@ class ScreenScraper {
 				'start_date' => $data['start_date'],
 				'end_date' => $data['end_date'],
 			]);
-
+		}
 	}
 
 

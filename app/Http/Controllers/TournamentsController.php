@@ -15,8 +15,16 @@ class TournamentsController extends Controller {
 	 */
 	public function index()
 	{
-		$tournaments = Tournament::orderBy("start_date")->get();
-		return view('pages/tournaments.index', compact('tournaments'));
+		$live_tournaments = Tournament::where('start_date', '<=', date('Y-m-d H:i:s'))
+							->where('end_date', '>=', date('Y-m-d H:i:s'))
+							->orderBy('start_date')
+							->get();
+
+		$future_tournaments = Tournament::where('start_date', '>', date('Y-m-d H:i:s'))
+						    ->orderBy('start_date')
+							->get();
+
+		return view('pages/tournaments.index', compact('live_tournaments', 'future_tournaments'));
 	}
 
 	/**

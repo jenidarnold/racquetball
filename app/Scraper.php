@@ -252,11 +252,11 @@ class Scraper {
 	 
 	 	//Save Tournaments to database
 	 	foreach ($result as $tourneys) {
+
 	 		for ($x = 0; $x <= count($tourneys); $x++) {
+
 	            $tid = $tourneys["tournament_id"][$x];
 	            $tname = $tourneys["name"][$x];
-
-				//var_dump($tname[0]);
 	        
 				$tourney = array(
 					'tournament_id' =>  $tourneys["tournament_id"][$x],
@@ -264,7 +264,7 @@ class Scraper {
 					'location' => $tourneys["location"][$x],
 					'start_date' => date("Y-m-d H:i:s", strtotime($tourneys["start_date"][$x])),
 					'end_date' => date("Y-m-d H:i:s", strtotime($tourneys["start_date"][$x])),
-				);
+				);				
 
 				//Save to database
 				$ss->create_tournament($tourney);

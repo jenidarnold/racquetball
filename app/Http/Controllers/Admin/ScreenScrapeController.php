@@ -88,9 +88,11 @@ class ScreenScrapeController extends Controller {
 
 		$ss = new Scraper();
 
-		$tournaments = $ss->get_tournaments();
+		$new_tournaments = $ss->get_tournaments();
+		$tournaments = \DB::table('tournaments')
+					->get();
 
-		return view('pages/tournaments');
+		return view('pages/tournaments', compact('tournaments'));
 	}
 
 	/**
