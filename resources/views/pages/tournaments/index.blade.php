@@ -18,7 +18,7 @@
 								<div class="panel-body">								
 									<div class="row">
 										<div class="col-md-2">
-											<!-- img src="http://www.r2sports.com/tourney/imageGallery/gallery/tourneyLogo/bigmoney_11_normal.jpg" width="125" height="85" border="0"></image -->
+											<img src="{{ url('http://www.r2sports.com/tourney/imageGallery/gallery/tourneyLogo/'.$tourney->img_logo) }}" width="125" height="85" border="0"></image>
 										</div>
 										<div class="col-md-10 col-md-offset-0">
 										      <h4>Dates: {{ $tourney->start_date}} - {{ $tourney->end_date }}</h4>
@@ -57,7 +57,7 @@
 								<div class="panel-body">								
 									<div class="row">
 										<div class="col-md-2">
-											<!--img src="http://www.r2sports.com/tourney/imageGallery/gallery/tourneyLogo/bigmoney_11_normal.jpg" width="125" height="85" border="0"></image-->
+											<img src="{{ url('http://www.r2sports.com/tourney/imageGallery/gallery/tourneyLogo/'.$tourney->img_logo) }}" width="125" height="85" border="0"></image>
 										</div>
 										<div class="col-md-10 col-md-offset-0">
 										      <h4>Dates: {{ $tourney->start_date}} - {{ $tourney->end_date }}</h4>

@@ -16,7 +16,7 @@ class Ranking extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['ranking_date', 'player_id', 'ranking'];
+	protected $fillable = ['ranking_date', 'player_id', 'ranking', 'group_id', 'location_id'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

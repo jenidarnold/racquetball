@@ -11,7 +11,7 @@
 				<div class="panel-body">
 					<div class="row">
 					   	<div class="col-md-2">
-							<img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->img_profile }} class="img-thumbnail" width="100" >
+							<img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} class="img-thumbnail" width="100" >
 						</div>
 						<div class="col-md-4">
 							<li>Skill:{{ $player->skill_level }}</li>

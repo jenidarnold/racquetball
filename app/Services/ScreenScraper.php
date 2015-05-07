@@ -17,13 +17,22 @@ class ScreenScraper {
 
 	public function create_ranking(array $data)
 	{
+		$ranking = \DB::table('rankings')
+			->where('ranking_date', '=', $data['ranking_date'])
+			->where('group_id', '=', $data['group_id'])
+			->where('location_id', '=', $data['location_id'])
+			->where('player_id', '=', $data['player_id'])
+			->first();
 
+		if (is_null($ranking)) {
 			return Ranking::create([
 				'ranking_date' => $data['ranking_date'],
 				'player_id' => $data['player_id'],
 				'ranking' =>  $data['ranking'],
+				'group_id' =>  $data['group_id'],
+				'location_id' =>  $data['location_id'],
 			]);
-
+		}
 	}
 
 	/**
@@ -44,6 +53,7 @@ class ScreenScraper {
 			return Tournament::create([
 				'tournament_id' => $data['tournament_id'],				
 				'name' => $data['name'],
+				'img_logo' => $data['img_logo'],
 				'location' =>  $data['location'],
 				'start_date' => $data['start_date'],
 				'end_date' => $data['end_date'],
@@ -62,12 +72,19 @@ class ScreenScraper {
 	public function create_participant(array $data)
 	{
 
-		return Participant::create([
-			'tournament_id' => $data['tournament_id'],				
-			'player_id' => $data['player_id'],
-			'division_id' =>  $data['division_id'],
-		]);
+		$player = \DB::table('participants')
+			->where('tournament_id', '=', $data['tournament_id'])
+			->where('player_id', '=', $data['player_id'])
+			->where('division_id', '=', $data['division_id'])
+			->first();
 
+		if (is_null($player)) {
+			return Participant::create([
+				'tournament_id' => $data['tournament_id'],				
+				'player_id' => $data['player_id'],
+				'division_id' =>  $data['division_id'],
+		]);
+	}
 	}
 
 	/**

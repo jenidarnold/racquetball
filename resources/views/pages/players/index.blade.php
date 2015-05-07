@@ -20,7 +20,8 @@
 						<tbody>
 						@foreach ($players as $player)
 							<tr>	
-								<td><a href="{{ route('players.show', [$player->player_id]) }}"><img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->img_profile }} class="img-thumbnail" width="100" ></a></td>
+								<td><a href="{{ route('players.show', [$player->player_id]) }}">
+								     <img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} class="img-thumbnail" width="100" ></a></td>
 								<td>{{ $player->first_name }}  </td>
 								<td>{{ $player->last_name }}  </td>
 								<td>{{ $player->gender }}</td>

@@ -16,7 +16,7 @@ class Tournament extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['tournament_id', 'name', 'location', 'start_date', 'end_date'];
+	protected $fillable = ['tournament_id', 'name', 'location', 'start_date', 'end_date', 'img_logo'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

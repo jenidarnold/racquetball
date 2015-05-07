@@ -14,7 +14,7 @@ class Scraper {
  	 * http://www.regular-expressions.info/refcapture.html
  	 */
 
- 	public function get_rankings() 
+ 	public function get_rankings($group_id, $location_id, $maxRank) 
  	{
 		//require_once('copycat.php');
 
@@ -26,31 +26,44 @@ class Scraper {
 	 		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
 	 	));
 
-	 				
-	 	//Men's National
-	 	//$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&startMembershipNum=458898&sex=M&stateID=0&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount=101';
-	 	
-	 	//Women's National
-	 	$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&sex=F&stateID=0&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount=1';
+	 	switch ($group_id) {
+	 		case 1:
+	 			//Men's Singles
+	 			$sexCode = 'M';
+	 			break;
+	 		case 2:
+				//Women's Singles
+	 			$sexCode = 'F';
+	 			break;
 
-	 	//Men's Texas
-		//$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&startMembershipNum=458898&sex=M&stateID=1&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount=101';
+	 		case 3:
+	 			//Men's Doubles
+				$sexCode = 'MD';
+				break;
 
-	 	//Women's Texas
-		//$url_rankings = 	'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&startMembershipNum=458898&sex=F&stateID=1&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount=101';
+			case 4:
+				//Women's State
+				$sexCode = 'WD';
+				break;
 
-		//Doubles: sex= MD and FD
+			case 5:
+				//Men's Mixed Doubles Texas
+				$sexCode = 'MX';
+				break;
 
-	 	$cc->matchAll(
-	 				array(
-	 					'ranking_date' => '/Rankings last updated:(?:.*?)>(.*?)</ms',
-	 					'player_id' => '/&UID=(.*?)">/ms',		 									
-	 				))
-	 		->URLS($url_rankings);	 		
+			case 6:
+				//Women's Mixed Doubles Texas
+				$sexCode = 'WX';
+				break;
 
-	 	$result = $cc->get();
+	 		default:
+	 			$sexCode = 'U';
+	 			break;
+	 	}
 
-	 	$ss = New ScreenScraper;
+	 	$startRank = 1;
+	 	$rankChunks = 100;
+		$ss = New ScreenScraper;
 
 		$player_rankings = array();
 	 	$i = 0;
@@ -58,37 +71,64 @@ class Scraper {
 	 	$prev_pid = -1;
 	 	$curr_pid = 0;
 
-	 	//Save Rankings to database
-	 	foreach ($result as $rankings) {
-	 		foreach ($rankings as $players) {
-	 			foreach ($players as $player) {
-	 				foreach (explode(" ", $player) as $pid) {
-	 				
-		 				if ($i == 0) {
-							$rdate =  date("Y-m-d H:i:s", strtotime($pid));
-							$i = $i + 1;
-						}
-						else {
-							$curr_pid = $pid;
-					 		
-							if ($prev_pid != $curr_pid) {
-								$rank = array(
-									'ranking_date' => $rdate,
-									'player_id' => $curr_pid,
-									'ranking' =>  $i,
-								);
-								//Save to database
-								$ss->create_ranking($rank);
-								array_push($player_rankings, $rank);
+	
+	 	//URL only gets ranking by chunks of 100. So we have to call the url multiple times to get more pages of info
+	 	for ($x = 1; $x <= $maxRank; $x=$x + $rankChunks) {
+	 		var_dump($x);
+
+	 		if($x == 1) {
+	 			$url_rankings = 'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&sex='.$sexCode.'&stateID='.$location_id.'&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount='.$startRank;
+	 		}
+	 		else {
+	 			$url_rankings = 'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&sex='.$sexCode.'&stateID='.$location_id.'&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount='.$startRank;	 	
+	 		}
+
+		 	$cc->matchAll(
+		 				array(
+		 					'ranking_date' => '/Rankings last updated:(?:.*?)>(.*?)</ms',
+		 					'player_id' => '/&UID=(.*?)">/ms',		 									
+		 				))
+		 		->URLS($url_rankings);	 		
+
+		 	$result = $cc->get();	
+
+		 	//Increment for next set of rankings
+		 	$startRank = $startRank + $rankChunks;	 	
+
+		 	//Save Rankings to database
+		 	foreach ($result as $rankings) {
+		 		foreach ($rankings as $players) {
+		 			foreach ($players as $player) {
+		 				foreach (explode(" ", $player) as $pid) {
+		 				
+			 				if ($i == 0) {
+								$rdate =  date("Y-m-d H:i:s", strtotime($pid));
 								$i = $i + 1;
 							}
+							else {
+								$curr_pid = $pid;
+						 		
+								if ($prev_pid != $curr_pid) {
+									$rank = array(
+										'ranking_date' => $rdate,
+										'player_id' => $curr_pid,
+										'ranking' =>  $i,
+										'group_id' => $group_id,
+										'location_id' => $location_id,
+									);
+									//Save to database
+									$ss->create_ranking($rank);
+									array_push($player_rankings, $rank);
+									$i = $i + 1;
+								}
 
-					 	}					 	
-					 	$prev_pid = $curr_pid;
-				 	}
+						 	}					 	
+						 	$prev_pid = $curr_pid;
+					 	}
+					}
 				}
-			}
-	 	}
+		 	}
+		 }
 	 	return $player_rankings;
 
  	}
@@ -240,6 +280,7 @@ class Scraper {
 	 		'location' => '/Location:<\/span>(.*?)</ms',
 	 		'start_date' => '/Date:<\/span>(.*?)-/ms',
 	 		'end_date' => '/Date:<\/span>(?:.*?)-(.*?)</ms',
+	 		'img_logo' => '/gallery\/tourneyLogo\/(.*?)"/s',
 	 		))
 	 		->URLS('http://www.usaracquetballevents.com/Texas/future.asp');	 		
 
@@ -253,7 +294,7 @@ class Scraper {
 	 	//Save Tournaments to database
 	 	foreach ($result as $tourneys) {
 
-	 		for ($x = 0; $x <= count($tourneys); $x++) {
+	 		for ($x = 0; $x < count($tourneys); $x++) {
 
 	            $tid = $tourneys["tournament_id"][$x];
 	            $tname = $tourneys["name"][$x];
@@ -264,7 +305,10 @@ class Scraper {
 					'location' => $tourneys["location"][$x],
 					'start_date' => date("Y-m-d H:i:s", strtotime($tourneys["start_date"][$x])),
 					'end_date' => date("Y-m-d H:i:s", strtotime($tourneys["start_date"][$x])),
+					'img_logo' => $tourneys["img_logo"][$x]
 				);				
+
+				var_dump($tourney);
 
 				//Save to database
 				$ss->create_tournament($tourney);

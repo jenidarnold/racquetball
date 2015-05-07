@@ -56,21 +56,29 @@ class ScreenScrapeController extends Controller {
 		return view('admin.scraper', compact('groups', 'locations','tournaments'));
 	}
 
-		/**
+	/**
 	 * Show the application welcome screen to the user.
 	 *
 	 * @return Response
 	 */
-	public function rankings()
+	public function rankings(Request $request)
 
 	{	
 
+		$group_id = $request->input('group_id');
+		$location_id = $request->input('location_id');
+		$maxRank = 300;
+
 		$ss = new Scraper();
 
-		$new_rankings = $ss->get_rankings();
+		$new_rankings = $ss->get_rankings($group_id, $location_id, $maxRank);
 
         $rankings = \DB::table('rankings')
 				->leftJoin('players', 'rankings.player_id', '=', 'players.player_id')
+				->leftJoin('groups', 'rankings.group_id', '=', 'groups.group_id')
+				->leftJoin('locations', 'rankings.location_id', '=', 'locations.location_id')
+				->where('rankings.group_id', '=', $group_id)
+				->where('rankings.location_id', '=', $location_id)
 				->get();
 
 		return view('pages/rankings', compact('rankings'));
@@ -107,8 +115,17 @@ class ScreenScrapeController extends Controller {
 		$tournament_id = $request->input('tournament_id');
 		$ss = new Scraper();
 
-		$participants = $ss->get_participants($tournament_id);
-		return view('pages/participants');
+		$new_participants = $ss->get_participants($tournament_id);
+
+
+		$tournament = \DB::table('tournaments')
+					->where('tournament_id', '=', $tournament_id)
+					->get();
+
+		$participants = \DB::table('participants')
+					->where('tournament_id', '=', $tournament_id)
+					->get();
+		return view('pages/participants', compact('$tournament', 'participants'));
 	}
 
 	/**

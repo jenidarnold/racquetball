@@ -17,8 +17,12 @@ class RankingsController extends Controller {
 	{
 		//$rankings = Ranking::all();
 
+		$latest_date = \DB::table('rankings')
+						->max('ranking_date');
+						
 		$rankings = \DB::table('rankings')
 				->leftJoin('players', 'rankings.player_id', '=', 'players.player_id')
+				->where('ranking_date', '=', $latest_date)
 				->get();
 
 		return view('pages/rankings', compact('rankings'));

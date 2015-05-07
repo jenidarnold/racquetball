@@ -34,4 +34,13 @@ class Participant extends Model {
 
 		return $this->hasMany('App\Division', 'division_id', 'id');
 	}
+
+    /**
+	 * Participant's divisions
+	 *
+	 */
+	public function player() {
+
+		return $this->belongsTo('App\Player', 'player_id', 'player_id');
+	}
 }
