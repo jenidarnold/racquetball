@@ -36,7 +36,7 @@ class Participant extends Model {
 	}
 
     /**
-	 * Participant's divisions
+	 * Participant's profile info
 	 *
 	 */
 	public function player() {

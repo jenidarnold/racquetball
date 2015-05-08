@@ -51,6 +51,7 @@ Route::bind('participants', function($value, $route){
 	return App\Participant::whereTournament_id($value)->first();
 });
 
+
 Route::resource('rankings', 'RankingsController');
 Route::resource('players', 'PlayersController');
 Route::resource('tournaments', 'TournamentsController');
