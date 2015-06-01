@@ -21,6 +21,9 @@ Route::get('admin/tournaments', 'Admin\ScreenScrapeController@tournaments');
 Route::get('admin/participants', array('as' => 'download_participants', 'uses' => 'Admin\ScreenScrapeController@participants'));
 Route::get('admin/player', array('as' => 'download_player', 'uses' => 'Admin\ScreenScrapeController@player'));
 
+
+Route::get('matchups', 'MatchupsController@index');
+Route::post('matchups', 'MatchupsController@show');
 //Route::get('admin/participants/create', 'Admin\ScreenScrapeController@participants');
 //Route::get('admin/participants/{tournament_id}', 'Admin\ScreenScrapeController@participants');
 

@@ -5,6 +5,41 @@
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="row">
+						{!! Form::open(array('route' => 'players.index', 'method' => 'get')) !!}
+						<div class="col-md-3 col-md-offset-0">
+							{!! Form::select('gender', 
+							                 array('All' => 'All', 'Male' => 'Male', 'Female' => 'Female'), 
+							                 $gender, 
+							                 array('class' => 'form-control')) !!}
+						</div>
+						<div class="col-md-3 col-md-offset-0">
+							{!! Form::select('level', 
+							                  array('All' => 'All', 
+							                        'Pro' => 'Pro', 
+							                        'Open' => 'Open',
+							                        'Elite' => 'Elite',
+							                        'A' => 'A',
+							                        'B' => 'B',
+							                        'C' => 'C',
+							                        'D' => 'D',
+							                        'Juniors' => 'Junior',						                       
+							                        'Novice' => 'Novice'
+							                        ),  
+							                  $level, 
+							                  array('class' => 'form-control')
+							                ) 
+							!!}
+						</div>					
+						<div class="col-md-3 col-md-offset-0">
+							{!! Form::submit('Filter Players', array('class' =>'btn btn-primary')) !!}
+						</div>					
+						{!! Form::close() !!}
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
 				<div class="panel-heading">Players</div>
 
 				<div class="panel-body">

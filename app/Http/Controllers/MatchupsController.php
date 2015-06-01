@@ -1,45 +1,31 @@
 <?php namespace App\Http\Controllers;
 
+use Input;
+use App\Ranking;
 use App\Player;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 
-class PlayersController extends Controller {
+
+class MatchupsController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index(Request $request)
+	public function index()
 	{
+	
+		$players = Player::orderby('last_name')->orderby('first_name')->get();
+		$players_list = $players->lists('last_first_name', 'player_id');
+		
+		$player1 = (object)	['player_id' => '-1'];
+		$player2 = (object)	['player_id' => '-1'];
 
-		$level = $request->input('level');
-		$gender = $request->input('gender');
+		return view('pages/matchups.index', compact('players_list', 'player1', 'player2'));
 
-
-		$players = \DB::table('players')
-				->orderby('last_name')
-				->orderby('first_name');
-
-		if (isset($gender)) {
-			if ($gender != 'All') {
-				$players = $players->where('gender', '=', $gender);
-			}
-		}
-
-		if (isset($level)) {
-			if ($level != 'All') {
-				$players = $players->where('skill_level', '=', $level);
-			}
-		}
-
-		$players = $players->get();
-
-
-		return view('pages/players/index', compact('players', 'level', 'gender'));
 	}
 
 	/**
@@ -68,10 +54,26 @@ class PlayersController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($player)
+	public function show(Request $request)
 	{
-		//$players = Player::all();
-		return view('pages/players/show', compact('player'));
+		
+		$player1ID = Input::get('ddlPlayer1');
+		$player2ID = Input::get('ddlPlayer2');
+
+		$players = Player::orderby('last_name')
+					->orderby('first_name')
+					->get();		
+		$players_list = $players
+					->lists('last_first_name', 'player_id');
+
+		$player1 = Player::where('player_id', '=', $player1ID)
+					->first();
+		$player2 =  Player::where('player_id', '=', $player2ID)
+					->first();
+
+		//dd($player1);
+
+		return view('pages/matchups.show', compact('players_list', 'player1', 'player2'));
 	}
 
 	/**

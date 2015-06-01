@@ -39,6 +39,7 @@
 					<li><a href="{{ url('/tournaments') }}">Tournaments</a></li>
 					<li><a href="{{ url('/players') }}">Players</a></li>
 					<li><a href="{{ url('/rankings') }}">Rankings</a></li>
+					<li><a href="{{ url('/matchups') }}">Matchups</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">

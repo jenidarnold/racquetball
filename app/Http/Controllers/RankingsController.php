@@ -18,8 +18,11 @@ class RankingsController extends Controller {
 	public function index()
 	{
 		//$rankings = Ranking::all();
+		$group_id = 1;
+		$location_id = 0;
 
-		$latest_date = \DB::table('rankings')
+
+		/*$latest_date = \DB::table('rankings')
 						->max('ranking_date');
 						
 		$groups = group::lists('name','group_id');
@@ -31,6 +34,10 @@ class RankingsController extends Controller {
 				->get();
 
 		return view('pages/rankings', compact('rankings', 'groups', 'locations'));
+		*/
+
+		return \Redirect::route('rankings.show');
+
 	}
 
 	/**
@@ -61,12 +68,19 @@ class RankingsController extends Controller {
 	 */
 	public function show(Request $request)
 	{
-
 		$groups = group::lists('name','group_id');
 		$locations = location::lists('location','location_id');
 
 		$group_id = $request->input('group_id');
 		$location_id = $request->input('location_id');
+
+		if (!isset($group_id)) {
+			$group_id = 1;
+		}
+	
+		if (!isset($location_id)) {
+			$location_id = 0;
+		}
 
 		$latest_date = \DB::table('rankings')
 						->max('ranking_date');

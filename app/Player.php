@@ -26,5 +26,13 @@ class Player extends Model {
 	// protected $hidden = ['password', 'remember_token'];
 
 
+	public function getFullNameAttribute()
+	{
+		return $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
+	}	
 
+	public function getLastFirstNameAttribute()
+	{
+		return $this->attributes['last_name'] .', '. $this->attributes['first_name'];
+	}
 }
