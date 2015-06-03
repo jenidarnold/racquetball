@@ -7,6 +7,7 @@ use App\Location;
 use App\Scraper;
 use App\Tournament;
 use App\Player;
+use App\Match;
 
 class ScreenScrapeController extends Controller {
 
@@ -57,12 +58,11 @@ class ScreenScrapeController extends Controller {
 	}
 
 	/**
-	 * Show the application welcome screen to the user.
+	 * Download Rankings
 	 *
 	 * @return Response
 	 */
 	public function rankings(Request $request)
-
 	{	
 
 		$group_id = $request->input('group_id');
@@ -86,12 +86,11 @@ class ScreenScrapeController extends Controller {
 	}
 
 	/**
-	 * Show the application welcome screen to the user.
+	 * Downlod Tournaments
 	 *
 	 * @return Response
 	 */
 	public function tournaments()
-
 	{	
 
 		$ss = new Scraper();
@@ -109,7 +108,6 @@ class ScreenScrapeController extends Controller {
 	 * @return Response
 	 */
 	public function participants(Request $request)
-
 	{	
 
 		$tournament_id = $request->input('tournament_id');
@@ -129,12 +127,11 @@ class ScreenScrapeController extends Controller {
 	}
 
 	/**
-	 * Show the application welcome screen to the user.
+	 * Download Player Profile
 	 *
 	 * @return Response
 	 */
 	public function player(Request $request)
-
 	{	
 
 		$player_id = $request->input('player_id');
@@ -143,6 +140,26 @@ class ScreenScrapeController extends Controller {
 		$ss->get_player($player_id);
 
 		$player = Player::wherePlayer_id($player_id);
-		return view('pages/players.show', compact('player'));
+		//return view('pages/players.show', compact('player'));
+		return redirect('admin/scraper');
+	}
+
+
+	/**
+	 * Download Player Matches
+	 *
+	 * @return Response
+	 */
+	public function matches(Request $request)
+	{	
+
+		$match_player_id = $request->input('match_player_id');
+		$ss = new Scraper();
+
+		$ss->get_matches($match_player_id);
+
+		$match = Match::where('player2_id', '=', $match_player_id)->get();
+
+		return redirect('admin/scraper');
 	}
 }

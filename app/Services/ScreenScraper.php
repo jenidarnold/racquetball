@@ -5,6 +5,7 @@ use App\Ranking;
 use App\Tournament;
 use App\Participant;
 use App\Player;
+use App\Match;
 
 class ScreenScraper {
 
@@ -83,8 +84,8 @@ class ScreenScraper {
 				'tournament_id' => $data['tournament_id'],				
 				'player_id' => $data['player_id'],
 				'division_id' =>  $data['division_id'],
-		]);
-	}
+			]);
+		}
 	}
 
 	/**
@@ -97,16 +98,70 @@ class ScreenScraper {
 	public function create_player(array $data)
 	{
 
-		return Player::create([
-			'player_id' => $data['player_id'],
-			'first_name' =>  $data['first_name'],
-			'last_name' =>  $data['last_name'],
-			'gender' =>  $data['gender'],
-			'home' =>  $data['home'],
-			'skill_level' =>  $data['skill_level'],
-			'img_profile' =>  $data['img_profile'],
-		]);
+		$player = \DB::table('players')
+			->where('player_id', '=', $data['player_id'])
+			->first();
 
+		if (is_null($player)) {
+			return Player::create([
+				'player_id' => $data['player_id'],
+				'first_name' =>  $data['first_name'],
+				'last_name' =>  $data['last_name'],
+				'gender' =>  $data['gender'],
+				'home' =>  $data['home'],
+				'skill_level' =>  $data['skill_level'],
+				'img_profile' =>  $data['img_profile'],
+			]);
+		}
+	}
+
+	/**
+	 * Insert new Match
+	 *
+	 * @param  array  $data
+	 * @return Participant
+	 */
+
+	public function create_match(array $data)
+	{
+	
+		$players = Player::select('player_id', 'first_name', 'last_name', \DB::raw('CONCAT(first_name, " ", last_name) as full_name'))
+					->lists('player_id','full_name');
+			
+		//check to see if players exist in Players table
+		$err = '';
+		if (!array_key_exists($data['player1'], $players))
+		{
+			$err .= '  Not in Players table: ' . $data['player1'];
+		}
+		if (!array_key_exists($data['player2'], $players))
+		{
+			$err .= '  Not in Players table: ' . $data['player2'];
+		}
+
+		if ($err == '') {
+			$player1_id = $players[$data['player1']];
+			$player2_id = $players[$data['player2']];
+
+			$match = \DB::table('matches')
+				->where('tournament_id', '=', $data['tournament_id'])
+				->where('player1_id', '=', $player1_id ) 
+				->where('player2_id', '=', $player2_id )
+				//->orWhere('player1_id' => $player2_id, 'player2_id' => $player1_id )
+				->first();
+
+			if (is_null($match)) {
+				$match = Match::create([
+					'player1_id' => $player1_id,
+					'player2_id' => $player2_id,
+					'winner_id' =>  $player1_id,
+					'tournament_id' =>  $data['tournament_id'],
+					'match_date' =>  $data['match_date'],
+					'match_type' =>  $data['match_type'],
+					'match_division' =>  $data['match_division'],
+				]);
+			}	
+		}	
 	}
 
 }

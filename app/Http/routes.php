@@ -20,6 +20,7 @@ Route::get('admin/rankings', array('as' => 'download_rankings', 'uses' => 'Admin
 Route::get('admin/tournaments', 'Admin\ScreenScrapeController@tournaments');
 Route::get('admin/participants', array('as' => 'download_participants', 'uses' => 'Admin\ScreenScrapeController@participants'));
 Route::get('admin/player', array('as' => 'download_player', 'uses' => 'Admin\ScreenScrapeController@player'));
+Route::get('admin/matches', array('as' => 'download_matches', 'uses' => 'Admin\ScreenScrapeController@matches'));
 
 
 Route::get('matchups', 'MatchupsController@index');

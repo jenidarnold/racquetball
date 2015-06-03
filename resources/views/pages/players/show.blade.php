@@ -69,23 +69,22 @@
 						<thead>
 							<th>Date</th>
 							<th>Tournament</th>
-							<th>Opponnet</th>
 							<th>Winner</th>
-							<th>Score</th>
+							<th>Loser</th>
+							<th>Dvision</th>
+							<th>Match Type</th>
 						</thead>
-						<tbody>
-						<!--
-						@ foreach ($matches as $match)
+						<tbody>						
+						@foreach ($matches as $m)
 							<tr>	
-								<td><a href="{{ route('players.show', [$player->player_id]) }}"><img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->img_profile }} class="img-thumbnail" width="100" ></a></td>
-								<td>{{ $player->first_name }}  </td>
-								<td>{{ $player->last_name }}  </td>
-								<td>{{ $player->gender }}</td>
-								<td>{{ $player->skill_level }} </td>								
-								<td>{{ $player->home }} </td>
+								<td>{{ $m->match_date }}  </td>
+								<td>{{ $m->tournament_id }}  </td>
+								<td>{{ $m->player1_id }}</td>
+								<td>{{ $m->player2_id }} </td>								
+								<td>{{ $m->match_division }} </td>						
+								<td>{{ $m->match_type }} </td>
 							</tr>
-						@e ndforeach
-						-->
+						@endforeach						
 						</tbody>
 					</table>
 			</div>

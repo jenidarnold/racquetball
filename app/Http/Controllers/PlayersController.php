@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Player;
+use App\Match;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -71,7 +72,11 @@ class PlayersController extends Controller {
 	public function show($player)
 	{
 		//$players = Player::all();
-		return view('pages/players/show', compact('player'));
+		$matches = Match::where("player1_id", '=', $player->player_id)
+						->orWhere("player2_id", '=', $player->player_id)
+						->get();
+
+		return view('pages/players/show', compact('player', 'matches'));
 	}
 
 	/**

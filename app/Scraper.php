@@ -158,8 +158,6 @@ class Scraper {
 
 	 	$result = $cc->get();
 		
-		var_dump($result);
-
 		$ss = New ScreenScraper;
 
 		$player = array();
@@ -185,11 +183,63 @@ class Scraper {
 		 //	}
 		}
 
-		var_dump($player);
 	 	return $player;
 	}
 
 
+    public function get_matches($uid) 
+ 	{
+		
+	 	$cc = new CopyCat;
+	 	$cc->setCurl(array(
+	 		CURLOPT_RETURNTRANSFER => 1,
+	 		CURLOPT_CONNECTTIMEOUT => 5,
+	 		CURLOPT_HTTPHEADER, "Content-Type: text/html; charset=iso-8859-1",
+	 		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
+	 	));
+
+	 	$cc->matchAll(
+	 				array(	 						 					
+	 					'player1'   => '/<h3>(?:.*?)<b>(.*?)<\/b>(?:.*?)drawsOut/ms',
+	 					'player2'  => '/<h3>(?:.*?)<b>(.*?)<\/b>(?:.*?)Track:/ms',	 					 		
+	 					'tournament_id' => '/Results\.asp\?TID=(.*?)>(?:.*?)drawsOut/ms',		
+	 					'match_division' => '/divID=(.*?)&/ms', 					
+	 					'match_date'        => '/<h3>([0-9]+\/[0-9]+\/[0-9]+)/ms',	 				
+	 					//'winner_id'      =>'/<h3>(?:.*?)<b>(.?)<\/b>/ms',
+	 					//match_type' => '//s',	 					
+	 				))
+	 		->URLS('http://www.usaracquetballevents.com/profile-player.asp?UID='.$uid.'&matchHistoryType=Singles');
+
+		$matches = array();
+	 			
+		$ss = New ScreenScraper;
+
+		$result_matches = $cc->get();
+	 	$i = 0;
+	 
+	 	//Save Player to database
+	 	foreach ($result_matches as $match_info) {
+	 		for ($x = 0; $x < count($match_info["player1"]); $x++) {
+          	        
+				$match = array(
+					'tournament_id' => $match_info["tournament_id"][$x],
+					'player1' => $match_info["player1"][$x],
+					'player2' => $match_info["player2"][$x],
+					'winner' => $match_info["player1"][$x],
+					'match_date' => date("Y-m-d H:i:s", strtotime($match_info["match_date"][$x])),
+					'match_division' => $match_info["match_division"][$x],
+					'match_type' => 'single elimination', //$match_info["match_type"],
+				);
+				//Save to database				
+			
+				$ss->create_match($match);
+				array_push($matches, $match);
+			}
+
+		}
+
+	 	return $matches;
+	}
 
 	/*
  	 * Param: tid = tournament id
@@ -222,39 +272,17 @@ class Scraper {
 	 	foreach ($result_parts as $part) {
 	 		for ($x = 0; $x < count($part["player_id"]); $x++) {
 
-		            $player_id = $part["player_id"][$x];
-		            //Get Player's Divisions
-					//$ccDiv = new CopyCat;
-				 	//$ccDiv->setCurl(array(
-				 	//	CURLOPT_RETURNTRANSFER => 1,
-				 	//	CURLOPT_CONNECTTIMEOUT => 5,
-				 	//	CURLOPT_HTTPHEADER, "Content-Type: text/html; charset=iso-8859-1",
-				 	//	CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
-				 	//));
+	            $player_id = $part["player_id"][$x];		          
 
-		 			//$ccDiv->matchAll(
-		 			//	array(
-		 			//		'division_id' => '/UID='. $player_id .'"(?:.*?)drawOut(?:.*?)&divID=(.*?)>/ms',
-		 			//	))
-		 			//	->URLS('http://www.r2sports.com/tourney/EntryList.asp?TID='. $tid);	 	
-		 			//$result_divs = $ccDiv->get();
+				$participant = array(
+					'tournament_id' =>  $tid,
+					'player_id' => $player_id,
+					'division_id' =>  '1',//$divs["division_id"][$d],
+				);
 
-
-		 			//foreach ($result_divs as $divs) {
-		 			//	for ($d = 0; $d <= count($divs); $d++) {
-
-		 					//var_dump($divs);
-
-							$participant = array(
-								'tournament_id' =>  $tid,
-								'player_id' => $player_id,
-								'division_id' =>  '1',//$divs["division_id"][$d],
-							);
-					//	}
-					//}
-					//Save to database
-					$ss->create_participant($participant);
-					array_push($participants, $participant);				
+				//Save to database
+				$ss->create_participant($participant);
+				array_push($participants, $participant);				
 		 	}
 		}
 
@@ -307,8 +335,6 @@ class Scraper {
 					'end_date' => date("Y-m-d H:i:s", strtotime($tourneys["start_date"][$x])),
 					'img_logo' => $tourneys["img_logo"][$x]
 				);				
-
-				var_dump($tourney);
 
 				//Save to database
 				$ss->create_tournament($tourney);

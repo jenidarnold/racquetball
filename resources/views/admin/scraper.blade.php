@@ -70,6 +70,24 @@
 					{!! Form::close() !!}
 					</div>
 
+					<h3>Player Match History</h3>
+					<div class="row">
+						{!! Form::open(array('route' => 'download_matches', 'method' => 'get')) !!}
+						<div class="col-md-1 col-md-offset-0">
+							{!! Form::Label('txtMatches', 'PlayerID:', array('id' => 'lblMatches')) !!}
+						</div>
+						<div class="col-md-1 col-md-offset-0">
+							{!! Form::text('match_player_id', '', null, array('class' => 'form-control')) !!}	
+						</div>
+					</div>
+					<div class="row">					
+						<div class="col-md-4 col-md-offset-1">
+							<br/>
+							{!! Form::submit('Download Matches', array('class' =>'btn btn-primary')) !!}	
+						</div>				
+					{!! Form::close() !!}
+					</div>
+
 					<h3>Rankings</h3>
 					<div class="row">
 						{!! Form::open(array('route' => 'download_rankings', 'method' => 'get')) !!}
