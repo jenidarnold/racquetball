@@ -25,4 +25,28 @@ class Match extends Model {
 	 */
 	// protected $hidden = ['password', 'remember_token'];
 
+	public function head2head($player1, $player2) {
+
+		$player1_wins = Match::where('winner_id', '=', $player1)
+					->where('player2_id', '=', $player2)
+					->get()
+					->count();
+
+
+		$player2_wins = Match::where('winner_id', '=', $player2)
+					->where('player2_id', '=', $player1)
+					->get()
+					->count();
+
+
+		$versus = [ 'player1' => [
+								 'wins' => $player1_wins,
+							],
+					'player2' => [
+								 'wins' => $player2_wins,
+							],
+			];
+
+		return $versus;
+	}
 }

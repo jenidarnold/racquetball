@@ -51,10 +51,18 @@ class ScreenScrapeController extends Controller {
 
 	{	
 
-		$groups = group::lists('name','group_id');
-		$locations = location::lists('location','location_id');
-		$tournaments = tournament::lists('name','tournament_id');
-		return view('admin.scraper', compact('groups', 'locations','tournaments'));
+		$groups = Group::lists('name','group_id');
+		$locations = Location::lists('location','location_id');
+		$tournaments = Tournament::lists('name','tournament_id');		
+		$players = Player::select('first_name', 'last_name', 'player_id',
+							\DB::raw('CONCAT(first_name, " ", last_name) as full_name'))
+				->orderBy('first_name')
+				->orderBy('last_name')
+				->get()
+				->lists('full_name', 'player_id');
+			
+
+		return view('admin.scraper', compact('groups', 'locations','tournaments', 'players'));
 	}
 
 	/**
@@ -153,7 +161,7 @@ class ScreenScrapeController extends Controller {
 	public function matches(Request $request)
 	{	
 
-		$match_player_id = $request->input('match_player_id');
+		$match_player_id = $request->input('player_id');
 		$ss = new Scraper();
 
 		$ss->get_matches($match_player_id);

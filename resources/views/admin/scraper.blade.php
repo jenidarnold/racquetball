@@ -32,7 +32,6 @@
 						</form>
 					</div>
 
-
 					<h3>Participants</h3>
 					<div class="row">
 						{!! Form::open(array('route' => 'download_participants', 'method' => 'get')) !!}
@@ -70,14 +69,14 @@
 					{!! Form::close() !!}
 					</div>
 
-					<h3>Player Match History</h3>
+					<h3>Match History</h3>
 					<div class="row">
 						{!! Form::open(array('route' => 'download_matches', 'method' => 'get')) !!}
 						<div class="col-md-1 col-md-offset-0">
-							{!! Form::Label('txtMatches', 'PlayerID:', array('id' => 'lblMatches')) !!}
+							{!! Form::Label('txtMatches', 'Player:', array('id' => 'lblMatches')) !!}
 						</div>
-						<div class="col-md-1 col-md-offset-0">
-							{!! Form::text('match_player_id', '', null, array('class' => 'form-control')) !!}	
+						<div class="col-md-2 col-md-offset-0">
+							{!! Form::select('player_id', $players, null, array('class' => 'form-control')) !!}	
 						</div>
 					</div>
 					<div class="row">					

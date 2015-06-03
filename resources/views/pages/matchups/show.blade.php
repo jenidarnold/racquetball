@@ -40,9 +40,9 @@
 							</tr>
 							<tr>							
 								<td style='width:150px;font-size:14pt;'>Rank</td>
-								<td style='width:200px;'>{{$player1->id}}</td>
+								<td style='width:200px;'>{{$player1->national_rank}}</td>
 								<td style='width:50px;'></td>
-								<td style='width:200px;'>{{$player2->id}}</td>
+								<td style='width:200px;'>{{$player2->national_rank}}</td>
 								<td style='width:150px;'></td>
 							</tr>
 							<tr>
@@ -54,9 +54,9 @@
 							</tr>
 							<tr>
 								<td style='width:150px;font-size:14pt;'>Wins</td>
-								<td>10</td>
+								<td>{{ $head2head['player1']['wins'] }}</td>
 								<td></td>
-								<td>4</td>
+								<td>{{ $head2head['player2']['wins'] }}</td>
 								<td></td>
 							</tr>
 							<tr>

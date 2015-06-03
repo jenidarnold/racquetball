@@ -3,6 +3,7 @@
 use Input;
 use App\Ranking;
 use App\Player;
+use App\Match;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -60,20 +61,22 @@ class MatchupsController extends Controller {
 		$player1ID = Input::get('ddlPlayer1');
 		$player2ID = Input::get('ddlPlayer2');
 
-		$players = Player::orderby('last_name')
+		$players_list = Player::orderby('last_name')
 					->orderby('first_name')
-					->get();		
-		$players_list = $players
+					->get()
 					->lists('last_first_name', 'player_id');
 
-		$player1 = Player::where('player_id', '=', $player1ID)
-					->first();
-		$player2 =  Player::where('player_id', '=', $player2ID)
-					->first();
+		$player1 = Player::where('player_id', '=', $player1ID)->first();
+		$player2 = Player::where('player_id', '=', $player2ID)->first();
 
-		//dd($player1);
+		
 
-		return view('pages/matchups.show', compact('players_list', 'player1', 'player2'));
+		$h2h = new Match();
+
+		$head2head = $h2h->head2head($player1ID, $player2ID);
+
+
+		return view('pages/matchups.show', compact('players_list', 'player1', 'player2', 'head2head'));
 	}
 
 	/**

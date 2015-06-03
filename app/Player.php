@@ -35,4 +35,14 @@ class Player extends Model {
 	{
 		return $this->attributes['last_name'] .', '. $this->attributes['first_name'];
 	}
+
+	public function getNationalRankAttribute()
+	{
+		return 100;
+	}
+
+	public function getStateRankAttribute($stateID = null)
+	{
+		return 10;
+	}
 }
