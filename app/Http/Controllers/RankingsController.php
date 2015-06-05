@@ -82,9 +82,7 @@ class RankingsController extends Controller {
 			$location_id = 0;
 		}
 
-		$latest_date = \DB::table('rankings')
-						->max('ranking_date');
-						
+		/*				
 		$rankings = \DB::table('rankings')
 				->join('players', 'rankings.player_id', '=', 'players.player_id')
 				->join('groups', 'rankings.group_id', '=', 'groups.group_id')
@@ -94,7 +92,10 @@ class RankingsController extends Controller {
 				->where('rankings.location_id', '=', $location_id)
 				->distinct()
 				->get();
+		*/
+		$ranking = New Ranking;
 
+		$rankings = $ranking->getlatestRankings($group_id, $location_id);
 		return view('pages/rankings', compact('rankings', 'groups', 'locations'));
 	}
 

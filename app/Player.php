@@ -38,11 +38,40 @@ class Player extends Model {
 
 	public function getNationalRankAttribute()
 	{
-		return 100;
+
+		$ranks = $this->hasMany('App\Ranking', 'player_id', 'player_id');
+		$rank = $ranks->where("location_id", '=', "0")
+					->first();
+		if ($rank)
+		{
+			return $rank->ranking;
+		}else
+		{
+			return 0;
+		}					
 	}
 
 	public function getStateRankAttribute($stateID = null)
 	{
-		return 10;
+		$ranks = $this->hasMany('App\Ranking', 'player_id', 'player_id');
+		return $ranks->where("location_id", '=', $stateID)
+					->first()
+					->ranking
+					;
+	}
+
+	public function participation() {
+
+		return $this->hasMany('App\Participant', 'player_id', 'player_id');
+	}
+
+	public function getTournaments() {
+
+		return \DB::table('tournaments')
+			->join('participants', 'tournaments.tournament_id', '=', 'participants.tournament_id')
+			->where('participants.player_id', '=', $this->player_id)
+			->distinct()
+			->get();
+
 	}
 }

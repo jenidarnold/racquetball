@@ -43,4 +43,9 @@ class Participant extends Model {
 
 		return $this->belongsTo('App\Player', 'player_id', 'player_id');
 	}
+
+	public function tournament() {
+
+		return $this->belongsTo('App\Tournament', 'tournament_id', 'tournament_id');
+	}
 }

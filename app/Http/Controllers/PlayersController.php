@@ -76,7 +76,9 @@ class PlayersController extends Controller {
 						->orWhere("player2_id", '=', $player->player_id)
 						->get();
 
-		return view('pages/players/show', compact('player', 'matches'));
+		$tournaments = $player->getTournaments();
+
+		return view('pages/players/show', compact('player', 'matches', 'tournaments'));
 	}
 
 	/**

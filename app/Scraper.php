@@ -308,9 +308,9 @@ class Scraper {
 	 		'location' => '/Location:<\/span>(.*?)</ms',
 	 		'start_date' => '/Date:<\/span>(.*?)-/ms',
 	 		'end_date' => '/Date:<\/span>(?:.*?)-(.*?)</ms',
-	 		'img_logo' => '/gallery\/tourneyLogo\/(.*?)"/s',
+	 		'img_logo' => '/gallery\/tourneyLogo\/(.*?)"/ms',
 	 		))
-	 		->URLS('http://www.usaracquetballevents.com/Texas/future.asp');	 		
+	 		->URLS('http://www.usaracquetballevents.com/Texas/results.asp?showGrouping=1');	 		
 
 	 	$result = $cc->get();
 

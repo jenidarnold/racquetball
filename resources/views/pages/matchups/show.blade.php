@@ -2,100 +2,125 @@
 
 @section('style')
 	<style type="text/css">
-	.vs{
-		text-align: center;
-		font-size: 24pt;
+	.profile 
+	{
+		text-align:center;
+		font-size:10pt;
+		font-weight:bold;
+	}
+
+	.category
+	{
+		background-color: lightblue;
 	}
 	</style>	
-
-	
-@stop
+@stop	
 
 @section('matchup-content')
 <div class="container">
 	<div class="row">
-		<div class="col-md-1">
-		</div>
-		<div class="col-md-10">
-			<div class="panel panel-success">
-				<div class="panel-heading">
-					<center><h3>Head to Head</h3></center>
-				</div>
-				<div class="panel-body">
-					<center>
-						<table class="table" style="text-align:center;font-size:12pt;font-weight:bold">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<center><h2>Head to Head</h2></center>
+			</div>
+			<div class="panel-body">
+				<div class="col-md-3">	
+					<center>		
+						<table class="profile">
 							<tr>
-								<td></td>
-								<td><img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg' }} class="img-thumbnail" height="100" ></a></td>
-								<td></td>
-								<td><img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player2->player_id.'_normal.jpg' }} class="img-thumbnail" height="100" ></a></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
 								<td><h3>{{ $player1->first_name .' '. $player1->last_name }}</h3></td>
-								<td><h3>Vs</h3></td>
-								<td><h3>{{ $player2->first_name .' '. $player2->last_name }}</h3></td>
-								<td></td>
-							</tr>
-							<tr>							
-								<td style='width:150px;font-size:14pt;'>Rank</td>
-								<td style='width:200px;'>{{$player1->national_rank}}</td>
-								<td style='width:50px;'></td>
-								<td style='width:200px;'>{{$player2->national_rank}}</td>
-								<td style='width:150px;'></td>
 							</tr>
 							<tr>
-								<td style='width:150px;font-size:14pt;'>Skill</td>
+								<td><img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg' }} class="img-thumbnail" width="200" ></a></td>
+							</tr>
+							<tr>
+								<td>{{ $player1->gender }}</td>
+							</tr>	
+							<tr>
+								<td>{{ $player1->home }}</td>
+							</tr>				
+						</table>
+					</center>					
+				</div>
+				<div class="col-md-6">			
+					<center>
+						<table class="table table table-condensed" style="text-align:center;font-size:12pt;font-weight:bold">
+							<tr class="category">							
+								<td colspan="2">Rank</td>
+							</tr>
+							<tr>
+								<td>{{$player1->national_rank}}</td>
+								<td>{{$player2->national_rank}}</td>
+							</tr>
+							<tr class="category">
+								<td colspan="2">Skill</td>
+							</tr>
+							<tr>
 								<td>{{$player1->skill_level}}</td>
-								<td></td>
 								<td>{{$player2->skill_level}}</td>
-								<td></td>
+							</tr>
+							<tr class="category">
+								<td colspan="2">Wins</td>
 							</tr>
 							<tr>
-								<td style='width:150px;font-size:14pt;'>Wins</td>
 								<td>{{ $head2head['player1']['wins'] }}</td>
-								<td></td>
 								<td>{{ $head2head['player2']['wins'] }}</td>
-								<td></td>
+							</tr>
+							<tr class="category">
+								<td colspan="2">Power</td>
 							</tr>
 							<tr>
-								<td style='width:150px;font-size:14pt;'>Power</td>
 								<td><i class="fa fa-lg fa-check"></td>
 								<td></td>
-								<td></i></td>
-								<td></td>
+							</tr>
+							<tr class="category">
+								<td colspan="2">Control</td>
 							</tr>
 							<tr>
-								<td style='width:150px;font-size:14pt;'>Control</td>
 								<td></td>
-								<td></td>
+								<td><i class="fa fa-lg fa-check"></i></td>
+							</tr>
+							<tr class="category">
+								<td colspan="2">Serves</td>
+							</tr>
+							<tr>
 								<td><i class="fa fa-lg fa-check"></i></td>
 								<td></td>
 							</tr>
-							<tr>
-								<td style='width:150px;font-size:14pt;'>Serves</td>
-								<td><i class="fa fa-lg fa-check"></i></td>
-								<td></td>
-								<td></td>
-								<td></td>
+							<tr class="category">
+								<td colspan="2">Forehand</td>
 							</tr>
 							<tr>
-								<td style='width:150px;font-size:14pt;'>Forehand</td>
 								<td><i class="fa fa-lg fa-check"></i></td>
-								<td></td>
-								<td></td>
 								<td></td>
 							</tr>
+							<tr class="category">
+								<td colspan="2">Backhand</td>
+							</tr>
 							<tr>
-								<td style='width:150px;font-size:14pt;'>Backhand</td>
-								<td></td>
 								<td></td>
 								<td><i class="fa fa-lg fa-check"></i></td>
-								<td></td>
 							</tr>
 						</table>
 					</center>
+				</div>
+				<div class="col-md-3">		
+					<center>			
+						<table class="profile">
+							<tr>
+								<td><h3>{{ $player2->first_name .' '. $player2->last_name }}</h3></td>
+							</tr>
+							<tr>
+								<td><img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player2->player_id.'_normal.jpg' }} class="img-thumbnail" width="200" ></a></td>
+							</tr>
+							<tr>
+								<td>{{ $player2->gender }}</td>
+							</tr>	
+							<tr>
+								<td>{{ $player2->home }}</td>
+							</tr>						
+						</table>
+					</center>				
 				</div>
 			</div>
 		</div>

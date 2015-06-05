@@ -49,4 +49,9 @@ class Match extends Model {
 
 		return $versus;
 	}
+
+	public function tournament() {
+
+		return $this->belongsTo('App\Tournament', 'tournament_id', 'tournament_id');
+	}
 }

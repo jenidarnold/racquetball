@@ -41,18 +41,13 @@
 							<th>Result</th>
 						</thead>
 						<tbody>
-						<!--
-						@ foreach ($tournaments as $tournament)
-							<tr>	
-								<td><a href="{{ route('players.show', [$player->player_id]) }}"><img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->img_profile }} class="img-thumbnail" width="100" ></a></td>
-								<td>{{ $player->first_name }}  </td>
-								<td>{{ $player->last_name }}  </td>
-								<td>{{ $player->gender }}</td>
-								<td>{{ $player->skill_level }} </td>								
-								<td>{{ $player->home }} </td>
+						@foreach ($tournaments as $tournament)
+							<tr>		
+								<td>{{ $tournament->start_date }}  </td>
+								<td>{{ $tournament->name }}  </td>
+								<td> 1st Place  </td>
 							</tr>
-						@e ndforeach
-						-->
+						@endforeach
 						</tbody>
 					</table>
 			</div>
@@ -78,7 +73,13 @@
 						@foreach ($matches as $m)
 							<tr>	
 								<td>{{ $m->match_date }}  </td>
-								<td>{{ $m->tournament_id }}  </td>
+								<td>
+								@if($m->tournament)
+									{{ $m->tournament->name }}
+								@else
+									{{ $m->tournament_id }}
+								@endif
+								</td>
 								<td>{{ $m->player1_id }}</td>
 								<td>{{ $m->player2_id }} </td>								
 								<td>{{ $m->match_division }} </td>						
