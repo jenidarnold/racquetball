@@ -1,5 +1,14 @@
 @extends('layouts.app')
 
+@section('style')
+	<style type="text/css">
+		.td-profile-head {
+			font-weight: bold;
+			padding-right: 5px;
+		}
+	</style>
+@stop
+
 @section('content')
 <div class="container">
 	<div class="row">
@@ -13,15 +22,39 @@
 					   	<div class="col-md-2">
 							<img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} class="img-thumbnail" width="100" >
 						</div>
-						<div class="col-md-4">
-							<li>Skill:{{ $player->skill_level }}</li>
-		                    <li>Rank: {{ $player->ranking }}</li>
-							<li>Home: {{ $player->home }} </li>
-							<li>Gender:{{ $player->gender }}</li>
+						<div class="col-md-3">
+							<table>								
+								<tr>
+				                    <td class="td-profile-head">National Rank:</td><td> {{ $player->national_rank }}</td>
+				                 </tr>
+				                <tr>
+				                    <td class="td-profile-head">State Rank:</td><td>{{ $player->state_rank}}</td>
+				                </tr>
+								<tr>
+				                    <td class="td-profile-head">Tracking #:</td><td>{{ $player->tracking_id }}</td>
+				                </tr>
+				                <tr>
+				                    <td class="td-profile-head">Tracking:</td><td>{{ $player->tracking }}</td>
+				                </tr>				                
+							</table>							
 						</div>
-						<div class="col-md-6">
-							
+						<div class="col-md-3">
+							<table>
+								<tr>
+									<td class="td-profile-head">Skill Level:</td><td>{{ $player->skill_level }}</td>
+								</tr>
+							</table>	
 						</div>	
+						<div class="col-md-3">
+							<table>
+								<tr>
+									<td class="td-profile-head">Home:</td><td>{{ $player->home }}</td>
+								</tr>
+								<tr>
+									<td class="td-profile-head">Gender:</td><td>{{ $player->gender }}</td>
+								</tr>
+							</table>	
+						</div>
 					</div>	
 				</div>
 			</div>
@@ -74,14 +107,10 @@
 							<tr>	
 								<td>{{ $m->match_date }}  </td>
 								<td>
-								@if($m->tournament)
-									{{ $m->tournament->name }}
-								@else
-									{{ $m->tournament_id }}
-								@endif
+									{{ $m->tournament }}
 								</td>
-								<td>{{ $m->player1_id }}</td>
-								<td>{{ $m->player2_id }} </td>								
+								<td>{{ $m->winner_first_name.' '.$m->winner_last_name}}</td>
+								<td>{{ $m->loser_first_name.' '.$m->loser_last_name }} </td>								
 								<td>{{ $m->match_division }} </td>						
 								<td>{{ $m->match_type }} </td>
 							</tr>

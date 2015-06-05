@@ -71,13 +71,11 @@ class PlayersController extends Controller {
 	 */
 	public function show($player)
 	{
-		//$players = Player::all();
-		$matches = Match::where("player1_id", '=', $player->player_id)
-						->orWhere("player2_id", '=', $player->player_id)
-						->get();
-
+		
+		$matches = $player->getMatches();
 		$tournaments = $player->getTournaments();
 
+		//dd($player);
 		return view('pages/players/show', compact('player', 'matches', 'tournaments'));
 	}
 

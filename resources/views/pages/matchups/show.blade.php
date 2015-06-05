@@ -9,9 +9,31 @@
 		font-weight:bold;
 	}
 
-	.category
+	.tbl-facts, .tbl-feedback {
+		text-align:center;
+		font-size:10pt;
+		font-weight:bold;
+	}
+
+	.tr-facts
 	{
 		background-color: lightblue;
+	}
+
+	.tr-feedback
+	{
+		background-color: lightgray;
+	}
+
+	.td-left {
+		width: 50%;
+		text-align: right;
+		font-color: orange;
+	}
+	.td-right {
+		width: 50%;
+		text-align: left;
+		font-color: blue;
 	}
 	</style>	
 @stop	
@@ -44,62 +66,80 @@
 				</div>
 				<div class="col-md-6">			
 					<center>
-						<table class="table table table-condensed" style="text-align:center;font-size:12pt;font-weight:bold">
-							<tr class="category">							
+						<table class="table table-striped table-condensed table-bordered tbl-facts">
+							<tr>
+								<td colspan="2">The Facts</td>
+							</tr>
+							<tr class="tr-facts">							
 								<td colspan="2">Rank</td>
 							</tr>
 							<tr>
 								<td>{{$player1->national_rank}}</td>
 								<td>{{$player2->national_rank}}</td>
 							</tr>
-							<tr class="category">
+							<tr class="tr-facts">
 								<td colspan="2">Skill</td>
 							</tr>
 							<tr>
 								<td>{{$player1->skill_level}}</td>
 								<td>{{$player2->skill_level}}</td>
 							</tr>
-							<tr class="category">
+							<tr class="tr-facts">
 								<td colspan="2">Wins</td>
 							</tr>
 							<tr>
 								<td>{{ $head2head['player1']['wins'] }}</td>
 								<td>{{ $head2head['player2']['wins'] }}</td>
 							</tr>
-							<tr class="category">
-								<td colspan="2">Power</td>
+						</table>
+						<table class="table table-striped table-condensed table-bordered tbl-feedback">
+							<tr>
+								<td colspan="4">The Fan Feedback</td>
+							</tr>
+							<tr class="tr-feedback">
+								<td colspan="4">Power</td>
 							</tr>
 							<tr>
-								<td><i class="fa fa-lg fa-check"></td>
-								<td></td>
+								<td class="vote-left"><button class="btn btn-xs btn-success"><i class="fa fa-thumbs-up"></i></button></td>
+								<td class="td-left">80% ********</td>
+								<td class="td-right">** 20%</td>
+								<td class="vote-right"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
 							</tr>
-							<tr class="category">
-								<td colspan="2">Control</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td><i class="fa fa-lg fa-check"></i></td>
-							</tr>
-							<tr class="category">
-								<td colspan="2">Serves</td>
+							<tr class="tr-feedback">
+								<td colspan="4">Control</td>
 							</tr>
 							<tr>
-								<td><i class="fa fa-lg fa-check"></i></td>
-								<td></td>
+								<td class="vote-left"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
+								<td class="td-left">33% ***</td>
+								<td class="td-right">******* 66%</td>
+								<td class="vote-right"><button class="btn btn-xs btn-success"><i class="fa fa-thumbs-up"></i></button></td>
 							</tr>
-							<tr class="category">
-								<td colspan="2">Forehand</td>
-							</tr>
-							<tr>
-								<td><i class="fa fa-lg fa-check"></i></td>
-								<td></td>
-							</tr>
-							<tr class="category">
-								<td colspan="2">Backhand</td>
+							<tr class="tr-feedback">
+								<td colspan="4">Serves</td>
 							</tr>
 							<tr>
-								<td></td>
-								<td><i class="fa fa-lg fa-check"></i></td>
+								<td class="vote-left"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
+								<td class="td-left">40% ****</td>
+								<td class="td-right">****** 60%</td>
+								<td class="vote-right"><button class="btn btn-xs btn-success"><i class="fa fa-thumbs-up"></i></button></td>
+							</tr>
+							<tr class="tr-feedback">
+								<td colspan="4">Forehand</td>
+							</tr>
+							<tr>
+								<td class="vote-left"><button class="btn btn-xs btn-success"><i class="fa fa-thumbs-up"></i></button></td>
+								<td class="td-left">75% *******</td>
+								<td class="td-right">*** 25%</td>
+								<td class="vote-right"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
+							</tr>
+							<tr class="tr-feedback">
+								<td colspan="4">Backhand</td>
+							</tr>
+							<tr>
+								<td class="vote-left"><button class="btn btn-xs btn-sucess"><i class="fa fa-thumbs-up"></i></button></td>
+								<td class="td-left">50% *****</td>
+								<td class="td-right">***** 50%</td>
+								<td class="vote-right"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
 							</tr>
 						</table>
 					</center>
