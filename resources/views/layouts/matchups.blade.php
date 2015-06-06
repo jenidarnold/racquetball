@@ -18,7 +18,8 @@
 		font-color: grey;
 	}	
 	.racquet {
-		height:40px;
+		height:60px;
+		padding-right:10px;
 	}
 	</style>
 @stop
@@ -30,9 +31,9 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<center>
-						<img src='images/racquet-right.png' class="" ='racquet')>
+						<img src='images/racquet-right.png' class='racquet')>
 						<span class='hd'>Head</span><span class="hd2"> 2 </span><span class='hd'>Head</span>
-						<img src='images/racquet-left.png' class="" ='racquet')>
+						<img src='images/racquet-left.png' class='racquet')>
 					</center>
 				</div>
 				<div class="panel-body">
@@ -42,13 +43,13 @@
 								{!! Form::open(array('class' => 'form-inline', 'role' => 'form')) !!}
 									<div class="form-group" style="padding-bottom:10px">
 										<span class='lbl text-primary' style="font-weight:bolder; font-size:14pt;">Player 1</span>
-										{!! Form::select('ddlPlayer1', $players_list, $player1->player_id, array('class' => 'form-control', 'style' => 'width:250' )) !!}	
-										<span class='lbl text-muted' style="font-weight:bold; font-size:18pt; padding-left:20px; padding-right:20px"><i> Vs </i></span>
-									
-										{!! Form::select('ddlPlayer2', $players_list, $player2->player_id, array('class' => 'form-control', 'style' => 'width:250;text-align:center' )) !!}	
+										{!! Form::select('ddlPlayer1', $players_list, $player1->player_id, array('class' => 'form-control', 'style' => 'width:250px' )) !!}	
+										<!--span class='lbl text-muted' style="font-weight:bold; font-size:18pt; padding-left:20px; padding-right:20px"><i> Vs </i></span -->
+										{!! Form::submit('Vs', array('class' =>'btn btn-sm btn-success', 'style' => 'font-style:italic; font-weight:bolder')) !!}	
+										{!! Form::select('ddlPlayer2', $players_list, $player2->player_id, array('class' => 'form-control', 'style' => 'width:250px;text-align:center' )) !!}	
 										<span class='lbl text-primary' style="font-weight:bolder; font-size:14pt">Player 2</span>
 									</div>
-									<br/>{!! Form::submit('Show Matchup', array('class' =>'btn btn-sm btn-success', 'style' => 'font-weight:bold')) !!}								
+									
 								{!! Form::close() !!}	
 							</center>
 						</div>					

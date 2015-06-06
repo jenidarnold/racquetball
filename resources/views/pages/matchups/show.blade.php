@@ -11,6 +11,12 @@
 		font-weight: bolder;
 		font-color: grey;
 	}
+
+	.img-profile {
+		width:125px;
+		height: auto;
+		overflow: hidden;
+	}
 	.profile 
 	{
 		text-align:center;
@@ -22,6 +28,12 @@
 		text-align:center;
 		font-size:10pt;
 		font-weight:bold;
+	}
+	.row-header{
+		font-size: 16pt;
+	}
+	.row-subheader{
+		font-size: 14pt;
 	}
 	.tr-facts
 	{
@@ -45,7 +57,7 @@
 	}
 	.progress-radius {
 		border-radius: 0;
-	}	
+	}		
 	</style>	
 @stop	
 
@@ -56,19 +68,26 @@
 			<div class="panel-body">
 				<div class="col-sm-3">	
 					<center>		
-						<table class="profile">
+						<table class="profile">	
 							<tr>
 								<td><h3>{{ $player1->first_name .' '. $player1->last_name }}</h3></td>
 							</tr>
-							<tr>
-								<td><img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg' }} class="img-thumbnail" width="200" ></a></td>
-							</tr>
-							<tr>
+							<!--tr>
 								<td>{{ $player1->gender }}</td>
-							</tr>	
+							</tr-->	
 							<tr>
 								<td>{{ $player1->home }}</td>
-							</tr>				
+							</tr>							
+							<tr>
+								<td>
+								@if(get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found')	
+									<img class='img-profile img-thumbnail' src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg' }} ></a>
+								@else
+									<img class='img-profile img-thumbnail' src='images/racquet-right.png'>
+								@endif
+								</td>
+							</tr>
+										
 						</table>
 					</center>					
 				</div>
@@ -76,24 +95,24 @@
 					<center>
 						<table class="table table-striped table-condensed table-bordered tbl-facts">
 							<tr>
-								<td colspan="2">The Facts</td>
+								<td colspan="2" class='row-header'>The Facts</td>
 							</tr>
 							<tr class="tr-facts">							
-								<td colspan="2">Rank</td>
+								<td colspan="2" class='row-subheader'>Rank</td>
 							</tr>
 							<tr>
 								<td>{{$player1->national_rank}}</td>
 								<td>{{$player2->national_rank}}</td>
 							</tr>
 							<tr class="tr-facts">
-								<td colspan="2">Skill</td>
+								<td colspan="2" class='row-subheader'>Skill</td>
 							</tr>
 							<tr>
 								<td>{{$player1->skill_level}}</td>
 								<td>{{$player2->skill_level}}</td>
 							</tr>
 							<tr class="tr-facts">
-								<td colspan="2">Wins</td>
+								<td colspan="2" class='row-subheader'>Wins</td>
 							</tr>
 							<tr>
 								<td>{{ $head2head['player1']['wins'] }}</td>
@@ -102,10 +121,10 @@
 						</table>
 						<table class="table table-striped table-condensed table-bordered tbl-feedback">
 							<tr>
-								<td colspan="4">The Fan Feedback</td>
+								<td colspan="4" class='row-header'>The Fan Feedback</td>
 							</tr>
 							<tr class="tr-feedback">
-								<td colspan="4">Power</td>
+								<td colspan="4" class='row-subheader'>Power</td>
 							</tr>
 							<tr>
 								<td class="vote-left"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
@@ -124,7 +143,7 @@
 								<td class="vote-right"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
 							</tr>
 							<tr class="tr-feedback">
-								<td colspan="4">Control</td>
+								<td colspan="4" class='row-subheader'>Control</td>
 							</tr>
 							<tr>
 								<td class="vote-left"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
@@ -143,7 +162,7 @@
 								<td class="vote-right"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
 							</tr>
 							<tr class="tr-feedback">
-								<td colspan="4">Serves</td>
+								<td colspan="4" class='row-subheader'>Serves</td>
 							</tr>
 							<tr>
 								<td class="vote-left"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
@@ -162,7 +181,7 @@
 								<td class="vote-right"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
 							</tr>
 							<tr class="tr-feedback">
-								<td colspan="4">Forehand</td>
+								<td colspan="4" class='row-subheader'>Forehand</td>
 							</tr>
 							<tr>
 								<td class="vote-left"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
@@ -181,7 +200,7 @@
 								<td class="vote-right"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
 							</tr>
 							<tr class="tr-feedback">
-								<td colspan="4">Backhand</td>
+								<td colspan="4" class='row-subheader'>Backhand</td>
 							</tr>
 							<tr>
 								<td class="vote-left"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
@@ -207,15 +226,22 @@
 							<tr>
 								<td><h3>{{ $player2->first_name .' '. $player2->last_name }}</h3></td>
 							</tr>
-							<tr>
-								<td><img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player2->player_id.'_normal.jpg' }} class="img-thumbnail" width="200" ></a></td>
-							</tr>
-							<tr>
+							<!--tr>
 								<td>{{ $player2->gender }}</td>
-							</tr>	
+							</tr-->	
 							<tr>
 								<td>{{ $player2->home }}</td>
-							</tr>						
+							</tr>									
+							<tr>
+								<td>
+								@if(get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player2->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found')							
+									<img class='img-profile img-thumbnail' src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player2->player_id.'_normal.jpg' }}  ></a>
+								@else
+									<img class='img-profile img-thumbnail' src='images/racquet-left.png'>
+								@endif
+								</td>
+							</tr>
+							
 						</table>
 					</center>				
 				</div>
