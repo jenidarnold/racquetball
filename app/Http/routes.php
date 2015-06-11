@@ -42,6 +42,7 @@ Route::model('tournaments', 'Tournament');
 Route::model('players', 'Player');
 
 
+
 //Need to add slug field to database tables
 Route::bind('players', function($value, $route){
 	return App\Player::wherePlayer_id($value)->first();
@@ -55,6 +56,9 @@ Route::bind('participants', function($value, $route){
 	return App\Participant::whereTournament_id($value)->first();
 });
 
+
+Route::get('players/{players}/tournaments', 'PlayersController@getTournaments');
+Route::get('players/{players}/biography', 'PlayersController@getBio');
 
 Route::resource('rankings', 'RankingsController');
 Route::resource('players', 'PlayersController');

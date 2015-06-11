@@ -112,4 +112,23 @@ class PlayersController extends Controller {
 		//
 	}
 
+	/**
+	 * Player Tournament History
+	 */
+	public function getTournaments($player){
+	
+		$matches = $player->getMatches();
+		$tournaments = $player->getTournaments();
+
+		//dd($player);
+		return view('pages/players/tournaments', compact('player', 'matches', 'tournaments'));
+	}
+
+		/**
+	 * Player Tournament History
+	 */
+	public function getBio($player){
+	
+		return view('pages/players/bio', compact('player'));
+	}
 }

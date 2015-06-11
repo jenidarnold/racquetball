@@ -109,7 +109,7 @@
 						<td>{{ $head2head['player2']['wins'] }}</td>
 					</tr>
 				</table>
-				<table class="table table-striped table-condensed table-bordered tbl-feedback">
+{{-- 				<table class="table table-striped table-condensed table-bordered tbl-feedback">
 					<tr>
 						<td colspan="4" class='row-header label-info'>
 							<span class='label label-block label-info'>In Your Opinion</span>
@@ -209,7 +209,47 @@
 						</td>
 						<td class="vote-right"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
 					</tr>
+				</table> --}}
+
+				<table class="table table-striped table-condensed table-bordered tbl-feedback">
+					<tr>
+						<td colspan="4" class='row-header label-info'>
+							<span class='label label-block label-info'>In Your Opinion</span>
+						</td>
+					</tr>
+					@foreach($skills as $s)
+					<tr class="tr-feedback">
+						<td colspan="4" class='row-subheader'>{{ $s->skill }}</td>
+					</tr>
+					<tr>
+						<td class="vote-left"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
+						<td class="td-left">
+							<div class="progress progress-radius">
+								<div class="progress-bar progress-bar-success" role="progressbar" 
+								aria-valuenow={{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }} 
+								aria-valuemin="0" aria-valuemax="100" 
+								style="float:right; width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }}%">
+								{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"] }}%
+								</div>
+							</div>
+						</td>
+						<td class="td-right">
+							<div class="progress progress-radius">
+								<div class="progress-bar progress-bar-success" role="progressbar" 
+								aria-valuenow={{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }} 
+								aria-valuemin="0" aria-valuemax="100" 
+								style="float:right; width:{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }}%">
+								{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"] }}%
+								</div>
+							</div>
+						</td>
+						<td class="vote-right"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
+					</tr>
+					@endforeach							
 				</table>
+
+
+
 			</center>
 		</div>
 		<div class="col-sm-3">		

@@ -24,6 +24,7 @@ class CreateMatchesTable extends Migration {
 			$table->integer('winner_id');
 			$table->timestamps();
 		});
+
 	}
 
 	/**

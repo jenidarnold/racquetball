@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use Input;
+use App\Skill;
+use App\Vote;
 use App\Ranking;
 use App\Player;
 use App\Match;
@@ -62,21 +64,22 @@ class MatchupsController extends Controller {
 		$player2ID = Input::get('ddlPlayer2');
 
 		$players_list = Player::orderby('last_name')
-					->orderby('first_name')
-					->get()
-					->lists('last_first_name', 'player_id');
+			->orderby('first_name')
+			->get()
+			->lists('last_first_name', 'player_id');
 
 		$player1 = Player::where('player_id', '=', $player1ID)->first();
 		$player2 = Player::where('player_id', '=', $player2ID)->first();
-
-		
-
+	
 		$h2h = new Match();
 
 		$head2head = $h2h->head2head($player1ID, $player2ID);
+		$skills = Skill::orderby('skill_id')
+			->get();
 
+		$votes = new Vote();
 
-		return view('pages/matchups.show', compact('players_list', 'player1', 'player2', 'head2head'));
+		return view('pages/matchups.show', compact('players_list', 'player1', 'player2', 'head2head', 'skills', 'votes'));
 	}
 
 	/**

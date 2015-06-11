@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMatchesTable_deleteme extends Migration {
+class AlterAttributeInVotesTable_delete extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateMatchesTable_deleteme extends Migration {
 	 */
 	public function up()
 	{
-		
+		//
 	}
 
 	/**
@@ -22,7 +22,7 @@ class CreateMatchesTable_deleteme extends Migration {
 	 */
 	public function down()
 	{
-		
+		//
 	}
 
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMatchesTable_deleteme extends Migration {
+class AddVoterIDToVotesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,9 @@ class CreateMatchesTable_deleteme extends Migration {
 	 */
 	public function up()
 	{
-		
+		Schema::table('votes', function($t){
+			$t->integer('voter_id');
+		});
 	}
 
 	/**
@@ -22,7 +24,9 @@ class CreateMatchesTable_deleteme extends Migration {
 	 */
 	public function down()
 	{
-		
+		Schema::table('votes', function($t){
+			$t->dropColumn('voter_id');
+		});
 	}
 
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMatchesTable_deleteme extends Migration {
+class CreateSkillsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,12 @@ class CreateMatchesTable_deleteme extends Migration {
 	 */
 	public function up()
 	{
-		
+		Schema::create('skills', function(Blueprint $table)
+		{
+			$table->increments('skill_id');
+			$table->string('skill');	
+			$table->timestamps();
+		});
 	}
 
 	/**
@@ -22,7 +27,7 @@ class CreateMatchesTable_deleteme extends Migration {
 	 */
 	public function down()
 	{
-		
+		Schema::drop('skills');
 	}
 
 }
