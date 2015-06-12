@@ -127,10 +127,11 @@
 						<td colspan="4" class='row-subheader'>{{ $s->skill }}</td>
 					</tr>
 					<tr>
-						<td class="vote-left"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
+						<td class="vote-left">
+							<button id="btnVote" onclick="{{"vote($voter_id,$s->skill_id,$player1->player_id,$player2->player_id);"}}" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
 						<td class="td-left">
 							<div class="progress progress-radius">
-								<div id="div_p1_vs" class="p1-bar progress-bar " role="progressbar" 
+								<div id="{{"div-p1-$s->skill_id-vs"}}" class="p1-bar progress-bar " role="progressbar" 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }}%">
@@ -139,7 +140,7 @@
 							</div>
 						
 							<div class="progress progress-radius">
-								<div id="div_p1_all" class="p1-bar progress-bar progress-bar-success" role="progressbar" 
+								<div id="{{"div-p1-$s->skill_id-all"}}" class="p1-bar progress-bar progress-bar-success" role="progressbar" 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"]  }}%">
@@ -149,7 +150,7 @@
 						</td>
 						<td class="td-right">
 							<div class="progress progress-radius">
-								<div id="div_p2_vs" class="p2-bar progress-bar progress-bar-success" role="progressbar" 
+								<div id="div_p2_vs" class="p2-bar progress-bar progress-bar-success" role="progressbar 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }}%">
@@ -202,19 +203,51 @@
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-		$('[id^=div_p]').each(function(){
-			var perct = $(this).text();
 
-			perct = parseInt(perct.replace('%',''));
+			//Vote Percentage color-code
+			$('[id^=div-p]').each(function(){
+				var perct = $(this).text();
 
-			if (perct == 50) {
-				$(this).addClass('progress-bar-warning');
-			} else if (perct > 50) {
-				$(this).addClass('progress-bar-success');
-			}
-			else {
-				$(this).addClass('progress-bar-danger');
-			}		
+				perct = parseInt(perct.replace('%',''));
+
+				if (perct == 50) {
+					$(this).addClass('progress-bar-warning');
+				} else if (perct > 50) {
+					$(this).addClass('progress-bar-success');
+				}
+				else {
+					$(this).addClass('progress-bar-danger');
+				}		
+			});
+
+		
 		});
-	});
+
+		//Voting Button
+		function vote(voter_id, skill_id, for_id, against_id){
+			$.ajax({
+				type: 'GET',
+				url: '{{ URL::to('api/vote/castvote') }}',
+				data: 'voterID='+ voter_id +'&skillID=' + skill_id + '&forID=' + for_id + '&againstID=' + against_id,
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success:function(result){
+					//Update the appropriate div
+										
+					var div_p1_vs ='div-p1-' + skill_id + '-vs';
+					var div_p2_vs ='div-p1-' + skill_id + '-vs';
+					var div_p1_all ='div-p1-' + skill_id + '-all';
+					var div_p2_all ='div-p1-' + skill_id + '-all';
+					
+					$('#'+ div_p1_vs).text( result.p1["for"]-10);
+					$('#'+ div_p2_vs).text( result.p2["for"+10]);	
+					$('#'+ div_p1_all).text( result.p1["for_all"-30]);
+					$('#'+ div_p2_all).text( result.p2["for_all"]+20);			
+				},
+				error:function(x,e) {
+					alert("error casting vote: " + e.message);
+				}
+			});
+		};
+
 	</script>

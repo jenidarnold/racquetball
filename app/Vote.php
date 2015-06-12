@@ -24,7 +24,7 @@ class Vote extends Model {
 		return $this->hasMany('App\Skill', 'skill_id', 'skill_id');
 	}
 
-	public function head2head($skill_id, $player1, $player2) {
+	public static function head2head($skill_id, $player1, $player2) {
 
 		$p1_for_vs = Vote::where('skill_id', '=', $skill_id)
 			->where('for_id', '=', $player1)

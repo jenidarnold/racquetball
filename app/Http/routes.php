@@ -1,15 +1,7 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
+use DB;
+use App\Vote;
 
 Route::get('/', 'WelcomeController@index');
 
@@ -67,3 +59,24 @@ Route::resource('tournaments.participants', 'ParticipantsController');
 Route::resource('tournaments.divisions', 'DivisionsController');
 //Route::resource('tournaments.divisions.participaints', 'ParticipantsController');
 
+//APIs
+Route::get('api/vote/castvote', function(){
+	$skill_id = (int)Input::get('skillID');
+	$voter_id = (int)Input::get('voterID');
+	$for_id = (int)Input::get('forID');
+	$against_id = (int)Input::get('againstID');
+	
+	//1. if exists delete vote by voterid, skillid, forid, againstid
+	//2. store new vote by voterid, skillid, forid, againstid
+	//3. get the reults
+	$p1 = Vote::head2head($skill_id,$for_id,$against_id );
+	$p2 = Vote::head2head($skill_id,$against_id,$for_id );
+
+	$versus = array(
+		"p1" => $p1,
+		"p2" => $p2
+		);
+
+	//dd($versus);
+	return Response::json($versus);
+});
