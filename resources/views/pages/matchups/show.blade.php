@@ -131,7 +131,7 @@
 							<button id="btnVote" onclick="{{"vote($voter_id,$s->skill_id,$player1->player_id,$player2->player_id);"}}" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
 						<td class="td-left">
 							<div class="progress progress-radius">
-								<div id="{{"div-p1-$s->skill_id-vs"}}" class="p1-bar progress-bar " role="progressbar" 
+								<div id="{{"div-p$player1->player_id-s$s->skill_id-vs"}}" class="p1-bar progress-bar " role="progressbar" 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }}%">
@@ -140,7 +140,7 @@
 							</div>
 						
 							<div class="progress progress-radius">
-								<div id="{{"div-p1-$s->skill_id-all"}}" class="p1-bar progress-bar progress-bar-success" role="progressbar" 
+								<div id="{{"div-p$player1->player_id-s$s->skill_id-all"}}" class="p1-bar progress-bar progress-bar-success" role="progressbar" 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"]  }}%">
@@ -150,7 +150,7 @@
 						</td>
 						<td class="td-right">
 							<div class="progress progress-radius">
-								<div id="div_p2_vs" class="p2-bar progress-bar progress-bar-success" role="progressbar 
+								<div id="{{"div-p$player2->player_id-s$s->skill_id-vs"}}" class="p2-bar progress-bar progress-bar-success" role="progressbar 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }}%">
@@ -159,7 +159,7 @@
 							</div>
 						
 							<div class="progress progress-radius">
-								<div id="div_p2_all"class="p2-bar progress-bar progress-bar-success" role="progressbar" 
+								<div id="{{"div-p$player2->player_id-s$s->skill_id-all"}}" class="p2-bar progress-bar progress-bar-success" role="progressbar" 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for_all"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for_all"]  }}%">
@@ -167,7 +167,8 @@
 								</div>
 							</div>
 						</td>
-						<td class="vote-right"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
+						<td class="vote-right">
+							<button id="btnVote" onclick="{{"vote($voter_id,$s->skill_id,$player2->player_id,$player1->player_id);"}}" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></td>
 					</tr>
 					@endforeach							
 				</table>
@@ -206,22 +207,45 @@
 
 			//Vote Percentage color-code
 			$('[id^=div-p]').each(function(){
-				var perct = $(this).text();
 
-				perct = parseInt(perct.replace('%',''));
+				setProgressBarColors($(this));
 
-				if (perct == 50) {
-					$(this).addClass('progress-bar-warning');
-				} else if (perct > 50) {
-					$(this).addClass('progress-bar-success');
-				}
-				else {
-					$(this).addClass('progress-bar-danger');
-				}		
+				// var perct = $(this).text();
+				// perct = parseInt(perct.replace('%',''));
+
+				// if (perct == 50) {
+				// 	$(this).addClass('progress-bar-warning');
+				// } else if (perct > 50) {
+				// 	$(this).addClass('progress-bar-success');
+				// }
+				// else {
+				// 	$(this).addClass('progress-bar-danger');
+				// }		
 			});
 
-		
+
 		});
+
+		function setProgressBarColors(el){
+			var perct = el.text();
+
+			perct = parseInt(perct.replace('%',''));
+
+			//remove previous color
+			el.removeClass('progress-bar-warning');
+			el.removeClass('progress-bar-success');
+			el.removeClass('progress-bar-danger');
+			
+			// set new color
+			if (perct == 50) {
+				el.addClass('progress-bar-warning');
+			} else if (perct > 50) {
+				el.addClass('progress-bar-success');
+			}
+			else {
+				el.addClass('progress-bar-danger');
+			}	
+		}
 
 		//Voting Button
 		function vote(voter_id, skill_id, for_id, against_id){
@@ -234,15 +258,32 @@
 				success:function(result){
 					//Update the appropriate div
 										
-					var div_p1_vs ='div-p1-' + skill_id + '-vs';
-					var div_p2_vs ='div-p1-' + skill_id + '-vs';
-					var div_p1_all ='div-p1-' + skill_id + '-all';
-					var div_p2_all ='div-p1-' + skill_id + '-all';
+					var div_p1_vs = 'div-p' + for_id + '-s' + skill_id + '-vs';
+					var div_p2_vs = 'div-p' + against_id + '-s' + skill_id + '-vs';
+					var div_p1_all ='div-p' + for_id + '-s' + skill_id + '-all';
+					var div_p2_all ='div-p' + against_id + '-s' + skill_id + '-all';
 					
-					$('#'+ div_p1_vs).text( result.p1["for"]-10);
-					$('#'+ div_p2_vs).text( result.p2["for"+10]);	
-					$('#'+ div_p1_all).text( result.p1["for_all"-30]);
-					$('#'+ div_p2_all).text( result.p2["for_all"]+20);			
+
+					$('#'+ div_p1_vs).text( result.p1["for"]+'%');
+					$('#'+ div_p2_vs).text( result.p2["for"]+'%');	
+					$('#'+ div_p1_all).text( result.p1["for_all"]+'%');
+					$('#'+ div_p2_all).text( result.p2["for_all"]+'%');		
+
+
+					$('#'+ div_p1_vs).width( result.p1["for"]+'%');
+					$('#'+ div_p2_vs).width( result.p2["for"]+'%');	
+					$('#'+ div_p1_all).width( result.p1["for_all"]+'%');
+					$('#'+ div_p2_all).width( result.p2["for_all"]+'%');	
+
+					$('#'+ div_p1_vs).attr('aria-valuenow', result.p1["for"]);
+					$('#'+ div_p2_vs).attr('aria-valuenow', result.p2["for"]);	
+					$('#'+ div_p1_all).attr('aria-valuenow', result.p1["for_all"]);
+					$('#'+ div_p2_all).attr('aria-valuenow', result.p2["for_all"]);	
+
+					setProgressBarColors($('#'+ div_p1_vs));
+					setProgressBarColors($('#'+ div_p2_vs));
+					setProgressBarColors($('#'+ div_p1_all));
+					setProgressBarColors($('#'+ div_p2_all));
 				},
 				error:function(x,e) {
 					alert("error casting vote: " + e.message);

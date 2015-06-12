@@ -16,7 +16,7 @@ class Vote extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['vote_id', 'voter_id', 'skill_id', 'for_id', 'against_id'];
+	protected $fillable = ['voter_id', 'skill_id', 'for_id', 'against_id'];
 
 
 	public function skills() {

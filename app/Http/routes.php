@@ -67,7 +67,15 @@ Route::get('api/vote/castvote', function(){
 	$against_id = (int)Input::get('againstID');
 	
 	//1. if exists delete vote by voterid, skillid, forid, againstid
-	//2. store new vote by voterid, skillid, forid, againstid
+		
+	//2. Save vote
+	$vote = new Vote;
+	$vote->voter_id = $voter_id;
+	$vote->skill_id = $skill_id;
+	$vote->for_id = $for_id;
+	$vote->against_id = $against_id;
+	$vote->save();
+
 	//3. get the reults
 	$p1 = Vote::head2head($skill_id,$for_id,$against_id );
 	$p2 = Vote::head2head($skill_id,$against_id,$for_id );
