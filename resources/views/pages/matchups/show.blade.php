@@ -48,6 +48,13 @@
 	.progress-radius {
 		border-radius: 0;
 	}		
+
+	.p1-bar{
+		float: right;
+	}
+	.p2-bar{
+		float: left;
+	}
 	</style>	
 @stop	
 
@@ -68,7 +75,7 @@
 					</tr>							
 					<tr>
 						<td>
-						@if(get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found')	
+						@if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
 							<img class='img-profile img-thumbnail' src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg' }} ></a>
 						@else
 							<img class='img-profile img-thumbnail' src='images/racquet-right.png'>
@@ -109,108 +116,6 @@
 						<td>{{ $head2head['player2']['wins'] }}</td>
 					</tr>
 				</table>
-{{-- 				<table class="table table-striped table-condensed table-bordered tbl-feedback">
-					<tr>
-						<td colspan="4" class='row-header label-info'>
-							<span class='label label-block label-info'>In Your Opinion</span>
-						</td>
-					</tr>
-					<tr class="tr-feedback">
-						<td colspan="4" class='row-subheader'>Power</td>
-					</tr>
-					<tr>
-						<td class="vote-left"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
-						<td class="td-left">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="float:right; width:80%">80%
-								</div>
-							</div>
-						</td>
-						<td class="td-right">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%">20%
-								</div>
-							</div>
-						</td>
-						<td class="vote-right"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
-					</tr>
-					<tr class="tr-feedback">
-						<td colspan="4" class='row-subheader'>Control</td>
-					</tr>
-					<tr>
-						<td class="vote-left"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
-						<td class="td-left">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="float:right; width:33%">33%
-								</div>
-							</div>
-						</td>
-						<td class="td-right">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" style="width:66%">66%
-								</div>
-							</div>
-						</td>
-						<td class="vote-right"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
-					</tr>
-					<tr class="tr-feedback">
-						<td colspan="4" class='row-subheader'>Serves</td>
-					</tr>
-					<tr>
-						<td class="vote-left"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
-						<td class="td-left">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="float:right; width:40%">40%
-								</div>
-							</div>
-						</td>
-						<td class="td-right">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:60%">60%
-								</div>
-							</div>
-						</td>
-						<td class="vote-right"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
-					</tr>
-					<tr class="tr-feedback">
-						<td colspan="4" class='row-subheader'>Forehand</td>
-					</tr>
-					<tr>
-						<td class="vote-left"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
-						<td class="td-left">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="float:right; width:75%">75%
-								</div>
-							</div>
-						</td>
-						<td class="td-right">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width:25%">25%
-								</div>
-							</div>
-						</td>
-						<td class="vote-right"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
-					</tr>
-					<tr class="tr-feedback">
-						<td colspan="4" class='row-subheader'>Backhand</td>
-					</tr>
-					<tr>
-						<td class="vote-left"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
-						<td class="td-left">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="float:right; width:50%">50%
-								</div>
-							</div></td>
-						<td class="td-right">
-							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">50%
-								</div>
-							</div>
-						</td>
-						<td class="vote-right"><button class="btn btn-xs btn-default"><i class="fa fa-thumbs-up"></i></button></td>
-					</tr>
-				</table> --}}
-
 				<table class="table table-striped table-condensed table-bordered tbl-feedback">
 					<tr>
 						<td colspan="4" class='row-header label-info'>
@@ -225,21 +130,39 @@
 						<td class="vote-left"><button class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
 						<td class="td-left">
 							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-success" role="progressbar" 
+								<div id="div_p1_vs" class="p1-bar progress-bar " role="progressbar" 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
-								style="float:right; width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }}%">
+								style="width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }}%">
 								{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"] }}%
+								</div>
+							</div>
+						
+							<div class="progress progress-radius">
+								<div id="div_p1_all" class="p1-bar progress-bar progress-bar-success" role="progressbar" 
+								aria-valuenow={{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"]  }} 
+								aria-valuemin="0" aria-valuemax="100" 
+								style="width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"]  }}%">
+								{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"] }}% (overall)
 								</div>
 							</div>
 						</td>
 						<td class="td-right">
 							<div class="progress progress-radius">
-								<div class="progress-bar progress-bar-success" role="progressbar" 
+								<div id="div_p2_vs" class="p2-bar progress-bar progress-bar-success" role="progressbar" 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
-								style="float:right; width:{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }}%">
-								{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"] }}%
+								style="width:{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }}%">
+								{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"] }}% 
+								</div>
+							</div>
+						
+							<div class="progress progress-radius">
+								<div id="div_p2_all"class="p2-bar progress-bar progress-bar-success" role="progressbar" 
+								aria-valuenow={{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for_all"]  }} 
+								aria-valuemin="0" aria-valuemax="100" 
+								style="width:{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for_all"]  }}%">
+								{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for_all"] }}% (overall)
 								</div>
 							</div>
 						</td>
@@ -247,9 +170,6 @@
 					</tr>
 					@endforeach							
 				</table>
-
-
-
 			</center>
 		</div>
 		<div class="col-sm-3">		
@@ -266,17 +186,35 @@
 					</tr>									
 					<tr>
 						<td>
-						@if(get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player2->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found')							
+						@if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player2->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))							
 							<img class='img-profile img-thumbnail' src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player2->player_id.'_normal.jpg' }}  ></a>
 						@else
 							<img class='img-profile img-thumbnail' src='images/racquet-left.png'>
 						@endif
 						</td>
-					</tr>
-					
+					</tr>					
 				</table>
 			</center>				
 		</div>	
 	</div>
 </div>
 @stop
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+		$('[id^=div_p]').each(function(){
+			var perct = $(this).text();
+
+			perct = parseInt(perct.replace('%',''));
+
+			if (perct == 50) {
+				$(this).addClass('progress-bar-warning');
+			} else if (perct > 50) {
+				$(this).addClass('progress-bar-success');
+			}
+			else {
+				$(this).addClass('progress-bar-danger');
+			}		
+		});
+	});
+	</script>

@@ -35,6 +35,7 @@ class Vote extends Model {
 
 		$p2_for_vs = Vote::where('skill_id', '=', $skill_id)
 			->where('for_id', '=', $player2)
+			->where('against_id', '=', $player1)
 			->get()
 			->count();
 
@@ -50,31 +51,28 @@ class Vote extends Model {
 
 		$total_vs = $p1_for_vs + $p2_for_vs;
 
-		$total_all =  Vote::where('skill_id', '=', $skill_id)
+		$total_all = Vote::where('skill_id', '=', $skill_id)
 			->get()
 			->count();
 
+		$vs_percent  = 0;
+		if($total_vs > 0) {
+			$vs_percent = (int)(($p1_for_vs/$total_vs)*100 + .5);
+		}
+		
+		$all_percent =  0;
+		if ($total_all > 0 ) {
+			$all_percent = (int)(($p1_for_all/$total_all)*100 + .5);
+		}
+
 		$versus = [ 
-			 'for' => ($p1_for_vs/$total_vs)*100,
+			 'for' => $vs_percent,
 			 'total_vs' => $total_vs,
-			 'for_all' => $p1_for_all ,
+			 'for_all' => $all_percent ,
 			 'total_all' => $total_all,
 		];	
 
-		// $versus = [ 'player1' => [
-		// 						 'for' => $p1_for_vs,
-		// 						 'total_vs' => $total_vs,
-		// 						 'for_all' => $p1_for_all ,
-		// 						 'total_all' => $total_all,
-		// 					],
-		// 			'player2' => [
-		// 						 'for' => $p2_for_vs,
-		// 						 'total' => $total_vs,
-		// 						 'for_all' => $p2_for_all ,
-		// 						 'total_all' => $total_all,
-		// 					],
-		// 	];
-
+		//dd($versus);
 		return $versus;
 	}
 }
