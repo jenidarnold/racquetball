@@ -1,6 +1,7 @@
 <?php
 
 use App\Vote;
+use App\Scraper;
 
 Route::get('/', 'WelcomeController@index');
 
@@ -26,13 +27,9 @@ Route::controllers([
 	'scraper' => 'Admin\ScreenScrapeController',
 ]);
 
-
-
 Route::model('participants', 'Participant');
 Route::model('tournaments', 'Tournament');
 Route::model('players', 'Player');
-
-
 
 //Need to add slug field to database tables
 Route::bind('players', function($value, $route){
@@ -59,6 +56,17 @@ Route::resource('tournaments.divisions', 'DivisionsController');
 //Route::resource('tournaments.divisions.participaints', 'ParticipantsController');
 
 //APIs
+Route::get('api/profile/download', function(){
+	$player_id = (int)Input::get('playerID');
+
+//dd($player_id);
+	//call scraper
+	$s = New Scraper();
+	$s->get_player($player_id);
+
+	return "";
+});
+
 Route::get('api/vote/castvote', function(){
 	$skill_id = (int)Input::get('skillID');
 	$voter_id = (int)Input::get('voterID');

@@ -32,7 +32,7 @@ class Participant extends Model {
 	 */
 	public function divisions() {
 
-		return $this->hasMany('App\Division', 'division_id', 'id');
+		return $this->hasMany('App\Division', 'id', 'division_id');
 	}
 
     /**

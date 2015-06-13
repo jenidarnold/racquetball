@@ -15,12 +15,13 @@ class TournamentsController extends Controller {
 	 */
 	public function index()
 	{
-		$live_tournaments = Tournament::where('start_date', '<=', date('Y-m-d H:i:s'))
-							->where('end_date', '>=', date('Y-m-d H:i:s'))
+		$today = date('Y-m-d');
+		$live_tournaments = Tournament::where('start_date', '=', date('Y-m-d'))
+							->where('end_date', '<=', date('Y-m-d', strtotime($today.'+2 days')))
 							->orderBy('start_date')
 							->get();
 
-		$future_tournaments = Tournament::where('start_date', '>', date('Y-m-d H:i:s'))
+		$future_tournaments = Tournament::where('start_date', '>', date('Y-m-d'))
 						    ->orderBy('start_date')
 							->get();
 
