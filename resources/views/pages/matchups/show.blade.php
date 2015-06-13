@@ -45,6 +45,10 @@
 		text-align: left;
 		font-color: blue;
 	}
+
+	.progress{
+		background-color: #A8A8A8; !important
+	}
 	.progress-radius {
 		border-radius: 0;
 	}		
@@ -128,14 +132,17 @@
 					</tr>
 					<tr>
 						<td class="vote-left">
-							<button id="btnVote" onclick="{{"vote($voter_id,$s->skill_id,$player1->player_id,$player2->player_id);"}}" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i></button></td>
+							<button id="{{"btnVote-p$player1->player_id-s$s->skill_id"}}" 
+							hasvote="{{ $votes->hasVote($voter_id, $s->skill_id, $player1->player_id, $player2->player_id) }}"  
+							onclick="{{"vote($voter_id,$s->skill_id,$player1->player_id,$player2->player_id);"}}" 
+							class="btn btn-xs"><i class="fa fa-thumbs-up"></i></button></td>
 						<td class="td-left">
 							<div class="progress progress-radius">
-								<div id="{{"div-p$player1->player_id-s$s->skill_id-vs"}}" class="p1-bar progress-bar " role="progressbar" 
+								<div id="{{"div-p$player1->player_id-s$s->skill_id-vs"}}" class="p1-bar progress-bar" role="progressbar" 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"]  }}%">
-								{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"] }}%
+								{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for"] }}% (vs)
 								</div>
 							</div>
 						
@@ -144,7 +151,7 @@
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"]  }}%">
-								{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"] }}% (overall)
+								{{ $votes->head2head($s->skill_id, $player1->player_id, $player2->player_id)["for_all"] }}% (all)
 								</div>
 							</div>
 						</td>
@@ -154,21 +161,26 @@
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"]  }}%">
-								{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"] }}% 
+								{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for"] }}% (vs)
 								</div>
 							</div>
-						
 							<div class="progress progress-radius">
+
 								<div id="{{"div-p$player2->player_id-s$s->skill_id-all"}}" class="p2-bar progress-bar progress-bar-success" role="progressbar" 
 								aria-valuenow={{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for_all"]  }} 
 								aria-valuemin="0" aria-valuemax="100" 
 								style="width:{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for_all"]  }}%">
-								{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for_all"] }}% (overall)
-								</div>
+								{{ $votes->head2head($s->skill_id, $player2->player_id, $player1->player_id)["for_all"] }}% (all)
+								</div>								
 							</div>
 						</td>
 						<td class="vote-right">
-							<button id="btnVote" onclick="{{"vote($voter_id,$s->skill_id,$player2->player_id,$player1->player_id);"}}" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></td>
+							<button id="{{"btnVote-p$player2->player_id-s$s->skill_id"}}" 
+							hasvote="{{$votes->hasVote($voter_id, $s->skill_id, $player2->player_id, $player1->player_id)}}"  
+							onclick="{{"vote($voter_id,$s->skill_id,$player2->player_id,$player1->player_id);"}}" 
+							class="btn btn-xs"><i class="fa fa-thumbs-up">
+							</i></button>
+						</td>
 					</tr>
 					@endforeach							
 				</table>
@@ -207,24 +219,58 @@
 
 			//Vote Percentage color-code
 			$('[id^=div-p]').each(function(){
-
-				setProgressBarColors($(this));
-
-				// var perct = $(this).text();
-				// perct = parseInt(perct.replace('%',''));
-
-				// if (perct == 50) {
-				// 	$(this).addClass('progress-bar-warning');
-				// } else if (perct > 50) {
-				// 	$(this).addClass('progress-bar-success');
-				// }
-				// else {
-				// 	$(this).addClass('progress-bar-danger');
-				// }		
+				setProgressBarColors($(this));		
 			});
-
+			
+			setVoteButtons();
 
 		});
+
+		function setVoteButtons(){
+			//Vote button selected
+			
+			$('[id^=btnVote]').each(function(){
+				setVote($(this));		
+			});
+		}
+
+		function setVote(el) {
+
+			var v = el.attr('hasvote');
+
+			//remove previous color
+			el.removeClass('btn-primary');
+			el.removeClass('btn-info');
+			el.removeClass('disabled');
+			
+			// set new color
+			if (v == 'true') {
+				el.addClass('btn-primary');
+				el.addClass('disabled');
+			}
+			else {
+				el.addClass('btn-default');
+
+			}	
+		}
+
+		function setVoteButton(el, hasVote) {
+
+			//remove previous color
+			el.removeClass('btn-primary');
+			el.removeClass('btn-info');
+			el.removeClass('disabled');
+
+			el.attr('hasvote', hasVote);
+			// set new color
+			if (hasVote == 'false') {
+				el.addClass('btn-default');
+			}
+			else {
+				el.addClass('btn-primary');
+				el.addClass('disabled');
+			}	
+		}
 
 		function setProgressBarColors(el){
 			var perct = el.text();
@@ -262,12 +308,15 @@
 					var div_p2_vs = 'div-p' + against_id + '-s' + skill_id + '-vs';
 					var div_p1_all ='div-p' + for_id + '-s' + skill_id + '-all';
 					var div_p2_all ='div-p' + against_id + '-s' + skill_id + '-all';
-					
 
-					$('#'+ div_p1_vs).text( result.p1["for"]+'%');
-					$('#'+ div_p2_vs).text( result.p2["for"]+'%');	
-					$('#'+ div_p1_all).text( result.p1["for_all"]+'%');
-					$('#'+ div_p2_all).text( result.p2["for_all"]+'%');		
+					//vote button			
+					var btnVote_p1 = 'btnVote-p' + for_id + '-s' + skill_id;					
+					var btnVote_p2 = 'btnVote-p' + against_id + '-s' + skill_id;	
+
+					$('#'+ div_p1_vs).text( result.p1["for"]+'% (vs)');
+					$('#'+ div_p2_vs).text( result.p2["for"]+'% (vs)');	
+					$('#'+ div_p1_all).text( result.p1["for_all"]+'% (all)');
+					$('#'+ div_p2_all).text( result.p2["for_all"]+'% (all)');		
 
 
 					$('#'+ div_p1_vs).width( result.p1["for"]+'%');
@@ -284,6 +333,9 @@
 					setProgressBarColors($('#'+ div_p2_vs));
 					setProgressBarColors($('#'+ div_p1_all));
 					setProgressBarColors($('#'+ div_p2_all));
+
+					setVoteButton($('#'+ btnVote_p1), 'true');
+					setVoteButton($('#'+ btnVote_p2), 'false');
 				},
 				error:function(x,e) {
 					alert("error casting vote: " + e.message);

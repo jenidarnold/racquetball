@@ -1,6 +1,5 @@
 <?php
 
-use DB;
 use App\Vote;
 
 Route::get('/', 'WelcomeController@index');
@@ -66,17 +65,30 @@ Route::get('api/vote/castvote', function(){
 	$for_id = (int)Input::get('forID');
 	$against_id = (int)Input::get('againstID');
 	
-	//1. if exists delete vote by voterid, skillid, forid, againstid
-		
-	//2. Save vote
-	$vote = new Vote;
-	$vote->voter_id = $voter_id;
-	$vote->skill_id = $skill_id;
-	$vote->for_id = $for_id;
-	$vote->against_id = $against_id;
-	$vote->save();
+	//if $sameVote exists, do nothing
+	$sameVote = Vote::where('voter_id', '=', $voter_id)
+		->where('skill_id', '=', $skill_id)
+		->where('for_id', '=', $for_id)
+		->where('against_id', '=', $against_id)
+		->count();
 
-	//3. get the reults
+	if ($sameVote == 0) {
+		$vote = Vote::firstOrNew(array(
+			'voter_id' => $voter_id,
+			'skill_id' => $skill_id,
+			'for_id' => $against_id,
+			'against_id' => $for_id,
+			)
+		);		
+
+		$vote->voter_id = $voter_id;
+		$vote->skill_id = $skill_id;
+		$vote->for_id = $for_id;
+		$vote->against_id = $against_id;
+		$vote->save();
+	}
+
+	// get the reults
 	$p1 = Vote::head2head($skill_id,$for_id,$against_id );
 	$p2 = Vote::head2head($skill_id,$against_id,$for_id );
 

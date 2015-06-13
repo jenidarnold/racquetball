@@ -18,6 +18,7 @@ class Vote extends Model {
 	 */
 	protected $fillable = ['voter_id', 'skill_id', 'for_id', 'against_id'];
 
+	public $primaryKey = 'vote_id';
 
 	public function skills() {
 
@@ -45,13 +46,19 @@ class Vote extends Model {
 			->count();
 
 		$p2_for_all = Vote::where('skill_id', '=', $skill_id)
-			->where('for_id', '=', $player2)
+			->where('for_id', '<>', $player1)
 			->get()
 			->count();
 
 		$total_vs = $p1_for_vs + $p2_for_vs;
 
 		$total_all = Vote::where('skill_id', '=', $skill_id)
+			->where('for_id', '=', $player1)
+			->get()
+			->count() 
+			+ 
+			Vote::where('skill_id', '=', $skill_id)
+			->Where('against_id', '=', $player1)
 			->get()
 			->count();
 
@@ -74,6 +81,22 @@ class Vote extends Model {
 
 		//dd($versus);
 		return $versus;
+	}
+	/**
+	 *  Get votes for all skills
+	 */
+	public static function hasVote($voter_id, $skill_id, $player1, $player2) {
+			$vote = Vote::where('voter_id', '=', $voter_id)
+			->where('skill_id', '=', $skill_id)
+			->where('for_id', '=', $player1)
+			->where('against_id', '=', $player2)
+			->count();
+		if($vote > 0 ) {
+			return "true";
+		}
+		else		{
+			return "false" ;
+		}
 	}
 }
 

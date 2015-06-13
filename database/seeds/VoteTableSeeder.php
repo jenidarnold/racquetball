@@ -98,7 +98,7 @@ class VoteTableSeeder extends Seeder {
 		//Voter 2 Julie vs Bernie
 		Vote::create([
 			'vote_id' => '11',
-			'voter_id' => '1',
+			'voter_id' => '2',
 			'skill_id' => '1',
 			'for_id' => '192412',
 			'against_id' => '17446',

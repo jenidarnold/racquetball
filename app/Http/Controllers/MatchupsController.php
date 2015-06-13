@@ -78,7 +78,7 @@ class MatchupsController extends Controller {
 			->get();
 
 		$votes = new Vote();
-		$voter_id = 555;
+		$voter_id = 1;
 		return view('pages/matchups.show', compact('players_list', 'player1', 'player2', 'head2head', 'skills', 'votes', 'voter_id'));
 	}
 
