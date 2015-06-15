@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Scraper;
 use App\Tournament;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -15,9 +16,18 @@ class TournamentsController extends Controller {
 	 */
 	public function index()
 	{
+
+		$s = New Scraper();
+		$tournaments = $s->get_tournaments();
+
+
 		$today = date('Y-m-d');
-		$live_tournaments = Tournament::where('start_date', '=', date('Y-m-d'))
-							->where('end_date', '<=', date('Y-m-d', strtotime($today.'+2 days')))
+		$past_tournaments = Tournament::where('end_date', '<', date('Y-m-d'))
+							->orderBy('start_date', 'desc')
+							->get();
+
+		$live_tournaments = Tournament::where('start_date', '<=', date('Y-m-d'))
+							->where('end_date', '>=', date('Y-m-d'))
 							->orderBy('start_date')
 							->get();
 
@@ -25,7 +35,7 @@ class TournamentsController extends Controller {
 						    ->orderBy('start_date')
 							->get();
 
-		return view('pages/tournaments.index', compact('live_tournaments', 'future_tournaments'));
+		return view('pages/tournaments.index', compact('past_tournaments','live_tournaments', 'future_tournaments'));
 	}
 
 	/**
@@ -56,7 +66,23 @@ class TournamentsController extends Controller {
 	 */
 	public function show($tournament)
 	{		
-		return view('pages/tournaments.show', compact('tournament'));
+		// Loop thru participants and download profile before pass to view		 
+		$s = New Scraper();
+		$participants = $tournament->participants;
+
+		$updated = false;
+		foreach ($participants as $participant){
+			if ($participant->player["full_name"] == "") {							
+				$s->get_player($participant->player_id);
+				$updated = true;
+			}
+		}
+
+		if ($updated){
+			$participants = participant::where("tournament_id", "=", $tournament->tournament_id);
+		}
+	
+		return view('pages/tournaments.show', compact('tournament', 'participants'));
 	}
 
 	/**

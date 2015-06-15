@@ -2,6 +2,7 @@
 
 use App\Tournament;
 use App\Participant;
+use App\Scraper;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -46,7 +47,7 @@ class ParticipantsController extends Controller {
 	 * @return Response
 	 */
 	public function show(Tournament $tournament, Participant $participant) //$tournament_id, $division_id)
-	{
+	{			
 		return view('pages.participants.show', compact('tournament', 'participant'));
 	}
 

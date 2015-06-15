@@ -51,7 +51,14 @@
 								<td><h2>{{$player->ranking }}</h3></t2>
 								<td>
 									<a href="{{ route('players.show', [$player->player_id]) }}">
-								     <img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} class="img-thumbnail" width="100" ></a>
+									{{-- <img class='img-profile img-thumbnail' width="100px" 
+										 src="{{ URL::to('api/profile/image?playerID='.$player->player_id) }}" ></a>
+ --}}
+								    @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
+										<img class='img-profile img-thumbnail' width="100px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} ></a>
+									@else
+										<img class='img-profile img-thumbnail' width="100px" src='/images/racquet-right.png'>
+									@endif
 								</td>
 								<td>{{ $player->first_name }}  </td>
 								<td>{{ $player->last_name }}  </td>

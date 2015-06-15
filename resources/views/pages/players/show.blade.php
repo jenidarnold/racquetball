@@ -62,9 +62,10 @@
 			<div class="row">
 				<div class="col-md-12">
 					<ul class="nav nav-pills">
-						<li><a href="#">Biography</a></li>
-						<li class="active"><a href="#">Tournaments</a></li>
-						<li><a href="#">Gallery</a></li>
+						<li class="active"><a href="#">Profile</a></li>
+						<li><a href="{{ url('players/'.$player->player_id.'/tournaments') }}">Tournaments</a></li>
+						<li><a href="{{ url('players/'.$player->player_id.'/journal/index') }}">My Journal</a></li>
+						<li><a href="{{ url('players/'.$player->player_id.'/gallery/index') }}">My Gallery</a></li>
 					</ul>
 				</div>
 			</div>

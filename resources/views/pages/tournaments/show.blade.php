@@ -10,7 +10,7 @@
 				</div>
 
 				<div class="panel-body">
-					<h3>{{ $tournament->participants->count() }} Participants</h2>
+					<h3>{{ $participants->count() }} Participants</h2>
 					<div>
 						<table class="table">
 							<thead>
@@ -18,29 +18,16 @@
 								<th>Name</th>
 								<th>Divisions</th>
 							</thead>
-							@foreach ($tournament->participants as $p)
+							@foreach ($participants as $p)
 								<tr>
-
 									<td>
-										@if(!isset($p->player['full_name']))										
-											<button id='btnDownload' 
-												class="btn btn-primary"
-											 	onclick="{{ "download($p->player_id)" }}">
-											 	<i class="fa fa-arrow-down"> Download</i>
-											 </button>
-										@else
-											<a id={{"lnkProfile-$p->player_id"}} 
-												class="btn btn-success"
-												href="{{ route('tournaments.participants.show', [$tournament->tournament_id, $p->player_id]) }}">
-											<i class="fa fa-search"> View Entry</i></a>
-										@endif
+										<a id={{"lnkProfile-$p->player_id"}} 
+										class="btn btn-success"
+										href="{{ route('tournaments.participants.show', [$tournament->tournament_id, $p->player_id]) }}">
+										<i class="fa fa-search"> View Entry</i></a>
 									</td>					
 									<td>
-										@if(!isset($p->player['full_name']))										
-											Unknown
-										@else
-											<a id={{"lnkProfile-$p->player_id"}} href="{{ route('tournaments.participants.show', [$tournament->tournament_id, $p->player_id]) }}">{{ $p->player['full_name']}}</a>
-										@endif
+										<a id={{"lnkProfile-$p->player_id"}} href="{{ route('players.show', [$p->player_id]) }}">{{ $p->player['full_name']}}</a>
 									</td>
 									<td>
 										@foreach ($p->divisions as $d)
@@ -84,4 +71,4 @@
 
 
 	</script>
-@end
+@stop

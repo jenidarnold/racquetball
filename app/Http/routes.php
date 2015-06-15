@@ -47,6 +47,9 @@ Route::bind('participants', function($value, $route){
 
 Route::get('players/{players}/tournaments', 'PlayersController@getTournaments');
 Route::get('players/{players}/biography', 'PlayersController@getBio');
+#Route::get('players/{players}/biography', 'PlayersProfileController@getBio');
+Route::get('players/{players}/journal/index', 'PlayersJournalController@index');
+Route::get('players/{players}/journal/{entry}', 'PlayersJournalController@show');
 
 Route::resource('rankings', 'RankingsController');
 Route::resource('players', 'PlayersController');
@@ -65,6 +68,20 @@ Route::get('api/profile/download', function(){
 	$s->get_player($player_id);
 
 	return "";
+});
+
+Route::get('api/profile/image', function(){
+	$player_id = (int)Input::get('playerID');
+
+	if (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player_id.'_normal.jpg')[0] 
+	 	!= 'HTTP/1.1 404 Not Found'){
+	 	$profile = 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player_id.'_normal.jpg'; 
+	}
+	else {
+		$profile = '/images/racquet-right.png';
+	}
+
+	return $profile;
 });
 
 Route::get('api/vote/castvote', function(){

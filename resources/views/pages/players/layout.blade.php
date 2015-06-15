@@ -55,8 +55,7 @@
 					<div class="row">
 						<div class="col-sm-4">
 							<h3 style="">{{ $player->first_name }} {{ $player->last_name }} </h3>
-						</div>
-						
+						</div>						
 					</div>
 					<div class="row">
 					   	<div class="col-md-2">
@@ -103,9 +102,10 @@
 	<div class="row">
 		<div class="col-md-12">
 			<ul class="nav nav-pills">
-				<li><a href="#">Bio</a></li>
+				<li><a href="#">Profile</a></li>
 				<li class="active"><a href="#">Tournaments</a></li>
-				<li><a href="#">Gallery</a></li>
+				<li><a href="#">My Journal</a></li>
+				<li><a href="#">My Gallery</a></li>
 			</ul>
 		</div>
 	</div>
