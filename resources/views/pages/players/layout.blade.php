@@ -21,10 +21,10 @@
 		<div class="col-md-2">			
 	   		<img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} class="img-thumbnail" width="200" >		
 			<ul class="nav nav-pills nav-stacked">				
-				<li id="li-profile" class="active"><a href="#">Profile</a></li>
+				<li id="li-profile"><a href="/players/{{ $player->player_id}}/">Profile</a></li>
 				<li id="li-tourney"><a href="/players/{{ $player->player_id}}/tournaments">Tournaments</a></li>
-				<li id="li-journal"><a href="#">My Journal</a></li>
-				<li id="li-gallery"><a href="#">My Gallery</a></li>
+				<li id="li-journal"><a href="/players/{{ $player->player_id}}/journal">My Journal</a></li>
+				<li id="li-gallery"><a href="/players/{{ $player->player_id}}/gallery">My Gallery</a></li>
 			</ul>
 		</div>			
 		<div class="col-md-10">

@@ -1,0 +1,35 @@
+@extends('pages.players.layout')
+
+@section('style')
+	@parent	
+	<style type="text/css">
+		.entry-date{
+			color: #ff4422;
+			font-size: 10pt;
+			font-style: italic;
+		}
+	</style>
+@stop
+
+@section('player-content')
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">			
+	   		<ul class="nav nav-pills">				
+				<li id="li-home"><a href="/players/{{ $player->player_id}}/journal">Home</a></li>
+				<li id="li-profile"><a href="/players/{{ $player->player_id}}/journal/evaluation/">Self Evaluation</a></li>
+				<li id="li-journal"><a href="/players/{{ $player->player_id}}/journal/opponents/">Opponents Log</a></li>
+				<li id="li-tourney"><a href="/players/{{ $player->player_id}}/journal/gameplans/">Game Plans</a></li>				
+				<li id="li-gallery"><a href="/players/{{ $player->player_id}}/journal/training/">Training Logs</a></li>
+			</ul>
+		</div>			
+		<div class="col-md-10">
+			@yield('journal-content')
+		</div>
+		</div>		
+	</div>	
+</div>
+<div class="row">
+	@yield('player-footer')
+</div>
+@stop

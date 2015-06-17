@@ -120,3 +120,14 @@
 		</div>
 	</div>
 @stop
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			//Vote Percentage color-code
+			$('#li-tourney').init(function(){	
+				var el = $(this);
+				el.addClass('active');
+			});
+			
+		});
+</script>	

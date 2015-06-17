@@ -48,7 +48,7 @@ Route::bind('participants', function($value, $route){
 Route::get('players/{players}/tournaments', 'PlayersController@getTournaments');
 Route::get('players/{players}/biography', 'PlayersController@getBio');
 #Route::get('players/{players}/biography', 'PlayersProfileController@getBio');
-Route::get('players/{players}/journal/index', 'PlayersJournalController@index');
+Route::get('players/{players}/journal/', 'PlayersJournalController@index');
 Route::get('players/{players}/journal/{entry}', 'PlayersJournalController@show');
 
 Route::resource('rankings', 'RankingsController');
