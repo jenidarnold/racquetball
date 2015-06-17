@@ -1,7 +1,6 @@
 @extends('pages.players.layout')
 
 @section('style')
-	@parent
 	<style type="text/css">
 		.table-bio, tr{
 			padding: 20px 20px 20px 20px;
@@ -16,14 +15,20 @@
 			padding-right: 5px;
 			color: orangered;
 		}
+
 	</style>
+	@parent
 @stop
 
-@section('player-header')
+@section('title')
+	<label class="player-sub-title">Profile</label>	
+@stop
+
+@section('player-content')
 <div class="container">	
 	<div class="row">
 		<div class="col-md-12">	
-			<h2>My Profile</h2>		
+				
 				<div class="col-md-3">
 					<div class="well">
 						<table class="table-bio">								
@@ -67,3 +72,15 @@
 		</div>
 	</div>
 @stop
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			//Vote Percentage color-code
+			$('#li-profile').init(function(){	
+				var el = $(this);
+				el.addClass('active');
+			});
+			
+		});
+	</script>	
