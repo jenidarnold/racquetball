@@ -72,11 +72,7 @@ class PlayersController extends Controller {
 	public function show($player)
 	{
 		
-		$matches = $player->getMatches();
-		$tournaments = $player->getTournaments();
-
-		//dd($player);
-		return view('pages/players/show', compact('player', 'matches', 'tournaments'));
+		return view('pages/players/bio', compact('player'));
 	}
 
 	/**
@@ -120,7 +116,7 @@ class PlayersController extends Controller {
 		$matches = $player->getMatches();
 		$tournaments = $player->getTournaments();
 
-		//dd($player);
+		//return view('pages/players/show', compact('player', 'matches', 'tournaments'));
 		return view('pages/players/tournaments', compact('player', 'matches', 'tournaments'));
 	}
 

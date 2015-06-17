@@ -21,8 +21,18 @@
 	<![endif]-->
 </head>
 @yield('style')
+<style>
+	.navbar-brand {
+		font-size: 22pt;
+		font-weight: 900;
+	}
+	.navbar-link {
+		font-size: 14pt;
+		font-weight: 500;
+	}
+</style>
 <body>
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-primary">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -31,18 +41,97 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Rqt-Ball</a>
+				<ul class="nav navbar-nav">
+					<li>
+						<a class="navbar-brand logo" href="#">					
+							<img style="height:25px" src="{{ asset('/images/racquet-right.png') }}">					
+						</a>
+					</li>
+					<li>
+						<a class="navbar-brand" href="{{ url('/') }}">RBall Stats</a>
+					</li>
+					<li>
+						<a class="navbar-brand logo" href="#">					
+							<img style="height:25px" src="{{ asset('/images/racquet-left.png') }}">					
+						</a>
+					</li>
+					
+				</ul>			
 			</div>
 
+			<!-- 2nd Nav menu -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="{{ url('/') }}">Home</a></li>
-					<li><a href="{{ url('/tournaments') }}">Tournaments</a></li>
-					<li><a href="{{ url('/players') }}">Players</a></li>
-					<li><a href="{{ url('/rankings') }}">Rankings</a></li>
-					<li><a href="{{ url('/matchups') }}">Matchups</a></li>
+					<li><a class="navbar-link" href="{{ url('/') }}"> 
+						<i class="fa fa-home" style="color:black1"></i> Home</a></li>
+					<li><a class="navbar-link" href="{{ url('/tournaments') }}">
+						<i class="fa fa-trophy" style="color:gold1"></i> Tournaments</i></a></li>
+					<li><a class="navbar-link" href="{{ url('/players') }}">
+						<i class="fa fa-users" style="color:purple1"></i>
+						 Players</a></li>
+					<li><a class="navbar-link" href="{{ url('/rankings') }}">
+						<i class="fa fa-sort-numeric-asc" style="color:purple1"></i> Rankings</a></li>
+					<li><a class="navbar-link" href="{{ url('/matchups') }}">
+						<i class="fa fa-user-plus" style="color:green1"></i>
+						<i class="fa fa-user" style="color:green1"></i> 
+						 Matchups</a></li>
 				</ul>
 
+				<ul class="nav navbar-nav zeroed secondary-nav--left">
+            <!-- Browse -->
+            <li class="dropdown ">
+                <a href="/index" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                    Browse <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class=""><a href="/index">Site Index</a></li>
+                    <li><a href="/all">Latest Content</a></li>
+                </ul>
+            </li>
+             <!-- Discuss -->
+            <li class="dropdown">
+                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                    Discuss <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class=""><a href="/discuss">Forum</a></li>
+                     <li><a href="http://facebook.com/rballstats">Facebook</a></li>
+                    <li><a href="http://twitter.com/rballstats">Twitter</a></li>
+                </ul>
+            </li>
+             <!-- Lessons -->
+            <li class="dropdown">
+                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                    Lessons <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class=""><a href="/l">Find by Location</a></li>
+                     <li><a href="http://facebook.com/rballstats">Find by Instructor</a></li>
+                </ul>
+            </li>
+            <!-- Clubs -->
+            <li class="dropdown">
+                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                    Clubs <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class=""><a href="/l">Find by Location</a></li>
+                    <li class=""><a href="/l">Leagues</a></li>
+                    <li><a href="http://facebook.com/rballstats">Find by Club</a></li>
+                </ul>
+            </li>
+            <!-- Shop -->
+            <li class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                <a href="/shop" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                Shop <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                     <li><a href="#">Advocare</a></li>
+                     <li><a href="#">Racquetball Warehouse</a></li>
+                </ul>
+            </li>
+	   	 </ul>        
+
+				<!-- Login -->
 				<ul class="nav navbar-nav navbar-right">
 					@if (Auth::guest())
 						<li><a href="{{ url('/auth/login') }}">Login</a></li>
@@ -60,7 +149,65 @@
 			</div>
 		</div>
 	</nav>
-
+	<hr/>
+	{{-- <nav class="navbar navbar-success secondary-nav" role="navigation">
+    <div class="container">
+        <ul class="nav navbar-nav zeroed secondary-nav--left">
+            <!-- Browse -->
+            <li class="dropdown ">
+              <a href="/index" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                    Browse <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class=""><a href="/index">Site Index</a></li>
+                    <li><a href="/all">Latest Content</a></li>
+                </ul>
+            </li>
+             <!-- Discuss -->
+            <li class="dropdown">
+                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                    Discuss <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class=""><a href="/discuss">Forum</a></li>
+                     <li><a href="http://facebook.com/rballstats">Facebook</a></li>
+                    <li><a href="http://twitter.com/rballstats">Twitter</a></li>
+                </ul>
+            </li>
+             <!-- Lessons -->
+            <li class="dropdown">
+                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                    Lessons <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class=""><a href="/l">Find by Location</a></li>
+                     <li><a href="http://facebook.com/rballstats">Find by Instructor</a></li>
+                </ul>
+            </li>
+            <!-- Clubs -->
+            <li class="dropdown">
+                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                    Clubs <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class=""><a href="/l">Find by Location</a></li>
+                    <li class=""><a href="/l">Leagues</a></li>
+                    <li><a href="http://facebook.com/rballstats">Find by Club</a></li>
+                </ul>
+            </li>
+            <!-- Shop -->
+            <li class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                <a href="/shop" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                Shop <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                     <li><a href="#">Advocare</a></li>
+                     <li><a href="#">Racquetball Warehouse</a></li>
+                </ul>
+            </li>
+	   	 </ul>         
+		</div>
+	</nav>
+	<hr/>--}}
 	@yield('content')
 
 	<!-- Scripts -->
