@@ -2,12 +2,13 @@
 
 use App\Player;
 use App\Match;
+use App\EvaluationCategory;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class PlayersJournalController extends Controller {
+class PlayersEvaluationController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -17,8 +18,7 @@ class PlayersJournalController extends Controller {
 	public function index($player)
 	{
 
-		$entry = 1;
-		return view('pages/players/journal/index', compact('player', 'entry'));
+		return view('pages/players/journal/evaluation/index', compact('player'));
 	}
 
 	/**
@@ -26,9 +26,11 @@ class PlayersJournalController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function create($player)
 	{
-		//
+		$categories = EvaluationCategory::all();
+
+		return view('pages/players/journal/evaluation/create', compact('player', 'categories'));
 	}
 
 	/**
@@ -49,8 +51,8 @@ class PlayersJournalController extends Controller {
 	 */
 	public function show($player)
 	{
-		$entry = 1;
-		return view('pages/players/bio', compact('player', 'entry'));
+		
+		return view('pages/players/journal/evaluation/show', compact('player'));
 	}
 
 	/**
@@ -98,7 +100,7 @@ class PlayersJournalController extends Controller {
 		return view('pages/players/tournaments', compact('player', 'matches', 'tournaments'));
 	}
 
-		/**
+	/**
 	 * Player Tournament History
 	 */
 	public function getBio($player){

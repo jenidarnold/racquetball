@@ -48,7 +48,7 @@
 						</a>
 					</li>
 					<li>
-						<a class="navbar-brand" href="{{ url('/') }}">RBall Stats</a>
+						<a class="navbar-brand" href="{{ url('/') }}">RacquetBall</a>
 					</li>
 					<li>
 						<a class="navbar-brand logo" href="#">					
@@ -213,5 +213,6 @@
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    @yield('script')
 </body>
 </html>

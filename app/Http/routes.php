@@ -20,7 +20,6 @@ Route::post('matchups', 'MatchupsController@show');
 //Route::get('admin/participants/create', 'Admin\ScreenScrapeController@participants');
 //Route::get('admin/participants/{tournament_id}', 'Admin\ScreenScrapeController@participants');
 
-
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
@@ -50,6 +49,8 @@ Route::get('players/{players}/biography', 'PlayersController@getBio');
 #Route::get('players/{players}/biography', 'PlayersProfileController@getBio');
 Route::get('players/{players}/journal/', 'PlayersJournalController@index');
 Route::get('players/{players}/journal/{entry}', 'PlayersJournalController@show');
+Route::get('players/{players}/journal/{entry}/evaluation', 'PlayersEvaluationController@index');
+Route::get('players/{players}/journal/{entry}/evaluation/create', 'PlayersEvaluationController@create');
 
 Route::resource('rankings', 'RankingsController');
 Route::resource('players', 'PlayersController');
