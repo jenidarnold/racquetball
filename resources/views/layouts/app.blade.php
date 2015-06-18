@@ -13,6 +13,7 @@
 	<!-- Fontawesome -->
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="{{ asset('/js/datepicker.js') }}"></script>
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
@@ -130,20 +131,28 @@
                 </ul>
             </li>
 	   	 </ul>        
-
 				<!-- Login -->
 				<ul class="nav navbar-nav navbar-right">
+                    @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.Auth::user()->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found' ))                                    
+                        <li><img style="height:25px" class='img' src={{'http://www.r2sports.com/tourney/imageGallery/gallery/player/'. Auth::user()->player_id . '_normal.jpg' }}>
+                        </a></li>
+                    @endif 
 					@if (Auth::guest())
 						<li><a href="{{ url('/auth/login') }}">Login</a></li>
 						<li><a href="{{ url('/auth/register') }}">Register</a></li>
-					@else
+					@else      
+                           
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            {{ Auth::user()->name }} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ url('/users/'.Auth::user()->id) }}">Site Profile</a></li>
+                                <li><a href="{{ url('/players/'.Auth::user()->player_id) }}">Player Page</a></li>
+                                <li><a href="{{ url('/players/') }}">Favorites</a></li>
 								<li><a href="{{ url('/admin/scraper') }}">Admin</a></li>
 								<li><a href="{{ url('/auth/logout') }}">Logout</a></li>
 							</ul>
-						</li>
+						</li>                         
 					@endif
 				</ul>
 			</div>

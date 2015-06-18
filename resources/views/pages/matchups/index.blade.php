@@ -1,4 +1,4 @@
-@extends('layouts.matchups')
+@extends('pages.matchups.layout')
 
 @section('matchup-content')
 

@@ -1,4 +1,4 @@
-@extends('layouts.matchups')
+@extends('pages.matchups.layout')
 
 @section('style')
 	<style type="text/css">

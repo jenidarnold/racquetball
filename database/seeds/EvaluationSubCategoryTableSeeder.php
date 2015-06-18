@@ -106,7 +106,37 @@ class EvaluationSubCategoryTableSeeder extends Seeder {
 		]);
 
 		EvaluationSubCategory::create([
-			'subcategory' => 'Attach serves',
+			'subcategory' => 'Mechanics/techniques',
+			'category_id' => '4',
+			//'category' => 'Serves'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Strategy',
+			'category_id' => '4',
+			//'category' => 'Serves'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Variety',
+			'category_id' => '4',
+			//'category' => 'Serves'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Quality/Consistency',
+			'category_id' => '4',
+			//'category' => 'Serves'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Deception',
+			'category_id' => '4',
+			//'category' => 'Serves'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Attack serves',
 			'category_id' => '5',
 			//'category' => 'Return of Serve',
 		]);
@@ -118,6 +148,24 @@ class EvaluationSubCategoryTableSeeder extends Seeder {
 		]);
 
 		EvaluationSubCategory::create([
+			'subcategory' => 'Strategy',
+			'category_id' => '5',
+			//'category' => 'Return of Serve'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Footwork',
+			'category_id' => '5',
+			//'category' => 'Return of Serve'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Quality/Consistency',
+			'category_id' => '5',
+			//'category' => 'Return of Serve'
+		]);
+
+		EvaluationSubCategory::create([
 			'subcategory' => 'During rally',
 			'category_id' => '6',
 			//'category' => 'Footwork'
@@ -125,6 +173,12 @@ class EvaluationSubCategoryTableSeeder extends Seeder {
 
 		EvaluationSubCategory::create([
 			'subcategory' => 'Return of serve',
+			'category_id' => '6',
+			//'category' => 'Footwork'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Crossover step',
 			'category_id' => '6',
 			//'category' => 'Footwork'
 		]);
@@ -142,6 +196,24 @@ class EvaluationSubCategoryTableSeeder extends Seeder {
 		]);
 
 		EvaluationSubCategory::create([
+			'subcategory' => 'Stays focued',
+			'category_id' => '7',
+			//'category' => 'Emotional State'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Easily upset',
+			'category_id' => '7',
+			//'category' => 'Emotional State'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Mentally tough',
+			'category_id' => '7',
+			//'category' => 'Emotional State'
+		]);
+
+		EvaluationSubCategory::create([
 			'subcategory' => 'Righty or lefty',
 			'category_id' => '8',
 			//'category' => 'Type of Player'
@@ -154,6 +226,48 @@ class EvaluationSubCategoryTableSeeder extends Seeder {
 		]);
 
 		EvaluationSubCategory::create([
+			'subcategory' => 'Tall or short',
+			'category_id' => '8',
+			//'category' => 'Type of Player'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Big or small',
+			'category_id' => '8',
+			//'category' => 'Type of Player'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Power or control',
+			'category_id' => '8',
+			//'category' => 'Type of Player'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'In shape or out of shape',
+			'category_id' => '8',
+			//'category' => 'Type of Player'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Healthy or injured',
+			'category_id' => '8',
+			//'category' => 'Type of Player'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Counterpuncher or ripper',
+			'category_id' => '8',
+			//'category' => 'Type of Player'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Orthodox or unorthodox',
+			'category_id' => '8',
+			//'category' => 'Type of Player'
+		]);
+
+		EvaluationSubCategory::create([
 			'subcategory' => 'Uses different strategies: adjusts game plan',
 			'category_id' => '9',
 			//'category' => 'Miscellaneous'
@@ -161,6 +275,48 @@ class EvaluationSubCategoryTableSeeder extends Seeder {
 
 		EvaluationSubCategory::create([
 			'subcategory' => 'Use of time-outs',
+			'category_id' => '9',
+			//'category' => 'Miscellaneous'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Knowledge of the rules',
+			'category_id' => '9',
+			//'category' => 'Miscellaneous'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Warm-up',
+			'category_id' => '9',
+			//'category' => 'Miscellaneous'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Etiquette/behavior',
+			'category_id' => '9',
+			//'category' => 'Miscellaneous'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Pace/tempo of game',
+			'category_id' => '9',
+			//'category' => 'Miscellaneous'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Nutrition',
+			'category_id' => '9',
+			//'category' => 'Miscellaneous'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Conditioned',
+			'category_id' => '9',
+			//'category' => 'Miscellaneous'
+		]);
+
+		EvaluationSubCategory::create([
+			'subcategory' => 'Watches the ball',
 			'category_id' => '9',
 			//'category' => 'Miscellaneous'
 		]);

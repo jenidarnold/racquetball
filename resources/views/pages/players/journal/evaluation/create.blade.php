@@ -11,17 +11,27 @@
 		color:white;
 		font-weight: 500;
 		font-size: 14pt;
+		width:450px;
+        padding-left: 10px !important; 
 	}
 	.eval-category{
-		font-weight: 500;
+		font-weight: 700;
 		font-size: 12pt;
+        padding-left: 10px !important; 
 	}
 	.eval-subcategory{
-
+		font-weight: 500;
+		font-size: 10pt;
+		vertical-align: center;
+         padding-left: 20px !important; 
 	}
 	.eval-comment {
 		width: 400px;
 	}
+
+    .form-label{
+        font-weight:500;
+    }
 	</style>
 	@parent
 @stop
@@ -32,38 +42,53 @@
 @stop
 
 @section('evaluation-content')
-	<div class="well1">
-		<h3>Game Evaluation</h3>
-		{!! Form::open()!!}
-		<table class="table">
-			<thead class="label-primary">
-				<th class="eval-header">Area of Evaluation</th>
-				<th class="eval-header">Rating</th>
-				<th class="eval-header">Comments</th>
-			</thead>
-			@foreach($categories as $c)
-			<tr>
-				<td class="eval-category info" colspan="3">{{ $c->category }}</td>
-			</tr>
-				@foreach($c->subcategories as $s)
-				<tr>
-					<td class="eval-subcategory"> {{ $s->subcategory }}</td>			
-					<td>
-						<div id="stars" class="starrr"></div>
-					</td>
-					<td class="eval-comment"> 
-					{!! Form::text('comment-$c->category_id-$s->subcategory_id', '') !!}
-					</td>
-				</tr>
-				@endforeach
-			@endforeach
-		</table>
+		{!! Form::open(array('class' =>'form-inline','role'=>'form'))!!}
+        <div class="row">
+            <div class="form-group">
+            {!! Form::label('Date:','', array('class' =>'form-label', 'for' =>'eval_date')) !!}
+            {!! Form::text('eval_date','', array('class' =>'form-control date-picker', 'style' => 'width:100px')) !!}
+            </div>
+            <div class="form-group">
+            {!! Form::label('Title:','', array('class' =>'form-label', 'for' =>'eval_title')) !!}
+            {!! Form::text('eval_title:','', array('class' =>'form-control', 'style' => 'width:400px')) !!}
+            </div>
+            <div class="form-group">
+            {!! Form::button('Save', array('class' =>'btn btn-success')) !!}
+            {!! Form::button('Reset', array('class' =>'btn btn-danger')) !!}
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px">
+    		<table class="table table-condensed">
+    			<thead class="label-primary">
+    				<th class="eval-header">Area of Evaluation</th>
+    				<th class="eval-header">Rating</th>
+    				<th class="eval-header">Comments</th>
+    			</thead>
+    			@foreach($categories as $c)
+    			<tr>
+    				<td class="eval-category info" colspan="3">{{ $c->category }}</td>
+    			</tr>
+    				@foreach($c->subcategories as $s)
+    				<tr>
+    					<td class="eval-subcategory"> {{ $s->subcategory }}</td>			
+    					<td>
+    						<div id={{"stars-$c->category_id-$s->subcategory_id"}} class="starrr"></div>
+    					</td>
+    					<td class="eval-comment"> 
+    					{!! Form::text('comment-$c->category_id-$s->subcategory_id', '', array('class' =>'form-control', 'style' => 'width:400px')) !!}
+    					</td>
+    				</tr>
+    				@endforeach
+    			@endforeach
+    		</table>
+        </div>
 		{!! Form::close()!!}
-	</div>
 @stop
 
 @section('script')
-<script>
+<script src="{{ asset('/js/datepicker.js') }}"></script>
+<script type="text/javascript">
+$('.date-picker').datepicker();
 // Starrr plugin (https://github.com/dobtco/starrr)
 var __slice = [].slice;
 
@@ -171,7 +196,7 @@ $(function() {
 
 $( document ).ready(function() {
       
-  $('#stars').on('starrr:change', function(e, value){
+  $(["id^=stars"]).on('starrr:change', function(e, value){
     $('#count').html(value);
   });
   
