@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use Input;
 use App\Player;
 use App\Match;
 use App\EvaluationCategory;
@@ -15,10 +16,11 @@ class PlayersEvaluationController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index($player)
+	public function index($player, $entry)
 	{
 
-		return view('pages/players/journal/evaluation/index', compact('player'));
+
+		return view('pages/players/journal/evaluation/index', compact('player', 'entry'));
 	}
 
 	/**
@@ -26,11 +28,11 @@ class PlayersEvaluationController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create($player)
+	public function create($player,$entry)
 	{
 		$categories = EvaluationCategory::all();
-
-		return view('pages/players/journal/evaluation/create', compact('player', 'categories'));
+		
+		return view('pages/players/journal/evaluation/create', compact('player', 'categories', 'entry'));
 	}
 
 	/**
@@ -40,7 +42,22 @@ class PlayersEvaluationController extends Controller {
 	 */
 	public function store()
 	{
-		//
+
+		$input = Input::all();
+
+		dd($input);
+
+		Evaluation::create($input);
+		
+		if($eval->isSaved()){
+
+			return Redirect::route('players/{players}/journal/{entry}/evaluation')
+				->with('flash', 'Evaluation Saved');				
+		}
+
+		return Redirect::route('players/{players}/journal/{entry}/evaluation/create')
+			->withInput()
+    		->withErrors($eval->errors());
 	}
 
 	/**

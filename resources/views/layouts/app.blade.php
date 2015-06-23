@@ -133,10 +133,10 @@
 	   	 </ul>        
 				<!-- Login -->
 				<ul class="nav navbar-nav navbar-right">
-                    @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.Auth::user()->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found' ))                                    
+                   {{--  @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.Auth::user()->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found' ))                                    
                         <li><img style="height:25px" class='img' src={{'http://www.r2sports.com/tourney/imageGallery/gallery/player/'. Auth::user()->player_id . '_normal.jpg' }}>
                         </a></li>
-                    @endif 
+                    @endif  --}}
 					@if (Auth::guest())
 						<li><a href="{{ url('/auth/login') }}">Login</a></li>
 						<li><a href="{{ url('/auth/register') }}">Register</a></li>

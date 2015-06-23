@@ -42,7 +42,7 @@
 @stop
 
 @section('evaluation-content')
-		{!! Form::open(array('class' =>'form-inline','role'=>'form'))!!}
+		{!! Form::open(array('class' =>'form-inline','role'=>'form', 'method'=>'POST', 'route' => array('evaluation.store', $player->player_id, $entry)))!!}
         <div class="row">
             <div class="form-group">
             {!! Form::label('Date:','', array('class' =>'form-label', 'for' =>'eval_date')) !!}
@@ -53,7 +53,7 @@
             {!! Form::text('eval_title:','', array('class' =>'form-control', 'style' => 'width:400px')) !!}
             </div>
             <div class="form-group">
-            {!! Form::button('Save', array('class' =>'btn btn-success')) !!}
+            {!! Form::button('Save', array('class' =>'btn btn-success', 'type' =>'submit')) !!}
             {!! Form::button('Reset', array('class' =>'btn btn-danger')) !!}
             </div>
         </div>

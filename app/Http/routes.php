@@ -50,7 +50,8 @@ Route::get('players/{players}/biography', 'PlayersController@getBio');
 Route::get('players/{players}/journal/', 'PlayersJournalController@index');
 Route::get('players/{players}/journal/{entry}', 'PlayersJournalController@show');
 Route::get('players/{players}/journal/{entry}/evaluation', 'PlayersEvaluationController@index');
-Route::get('players/{players}/journal/{entry}/evaluation/create', 'PlayersEvaluationController@create');
+Route::get('players/{players}/journal/{entry}/evaluation/create', array('as' => 'evaluation.create', 'uses' => 'PlayersEvaluationController@create'));
+Route::post('players/{players}/journal/{entry}/evaluation',  array('as' => 'evaluation.store', 'uses' => 'PlayersEvaluationController@store'));
 
 Route::resource('rankings', 'RankingsController');
 Route::resource('players', 'PlayersController');

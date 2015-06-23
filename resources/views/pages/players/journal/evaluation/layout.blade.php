@@ -17,7 +17,7 @@
 		<div class="col-md-12">			
 	   		<ul class="nav nav-pills">				
 				<li id="li-List"><a href="/players/{{ $player->player_id}}/journal/1/evaluation">Home</a></li>
-				<li id="li-New"><a href="/players/{{ $player->player_id}}/journal/1/evaluation/create">New</a></li>
+				<li id="li-New"><a href="/players/{{ $player->player_id}}/journal/{{$entry}}/evaluation/create">New</a></li>
 			</ul>
 		</div>			
 		<div class="col-md-10">

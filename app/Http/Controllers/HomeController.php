@@ -1,5 +1,8 @@
 <?php namespace App\Http\Controllers;
 
+use Redirect;
+use Illuminate\Contracts\Auth;
+
 class HomeController extends Controller {
 
 	/*
@@ -30,7 +33,14 @@ class HomeController extends Controller {
 	 */
 	public function index()
 	{
-		return view('pages/home');
+		$user = \Auth::user();
+
+		//If player go to Player Profile page
+		if ($user->player_id > 0){
+			return Redirect::action('PlayersJournalController@index', array($user->player_id));
+		}else {
+			return view('pages/home');
+		}
 	}
 
 }
