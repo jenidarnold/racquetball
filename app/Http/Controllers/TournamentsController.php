@@ -2,6 +2,7 @@
 
 use App\Scraper;
 use App\Tournament;
+use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -23,17 +24,17 @@ class TournamentsController extends Controller {
 
 		$today = date('Y-m-d');
 		$past_tournaments = Tournament::where('end_date', '<', date('Y-m-d'))
-							->orderBy('start_date', 'desc')
-							->get();
+							->orderBy('start_date', 'desc')							
+							->paginate(5);							
 
 		$live_tournaments = Tournament::where('start_date', '<=', date('Y-m-d'))
 							->where('end_date', '>=', date('Y-m-d'))
 							->orderBy('start_date')
-							->get();
+							->paginate(5);
 
 		$future_tournaments = Tournament::where('start_date', '>', date('Y-m-d'))
-						    ->orderBy('start_date')
-							->get();
+						    ->orderBy('start_date')							
+							->paginate(5);
 
 		return view('pages/tournaments.index', compact('past_tournaments','live_tournaments', 'future_tournaments'));
 	}
@@ -79,9 +80,9 @@ class TournamentsController extends Controller {
 		}
 
 		if ($updated){
-			$participants = participant::where("tournament_id", "=", $tournament->tournament_id);
+			$participants = Participant::where("tournament_id", "=", $tournament->tournament_id);
 		}
-	
+
 		return view('pages/tournaments.show', compact('tournament', 'participants'));
 	}
 

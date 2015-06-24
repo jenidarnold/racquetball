@@ -72,10 +72,14 @@
     				<tr>
     					<td class="eval-subcategory"> {{ $s->subcategory }}</td>			
     					<td>
-    						<div id={{"stars-$c->category_id-$s->subcategory_id"}} class="starrr"></div>
+    						<div id={{"stars-$c->category_id-$s->subcategory_id"}} 
+                                 class="starrr" 
+                                  data-rating="3"
+                                 ></div>
+                            {!! Form::hidden("score-$c->category_id-$s->subcategory_id") !!}
     					</td>
     					<td class="eval-comment"> 
-    					{!! Form::text('comment-$c->category_id-$s->subcategory_id', '', array('class' =>'form-control', 'style' => 'width:400px')) !!}
+    					{!! Form::text("comment-$c->category_id-$s->subcategory_id", '', array('class' =>'form-control', 'style' => 'width:400px')) !!}
     					</td>
     				</tr>
     				@endforeach
@@ -99,7 +103,11 @@ var __slice = [].slice;
         Starrr.prototype.defaults = {
             rating: void 0,
             numStars: 5,
-            change: function(e, value) {}
+            change: function(e, value) {
+                var score_id = e.target.id.replace("stars","score");
+
+                 $("[name=" + score_id +"]").val(value);
+            }
         };
 
         function Starrr($el, options) {
@@ -196,13 +204,13 @@ $(function() {
 
 $( document ).ready(function() {
       
-  $(["id^=stars"]).on('starrr:change', function(e, value){
-    $('#count').html(value);
+  $(["id^=star"]).on('starrr:change', function(e, value){
+    $(["name^=score"]).html(value);
   });
   
-  $('#stars-existing').on('starrr:change', function(e, value){
-    $('#count-existing').html(value);
-  });
+ // $(["id^=stars"]).on('starrr:change', function(e, value){
+ //   $('#currscore').html(value);
+ // });
 });
 </script>
 @stop

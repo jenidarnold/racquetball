@@ -6,11 +6,11 @@
 		<div class="col-md-10 col-md-offset-1">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h2>{{ $tournament->name }} </h1>
+					<h2>{{ $tournament->name }}</h1>
 				</div>
 
 				<div class="panel-body">
-					<h3>{{ $participants->count() }} Participants</h2>
+					<h3>{{ $participants->count() }} Participants </h2>
 					<div>
 						<table class="table">
 							<thead>
@@ -18,7 +18,7 @@
 								<th>Name</th>
 								<th>Divisions</th>
 							</thead>
-							@foreach ($participants as $p)
+							@foreach ($tournament->participants as $p)
 								<tr>
 									<td>
 										<a id={{"lnkProfile-$p->player_id"}} 
@@ -37,6 +37,9 @@
 								</tr>
 							@endforeach
 						</table>
+						<div>
+							{!! $tournament->participants->render() !!}
+						</div>
 					</div>
 				</div>
 			</div>

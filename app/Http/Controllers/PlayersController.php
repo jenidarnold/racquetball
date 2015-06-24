@@ -19,7 +19,8 @@ class PlayersController extends Controller {
 
 		$level = $request->input('level');
 		$gender = $request->input('gender');
-
+		$firstname = $request->input('first_name');
+		$lastname = $request->input('last_name');
 
 		$players = \DB::table('players')
 				->orderby('last_name')
@@ -37,7 +38,19 @@ class PlayersController extends Controller {
 			}
 		}
 
-		$players = $players->get();
+		if (isset($firstname)) {
+			if ($firstname != '') {
+				$players = $players->where('first_name',  'like', "%$firstname%");
+			}
+		}
+
+		if (isset($lastname)) {
+			if ($lastname != '') {
+				$players = $players->where('last_name', 'like', "%$lastname%");		
+			}	
+		}
+
+		$players = $players->paginate(5);
 
 
 		return view('pages/players/index', compact('players', 'level', 'gender'));
@@ -114,7 +127,8 @@ class PlayersController extends Controller {
 	public function getTournaments($player){
 	
 		$matches = $player->getMatches();
-		$tournaments = $player->getTournaments();
+		$tournaments = $player->getTournaments()->paginate(2);
+
 
 		//return view('pages/players/show', compact('player', 'matches', 'tournaments'));
 		return view('pages/players/tournaments', compact('player', 'matches', 'tournaments'));

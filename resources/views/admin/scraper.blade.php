@@ -19,7 +19,11 @@
 							</ul>
 						</div>
 					@endif
-
+					@if($success)
+						<div class="alert-box success">
+							<h2>{{ $success}}</h2>
+						</div>
+					@endif
 					<h3>Tournaments</h3>
 					<div class="row">
 						<form class="form-horizontal" role="form" method="GET" action="{{ url('/admin/tournaments') }}">

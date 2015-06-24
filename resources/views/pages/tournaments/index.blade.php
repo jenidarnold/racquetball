@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
+		<div class="col-md-12 col-md-offset-0">
 			<div class="panel panel-success">
 				<a name="live"></a>
 				<div class="panel-heading">
@@ -50,8 +50,8 @@
 				<div class="panel-body">
 					<ul>
 						@foreach ($future_tournaments as $tourney)
-							<div class="panel panel-default">
-								<div class="panel-heading">				
+							<div class="panel1 panel-default">
+								<div class="panel1-heading">				
 									<h3>{{ $tourney->name}} </h3>
 								</div>
 								<div class="panel-body">								
@@ -76,6 +76,11 @@
 						@endforeach
 					</ul>
 				</div>
+			<div>
+			<div class="panel-footer">
+				{!! $future_tournaments->render() !!}
+			</div>
+		</div>
 			</div>
 			<div class="panel panel-warning">
 				<a name="past"></a>
@@ -85,11 +90,11 @@
 				<div class="panel-body">
 					<ul>
 						@foreach ($past_tournaments as $tourney)
-							<div class="panel panel-default">
-								<div class="panel-heading">				
+							<div class="panel1 panel-default">
+								<div class="panel1-heading">				
 									<h3>{{ $tourney->name}} </h3>
 								</div>
-								<div class="panel-body">								
+								<div class="panel1-body">								
 									<div class="row">
 										<div class="col-md-2">
 											<img src="{{ url('http://www.r2sports.com/tourney/imageGallery/gallery/tourneyLogo/'.$tourney->img_logo) }}" width="125" height="85" border="0"></image>
@@ -110,6 +115,9 @@
 							</div>			
 						@endforeach
 					</ul>
+				</div>
+				<div class="panel-footer">
+					{!! $past_tournaments->render() !!}
 				</div>
 			</div>
 		</div>

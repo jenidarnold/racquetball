@@ -50,10 +50,11 @@ class ScreenScrapeController extends Controller {
 	public function scraper()
 
 	{	
-
+		$success='';
 		$groups = Group::lists('name','group_id');
 		$locations = Location::lists('location','location_id');
-		$tournaments = Tournament::lists('name','tournament_id');		
+		$tournaments = Tournament::orderBy('start_date', 'desc')
+			->lists('name','tournament_id');	
 		$players = Player::select('first_name', 'last_name', 'player_id',
 							\DB::raw('CONCAT(first_name, " ", last_name) as full_name'))
 				->orderBy('first_name')
@@ -62,7 +63,7 @@ class ScreenScrapeController extends Controller {
 				->lists('full_name', 'player_id');
 			
 
-		return view('admin.scraper', compact('groups', 'locations','tournaments', 'players'));
+		return view('admin.scraper', compact('groups', 'locations','tournaments', 'players', 'success'));
 	}
 
 	/**
@@ -89,7 +90,8 @@ class ScreenScrapeController extends Controller {
 				->where('rankings.location_id', '=', $location_id)
 				->get();
 
-		return view('pages/rankings', compact('rankings'));
+		return view('pages/rankings', compact('rankings'))
+			->with('success', 'rankings downloaded successfully');
 
 	}
 
@@ -105,9 +107,12 @@ class ScreenScrapeController extends Controller {
 
 		$new_tournaments = $ss->get_tournaments();
 		$tournaments = \DB::table('tournaments')
-					->get();
+			->orderBy('start_date', 'desc')
+			->get();
 
-		return view('pages/tournaments', compact('tournaments'));
+		//return view('pages/tournaments', compact('tournaments'));
+		return redirect('admin/scraper')
+			->with('success', 'tournaments downloaded successfully');
 	}
 
 	/**
@@ -126,12 +131,15 @@ class ScreenScrapeController extends Controller {
 
 		$tournament = \DB::table('tournaments')
 					->where('tournament_id', '=', $tournament_id)
+					->orderBy('start_date', 'desc')
 					->get();
 
 		$participants = \DB::table('participants')
 					->where('tournament_id', '=', $tournament_id)
 					->get();
-		return view('pages/participants', compact('$tournament', 'participants'));
+		//return view('pages/participants', compact('$tournament', 'participants'));
+		return redirect('admin/scraper')
+			->with('success', 'participants downloaded successfully');
 	}
 
 	/**

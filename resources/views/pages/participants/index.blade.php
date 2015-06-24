@@ -41,6 +41,9 @@
 						@endforeach
 						</tbody>					
 					</table>
+					{{-- <div>
+						{!! $tournament->participants->render() !!}
+					</div> --}}
 				</div>
 			</div>
 		</div>

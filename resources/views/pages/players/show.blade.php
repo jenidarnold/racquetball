@@ -142,6 +142,9 @@
 				</tbody>
 			</table>
 		</div>
+		<div>
+			{!! $tournaments->render() !!}
+		</div>
 	</div>
 </div>
 @stop
