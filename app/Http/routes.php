@@ -52,6 +52,9 @@ Route::get('players/{players}/journal/{entry}', 'PlayersJournalController@show')
 Route::get('players/{players}/journal/{entry}/evaluation', 'PlayersEvaluationController@index');
 Route::get('players/{players}/journal/{entry}/evaluation/create', array('as' => 'evaluation.create', 'uses' => 'PlayersEvaluationController@create'));
 Route::post('players/{players}/journal/{entry}/evaluation',  array('as' => 'evaluation.store', 'uses' => 'PlayersEvaluationController@store'));
+Route::get('players/{players}/journal/{entry}/evaluation/{evaluation_id}', array('as' => 'evaluation.show', 'uses' => 'PlayersEvaluationController@show'));
+Route::get('players/{players}/journal/{entry}/evaluation/{evaluation_id}/edit', array('as' => 'evaluation.edit', 'uses' => 'PlayersEvaluationController@edit'));
+Route::post('players/{players}/journal/{entry}/evaluation/{evaluation_id}/edit', array('as' => 'evaluation.update', 'uses' => 'PlayersEvaluationController@update'));
 
 Route::resource('rankings', 'RankingsController');
 Route::resource('players', 'PlayersController');

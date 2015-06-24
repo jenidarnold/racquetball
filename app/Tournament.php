@@ -18,6 +18,7 @@ class Tournament extends Model {
 	 */
 	protected $fillable = ['tournament_id', 'name', 'location', 'start_date', 'end_date', 'img_logo'];
 
+	public $primaryKey = 'tournament_id';
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *

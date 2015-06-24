@@ -15,7 +15,7 @@ class EvaluationScore extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['evaluation_id', 'category_id' 'subcategory_id', 'score', 'comment'];
+	protected $fillable = ['evaluation_id', 'category_id', 'subcategory_id', 'score', 'comment'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

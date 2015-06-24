@@ -18,6 +18,8 @@ class Player extends Model {
 	 */
 	protected $fillable = ['player_id', 'first_name', 'last_name', 'gender', 'home', 'skill_level', 'img_profile'];
 
+	public $primaryKey = 'player_id';
+
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *

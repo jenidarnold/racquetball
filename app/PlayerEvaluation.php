@@ -16,6 +16,8 @@ class PlayerEvaluation extends Model {
 	 * @var array
 	 */
 	protected $fillable = ['evaluation_id', 'player_id'];
+	
+	public $primaryKey = 'evaluation_id';
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -24,5 +26,9 @@ class PlayerEvaluation extends Model {
 	 */
 	// protected $hidden = ['password', 'remember_token'];
 
+	public function scores() {
+
+		return $this->hasMany('App\EvaluationScore', 'evaluation_id', 'evaluation_id');
+	}
 
 }

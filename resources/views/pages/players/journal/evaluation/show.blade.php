@@ -30,31 +30,31 @@
 	}
 
     .form-label{
-        font-weight:500;
+        font-weight:800;
+        font-size: 12pt;
+    }
+
+    .eval-title{
+        font-weight:700;
+        font-size: 16pt;
     }
 	</style>
 	@parent
 @stop
 
 @section('title')
-	<label class="player-sub-title">Create New Evaluation</label>
-	<label class="entry-date" style="float:right">Last Entry: 6/1/15</label>		
+	<label class="player-sub-title">My Evaluation</label>
+	<label class="entry-date" style="float:right">Updated : {{$evaluation->updated_at}} </label>		
 @stop
 
 @section('evaluation-content')
-		{!! Form::open(array('class' =>'form-inline','role'=>'form', 'method'=>'POST', 'route' => array('evaluation.store', $player->player_id, $entry)))!!}
+		
         <div class="row">
-            <div class="form-group">
-            {!! Form::label('Date:','', array('class' =>'form-label', 'for' =>'eval_date')) !!}
-            {!! Form::text('eval_date','', array('class' =>'form-control date-picker', 'style' => 'width:100px')) !!}
-            </div>
-            <div class="form-group">
-            {!! Form::label('Title:','', array('class' =>'form-label', 'for' =>'eval_title')) !!}
-            {!! Form::text('eval_title:','', array('class' =>'form-control', 'style' => 'width:400px')) !!}
-            </div>
-            <div class="form-group">
-            {!! Form::button('Save', array('class' =>'btn btn-success', 'type' =>'submit')) !!}
-            {!! Form::button('Reset', array('class' =>'btn btn-danger')) !!}
+          <div class="form-group">
+            <span class="eval-title">Title: {{$evaluation->title}} </span>
+            {!! Form::open(array('class' =>'form-inline','role'=>'form', 'method'=>'POST', 'route' => array('evaluation.edit', $player->player_id, $entry)))!!}
+            {!! Form::button('Edit', array('class' =>'btn btn-warning', 'type' =>'submit')) !!}
+            {!! Form::close()!!}
             </div>
         </div>
         <div class="row" style="padding-top:10px">
@@ -72,27 +72,23 @@
     				<tr>
     					<td class="eval-subcategory"> {{ $s->subcategory }}</td>			
     					<td>
-    						<div id={{"stars-$c->category_id-$s->subcategory_id"}} 
-                                 class="starrr" 
-                                  data-rating="3"
-                                 ></div>
-                            {!! Form::hidden("score-$c->category_id-$s->subcategory_id") !!}
+    						<div id={{"stars-$c->category_id-$s->subcategory_id"}} class="starrr" data-rating={{$s->score}}></div>
     					</td>
     					<td class="eval-comment"> 
-    					{!! Form::text("comment-$c->category_id-$s->subcategory_id", '', array('class' =>'form-control', 'style' => 'width:400px')) !!}
+    					 <span class="">{{$evaluation->scores[$c->category_id] }} </span>
     					</td>
     				</tr>
     				@endforeach
     			@endforeach
     		</table>
         </div>
-		{!! Form::close()!!}
 @stop
 
 @section('script')
 <script src="{{ asset('/js/datepicker.js') }}"></script>
 <script type="text/javascript">
 $('.date-picker').datepicker();
+
 // Starrr plugin (https://github.com/dobtco/starrr)
 var __slice = [].slice;
 
