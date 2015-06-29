@@ -12,32 +12,47 @@
 			color: #fff;
 		}
 
+		.table-games {
+			width:500px !important;
+		}
 		.tr-games{
 			font-weight: bold;
 			text-align: center;
 		}
 		.seed {
-			width:15px;
+			width:15px  !important;
 			font-size: 9pt;
 			color:gray;
 		}
 		.games {
 			font-weight: bolder;
+			font-size: 8.5pt;
 			text-align: right;
+			width:10px  !important;
 		}
+
+		.game-num {
+			font-weight: bolder;
+			font-size: 8.5pt;
+			text-align: center;
+		}
+
 		.winner {
 			color:green;
 			font-weight: bold;
+			width: 250px !important;
 		}
 		.loser {
 			color:gray;
 			font-weight: bold;
+			width: 250px  !important;
 		}
 
 		.score {
 			color:gray;
 			font-weight: bold;
 			text-align: center;
+			width:30px  !important;
 		}
 
 		.high-score {
@@ -86,13 +101,14 @@
 										<td>{{ $m->match_type }} </td>
 										<td>Rnd {{$m->round}}</td>
 										<td>
-											<table class="table table-condensed" border=0>
+											<table class="table-games table table-condensed">
 												<tr class="tr-games label-info">
-													<td></td>
+													<td class="games">&nbsp;</td>
 													<td class="games">Gm</td>													
 													@for ($i = 1; $i <= $match->whereMatchId($m->match_id)->with('games')->count() ; $i++)
-													<td class="">{{ $i}}</td>
+													<td class="game-num">{{ $i}}</td>
 													@endfor
+													<td class="">&nbsp;</td>
 												</tr>
 												<tr>
 													<td class="seed">[1]</td>
@@ -105,6 +121,7 @@
 													<td class="score">{{$g["games"]->first()->score1 }}
 													</td>
 													@endforeach
+													<td class="">&nbsp;</td>
 												</tr>
 												<tr>
 													<td class="seed">[2]</td>
@@ -116,6 +133,7 @@
 													@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
 													<td class="score">{{$g["games"]->first()->score2}}</td>
 													@endforeach
+													<td class="">&nbsp;</td>
 												</tr>
 											</table>
 										</td>													
