@@ -28,5 +28,8 @@
 			</tr>
 			@endforeach
 		</table>
+		<div>
+		{!! $evaluations->render() !!}
+		</div>
 	</div>
 @stop

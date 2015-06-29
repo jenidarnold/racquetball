@@ -24,7 +24,7 @@ class PlayersEvaluationController extends Controller {
 
 		$evaluations = PlayerEvaluation::where('player_id', '=', $player->player_id)
 			->orderBy('created_at', 'desc')
-			->get();
+			->paginate(10);
 
 		return view('pages/players/journal/evaluation/index', compact('player', 'entry', 'evaluations'));
 	}
@@ -54,10 +54,9 @@ class PlayersEvaluationController extends Controller {
 		$input = Input::all();
 
 		$scores  =[];
-		//dd($input);
-
+		
 		// 1. Create a new Player Evaluation Form	
-		$eval = PlayerEvaluation::create(['player_id' => $player->player_id]);
+		$eval = PlayerEvaluation::create(['player_id' => $player->player_id, 'title' => $input["eval_title:"]]);
 
 		// 2. Loop through input and save
 		foreach ($categories as $c) {
@@ -65,7 +64,7 @@ class PlayersEvaluationController extends Controller {
 		 		$score = $input["score-$c->category_id-$s->subcategory_id"];
 		 		$comment =  $input["comment-$c->category_id-$s->subcategory_id"];
 
-				$eval_score = EvaluationScore::create(['evaluation_id' => $eval->id, 
+				$eval_score = EvaluationScore::create(['evaluation_id' => $eval->evaluation_id, 
 					'category_id' => $c->category_id, 
 					'subcategory_id' => $s->subcategory_id, 
 					'score' => $score, 

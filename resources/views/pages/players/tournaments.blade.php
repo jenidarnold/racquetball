@@ -33,6 +33,13 @@
 			color:gray;
 			font-weight: bold;
 		}
+
+		.score {
+			color:gray;
+			font-weight: bold;
+			text-align: center;
+		}
+
 		.high-score {
 			color:green;
 			font-weight: bold;
@@ -56,10 +63,10 @@
 		<div class="col-md-12">
 			<table class="table">
 				<tbody>
-				@foreach ($tournaments as $tournament)
+				@foreach ($tournaments as $t)
 					<tr class="tournament label-success">		
-						<td>{{ $tournament->start_date }}</td>
-						<td>{{ $tournament->name }}  </td>
+						<td>{{ $t->start_date }}</td>
+						<td>{{ $t->name }}  </td>
 						<td> 1st Place  </td>
 					</tr>
 					<tr>
@@ -72,39 +79,43 @@
 									<th>Results</th>										
 								</thead>
 								<tbody>		
-									@foreach ($matches as $m)
+								
+									@foreach ($tournament->getMatches($t->tournament_id, $player->player_id) as $m)
 									<tr>	
 										<td>{{ $m->match_division }} </td>						
 										<td>{{ $m->match_type }} </td>
-										<td>Rnd 1</td>
+										<td>Rnd {{$m->round}}</td>
 										<td>
-											<table class="table table-condensed">
+											<table class="table table-condensed" border=0>
 												<tr class="tr-games label-info">
 													<td></td>
-													<td class="games">Gm</td>
-													<td class="">1</td>
-													<td class="">2</td>
-													<td class="">3</td>
-													<td class="">4</td>
-													<td class="">5</td>
+													<td class="games">Gm</td>													
+													@for ($i = 1; $i <= $match->whereMatchId($m->match_id)->with('games')->count() ; $i++)
+													<td class="">{{ $i}}</td>
+													@endfor
 												</tr>
 												<tr>
 													<td class="seed">[1]</td>
-													<td class="winner">{{ $m->winner_first_name.' '.$m->winner_last_name}}</td>
-													<td class="high-score">15</td>
-													<td class="low-score">12</td>
-													<td class="high-score">11</td>
-													<td class="low-score"></td>
-													<td class="low-score"></td>
+													<td class="winner">
+														<a href="{{ route('player.tournaments', [$m->winner_id]) }}" class="winner">
+														{{ $m->winner_first_name.' '.$m->winner_last_name}}
+														</a>
+													</td>
+													@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
+													<td class="score">{{$g["games"]->first()->score1 }}
+													</td>
+													@endforeach
 												</tr>
 												<tr>
 													<td class="seed">[2]</td>
-													<td class="loser">{{ $m->loser_first_name.' '.$m->loser_last_name }}</td>
-													<td class="low-score">10</td>
-													<td class="high-score">15</td>
-													<td class="low-score">3</td>
-													<td class="low-score"></td>
-													<td class="low-score"></td>
+													<td class="loser">
+														<a href="{{ route('player.tournaments', [$m->loser_id]) }}" class="loser">
+														{{ $m->loser_first_name.' '.$m->loser_last_name }}
+														</a>
+													</td>
+													@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
+													<td class="score">{{$g["games"]->first()->score2}}</td>
+													@endforeach
 												</tr>
 											</table>
 										</td>													
@@ -118,9 +129,9 @@
 				</tbody>
 			</table>
 		</div>
-		<div>
+		{{-- <div>
 			{!! $tournaments->render() !!}
-		</div>
+		</div> --}}
 	</div>
 @stop
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>

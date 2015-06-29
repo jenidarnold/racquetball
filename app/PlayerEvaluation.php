@@ -15,7 +15,7 @@ class PlayerEvaluation extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['evaluation_id', 'player_id'];
+	protected $fillable = ['evaluation_id', 'player_id', 'title'];
 	
 	public $primaryKey = 'evaluation_id';
 
@@ -31,4 +31,28 @@ class PlayerEvaluation extends Model {
 		return $this->hasMany('App\EvaluationScore', 'evaluation_id', 'evaluation_id');
 	}
 
+	public function getScore($catID, $subCatID) {
+
+
+		$s= EvaluationScore::where('evaluation_id', '=', $this->evaluation_id)
+			->where('category_id', '=', $catID)
+			->where('subcategory_id', '=',  $subCatID)
+			->select('score')
+			->first();
+		
+		return $s->score;
+	}
+
+
+	public function getComment($catID, $subCatID) {
+
+
+		$s= EvaluationScore::where('evaluation_id', '=', $this->evaluation_id)
+			->where('category_id', '=', $catID)
+			->where('subcategory_id', '=',  $subCatID)
+			->select('comment')
+			->first();
+		
+		return $s->comment;
+	}
 }

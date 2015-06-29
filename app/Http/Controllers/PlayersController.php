@@ -1,7 +1,10 @@
 <?php namespace App\Http\Controllers;
 
 use App\Player;
+use App\MatchGame;
 use App\Match;
+use App\Game;
+use App\Tournament;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -127,11 +130,16 @@ class PlayersController extends Controller {
 	public function getTournaments($player){
 	
 		$matches = $player->getMatches();
-		$tournaments = $player->getTournaments()->paginate(2);
+		$tournaments = $player->getTournaments();
 
+
+		//used to get Scores
+		$tournament = New Tournament();
+		$match = New MatchGame();
+		$game = New Game();
 
 		//return view('pages/players/show', compact('player', 'matches', 'tournaments'));
-		return view('pages/players/tournaments', compact('player', 'matches', 'tournaments'));
+		return view('pages/players/tournaments', compact('player', 'matches', 'tournaments', 'tournament', 'match', 'game'));
 	}
 
 		/**

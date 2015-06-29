@@ -100,11 +100,13 @@ class Player extends Model {
 		return $this->hasMany('App\Participant', 'player_id', 'player_id');
 	}
 
+
 	public function getTournaments() {
 
 		return \DB::table('tournaments')
 			->join('participants', 'tournaments.tournament_id', '=', 'participants.tournament_id')
 			->where('participants.player_id', '=', $this->player_id)
+			->select('player_id','participants.tournament_id', 'name', 'start_date', 'end_date')
 			->distinct()
 			->orderBy('start_date', 'desc')
 			->get();
@@ -119,17 +121,18 @@ class Player extends Model {
 			->join('players as loser', 'loser.player_id', '=', 'matches.player2_id')
 			->where("player1_id", '=', $this->player_id)
 			->orWhere("player2_id", '=', $this->player_id)
-			->orderBy('match_date', 'desc')
+			->orderBy('round')
 			->select( '*',
 				'winner.first_name as winner_first_name', 				
 			 	'winner.last_name as winner_last_name' ,
 				'loser.first_name as loser_first_name', 
 				'loser.last_name as loser_last_name',
+				'loser.player_id as loser_id',
 				'tournaments.name as tournament'
 				)
 			->get();
 
 		return $m;
-
 	}
+
 }

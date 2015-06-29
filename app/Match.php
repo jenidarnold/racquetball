@@ -18,6 +18,8 @@ class Match extends Model {
 	 */
 	protected $fillable = ['match_id', 'tournament_id', 'match_date', 'match_division', 'player1_id', 'player2_id', 'winner_id', 'match_type'];
 
+	public $primaryKey ='match_id';
+	
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -53,5 +55,11 @@ class Match extends Model {
 	public function tournament() {
 
 		return $this->belongsTo('App\Tournament', 'tournament_id', 'tournament_id');
+	}
+
+	public function getScores() {
+
+		return 5;
+		return $this->hasMany('App\MatchGame', 'match_id', 'game_id');
 	}
 }

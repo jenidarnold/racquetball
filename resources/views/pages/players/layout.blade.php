@@ -27,11 +27,17 @@
 				<li id="li-gallery"><a href="/players/{{ $player->player_id}}/gallery">My Gallery</a></li>
 			</ul>
 		</div>			
-		<div class="col-md-10">
-			<label class="player-title">{{$player->first_name.' '.$player->last_name}}: </label>
-			@yield('title')
-			@yield('player-content')
+		<div class="row col-md-10">
+			<label class="player-title">{{$player->first_name.' '.$player->last_name}}</label>
 		</div>
+		<div class="row col-md-10 panel panel-primary">
+			@yield('menu')
+		</div>
+		<div class="row col-md-10">
+			@yield('title')
+		</div>
+		<div class="row col-md-10">
+			@yield('player-content')
 		</div>		
 	</div>	
 </div>

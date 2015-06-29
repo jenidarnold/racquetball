@@ -72,10 +72,10 @@
     				<tr>
     					<td class="eval-subcategory"> {{ $s->subcategory }}</td>			
     					<td>
-    						<div id={{"stars-$c->category_id-$s->subcategory_id"}} class="starrr" data-rating={{$s->score}}></div>
+    						<div id={{"stars-$c->category_id-$s->subcategory_id"}} class="starrr" data-rating={{$evaluation->getScore($c->category_id,$s->subcategory_id )}}></div>
     					</td>
     					<td class="eval-comment"> 
-    					 <span class="">{{$evaluation->scores[$c->category_id] }} </span>
+    					 <span class="">{{$evaluation->getComment($c->category_id,$s->subcategory_id )}} </span>
     					</td>
     				</tr>
     				@endforeach

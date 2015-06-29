@@ -14,6 +14,10 @@
 		width:450px;
         padding-left: 10px !important; 
 	}
+    .eval-title{
+        font-weight:700;
+        font-size: 16pt;
+    }
 	.eval-category{
 		font-weight: 700;
 		font-size: 12pt;
@@ -44,12 +48,12 @@
 @section('evaluation-content')
 		{!! Form::open(array('class' =>'form-inline','role'=>'form', 'method'=>'POST', 'route' => array('evaluation.store', $player->player_id, $entry)))!!}
         <div class="row">
-            <div class="form-group">
+           {{--  <div class="form-group">
             {!! Form::label('Date:','', array('class' =>'form-label', 'for' =>'eval_date')) !!}
             {!! Form::text('eval_date','', array('class' =>'form-control date-picker', 'style' => 'width:100px')) !!}
-            </div>
+            </div> --}}
             <div class="form-group">
-            {!! Form::label('Title:','', array('class' =>'form-label', 'for' =>'eval_title')) !!}
+            {!! Form::label('Title:','', array('class' =>'form-label eval-title', 'for' =>'eval_title')) !!}
             {!! Form::text('eval_title:','', array('class' =>'form-control', 'style' => 'width:400px')) !!}
             </div>
             <div class="form-group">
@@ -74,7 +78,7 @@
     					<td>
     						<div id={{"stars-$c->category_id-$s->subcategory_id"}} 
                                  class="starrr" 
-                                  data-rating="3"
+                                  data-rating="0"
                                  ></div>
                             {!! Form::hidden("score-$c->category_id-$s->subcategory_id") !!}
     					</td>

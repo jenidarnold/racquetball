@@ -44,8 +44,8 @@ Route::bind('participants', function($value, $route){
 });
 
 
-Route::get('players/{players}/tournaments', 'PlayersController@getTournaments');
-Route::get('players/{players}/biography', 'PlayersController@getBio');
+Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'uses' => 'PlayersController@getTournaments'));
+Route::get('players/{players}/biography', array('as' => 'player.bio', 'uses' => 'PlayersController@getBio'));
 #Route::get('players/{players}/biography', 'PlayersProfileController@getBio');
 Route::get('players/{players}/journal/', 'PlayersJournalController@index');
 Route::get('players/{players}/journal/{entry}', 'PlayersJournalController@show');
