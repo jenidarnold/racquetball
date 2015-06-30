@@ -1,7 +1,6 @@
-@extends('pages.players.layout')
+@extends('pages.players.journal.opponent.layout')
 
-@section('style')
-	@parent	
+@section('style')	
 	<style type="text/css">
 	.starrr{
 		color: green;
@@ -15,6 +14,10 @@
 		width:450px;
         padding-left: 10px !important; 
 	}
+    .eval-title{
+        font-weight:700;
+        font-size: 16pt;
+    }
 	.eval-category{
 		font-weight: 700;
 		font-size: 12pt;
@@ -31,47 +34,69 @@
 	}
 
     .form-label{
-        font-weight:800;
-        font-size: 12pt;
-    }
-
-    .eval-title{
-        font-weight:700;
-        font-size: 16pt;
+        font-weight:500;
     }
 	</style>
+	@parent
 @stop
 
-@section('menu')
-	<div class="col-md-12">			
-   		<ul class="nav nav-pills">				
-			<li id="li-List"><a href="/players/{{ $player->player_id}}/journal/1/opponent">Home</a></li>
-			<li id="li-New"><a href="/players/{{ $player->player_id}}/journal/{{$entry}}/opponent/create">New</a></li>
-		</ul>
-	</div>	
+@section('title')
+	<label class="player-sub-title">Create New Opponent Evaluation for <b>{{ $opponent->full_name }}</b></label>
+	<label class="entry-date" style="float:right">Last Entry: 6/1/15</label>		
 @stop
 
-@section('player-content')
-<div class="container">
-	<div class="row">
-				
-		<div class="col-md-10">
-			@yield('opponent-content')
-		</div>
-		</div>		
-	</div>	
-</div>
-<div class="row">
-	@yield('player-footer')
-</div>
+@section('opponent-content')
+		{!! Form::open(array('class' =>'form-inline','role'=>'form', 'method'=>'POST', 'route' => array('evaluation.store', $opponent->player_id, $entry)))!!}
+        <div class="row">
+           {{--  <div class="form-group">
+            {!! Form::label('Date:','', array('class' =>'form-label', 'for' =>'eval_date')) !!}
+            {!! Form::text('eval_date','', array('class' =>'form-control date-picker', 'style' => 'width:100px')) !!}
+            </div> --}}
+            <div class="form-group">
+            {!! Form::label('Title:','', array('class' =>'form-label eval-title', 'for' =>'eval_title')) !!}
+            {!! Form::text('eval_title:','', array('class' =>'form-control', 'style' => 'width:400px')) !!}
+            </div>
+            <div class="form-group">
+            {!! Form::button('Save', array('class' =>'btn btn-success', 'type' =>'submit')) !!}
+            {!! Form::button('Reset', array('class' =>'btn btn-danger')) !!}
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px">
+    		<table class="table table-condensed">
+    			<thead class="label-primary">
+    				<th class="eval-header">Area of Evaluation</th>
+    				<th class="eval-header">Rating</th>
+    				<th class="eval-header">Comments</th>
+    			</thead>
+    			@foreach($categories as $c)
+    			<tr>
+    				<td class="eval-category info" colspan="3">{{ $c->category }}</td>
+    			</tr>
+    				@foreach($c->subcategories as $s)
+    				<tr>
+    					<td class="eval-subcategory"> {{ $s->subcategory }}</td>			
+    					<td>
+    						<div id={{"stars-$c->category_id-$s->subcategory_id"}} 
+                                 class="starrr" 
+                                  data-rating="0"
+                                 ></div>
+                            {!! Form::hidden("score-$c->category_id-$s->subcategory_id") !!}
+    					</td>
+    					<td class="eval-comment"> 
+    					{!! Form::text("comment-$c->category_id-$s->subcategory_id", '', array('class' =>'form-control', 'style' => 'width:400px')) !!}
+    					</td>
+    				</tr>
+    				@endforeach
+    			@endforeach
+    		</table>
+        </div>
+		{!! Form::close()!!}
 @stop
 
-@section('script')
 @section('script')
 <script src="{{ asset('/js/datepicker.js') }}"></script>
 <script type="text/javascript">
 $('.date-picker').datepicker();
-
 // Starrr plugin (https://github.com/dobtco/starrr)
 var __slice = [].slice;
 

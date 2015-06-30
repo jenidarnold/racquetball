@@ -5,6 +5,9 @@ use Redirect;
 use App\Player;
 use App\Match;
 use App\Http\Requests;
+use App\PlayerEvaluation;
+use App\EvaluationScore;
+use App\EvaluationCategory;
 use App\Http\Controllers\Controller;
 //use App\Opponent;
 use Illuminate\Http\Request;
@@ -31,9 +34,21 @@ class PlayersOpponentController extends Controller {
 	 * @return Response
 	 */
 	public function create($player,$entry)
+	{		
+		return view('pages/players/journal/opponent/create', compact('player', 'categories', 'entry'));
+	}
+
+
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return Response
+	 */
+	public function createEvaluate($player,$entry, $opponent_id)
 	{
-		
-		return view('pages/players/journal/opponent/create', compact('player', 'entry'));
+		$categories = EvaluationCategory::all();		
+		$opponent = Player::find($opponent_id);
+		return view('pages/players/journal/opponent/evaluate', compact('player', 'opponent', 'categories', 'entry'));
 	}
 
 	/**
@@ -62,12 +77,25 @@ class PlayersOpponentController extends Controller {
 		$opponent = Player::find($opponent_id);
 		$opplog = []; // OpponentLog::where('opponent_id' , '=', $opponent_id);
 
-	
+		//Match History	
 		$h2h = new Match();
 		$head2head = $h2h->head2head($player->player_id, $opponent->player_id);
 
-		return view('pages/players/journal/opponent/show', compact('player', 'entry' ,'opponent', 'opplog', 'head2head'));
+		//Evaluation
+		$evaluation_id = 28; // get opponent evalution_id by table PlayerID -> entry_ID -> Opponent_id
+		$categories = EvaluationCategory::all();
+		$evaluation = PlayerEvaluation::find($evaluation_id);
+		$scores =EvaluationScore::where('evaluation_id' , '=', $evaluation_id);
+	
+		//Notes
+		//
+		//
+		//
+		return view('pages/players/journal/opponent/show', 
+			compact('player', 'entry' ,'opponent', 'opplog', 'head2head', 'evaluation', 'categories', 'scores'));
 	}
+
+
 
 	/**
 	 * Show the form for editing the specified resource.

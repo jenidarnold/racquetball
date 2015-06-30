@@ -66,6 +66,7 @@ Route::post('players/{players}/journal/{entry}/opponent',  array('as' => 'oppone
 Route::get('players/{players}/journal/{entry}/opponent/{player_id}', array('as' => 'opponent.show', 'uses' => 'PlayersOpponentController@show'));
 Route::get('players/{players}/journal/{entry}/opponent/{player_id}/edit', array('as' => 'opponent.edit', 'uses' => 'PlayersOpponentController@edit'));
 Route::post('players/{players}/journal/{entry}/opponent/{player_id}/edit', array('as' => 'opponent.update', 'uses' => 'PlayersOpponentController@update'));
+Route::get('players/{players}/journal/{entry}/opponent/{player_id}/evaluate', array('as' => 'opponent.update', 'uses' => 'PlayersOpponentController@evaluate'));
 
 
 Route::resource('rankings', 'RankingsController');

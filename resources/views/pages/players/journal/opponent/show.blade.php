@@ -36,13 +36,33 @@
 @stop
 
 @section('opponent-content')
-        <div class="row" style="padding-top:10px">
+        <div class="row">
         	<div class="col-md-8">
     			<div>
-	    			<h3>Strategy</h3>
-					<li></li>
-	    			<li></li>
-	    			<li></li>
+	    			<h3>Evaluation</h3>
+						<table class="table table-condensed">
+		    				<thead class="label-primary">
+			    				<th class="eval-header">Area of Evaluation</th>
+			    				<th class="eval-header">Rating</th>
+			    				<th class="eval-header">Comments</th>
+			    			</thead>
+			    			@foreach($categories as $c)
+			    			<tr>
+			    				<td class="eval-category info" colspan="3">{{ $c->category }}</td>
+			    			</tr>
+			    				@foreach($c->subcategories as $s)
+			    				<tr>
+			    					<td class="eval-subcategory"> {{ $s->subcategory }}</td>			
+			    					<td>
+			    						<div id={{"stars-$c->category_id-$s->subcategory_id"}} class="starrr" data-rating={{$evaluation->getScore($c->category_id,$s->subcategory_id )}}></div>
+			    					</td>
+			    					<td class="eval-comment"> 
+			    					 <span class="">{{$evaluation->getComment($c->category_id,$s->subcategory_id )}} </span>
+			    					</td>
+			    				</tr>
+			    				@endforeach
+			    			@endforeach
+			    		</table>
     			</div>
     			<div>
 	    			<h3>Notes</h3>
@@ -104,10 +124,6 @@
 @stop
 
 @section('script')
-<script src="{{ asset('/js/datepicker.js') }}"></script>
-<script type="text/javascript">
-$('.date-picker').datepicker();
-
-
-</script>
+<script type="text/javascript"></script>
+	@parent
 @stop
