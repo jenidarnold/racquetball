@@ -121,7 +121,6 @@ class Scraper {
 									array_push($player_rankings, $rank);
 									$i = $i + 1;
 								}
-
 						 	}					 	
 						 	$prev_pid = $curr_pid;
 					 	}
@@ -140,7 +139,7 @@ class Scraper {
 	 	$cc = new CopyCat;
 	 	$cc->setCurl(array(
 	 		CURLOPT_RETURNTRANSFER => 1,
-	 		CURLOPT_CONNECTTIMEOUT => 5,
+	 		CURLOPT_CONNECTTIMEOUT => 2,
 	 		CURLOPT_HTTPHEADER, "Content-Type: text/html; charset=iso-8859-1",
 	 		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
 	 	));
@@ -216,7 +215,7 @@ class Scraper {
 
 		$result_matches = $cc->get();
 	 	$i = 0;
-	 
+
 	 	//Save Player to database
 	 	foreach ($result_matches as $match_info) {
 	 		for ($x = 0; $x < count($match_info["player1"]); $x++) {
@@ -232,8 +231,10 @@ class Scraper {
 				);
 				//Save to database				
 			
-				$ss->create_match($match);
-				array_push($matches, $match);
+				//if ($match_info["player1"][$x] != $match_info["player2"][$x]){
+					$ss->create_match($match);
+					array_push($matches, $match);
+				//}
 			}
 
 		}
@@ -268,9 +269,11 @@ class Scraper {
 		$participants = array();
 		$ss = New ScreenScraper;
 
+		$cnt = count($result_parts[0]["player_id"]);
+
 	 	//Save Participants to database
 	 	foreach ($result_parts as $part) {
-	 		for ($x = 0; $x < count($part["player_id"]); $x++) {
+	 		for ($x = 0; $x < $cnt; $x++) {
 
 	            $player_id = $part["player_id"][$x];		          
 
@@ -310,7 +313,7 @@ class Scraper {
 	 		'end_date' => '/Date:<\/span>(?:.*?)-(.*?)</ms',
 	 		'img_logo' => '/gallery\/tourneyLogo\/(.*?)"/ms',
 	 		))
-	 		->URLS('http://www.usaracquetballevents.com/Texas/results.asp?showGrouping=1');	 		
+	 		->URLS('http://www.usaracquetballevents.com/Texas/results.asp?showGrouping=0');	 		
 
 	 	$result = $cc->get();
 
@@ -318,11 +321,12 @@ class Scraper {
 
 		$tournaments = array();
 	 	$i = 0;
-	 
+	 	$cnt = count($result[0]["tournament_id"]);
+	 	
 	 	//Save Tournaments to database
 	 	foreach ($result as $tourneys) {
 
-	 		for ($x = 0; $x < count($tourneys); $x++) {
+	 		for ($x = 0; $x < $cnt; $x++) {
 
 	            $tid = $tourneys["tournament_id"][$x];
 	            $tname = $tourneys["name"][$x];
@@ -333,8 +337,9 @@ class Scraper {
 					'location' => $tourneys["location"][$x],
 					'start_date' => date("Y-m-d H:i:s", strtotime($tourneys["start_date"][$x])),
 					'end_date' => date("Y-m-d H:i:s", strtotime($tourneys["start_date"][$x])),
-					'img_logo' => $tourneys["img_logo"][$x]
+					'img_logo' => isset($tourneys["img_logo"][$x])
 				);				
+
 
 				//Save to database
 				$ss->create_tournament($tourney);

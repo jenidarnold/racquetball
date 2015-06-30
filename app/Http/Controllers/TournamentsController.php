@@ -75,6 +75,7 @@ class TournamentsController extends Controller {
 		foreach ($participants as $participant){
 			if ($participant->player["full_name"] == "") {							
 				$s->get_player($participant->player_id);
+				$s->get_matches($participant->player_id);				
 				$updated = true;
 			}
 		}

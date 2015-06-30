@@ -47,14 +47,26 @@ Route::bind('participants', function($value, $route){
 Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'uses' => 'PlayersController@getTournaments'));
 Route::get('players/{players}/biography', array('as' => 'player.bio', 'uses' => 'PlayersController@getBio'));
 #Route::get('players/{players}/biography', 'PlayersProfileController@getBio');
+
+/************   Journal  ***********/
 Route::get('players/{players}/journal/', 'PlayersJournalController@index');
 Route::get('players/{players}/journal/{entry}', 'PlayersJournalController@show');
+# Evaluations
 Route::get('players/{players}/journal/{entry}/evaluation', 'PlayersEvaluationController@index');
 Route::get('players/{players}/journal/{entry}/evaluation/create', array('as' => 'evaluation.create', 'uses' => 'PlayersEvaluationController@create'));
 Route::post('players/{players}/journal/{entry}/evaluation',  array('as' => 'evaluation.store', 'uses' => 'PlayersEvaluationController@store'));
 Route::get('players/{players}/journal/{entry}/evaluation/{evaluation_id}', array('as' => 'evaluation.show', 'uses' => 'PlayersEvaluationController@show'));
 Route::get('players/{players}/journal/{entry}/evaluation/{evaluation_id}/edit', array('as' => 'evaluation.edit', 'uses' => 'PlayersEvaluationController@edit'));
 Route::post('players/{players}/journal/{entry}/evaluation/{evaluation_id}/edit', array('as' => 'evaluation.update', 'uses' => 'PlayersEvaluationController@update'));
+# Opponents
+
+Route::get('players/{players}/journal/{entry}/opponent', 'PlayersOpponentController@index');
+Route::get('players/{players}/journal/{entry}/opponent/create', array('as' => 'opponent.create', 'uses' => 'PlayersOpponentController@create'));
+Route::post('players/{players}/journal/{entry}/opponent',  array('as' => 'opponent.store', 'uses' => 'PlayersOpponentController@store'));
+Route::get('players/{players}/journal/{entry}/opponent/{player_id}', array('as' => 'opponent.show', 'uses' => 'PlayersOpponentController@show'));
+Route::get('players/{players}/journal/{entry}/opponent/{player_id}/edit', array('as' => 'opponent.edit', 'uses' => 'PlayersOpponentController@edit'));
+Route::post('players/{players}/journal/{entry}/opponent/{player_id}/edit', array('as' => 'opponent.update', 'uses' => 'PlayersOpponentController@update'));
+
 
 Route::resource('rankings', 'RankingsController');
 Route::resource('players', 'PlayersController');

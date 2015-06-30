@@ -29,6 +29,35 @@ class Match extends Model {
 
 	public function head2head($player1, $player2) {
 
+		//Match detail
+		$matches = \DB::table('matches')
+			->join('tournaments', 'tournaments.tournament_id', '=', 'matches.tournament_id')
+			->join('players as winner', 'winner.player_id', '=', 'matches.player1_id')
+			->join('players as loser', 'loser.player_id', '=', 'matches.player2_id')
+			->where(
+				function($q)use($player1) {
+					$q->where('player1_id', '=', $player1)
+						->orWhere('player2_id', '=', $player1);
+			})
+			->where(
+				function($q)use($player2) {
+					$q->where('player1_id', '=', $player2)
+						->orWhere('player2_id', '=', $player2);
+			})
+			->orderBy('match_division')
+			->orderBy('round')
+			->select( '*',
+				'winner.first_name as winner_first_name', 				
+			 	'winner.last_name as winner_last_name' ,
+				'loser.first_name as loser_first_name', 
+				'loser.last_name as loser_last_name',
+				'loser.player_id as loser_id',
+				'tournaments.name as tournament'
+				)
+			->distinct()
+			->get();
+
+		//Count wins by player
 		$player1_wins = Match::where('winner_id', '=', $player1)
 					->where('player2_id', '=', $player2)
 					->get()
@@ -47,6 +76,7 @@ class Match extends Model {
 					'player2' => [
 								 'wins' => $player2_wins,
 							],
+					'matches' => $matches,
 			];
 
 		return $versus;
