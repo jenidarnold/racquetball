@@ -55,7 +55,7 @@ return [
 		'mysql' => [
 			'driver'    => 'mysql',
 			'host'      => env('DB_HOST', 'localhost'),
-			'database'  => env('DB_DATABASE', 'forge'),
+			'database'  => env('DB_DATABASE', 'racquetball'),
 			'username'  => env('DB_USERNAME', 'forge'),
 			'password'  => env('DB_PASSWORD', ''),
 			'charset'   => 'utf8',
@@ -64,16 +64,12 @@ return [
 			'strict'    => false,
 		],
 
-		'pgsql' => [
-			'driver'   => 'pgsql',
-			'host'     => env('DB_HOST', 'localhost'),
-			'database' => env('DB_DATABASE', 'forge'),
-			'username' => env('DB_USERNAME', 'forge'),
-			'password' => env('DB_PASSWORD', ''),
-			'charset'  => 'utf8',
-			'prefix'   => '',
-			'schema'   => 'public',
-		],
+		'pgsql' => [ 'driver' => 'pgsql', 'host' =>
+			env('DB_HOST', 'localhost'), 'database' =>
+			env('DB_DATABASE', 'forge'), 'username' =>
+			env('DB_USERNAME', 'forge'), 'password' =>
+			env('DB_PASSWORD', ''), 'charset' => 'utf8',
+			'prefix' => '', 'schema' => 'public', ],
 
 		'sqlsrv' => [
 			'driver'   => 'sqlsrv',
