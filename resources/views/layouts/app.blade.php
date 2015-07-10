@@ -32,7 +32,7 @@
 		font-weight: 500;
 	}
 </style>
-<body>
+<body style="background-image: url('/images/grey-bg.jpg');">
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -63,6 +63,10 @@
 			<!-- 2nd Nav menu -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
+                @if (Auth::guest())
+                    <li><a class="navbar-link" href="{{ url('/demo') }}"> 
+                        <i class="fa fa-home" style="color:black1"></i> Demo</a></li>
+                @else
 					<li><a class="navbar-link" href="{{ url('/') }}"> 
 						<i class="fa fa-home" style="color:black1"></i> Home</a></li>
 					<li><a class="navbar-link" href="{{ url('/tournaments') }}">
@@ -76,61 +80,65 @@
 						<i class="fa fa-user-plus" style="color:green1"></i>
 						<i class="fa fa-user" style="color:green1"></i> 
 						 Matchups</a></li>
+                @endif
 				</ul>
 
+                @if (Auth::guest())
+                @else
 				<ul class="nav navbar-nav zeroed secondary-nav--left">
-            <!-- Browse -->
-            <li class="dropdown ">
-                <a href="/index" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                    Browse <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class=""><a href="/index">Site Index</a></li>
-                    <li><a href="/all">Latest Content</a></li>
-                </ul>
-            </li>
-             <!-- Discuss -->
-            <li class="dropdown">
-                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                    Discuss <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class=""><a href="/discuss">Forum</a></li>
-                     <li><a href="http://facebook.com/rballstats">Facebook</a></li>
-                    <li><a href="http://twitter.com/rballstats">Twitter</a></li>
-                </ul>
-            </li>
-             <!-- Lessons -->
-            <li class="dropdown">
-                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                    Lessons <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class=""><a href="/l">Find by Location</a></li>
-                     <li><a href="http://facebook.com/rballstats">Find by Instructor</a></li>
-                </ul>
-            </li>
-            <!-- Clubs -->
-            <li class="dropdown">
-                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                    Clubs <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class=""><a href="/l">Find by Location</a></li>
-                    <li class=""><a href="/l">Leagues</a></li>
-                    <li><a href="http://facebook.com/rballstats">Find by Club</a></li>
-                </ul>
-            </li>
-            <!-- Shop -->
-            <li class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                <a href="/shop" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                Shop <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                     <li><a href="#">Advocare</a></li>
-                     <li><a href="#">Racquetball Warehouse</a></li>
-                </ul>
-            </li>
-	   	 </ul>        
+                <!-- Browse -->
+                    <li class="dropdown ">
+                        <a href="/index" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                            Browse <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class=""><a href="/index">Site Index</a></li>
+                            <li><a href="/all">Latest Content</a></li>
+                        </ul>
+                    </li>
+                     <!-- Discuss -->
+                    <li class="dropdown">
+                        <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                            Discuss <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class=""><a href="/discuss">Forum</a></li>
+                            <li><a href="http://facebook.com/rballstats">Facebook</a></li>
+                            <li><a href="http://twitter.com/rballstats">Twitter</a></li>
+                        </ul>
+                    </li>
+                     <!-- Lessons -->
+                    <li class="dropdown">
+                        <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                            Lessons <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class=""><a href="/l">Find by Location</a></li>
+                            <li><a href="http://facebook.com/rballstats">Find by Instructor</a></li>
+                        </ul>                
+                    </li>
+                    <!-- Clubs -->
+                    <li class="dropdown">
+                        <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                            Clubs <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class=""><a href="/l">Find by Location</a></li>
+                            <li class=""><a href="/l">Leagues</a></li>
+                            <li><a href="http://facebook.com/rballstats">Find by Club</a></li>
+                        </ul>
+                    </li>
+                    <!-- Shop -->
+                    <li class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                        <a href="/shop" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                        Shop <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                             <li><a href="#">Advocare</a></li>
+                             <li><a href="#">Racquetball Warehouse</a></li>
+                        </ul>
+                    </li>
+        	   	</ul>  
+                @endif      
 				<!-- Login -->
 				<ul class="nav navbar-nav navbar-right">
                    {{--  @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.Auth::user()->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found' ))                                    
@@ -158,7 +166,6 @@
 			</div>
 		</div>
 	</nav>
-	<hr/>
 	{{-- <nav class="navbar navbar-success secondary-nav" role="navigation">
     <div class="container">
         <ul class="nav navbar-nav zeroed secondary-nav--left">
