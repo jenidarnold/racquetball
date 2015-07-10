@@ -19,7 +19,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-2">			
-	   		<img src={{ 'http://www1.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} class="img-thumbnail" width="200" >		
+	   		<img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} class="img-thumbnail" width="200" >		
 			<ul class="nav nav-pills nav-stacked">				
 				<li id="li-profile"><a href="/players/{{ $player->player_id}}/">Profile</a></li>
 				<li id="li-tourney"><a href="/players/{{ $player->player_id}}/tournaments">Tournaments</a></li>
