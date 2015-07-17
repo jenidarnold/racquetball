@@ -31,6 +31,10 @@
 		font-size: 14pt;
 		font-weight: 500;
 	}
+
+    .container { 
+        background-color: white;
+    }
 </style>
 <body style="background-image: url('/images/grey-bg.jpg');">
 <script>

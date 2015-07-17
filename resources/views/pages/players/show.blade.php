@@ -47,7 +47,6 @@
 @stop
 
 @section('content')
-<div class="container">
 	<div class="row">
 	   	<div class="col-md-2">
 			<img style="height:125px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} class="img-thumbnail">
@@ -146,5 +145,4 @@
 			{!! $tournaments->render() !!}
 		</div>
 	</div>
-</div>
 @stop
