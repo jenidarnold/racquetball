@@ -29,8 +29,14 @@ Route::controllers([
 Route::model('participants', 'Participant');
 Route::model('tournaments', 'Tournament');
 Route::model('players', 'Player');
+Route::model('user', 'User');
 
 //Need to add slug field to database tables
+
+Route::bind('users', function($value, $route){
+	return App\User::whereId($value)->first();
+});
+
 Route::bind('players', function($value, $route){
 	return App\Player::wherePlayer_id($value)->first();
 });
@@ -43,6 +49,14 @@ Route::bind('participants', function($value, $route){
 	return App\Participant::whereTournament_id($value)->first();
 });
 
+######  User  ################
+#
+Route::resource('users', 'UserController');
+
+
+Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'uses' => 'PlayersController@getTournaments'));
+Route::get('players/{players}/biograph', 'UserAccountController@show');
+Route::get('users/{user_id}/account', 'UserAccountController@show');
 
 Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'uses' => 'PlayersController@getTournaments'));
 Route::get('players/{players}/biography', array('as' => 'player.bio', 'uses' => 'PlayersController@getBio'));
@@ -52,9 +66,9 @@ Route::get('players/{players}/biography', array('as' => 'player.bio', 'uses' => 
 Route::get('players/{players}/journal/', 'PlayersJournalController@index');
 Route::get('players/{players}/journal/{entry}', 'PlayersJournalController@show');
 # Evaluations
-Route::get('players/{players}/journal/{entry}/evaluation', 'PlayersEvaluationController@index');
-Route::get('players/{players}/journal/{entry}/evaluation/create', array('as' => 'evaluation.create', 'uses' => 'PlayersEvaluationController@create'));
-Route::post('players/{players}/journal/{entry}/evaluation',  array('as' => 'evaluation.store', 'uses' => 'PlayersEvaluationController@store'));
+Route::get('players/{players}/journal/{entry}/evaluation/{target}/', 'PlayersEvaluationController@index');
+Route::get('players/{players}/journal/{entry}/evaluation/{target}/create', array('as' => 'evaluation.create', 'uses' => 'PlayersEvaluationController@create'));
+Route::post('players/{players}/journal/{entry}/evaluation/{target}',  array('as' => 'evaluation.store', 'uses' => 'PlayersEvaluationController@store'));
 Route::get('players/{players}/journal/{entry}/evaluation/{evaluation_id}', array('as' => 'evaluation.show', 'uses' => 'PlayersEvaluationController@show'));
 Route::get('players/{players}/journal/{entry}/evaluation/{evaluation_id}/edit', array('as' => 'evaluation.edit', 'uses' => 'PlayersEvaluationController@edit'));
 Route::post('players/{players}/journal/{entry}/evaluation/{evaluation_id}/edit', array('as' => 'evaluation.update', 'uses' => 'PlayersEvaluationController@update'));
@@ -62,6 +76,7 @@ Route::post('players/{players}/journal/{entry}/evaluation/{evaluation_id}/edit',
 
 Route::get('players/{players}/journal/{entry}/opponent', 'PlayersOpponentController@index');
 Route::get('players/{players}/journal/{entry}/opponent/create', array('as' => 'opponent.create', 'uses' => 'PlayersOpponentController@create'));
+Route::get('players/{players}/journal/{entry}/opponent/{target_id}', array('as' => 'opponent.evaluation.store', 'uses' => 'PlayersEvaluationController@store'));
 Route::post('players/{players}/journal/{entry}/opponent',  array('as' => 'opponent.store', 'uses' => 'PlayersOpponentController@store'));
 Route::get('players/{players}/journal/{entry}/opponent/{player_id}', array('as' => 'opponent.show', 'uses' => 'PlayersOpponentController@show'));
 Route::get('players/{players}/journal/{entry}/opponent/{player_id}/edit', array('as' => 'opponent.edit', 'uses' => 'PlayersOpponentController@edit'));

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="main-content">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="panel panel-default">
@@ -47,15 +47,14 @@
 						</thead>
 						<tbody>
 							@foreach ($rankings as $player)							
-							<tr>	
+							<tr class="clickable-row" data-href="{{ route('players.show', [$player->player_id]) }}">	
 								<td><h2>{{$player->ranking }}</h3></t2>
 								<td>
-									<a href="{{ route('players.show', [$player->player_id]) }}">
 									{{-- <img class='img-profile img-thumbnail' width="100px" 
 										 src="{{ URL::to('api/profile/image?playerID='.$player->player_id) }}" ></a>
  --}}
 								    @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
-										<img class='img-profile img-thumbnail' width="100px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} ></a>
+										<img class='img-profile img-thumbnail' width="100px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} >
 									@else
 										<img class='img-profile img-thumbnail' width="100px" src='/images/racquet-right.png'>
 									@endif
@@ -67,6 +66,11 @@
 								<td>{{ $player->home }} </td>
 							</tr>
 							@endforeach
+							<tr>
+								<td colspan="7"> 
+									{!! $rankings->appends(Input::except('page'))->render() !!}
+								</td>
+							</tr>
 						</tbody>					
 					</table>
 				</div>						

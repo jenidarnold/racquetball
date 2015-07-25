@@ -60,6 +60,7 @@ class Ranking extends Model {
 			->where('rankings.group_id', '=', $group_id)
 			->where('rankings.location_id', '=', $location_id)
 			->distinct()
-			->get();
+			->paginate(10);
+			//->get();
 	}
 }

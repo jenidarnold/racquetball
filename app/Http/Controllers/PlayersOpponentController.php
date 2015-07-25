@@ -28,6 +28,17 @@ class PlayersOpponentController extends Controller {
 		return view('pages/players/journal/opponent/index', compact('player', 'entry', 'opponents', 'opplogs'));
 	}
 
+	public function listEvaluations($player, $opponent, $entry)
+	{
+
+		$evaluations = PlayerEvaluation::where('player_id', '=', $opponent->player_id)
+			->where('creator_id', '=', $player->player_id)
+			->orderBy('created_at', 'desc')
+			->paginate(10);
+
+		return view('pages/players/journal/opponent/evaluation/index', compact('player', 'entry', 'evaluations'));
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -35,7 +46,11 @@ class PlayersOpponentController extends Controller {
 	 */
 	public function create($player,$entry)
 	{		
-		return view('pages/players/journal/opponent/create', compact('player', 'categories', 'entry'));
+		$target_id = -1;
+		$players = Player::orderby('last_name')->orderby('first_name')->get();
+		$players_list = $players->lists('last_first_name', 'player_id');
+
+		return view('pages/players/journal/opponent/create', compact('player', 'target_id', 'categories', 'entry', 'players_list'));
 	}
 
 
@@ -44,8 +59,9 @@ class PlayersOpponentController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function createEvaluate($player,$entry, $opponent_id)
+	public function createEvaluation($player,$entry, $opponent_id)
 	{
+
 		$categories = EvaluationCategory::all();		
 		$opponent = Player::find($opponent_id);
 		return view('pages/players/journal/opponent/evaluate', compact('player', 'opponent', 'categories', 'entry'));
@@ -59,10 +75,30 @@ class PlayersOpponentController extends Controller {
 	public function store($player, $entry)
 	{
 
+		$input = Input::all();
 
+		
+		// 1. Create a new Player Evaluation Form	
+		$opp = Opponent::create(['player_id' => $player->player_id, 'title' => $input["eval_title:"]]);
+
+		// 2. Loop through input and save
+		foreach ($categories as $c) {
+		 	foreach ($c->subcategories as $s) {
+		 		$score = $input["score-$c->category_id-$s->subcategory_id"];
+		 		$comment =  $input["comment-$c->category_id-$s->subcategory_id"];
+
+				$eval_score = EvaluationScore::create(['evaluation_id' => $eval->evaluation_id, 
+					'category_id' => $c->category_id, 
+					'subcategory_id' => $s->subcategory_id, 
+					'score' => $score, 
+					'comment' => $comment,
+					]);
+			}
+		}
+	
 
 		return Redirect::route('opponent.show', [$player->player_id, $entry, $log->id])
-		 	->with('flash', 'Opponent Log Saved');
+		 	->with('flash', 'Opponent Entry Saved');
 	}
 
 	/**

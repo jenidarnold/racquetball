@@ -16,8 +16,8 @@ class Opponent extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['opponent_id', 'player_id', 'title'];
+	protected $fillable = ['entry_id', 'opponent_id', 'player_id', 'title'];
 
-	public $primaryKey = 'opponent_id';
+	public $primaryKey = 'entry_id';
 
 }

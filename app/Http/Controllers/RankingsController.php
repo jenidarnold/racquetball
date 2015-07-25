@@ -96,6 +96,7 @@ class RankingsController extends Controller {
 		$ranking = New Ranking;
 
 		$rankings = $ranking->getlatestRankings($group_id, $location_id);
+		//var_dump($rankings);
 		return view('pages/rankings', compact('rankings', 'groups', 'locations'));
 	}
 

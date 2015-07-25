@@ -15,7 +15,7 @@ class PlayerEvaluation extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['evaluation_id', 'player_id', 'title'];
+	protected $fillable = ['evaluation_id', 'player_id', 'title', 'creator_id'];
 	
 	public $primaryKey = 'evaluation_id';
 

@@ -32,8 +32,32 @@
 		font-weight: 500;
 	}
 
-    .container { 
+    .row {
+        width: 100%;
+    }
+    .main-content { 
         background-color: white;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+    .box-shadow--2dp {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12)
+    }
+    .box-shadow--3dp {
+        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)
+    }
+    .box-shadow--4dp {
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)
+    }
+    .box-shadow--6dp {
+        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2)
+    }
+    .box-shadow--8dp {
+        box-shadow: 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12), 0 5px 5px -3px rgba(0, 0, 0, .2)
+    }
+    .box-shadow--16dp {
+        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
     }
 </style>
 <body style="background-image: url('/images/grey-bg.jpg');">
@@ -168,7 +192,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             {{ Auth::user()->name }} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/users/'.Auth::user()->id) }}">Site Profile</a></li>
+                                <li><a href="{{ url('/users/'.Auth::user()->id) }}">My Account</a></li>
                                 <li><a href="{{ url('/players/'.Auth::user()->player_id) }}">Player Page</a></li>
                                 <li><a href="{{ url('/players/') }}">Favorites</a></li>
 								<li><a href="{{ url('/admin/scraper') }}">Admin</a></li>
@@ -180,69 +204,23 @@
 			</div>
 		</div>
 	</nav>
-	{{-- <nav class="navbar navbar-success secondary-nav" role="navigation">
-    <div class="container">
-        <ul class="nav navbar-nav zeroed secondary-nav--left">
-            <!-- Browse -->
-            <li class="dropdown ">
-              <a href="/index" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                    Browse <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class=""><a href="/index">Site Index</a></li>
-                    <li><a href="/all">Latest Content</a></li>
-                </ul>
-            </li>
-             <!-- Discuss -->
-            <li class="dropdown">
-                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                    Discuss <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class=""><a href="/discuss">Forum</a></li>
-                     <li><a href="http://facebook.com/rballstats">Facebook</a></li>
-                    <li><a href="http://twitter.com/rballstats">Twitter</a></li>
-                </ul>
-            </li>
-             <!-- Lessons -->
-            <li class="dropdown">
-                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                    Lessons <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class=""><a href="/l">Find by Location</a></li>
-                     <li><a href="http://facebook.com/rballstats">Find by Instructor</a></li>
-                </ul>
-            </li>
-            <!-- Clubs -->
-            <li class="dropdown">
-                <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                    Clubs <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class=""><a href="/l">Find by Location</a></li>
-                    <li class=""><a href="/l">Leagues</a></li>
-                    <li><a href="http://facebook.com/rballstats">Find by Club</a></li>
-                </ul>
-            </li>
-            <!-- Shop -->
-            <li class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                <a href="/shop" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                Shop <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                     <li><a href="#">Advocare</a></li>
-                     <li><a href="#">Racquetball Warehouse</a></li>
-                </ul>
-            </li>
-	   	 </ul>         
-		</div>
-	</nav>
-	<hr/>--}}
 	@yield('content')
 
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
     @yield('script')
+
+
+    @section('script')
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+             $(".clickable-row").click(function() {
+                window.document.location = $(this).data("href");
+            });    
+        });
+    </script>
 </body>
 </html>

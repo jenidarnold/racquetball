@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('style')
 	<style type="text/css">
+
+	    .container { 
+        background-color: transparent !important;
+    	}
 		.bg-logo {
 			/* background-image: url('/images/julie-racquet1.jpg'); */
 			background-image: url('/images/racquet-round.png');

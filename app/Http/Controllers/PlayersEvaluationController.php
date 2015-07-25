@@ -19,14 +19,15 @@ class PlayersEvaluationController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index($player, $entry)
+	public function index($player, $entry, $target_id)
 	{
-
-		$evaluations = PlayerEvaluation::where('player_id', '=', $player->player_id)
+	
+		$evaluations = PlayerEvaluation::where('player_id', '=', $target_id)
+			->where('creator_id', '=', $player->player_id)
 			->orderBy('created_at', 'desc')
 			->paginate(10);
 
-		return view('pages/players/journal/evaluation/index', compact('player', 'entry', 'evaluations'));
+		return view('pages/players/journal/evaluation/index', compact('player', 'target', 'entry', 'evaluations'));
 	}
 
 	/**
