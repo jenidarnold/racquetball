@@ -53,12 +53,6 @@ class UserController extends Controller {
 		
 		return view('pages/users.show', compact('user'));
 	}
-
-	public function linkUsar($user)
-	{
-		
-		return view('pages/users.info.link-usar', compact('user'));
-	}
 	
 	/**
 	 * Show the form for editing the specified resource.
@@ -66,9 +60,10 @@ class UserController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+	public function edit($user)
 	{
-		//
+	
+		return view('pages/users.account.edit', compact('user'));
 	}
 
 	/**

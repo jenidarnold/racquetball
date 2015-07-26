@@ -36,6 +36,7 @@
         width: 100%;
     }
     .main-content { 
+        height: 100%;
         background-color: white;
         padding-left: 10px;
         padding-right: 10px;

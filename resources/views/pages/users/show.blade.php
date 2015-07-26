@@ -58,7 +58,7 @@
 	</div>
 	<div class="row regions">
 		<div class="col-md-4 region">
-			<div class="panel panel-default box-shadow--2dp" role="region1">
+			<div class="panel panel-default box-shadow--2dp">
 				<h2 class="region-title">
 					<div class="" id="">
 						<i class="fa fa-lock"></i> Sign-in &amp; Security
@@ -66,7 +66,7 @@
 					</div>
 				</h2>
 				<div class="list-group">
-				  <a href="#" class="list-group-item">Change Username and/or Password</a>
+				  <a href="/users/{{$user->id}}/edit" class="list-group-item">Change Username and/or Password</a>
 				  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
 				  <a href="#" class="list-group-item">Morbi leo risus</a>
 				  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
@@ -75,7 +75,7 @@
 			</div>
 		</div>
 		<div class="col-md-4 region">
-			<div class="panel panel-default box-shadow--2dp" role="region1">
+			<div class="panel panel-default box-shadow--2dp">
 				<h2 class="region-title">
 					<div class="" id="">
 						<i class="fa fa-user"></i> Personal Info
@@ -83,7 +83,7 @@
 					</div>
 				</h2>
 				<div class="list-group">
-				  <a href="#" class="list-group-item">Your personal info</a>
+				  <a href="/users/{{$user->id}}/info/edit" class="list-group-item">Your personal info</a>
 				  <a href="#" class="list-group-item">Account history</a>
 				  <a href="/users/{{$user->id}}/info/link-usar" class="list-group-item">Link account to your USAR account</a>
 				  <a href="#" class="list-group-item"></a>
@@ -91,7 +91,7 @@
 			</div>
 		</div>
 		<div class="col-md-4 region">
-			<div class="panel panel-default box-shadow--2dp" role="region1">
+			<div class="panel panel-default box-shadow--2dp">
 				<h2 class="region-title">
 					<div class="" id="">
 						<i class="fa fa-cog"></i> Preferences

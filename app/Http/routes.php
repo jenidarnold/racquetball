@@ -52,9 +52,14 @@ Route::bind('participants', function($value, $route){
 ######  User  ################
 #
 /* Personal Info */
+Route::get('users/{user}/info/edit',  array('as' =>'link-usar', 'uses' => 'Users\UserInfoController@edit'));
 Route::get('users/{user}/info/link-usar',  array('as' =>'link-usar', 'uses' => 'Users\UserInfoController@linkUsar'));
 
+/* Preferences */
+Route::get('users/{user}/preferences',  array('as' =>'user-edit-pref', 'uses' => 'Users\UserPreferencesController@edit'));
 
+
+##### Players #####################
 Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'uses' => 'PlayersController@getTournaments'));
 Route::get('players/{players}/biograph', 'UserAccountController@show');
 
