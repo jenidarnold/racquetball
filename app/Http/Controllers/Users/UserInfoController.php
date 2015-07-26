@@ -1,13 +1,12 @@
-<?php namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers\Users;
 
 use Input;
-use App\User;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\User;
 
-
-class UserController extends Controller {
+class UserInfoController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -18,7 +17,7 @@ class UserController extends Controller {
 	{
 	
 
-		return view('pages/users.index');
+		return view('pages/users.info.index');
 
 	}
 
@@ -48,18 +47,24 @@ class UserController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
+	public function linkUsar($user)
+	{	
+		return view('pages/users.info.link-usar', compact('user'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
 	public function show($user)
 	{
 		
-		return view('pages/users.show', compact('user'));
+		return view('pages/users.info.show', compact('user'));
 	}
 
-	public function linkUsar($user)
-	{
-		
-		return view('pages/users.info.link-usar', compact('user'));
-	}
-	
+
 	/**
 	 * Show the form for editing the specified resource.
 	 *

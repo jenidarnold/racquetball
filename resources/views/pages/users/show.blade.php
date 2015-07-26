@@ -22,19 +22,25 @@
 			font-size: 20pt;
 		}	
 
-		.region {
+		.regions {
 			vertical-align: top;
 			text-align: center;
 			padding-top: 15px;
+			padding-left: 20px;
+			padding-right: 20px;
 			padding-bottom: 15px;
 		}
-
+		.region {
+			text-align: center;
+			padding-left: 30px;
+			padding-right: 30px;
+		}
 		.region-title {
 			color: steelblue;
 		}
 
-		.go-arrow{
-			text-align: right;
+		.list-group-item {
+			font-size: 14pt;
 		}
 	</style>
 	@parent	
@@ -43,9 +49,6 @@
 @section('content')
 <div class="main-content">
 	<div class="row">
-		<div class="col-md-2">			
-	   		
-		</div>			
 		<div class="row col-md-12 div-welcome">
 			<label class="welcome">Welcome, {{$user->name}}</label>
 		</div>	
@@ -53,30 +56,55 @@
 			<label class="describe">Your account settings and preferences</label>
 		</div>	
 	</div>
-	<div class="row">
-		<div class="col-md-4 region panel panel-default box-shadow--2dp" role="region">
-			<h2 class="region-title">
-				<div class="" id="">
-					<i class="fa fa-lock"></i> Sign-in &amp; security
-					<i class="fa fa-caret-right"></i>				
+	<div class="row regions">
+		<div class="col-md-4 region">
+			<div class="panel panel-default box-shadow--2dp" role="region1">
+				<h2 class="region-title">
+					<div class="" id="">
+						<i class="fa fa-lock"></i> Sign-in &amp; Security
+						<i class="fa fa-caret-right"></i>				
+					</div>
+				</h2>
+				<div class="list-group">
+				  <a href="#" class="list-group-item">Change Username and/or Password</a>
+				  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+				  <a href="#" class="list-group-item">Morbi leo risus</a>
+				  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+				  <a href="#" class="list-group-item">Vestibulum at eros</a>
 				</div>
-			</h2>
+			</div>
 		</div>
-		<div class="col-md-4 region" role="region">
-			<h2 class="region-title">
-				<div class="" id="">
-					<i class="fa fa-user"></i> Personal Info
-					<i class="fa fa-caret-right"></i>
+		<div class="col-md-4 region">
+			<div class="panel panel-default box-shadow--2dp" role="region1">
+				<h2 class="region-title">
+					<div class="" id="">
+						<i class="fa fa-user"></i> Personal Info
+						<i class="fa fa-caret-right"></i>
+					</div>
+				</h2>
+				<div class="list-group">
+				  <a href="#" class="list-group-item">Your personal info</a>
+				  <a href="#" class="list-group-item">Account history</a>
+				  <a href="/users/{{$user->id}}/info/link-usar" class="list-group-item">Link account to your USAR account</a>
+				  <a href="#" class="list-group-item"></a>
 				</div>
-			</h2>
+			</div>
 		</div>
-		<div class="col-md-4 region" role="region">
-			<h2 class="region-title">
-				<div class="" id="">
-					<i class="fa fa-cog"></i> Preferences
-					<i class="fa fa-caret-right"></i>
+		<div class="col-md-4 region">
+			<div class="panel panel-default box-shadow--2dp" role="region1">
+				<h2 class="region-title">
+					<div class="" id="">
+						<i class="fa fa-cog"></i> Preferences
+						<i class="fa fa-caret-right"></i>
+					</div>
+				</h2>
+				<div class="list-group">
+				  <a href="#" class="list-group-item">Home Page</a>
+				  <a href="#" class="list-group-item">Control content</a>
+				  <a href="#" class="list-group-item"></a>
+				  <a href="#" class="list-group-item"></a>
 				</div>
-			</h2>
+			</div>
 		</div>
 	</div>
 </div>

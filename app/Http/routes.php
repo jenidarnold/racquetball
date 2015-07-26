@@ -51,12 +51,12 @@ Route::bind('participants', function($value, $route){
 
 ######  User  ################
 #
-Route::resource('users', 'UserController');
+/* Personal Info */
+Route::get('users/{user}/info/link-usar',  array('as' =>'link-usar', 'uses' => 'Users\UserInfoController@linkUsar'));
 
 
 Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'uses' => 'PlayersController@getTournaments'));
 Route::get('players/{players}/biograph', 'UserAccountController@show');
-Route::get('users/{user_id}/account', 'UserAccountController@show');
 
 Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'uses' => 'PlayersController@getTournaments'));
 Route::get('players/{players}/biography', array('as' => 'player.bio', 'uses' => 'PlayersController@getBio'));
@@ -84,6 +84,7 @@ Route::post('players/{players}/journal/{entry}/opponent/{player_id}/edit', array
 Route::get('players/{players}/journal/{entry}/opponent/{player_id}/evaluate', array('as' => 'opponent.update', 'uses' => 'PlayersOpponentController@evaluate'));
 
 
+Route::resource('users', 'UserController');
 Route::resource('rankings', 'RankingsController');
 Route::resource('players', 'PlayersController');
 Route::resource('tournaments', 'TournamentsController');
