@@ -76,7 +76,7 @@ class ScreenScrapeController extends Controller {
 
 		$group_id = $request->input('group_id');
 		$location_id = $request->input('location_id');
-		$maxRank = 300;
+		$maxRank = 100;
 
 		$ss = new Scraper();
 

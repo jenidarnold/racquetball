@@ -4,8 +4,8 @@
 <div class="main-content">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
-			<div class="panel panel-default">
-				<div class="panel-heading">	
+			<div class="panel panel-default">					
+				<div class="panel-heading">						
 					<h4>Ranking as of {{ $rankings[0]->ranking_date}}</h4>	
 				</div>
 				<div class="panel-body">
@@ -32,7 +32,7 @@
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">					
-					<h3>{{ $rankings[0]->name }} {{ $rankings[0]->location }}</h3>						
+					<h3>{{ $rankings[0]->name }} {{ $rankings[0]->location }}</h3>					
 				</div>
 				<div class="panel-body">
 					<table class="table">
@@ -46,31 +46,36 @@
 							<th>Home</th>
 						</thead>
 						<tbody>
-							@foreach ($rankings as $player)							
-							<tr class="clickable-row" data-href="{{ route('players.show', [$player->player_id]) }}">	
-								<td><h2>{{$player->ranking }}</h3></t2>
-								<td>
-									{{-- <img class='img-profile img-thumbnail' width="100px" 
-										 src="{{ URL::to('api/profile/image?playerID='.$player->player_id) }}" ></a>
- --}}
-								    @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
-										<img class='img-profile img-thumbnail' width="100px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} >
-									@else
-										<img class='img-profile img-thumbnail' width="100px" src='/images/racquet-right.png'>
-									@endif
-								</td>
-								<td>{{ $player->first_name }}  </td>
-								<td>{{ $player->last_name }}  </td>
-								<td>{{ $player->gender }}</td>
-								<td>{{ $player->skill_level }} </td>								
-								<td>{{ $player->home }} </td>
-							</tr>
-							@endforeach
-							<tr>
-								<td colspan="7"> 
-									{!! $rankings->appends(Input::except('page'))->render() !!}
-								</td>
-							</tr>
+							@if(!is_null($rankings[0]))
+								@foreach ($rankings as $player)							
+								<tr class="clickable-row" data-href="{{ route('players.show', [$player->player_id]) }}">	
+									<td><h2>{{$player->ranking }}</h3></t2>
+									<td>
+										{{-- <img class='img-profile img-thumbnail' width="100px" 
+											 src="{{ URL::to('api/profile/image?playerID='.$player->player_id) }}" ></a>
+	 --}}
+									    @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
+											<img class='img-profile img-thumbnail' width="100px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} >
+										@else
+											<img class='img-profile img-thumbnail' width="100px" src='/images/racquet-right.png'>
+										@endif
+									</td>
+									<td>{{ $player->first_name }}  </td>
+									<td>{{ $player->last_name }}  </td>
+									<td>{{ $player->gender }}</td>
+									<td>{{ $player->skill_level }} </td>								
+									<td>{{ $player->home }} </td>
+								</tr>
+								@endforeach							
+								<tr>
+									<td colspan="7"> 
+										{!! $rankings->appends(Input::except('page'))->render() !!}
+									</td>
+								</tr>
+							@else
+							 	<tr><td colspan="7">No Ranking Data Available</td></tr>
+							@endif
+
 						</tbody>					
 					</table>
 				</div>						

@@ -21,23 +21,23 @@
 			padding-top: 5px;
 			font-size: 60pt;
 			font-weight: 900;
-			color: white;
+			color: black;
 			text-shadow:
-		    -1px -1px 0 #000,
-		    1px -1px 0 #000,
-		    -1px 4px 0 #000,
-		    1px 1px 0 #000;  
+		    -1px -1px 0 steelblue,
+		    1px -1px 0 steelblue,
+		    -1px 4px 0 steelblue,
+		    1px 1px 0 steelblue;  
 		}
 		.lead {
 			padding-top: 25px;
-			color: white;
+			color: black;
 			font-weight: 800;
 			font-size: 24pt;
 			text-shadow:
-		    -1px -1px 0 #000,
-		    1px -1px 0 #000,
-		    -1px 2px 0 #000,
-		    1px 1px 0 #000;  
+		    -1px -1px 0 steelblue,
+		    1px -1px 0 grey,
+		    -1px 2px 0 grey,
+		    1px 1px 0 grey;  
 		}
 
 		.btn-start {			

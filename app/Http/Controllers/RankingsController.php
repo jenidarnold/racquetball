@@ -69,7 +69,10 @@ class RankingsController extends Controller {
 	public function show(Request $request)
 	{
 		$groups = group::lists('name','group_id');
-		$locations = location::lists('location','location_id');
+		$locations = location::orderBy('location_id')
+			->lists('location','location_id');
+			
+		//$locations = array_merge($locations, array('0', 'National'));
 
 		$group_id = $request->input('group_id');
 		$location_id = $request->input('location_id');
@@ -96,7 +99,7 @@ class RankingsController extends Controller {
 		$ranking = New Ranking;
 
 		$rankings = $ranking->getlatestRankings($group_id, $location_id);
-		//var_dump($rankings);
+
 		return view('pages/rankings', compact('rankings', 'groups', 'locations'));
 	}
 

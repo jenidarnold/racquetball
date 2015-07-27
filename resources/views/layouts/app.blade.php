@@ -35,6 +35,9 @@
     .row {
         width: 100%;
     }
+    .white{
+        background-color: white;        
+    }
     .main-content { 
         height: 100%;
         background-color: white;
@@ -61,7 +64,7 @@
         box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
     }
 </style>
-<body style="background-image: url('/images/grey-bg.jpg');">
+<body class="white" style="background-image1: url('/images/grey-bg.jpg');">
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -124,49 +127,18 @@
 
                 @if (Auth::guest())
                 @else
-				<ul class="nav navbar-nav zeroed secondary-nav--left">
-                <!-- Browse -->
-                    <li class="dropdown ">
-                        <a href="/index" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                            Browse <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class=""><a href="/index">Site Index</a></li>
-                            <li><a href="/all">Latest Content</a></li>
-                        </ul>
-                    </li>
-                     <!-- Discuss -->
+				<ul class="nav navbar-nav zeroed secondary-nav--left">                
+                    <!-- Social Media -->
                     <li class="dropdown">
                         <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                            Discuss <b class="caret"></b>
+                            Socialize <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
                             <li class=""><a href="/discuss">Forum</a></li>
                             <li><a href="http://facebook.com/rballstats">Facebook</a></li>
                             <li><a href="http://twitter.com/rballstats">Twitter</a></li>
                         </ul>
-                    </li>
-                     <!-- Lessons -->
-                    <li class="dropdown">
-                        <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                            Lessons <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class=""><a href="/l">Find by Location</a></li>
-                            <li><a href="http://facebook.com/rballstats">Find by Instructor</a></li>
-                        </ul>                
-                    </li>
-                    <!-- Clubs -->
-                    <li class="dropdown">
-                        <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                            Clubs <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class=""><a href="/l">Find by Location</a></li>
-                            <li class=""><a href="/l">Leagues</a></li>
-                            <li><a href="http://facebook.com/rballstats">Find by Club</a></li>
-                        </ul>
-                    </li>
+                    </li>                            
                     <!-- Shop -->
                     <li class="navbar-link dropdown-toggle" data-toggle="dropdown">
                         <a href="/shop" class="navbar-link dropdown-toggle" data-toggle="dropdown">
@@ -205,8 +177,9 @@
 			</div>
 		</div>
 	</nav>
+    <div class="White">
 	@yield('content')
-
+    </div>
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
