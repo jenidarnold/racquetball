@@ -24,21 +24,30 @@
 							<th>Division</th>
 						</thead>
 						<tbody>
+						{!! Form::open() !!}
 						@foreach ($tournament->participants as $participant)
-							<tr>	
+							<tr class="clickable-row" data-href="{{ route('players.show', [$participant->player_id]) }}">							
 								<td>
-									<a href="{{ route('players.show', [$participant->player_id]) }}">
-								     <img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$participant->player['player_id'].'_normal.jpg'}} class="img-thumbnail" width="100" >
-								     </a>
+									@if((false) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$participant->player['player_id'].'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
+										 <img src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$participant->player['player_id'].'_normal.jpg'}} class="img-thumbnail" width="100" >
+									@else
+									<img class='img-profile img-thumbnail' width="150px" src='/images/racquet-right.png'>
+								@endif	
 								</td>
-								<td>{{ $participant->player['player_id'] }}  </td>
-								<td>{{ $participant->player['first_name'] }}  </td>
+								<td>
+									@if( $participant->player['first_name'] == '')
+										{!! Form::button('Download Player Info', array('class' => 'btn btn-success')) !!}
+									@else
+										{{ $participant->player['first_name'] }}
+									@endif
+								</td>
 								<td>{{ $participant->player['last_name']   }}  </td>
 								<td>{{ $participant->player['gender']    }}  </td>
 								<td>{{ $participant->player['skill_level']  }}  </td>
 								<td>{{ $participant->player['division']  }}  </td>
 							</tr>
 						@endforeach
+						{!! Form::close() !!}
 						</tbody>					
 					</table>
 					{{-- <div>

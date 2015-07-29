@@ -75,7 +75,6 @@
 							@else
 							 	<tr><td colspan="7">No Ranking Data Available</td></tr>
 							@endif
-
 						</tbody>					
 					</table>
 				</div>						

@@ -76,7 +76,7 @@ class ScreenScrapeController extends Controller {
 
 		$group_id = $request->input('group_id');
 		$location_id = $request->input('location_id');
-		$maxRank = 100;
+		$maxRank = 300;
 
 		$ss = new Scraper();
 
@@ -90,7 +90,7 @@ class ScreenScrapeController extends Controller {
 				->where('rankings.location_id', '=', $location_id)
 				->get();
 
-		return view('pages/rankings', compact('rankings'))
+		return redirect('admin/scraper')
 			->with('success', 'rankings downloaded successfully');
 
 	}

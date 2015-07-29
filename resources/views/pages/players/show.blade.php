@@ -49,8 +49,11 @@
 @section('content')
 	<div class="row">
 	   	<div class="col-md-2">
-			<img style="height:125px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} class="img-thumbnail">
-			
+			@if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
+				<img class='img-profile img-thumbnail' width="125px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} >
+			@else
+				<img class='img-profile img-thumbnail' width="125px" src='/images/racquet-right.png'>
+			@endif
 		</div>
 		<div class="col-md-10">
 			<div class="row">

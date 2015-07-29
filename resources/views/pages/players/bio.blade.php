@@ -50,16 +50,16 @@
 				<div class="well">
 					<table>
 						<tr>
-							<td class="td-profile-head">Skill Level:</td><td class="td-stat"{{ $player->skill_level }}</td>
+							<td class="td-profile-head">Skill Level:</td><td class="td-stat">{{ $player->skill_level }}</td>
 						</tr>
 						<tr>
-							<td class="td-profile-head">Racquet:</td><td class="td-stat"{{ $player->racquet }}</td>
+							<td class="td-profile-head">Racquet:</td><td class="td-stat">{{ $player->racquet }}</td>
 						</tr>
 						<tr>
-							<td class="td-profile-head">Plays Left/Right:</td><td class="td-stat"{{ $player->handed }}</td>
+							<td class="td-profile-head">Plays Left/Right:</td><td class="td-stat">{{ $player->handed }}</td>
 						</tr>	
 						<tr>
-							<td class="td-profile-head">Sponsor:</td><td class="td-stat"{{ $player->sponsor}}</td>
+							<td class="td-profile-head">Sponsor:</td><td class="td-stat">{{ $player->sponsor}}</td>
 						</tr>
 					</table>
 				</div>	

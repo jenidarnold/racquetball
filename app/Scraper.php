@@ -70,27 +70,30 @@ class Scraper {
 	 	$rdate = date('1/1/0000');
 	 	$prev_pid = -1;
 	 	$curr_pid = 0;
-
+	 	$startMemNum = 0;
 	
 	 	//URL only gets ranking by chunks of 100. So we have to call the url multiple times to get more pages of info
 	 	for ($x = 1; $x <= $maxRank; $x=$x + $rankChunks) {
-	 		var_dump($x);
-
+	 		
 	 		if($x == 1) {
 	 			$url_rankings = 'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&sex='.$sexCode.'&stateID='.$location_id.'&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount='.$startRank;
 	 		}
 	 		else {
-	 			$url_rankings = 'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&sex='.$sexCode.'&stateID='.$location_id.'&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount='.$startRank;	 	
+	 			$url_rankings = 'http://www.usaracquetballevents.com/rankings.asp?sortOptions=YES&startMembershipNum='.$startMemNum.'&sex='.$sexCode.'&stateID='.$location_id.'&ageRange=all&divClass=&lastName=&firstName=&startDisplayCount='.$x;
 	 		}
 
 		 	$cc->matchAll(
 		 				array(
 		 					'ranking_date' => '/Rankings last updated:(?:.*?)>(.*?)</ms',
-		 					'player_id' => '/&UID=(.*?)">/ms',		 									
+		 					'player_id' => '/&UID=(.*?)">/ms',	
+		 					'startMemNum' => '/startMembershipNum=(.*?)&/ms',			 						 								
 		 				))
 		 		->URLS($url_rankings);	 		
 
 		 	$result = $cc->get();	
+		 	
+		 	//Variable needed for the next page of Rankings
+		 	$startMemNum = $result[0]['startMemNum'][0];
 
 		 	//Increment for next set of rankings
 		 	$startRank = $startRank + $rankChunks;	 	
@@ -128,6 +131,7 @@ class Scraper {
 				}
 		 	}
 		 }
+
 	 	return $player_rankings;
 
  	}

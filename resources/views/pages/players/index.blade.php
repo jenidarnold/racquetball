@@ -75,14 +75,12 @@
 				</thead>
 				<tbody>
 				@foreach ($players as $player)
-					<tr>	
-						<td><a href="{{ route('players.show', [$player->player_id]) }}">
-						    @if((false) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
+					<tr class="clickable-row" data-href="{{ route('players.show', [$player->player_id]) }}">	
+						<td>@if((false) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
 								<img class='img-profile img-thumbnail' style="width:100" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} >
 							@else
 								<img class='img-profile img-thumbnail' style="width:100px" src='/images/racquet-right.png'>
 							@endif
-							</a>
 						</td>
 						<td>{{ $player->first_name }}  </td>
 						<td>{{ $player->last_name }}  </td>

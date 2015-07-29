@@ -71,18 +71,20 @@ class TournamentsController extends Controller {
 		$s = New Scraper();
 		$participants = $tournament->participants;
 
-		$updated = false;
-		foreach ($participants as $participant){
-			if ($participant->player["full_name"] == "") {							
-				$s->get_player($participant->player_id);
-				$s->get_matches($participant->player_id);				
-				$updated = true;
-			}
-		}
+		var_dump($participants);
+		//Removed because: This needs to be evaluated for speed and overwhelming the original site
+		//$updated = false;
+		//foreach ($participants as $participant){
+		//	if ($participant->player["full_name"] == "") {							
+		//	$s->get_player($participant->player_id);
+		//		$s->get_matches($participant->player_id);				
+		//		$updated = true;
+		//	}
+		//}
 
-		if ($updated){
-			$participants = Participant::where("tournament_id", "=", $tournament->tournament_id);
-		}
+		//if ($updated){
+		//	$participants = Participant::where("tournament_id", "=", $tournament->tournament_id);
+		//}
 
 		return view('pages/tournaments.show', compact('tournament', 'participants'));
 	}
