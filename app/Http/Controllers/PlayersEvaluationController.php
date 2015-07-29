@@ -25,7 +25,7 @@ class PlayersEvaluationController extends Controller {
 		$evaluations = PlayerEvaluation::where('player_id', '=', $target_id)
 			->where('creator_id', '=', $player->player_id)
 			->orderBy('created_at', 'desc')
-			->paginate(10);
+			->paginate(5);
 
 		return view('pages/players/journal/evaluation/index', compact('player', 'target', 'entry', 'evaluations'));
 	}
