@@ -15,7 +15,7 @@
 		}
 
 		.player-nav-container{
-			background-color: lightgrey;
+			background-color1: lightgrey;
 			padding-right: 0px;
 			text-align:center;
 		}
@@ -36,16 +36,17 @@
 @section('content')
 <div class="main-content">
 	<div class="row">
-		<div class="col-md-2">
+		<div class="col-md-2">			
 			<div class="player-nav-container">	
-				<div style="text-align:left">
+				<nav class="navbar navbar-inverse">
+				<div style="text-align:left">					
 					<div class="player-logo">
 			   			@if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
 							<img class='img-profile img-thumbnail' width="150px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} >
 						@else
 							<img class='img-profile img-thumbnail' width="150px" src='/images/racquet-right.png'>
 						@endif	
-			   		</div>
+			   		</div>			   		
 					<ul class="nav nav-pills nav-stacked">				
 						<li id="li-profile"><a href="/players/{{ $player->player_id}}/"><i class="fa fa-user"></i> Profile</a></li>
 						<li id="li-tourney"><a href="/players/{{ $player->player_id}}/tournaments"><i class="fa fa-trophy"></i> Tournaments</a></li>
@@ -56,17 +57,20 @@
 					</ul>
 				</div>
 			</div>	
+			</nav>
 		</div>	
 		<div class="col-md-10 player-content">	
 			<div class="row">
-				<label class="player-title">{{$player->first_name.' '.$player->last_name}}</label>
-			</div>
-			<div class="row col-md-10 panel panel-primary">
-				@yield('menu')
+				<div class="col-md-12">
+					<label class="player-title">{{$player->first_name.' '.$player->last_name}}
+					<i class="fa fa-caret-right fa-lg"></i> @yield('title')</label>
+				</div>
 			</div>
 			<div class="row col-md-10">
-				@yield('title')
-			</div>
+				<nav class="navbar">
+					@yield('menu')
+				</nav>
+			</div>		
 			<div class="row col-md-10">
 				@yield('player-content')
 			</div>

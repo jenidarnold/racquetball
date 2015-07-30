@@ -22,12 +22,24 @@ class PlayersEvaluationController extends Controller {
 	public function index($player, $entry, $target_id)
 	{
 	
-		$evaluations = PlayerEvaluation::where('player_id', '=', $target_id)
+		$self_evals = PlayerEvaluation::where('player_id', '=', $target_id)
 			->where('creator_id', '=', $player->player_id)
 			->orderBy('created_at', 'desc')
 			->paginate(5);
 
-		return view('pages/players/journal/evaluation/index', compact('player', 'target', 'entry', 'evaluations'));
+
+		$peer_evals = PlayerEvaluation::where('player_id', '=', $target_id)
+			->where('creator_id', '!=', $player->player_id)
+			->orderBy('created_at', 'desc')
+			->paginate(5);
+
+
+		$opp_evals = PlayerEvaluation::where('player_id', '!=', $target_id)
+			->where('creator_id', '=', $player->player_id)
+			->orderBy('created_at', 'desc')
+			->paginate(5);
+
+		return view('pages/players/journal/evaluation/index', compact('player', 'target', 'entry', 'self_evals', 'peer_evals', 'opp_evals'));
 	}
 
 	/**

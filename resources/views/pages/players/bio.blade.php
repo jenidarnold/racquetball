@@ -21,16 +21,17 @@
 @stop
 
 @section('title')
-	<label class="player-sub-title">Profile</label>	
+	Profile	
 @stop
+@section('menu')
 
+@stop
 @section('player-content')
 <div class="row">
-	<div class="col-md-12">	
-			
+	<div class="col-md-12">				
 			<div class="col-md-4">
 				<div class="well">
-					<table class="table-bio">								
+					<table>								
 						<tr>
 		                    <td class="td-profile-head">National Rank:</td><td class="td-stat"> {{ $player->national_rank }}</td>
 		                 </tr>
@@ -38,7 +39,7 @@
 		                    <td class="td-profile-head">State Rank:</td><td class="td-stat">{{ $player->state_rank}}</td>
 		                </tr>
 						<tr>
-		                    <td class="td-profile-head">Tracking #:</td><td class="td-stat">{{ $player->tracking_id }}</td>
+							<td class="td-profile-head">Tracking #:</td><td class="td-stat">{{ $player->tracking_id }}</td>
 		                </tr>
 		                <tr>
 		                    <td class="td-profile-head">Tracking:</td><td class="td-stat">{{ $player->tracking }}</td>

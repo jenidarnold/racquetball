@@ -6,11 +6,10 @@
 	</style>
 	@parent
 @stop
-
 @section('title')
-	<label class="player-sub-title">My Journal</label>
-	<label class="entry-date" style="float:right">Last Entry: 6/1/15</label>		
+	My Journal
 @stop
+
 @section('journal-content')
 	<div class="well">
 		<h2>Your journal is to keep track of anything!</h2>
