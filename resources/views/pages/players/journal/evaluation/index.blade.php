@@ -34,14 +34,17 @@
 			<thead class="label-success">
 				<th class="eval-header">Created</th>
 				<th class="eval-header">Updated</th>
+				<th class="eval-header">From</th>
+				<th class="eval-header">Target</th>
 				<th class="eval-header">Title</th>
 			</thead>
 			@foreach($self_evals as $e)
-			<tr>
+			<tr class="clickable-row" data-href="{!! route('evaluation.show',  [$player->player_id, $entry, $e->evaluation_id]) !!}">
 				<td class="eval" >{{ $e->created_at }}</td>
 				<td class="eval" >{{ $e->updated_at }}</td>
-				{{-- <td class="eval" >{{ $e->title }}</td> --}}
-				<td class="eval" >{!! HTML::linkRoute('evaluation.show', $e->title, [$player->player_id, $entry, $e->evaluation_id]) !!}</td>
+				<td class="eval" >{{ $e->creator->full_name }}</td>
+				<td class="eval" >{{ $e->target->full_name}}</td>
+				<td class="eval" >{{ $e->title }}</td>
 			</tr>
 			@endforeach
 		</table>
@@ -70,14 +73,17 @@
 			<thead class="label-warning">
 				<th class="eval-header">Created</th>
 				<th class="eval-header">Updated</th>
+				<th class="eval-header">From</th>
+				<th class="eval-header">Target</th>
 				<th class="eval-header">Title</th>
 			</thead>
 			@foreach($peer_evals as $e)
-			<tr>
+			<tr class="clickable-row" data-href="{!! route('evaluation.show',  [$player->player_id, $entry, $e->evaluation_id]) !!}">
 				<td class="eval" >{{ $e->created_at }}</td>
 				<td class="eval" >{{ $e->updated_at }}</td>
-				{{-- <td class="eval" >{{ $e->title }}</td> --}}
-				<td class="eval" >{!! HTML::linkRoute('evaluation.show', $e->title, [$player->player_id, $entry, $e->evaluation_id]) !!}</td>
+				<td class="eval" >{{ $e->creator->full_name }}</td>
+				<td class="eval" >{{ $e->target->full_name}}</td>
+				<td class="eval" >{{ $e->title }}</td>
 			</tr>
 			@endforeach
 		</table>
@@ -106,14 +112,17 @@
 			<thead class="label-danger">
 				<th class="eval-header">Created</th>
 				<th class="eval-header">Updated</th>
+				<th class="eval-header">From</th>
+				<th class="eval-header">Target</th>
 				<th class="eval-header">Title</th>
 			</thead>
 			@foreach($opp_evals as $e)
-			<tr>
+			<tr class="clickable-row" data-href="{!! route('evaluation.show',  [$player->player_id, $entry, $e->evaluation_id]) !!}">
 				<td class="eval" >{{ $e->created_at }}</td>
 				<td class="eval" >{{ $e->updated_at }}</td>
-				{{-- <td class="eval" >{{ $e->title }}</td> --}}
-				<td class="eval" >{!! HTML::linkRoute('evaluation.show', $e->title, [$player->player_id, $entry, $e->evaluation_id]) !!}</td>
+				<td class="eval" >{{ $e->creator->full_name }}</td>
+				<td class="eval" >{{ $e->target->full_name}}</td>			
+				<td class="eval" >{{ $e->title }}</td>
 			</tr>
 			@endforeach
 		</table>

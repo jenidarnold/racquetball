@@ -55,4 +55,12 @@ class PlayerEvaluation extends Model {
 		
 		return $s->comment;
 	}
+
+	public function creator() {
+		return $this->hasOne('App\Player', 'player_id', 'creator_id');
+	}
+
+	public function target() {
+		return $this->hasOne('App\Player', 'player_id', 'player_id');
+	}
 }
