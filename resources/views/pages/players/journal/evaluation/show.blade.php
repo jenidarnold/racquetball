@@ -43,8 +43,7 @@
 @stop
 
 @section('title')
-	<label class="player-sub-title">My Evaluation</label>
-	<label class="entry-date" style="float:right">Updated : {{$evaluation->updated_at}} </label>		
+	<label class="player-sub-title">Evaluation for {{$evaluation->target->full_name}} Created By {{$evaluation->creator->full_name}} </label>		
 @stop
 
 @section('evaluation-content')
@@ -52,7 +51,8 @@
         <div class="row">
           <div class="form-group">
             <span class="eval-title">Title: {{$evaluation->title}} </span>
-            {!! Form::open(array('class' =>'form-inline','role'=>'form', 'method'=>'POST', 'route' => array('evaluation.edit', $player->player_id, $entry)))!!}
+            {!! Form::open(array('class' =>'form-inline','role'=>'form', 'method'=>'POST', 
+            'route' => array('evaluation.edit', $player->player_id, $entry, $evaluation->target->player_id, $evaluation->creator->player_id, $evaluation->evaluation_id)))!!}
             {!! Form::button('Edit', array('class' =>'btn btn-warning', 'type' =>'submit')) !!}
             {!! Form::close()!!}
             </div>

@@ -72,11 +72,11 @@ Route::get('players/{players}/journal/', array('middleware' => 'auth', 'uses' =>
 Route::get('players/{players}/journal/{entry}', array('middleware' => 'auth', 'uses' => 'PlayersJournalController@show'));
 # Evaluations
 Route::get('players/{players}/journal/{entry}/evaluation/{target}/', array('middleware' => 'auth', 'uses' => 'PlayersEvaluationController@index'));
-Route::get('players/{players}/journal/{entry}/evaluation/{target}/create', array('as' => 'evaluation.create', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@create'));
-Route::post('players/{players}/journal/{entry}/evaluation/{target}',  array('as' => 'evaluation.store', 'middleware' => 'auth', 'uses' => 'Pla)yersEvaluationController@store'));
-Route::get('players/{players}/journal/{entry}/evaluation/{evaluation_id}', array('as' => 'evaluation.show', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@show'));
-Route::get('players/{players}/journal/{entry}/evaluation/{evaluation_id}/edit', array('as' => 'evaluation.edit',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@edit'));
-Route::post('players/{players}/journal/{entry}/evaluation/{evaluation_id}/edit', array('as' => 'evaluation.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@update'));
+Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/create', array('as' => 'evaluation.create', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@create'));
+Route::post('players/{players}/journal/{entry}/evaluation/{target}/{creator}',  array('as' => 'evaluation.store', 'middleware' => 'auth', 'uses' => 'Pla)yersEvaluationController@store'));
+Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}', array('as' => 'evaluation.show', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@show'));
+Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.edit',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@edit'));
+Route::post('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@update'));
 # Opponents
 
 Route::get('players/{players}/journal/{entry}/opponent', 'PlayersOpponentController@index');

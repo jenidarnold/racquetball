@@ -14,7 +14,7 @@
 	<div class="row">
 		<form class="navbar-form" role="search">
 			<div class="col-md-1">
-				<a href="/players/{{ $player->player_id}}/journal/{{$entry}}/evaluation/{{ $player->player_id}}/create">
+				<a href="/players/{{ $player->player_id}}/journal/{{$entry}}/evaluation/{{$player->player_id}}/{{$player->player_id}}/create">
 				<button class="btn btn-success">New</button>
 				</a>
 			</div>
@@ -39,7 +39,7 @@
 				<th class="eval-header">Title</th>
 			</thead>
 			@foreach($self_evals as $e)
-			<tr class="clickable-row" data-href="{!! route('evaluation.show',  [$player->player_id, $entry, $e->evaluation_id]) !!}">
+			<tr class="clickable-row" data-href="{!! route('evaluation.show',  [$player->player_id, $entry,  $e->target->player_id, $e->creator->player_id, $e->evaluation_id]) !!}">
 				<td class="eval" >{{ $e->created_at }}</td>
 				<td class="eval" >{{ $e->updated_at }}</td>
 				<td class="eval" >{{ $e->creator->full_name }}</td>
@@ -78,7 +78,7 @@
 				<th class="eval-header">Title</th>
 			</thead>
 			@foreach($peer_evals as $e)
-			<tr class="clickable-row" data-href="{!! route('evaluation.show',  [$player->player_id, $entry, $e->evaluation_id]) !!}">
+			<tr class="clickable-row" data-href="{!! route('evaluation.show',  [$player->player_id, $entry,  $e->target->player_id, $e->creator->player_id, $e->evaluation_id]) !!}">
 				<td class="eval" >{{ $e->created_at }}</td>
 				<td class="eval" >{{ $e->updated_at }}</td>
 				<td class="eval" >{{ $e->creator->full_name }}</td>
@@ -117,7 +117,7 @@
 				<th class="eval-header">Title</th>
 			</thead>
 			@foreach($opp_evals as $e)
-			<tr class="clickable-row" data-href="{!! route('evaluation.show',  [$player->player_id, $entry, $e->evaluation_id]) !!}">
+			<tr class="clickable-row" data-href="{!! route('evaluation.show',  [$player->player_id, $entry,  $e->target->player_id, $e->creator->player_id, $e->evaluation_id]) !!}">
 				<td class="eval" >{{ $e->created_at }}</td>
 				<td class="eval" >{{ $e->updated_at }}</td>
 				<td class="eval" >{{ $e->creator->full_name }}</td>

@@ -97,7 +97,7 @@ class PlayersEvaluationController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($player, $entry, $evaluation_id)
+	public function show($player, $entry, $target, $creator, $evaluation_id)
 	{
 
 		$categories = EvaluationCategory::all();
@@ -113,9 +113,14 @@ class PlayersEvaluationController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($player, $entry, $evaluation)
+	public function edit($player, $entry, $target, $creator, $evaluation_id)
 	{
-		//
+		
+		$categories = EvaluationCategory::all();
+		$evaluation = PlayerEvaluation::find($evaluation_id);
+		$scores =EvaluationScore::where('evaluation_id' , '=', $evaluation_id);
+
+		return view('pages/players/journal/evaluation/edit', compact('categories', 'player', 'entry' ,'evaluation', 'scores'));
 	}
 
 	/**
