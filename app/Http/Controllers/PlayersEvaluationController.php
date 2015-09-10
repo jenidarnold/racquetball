@@ -54,6 +54,23 @@ class PlayersEvaluationController extends Controller {
 		return view('pages/players/journal/evaluation/create', compact('player', 'categories', 'entry'));
 	}
 
+
+	/**
+	 * Show the form for inviting a new resource.
+	 *
+	 * @return Response
+	 */
+	public function invite($player)
+	{
+		//TODO get rid of entry variable
+		$entry = 1;
+
+		$players = Player::orderby('last_name')->orderby('first_name')->get();
+		$players_list = $players->lists('last_first_name', 'player_id');
+				
+		return view('pages/players/journal/evaluation/invite', compact('player', 'players_list','entry'));
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -62,11 +79,10 @@ class PlayersEvaluationController extends Controller {
 	public function store($player, $entry)
 	{
 
-
 		$categories = EvaluationCategory::all();
 		$input = Input::all();
 
-		$scores  =[];
+		$scores = [];
 		
 		// 1. Create a new Player Evaluation Form	
 		$eval = PlayerEvaluation::create(['player_id' => $player->player_id, 'title' => $input["eval_title:"]]);

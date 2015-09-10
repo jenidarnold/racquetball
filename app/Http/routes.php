@@ -4,7 +4,6 @@ use App\Vote;
 use App\Scraper;
 
 Route::get('/', 'WelcomeController@index');
-
 Route::get('home', 'HomeController@index');
 Route::get('admin/scraper', ['middleware' => 'auth', 'uses' => 'Admin\ScreenScrapeController@scraper']);
 //Route::get('admin/rankings', 'Admin\ScreenScrapeController@rankings');
@@ -13,7 +12,6 @@ Route::get('admin/tournaments', 'Admin\ScreenScrapeController@tournaments');
 Route::get('admin/participants', array('as' => 'download_participants', 'uses' => 'Admin\ScreenScrapeController@participants'));
 Route::get('admin/player', array('as' => 'download_player', 'uses' => 'Admin\ScreenScrapeController@player'));
 Route::get('admin/matches', array('as' => 'download_matches', 'uses' => 'Admin\ScreenScrapeController@matches'));
-
 
 Route::get('matchups', 'MatchupsController@index');
 Route::post('matchups', 'MatchupsController@show');
@@ -68,6 +66,10 @@ Route::get('players/{players}/biography', array('as' => 'player.bio', 'middlewar
 #Route::get('players/{players}/biography', 'PlayersProfileController@getBio');
 
 /************   Journal  ***********/
+Route::get('players/{players}/evaluation/invite', array('as' => 'evaluation.invite',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@invite'));
+Route::post('players/{players}/evaluation/invite', array('as' => 'evaluation.invite.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@request'));
+
+
 Route::get('players/{players}/journal/', array('middleware' => 'auth', 'uses' => 'PlayersJournalController@index'));
 Route::get('players/{players}/journal/{entry}', array('middleware' => 'auth', 'uses' => 'PlayersJournalController@show'));
 # Evaluations
@@ -77,6 +79,7 @@ Route::post('players/{players}/journal/{entry}/evaluation/{target}/{creator}',  
 Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}', array('as' => 'evaluation.show', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@show'));
 Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.edit',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@edit'));
 Route::post('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@update'));
+
 # Opponents
 
 Route::get('players/{players}/journal/{entry}/opponent', 'PlayersOpponentController@index');

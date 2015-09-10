@@ -93,6 +93,7 @@ $('.date-picker').datepicker();
 var __slice = [].slice;
 
 (function($, window) {
+// $(document).ready(function(){
     var Starrr;
 
     Starrr = (function() {
@@ -195,11 +196,11 @@ var __slice = [].slice;
 })(window.jQuery, window);
 
 $(function() {
-    return $(".starrr").starrr();
+   return $(".starrr").starrr();
 });
 
 $( document ).ready(function() {
-      
+
   $(["id^=star"]).on('starrr:change', function(e, value){
     $(["name^=score"]).html(value);
   });
