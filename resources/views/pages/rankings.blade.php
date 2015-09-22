@@ -4,10 +4,10 @@
 <div class="main-content">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
-			<div class="panel panel-default">					
-				<div class="panel-heading">						
-					<h4>Ranking as of {{ $rankings[0]->ranking_date}}</h4>	
-				</div>
+			<div class="panel panel-default">								
+				<div class="panel-heading">		
+				  	<h4>Ranking as of {{ $rankings[0]->ranking_date}}</h4>	
+			    </div>
 				<div class="panel-body">
 					<div class="row">
 						{!! Form::open(array('route' => 'rankings.show', 'method' => 'get')) !!}
@@ -32,7 +32,7 @@
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">					
-					<h3>{{ $rankings[0]->name }} {{ $rankings[0]->location }}</h3>					
+					<h3>{{ $rankings[0]->name }} {{ $rankings[0]->location }}</h3>				
 				</div>
 				<div class="panel-body">
 					<table class="table">
@@ -46,14 +46,11 @@
 							<th>Home</th>
 						</thead>
 						<tbody>
-							@if(!is_null($rankings[0]))
+							@if(count($rankings) > 0)
 								@foreach ($rankings as $player)							
-								<tr class="clickable-row" data-href="{{ route('players.show', [$player->player_id]) }}">	
-									<td><h2>{{$player->ranking }}</h3></t2>
+								<tr class="clickable-row" data-href="{{ route('players.show', [$player->player_id]) }}">
+									<td><h2>{{$player->ranking }}</h2></td>
 									<td>
-										{{-- <img class='img-profile img-thumbnail' width="100px" 
-											 src="{{ URL::to('api/profile/image?playerID='.$player->player_id) }}" ></a>
-	 --}}
 									    @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
 											<img class='img-profile img-thumbnail' width="100px" src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg' }} >
 										@else

@@ -93,7 +93,7 @@ class Scraper {
 		 	$result = $cc->get();	
 		 	
 		 	//Variable needed for the next page of Rankings
-		 	$startMemNum = $result[0]['startMemNum'][0];
+		 	$startMemNum = 2222;//FIXME $result[0]['startMemNum'][0];
 
 		 	//Increment for next set of rankings
 		 	$startRank = $startRank + $rankChunks;	 	

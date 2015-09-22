@@ -41,9 +41,11 @@ class Ranking extends Model {
 	public function getLatestRankings($group_id, $location_id) {
 
 		$latest_date = \DB::table('rankings')
+			->where('group_id','=', $group_id)
+			->where('location_id','=', $location_id)
 			->max('ranking_date');
 
-		return $this->getRankings($this->last_ranking_date, $group_id, $location_id);
+		return $this->getRankings($latest_date, $group_id, $location_id);
 	}
 
 	/**
@@ -52,7 +54,7 @@ class Ranking extends Model {
 	 */
 	public function getRankings($ranking_date, $group_id, $location_id) {
 
-		return \DB::table('rankings')
+		$rankings= \DB::table('rankings')
 			->join('players', 'rankings.player_id', '=', 'players.player_id')
 			->join('groups', 'rankings.group_id', '=', 'groups.group_id')
 			->join('locations', 'rankings.location_id', '=', 'locations.location_id')
@@ -62,5 +64,7 @@ class Ranking extends Model {
 			->distinct()
 			->paginate(10);
 			//->get();
+
+			return $rankings;
 	}
 }
