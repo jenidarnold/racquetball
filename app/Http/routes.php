@@ -2,6 +2,7 @@
 
 use App\Vote;
 use App\Scraper;
+use App\User;
 
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
@@ -90,7 +91,6 @@ Route::get('players/{players}/journal/{entry}/opponent/{player_id}', array('as' 
 Route::get('players/{players}/journal/{entry}/opponent/{player_id}/edit', array('as' => 'opponent.edit',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@edit'));
 Route::post('players/{players}/journal/{entry}/opponent/{player_id}/edit', array('as' => 'opponent.update', 'middleware' => 'auth',  'uses' => 'PlayersOpponentController@update'));
 Route::get('players/{players}/journal/{entry}/opponent/{player_id}/evaluate', array('as' => 'opponent.update',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@evaluate'));
-
 
 Route::resource('users', 'UserController');
 Route::resource('rankings', 'RankingsController');

@@ -43,33 +43,34 @@
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">			
 			<div class="user-form panel panel-default box-shadow--2dp">				
-				<form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/login') }}">
-					<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				{!! Form::model($user, array('route' => array('users.update', $user->id), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'PUT')) !!}
+					{!! Form::hidden ('_token', csrf_token()) !!}
 					<div class="form-group">
-						<label class="col-md-5 control-label">Username:</label>
-						<div class="col-md-4">
-							<input type="text" class="form-control" name="username" value="{{ old('username') }}">
+						<label class="col-md-5 control-label">Email Address:</label>
+						<div class="col-md-6">
+							<input type="text" class="form-control" name="email" value="{{$user->email}}">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-md-5 control-label">New Password:</label>
-						<div class="col-md-4">
+						<div class="col-md-6">
 							<input type="password" class="form-control" name="password">
 						</div>
 					</div>	
 					<div class="form-group">
 						<label class="col-md-5 control-label">Confirm Password:</label>
-						<div class="col-md-4">
+						<div class="col-md-6">
 							<input type="password" class="form-control" name="password">
 						</div>
 					</div>			
 					<div class="form-group">
 						<div class="col-md-6 col-md-offset-3">
-							<button type="submit" class="btn btn-success">Submit</button>
+							{!!  Form::submit('Submit', array('class' => 'btn btn-success')) !!}
 							<button type="button" class="btn btn-warning">Cancel</button>
 						</div>
 					</div>
-				</form>
+				{!! Form::close() !!}		
+					
 			</div>
 		</div>
 	</div>

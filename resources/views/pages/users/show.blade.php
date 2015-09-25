@@ -45,13 +45,18 @@
 	</style>
 	@parent	
 @stop
-
 @section('content')
 <div class="main-content">
 	<div class="row">
 		<div class="row col-md-12 div-welcome">
 			<label class="welcome">Welcome, {{$user->name}}</label>
 		</div>	
+		@if(Session::has('message'))
+			<div class="row col-md-12 alert {{ Session::get('alert-class', 'alert-info') }}">
+			    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<center>{{ Session::get('message') }}</center>
+			</div>
+		@endif
 		<div class="row col-md-12 div-describe">
 			<label class="describe">Your account settings and preferences</label>
 		</div>	
