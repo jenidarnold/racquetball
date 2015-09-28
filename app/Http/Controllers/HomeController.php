@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Redirect;
+use App\Events\UserWasRegistered;
 use Illuminate\Contracts\Auth;
 
 class HomeController extends Controller {
@@ -34,6 +35,9 @@ class HomeController extends Controller {
 	public function index()
 	{
 		$user = \Auth::user();
+
+
+		\Event::fire(new UserWasRegistered(1));
 
 		//If player go to Player Profile page
 		if ($user->player_id > 0){
