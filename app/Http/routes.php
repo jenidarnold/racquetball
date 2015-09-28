@@ -51,8 +51,9 @@ Route::bind('participants', function($value, $route){
 ######  User  ################
 #
 /* Personal Info */
-Route::get('users/{user}/info/edit',  array('as' =>'link-usar', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit'));
-Route::get('users/{user}/info/link-usar',  array('as' =>'link-usar', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@linkUsar'));
+Route::get('users/{user_id}/info/show',  array('as' =>'user-show-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@show'));
+Route::get('users/{user_id}/info/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit'));
+Route::get('users/{user_id}/info/link-usar',  array('as' =>'link-usar', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@linkUsar'));
 
 /* Preferences */
 Route::get('users/{user}/preferences',  array('as' =>'user-edit-pref', 'middleware' => 'auth', 'uses' => 'Users\UserPreferencesController@edit'));
@@ -60,7 +61,7 @@ Route::get('users/{user}/preferences',  array('as' =>'user-edit-pref', 'middlewa
 
 ##### Players #####################
 Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'middleware' => 'auth', 'uses' => 'PlayersController@getTournaments'));
-Route::get('players/{players}/biograph', 'UserAccountController@show');
+Route::get('players/{players}/biograph', 'Users\UserAccountController@show');
 
 Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'middleware' => 'auth',  'uses' => 'PlayersController@getTournaments'));
 Route::get('players/{players}/biography', array('as' => 'player.bio', 'middleware' => 'auth', 'uses' => 'PlayersController@getBio'));
@@ -76,7 +77,7 @@ Route::get('players/{players}/journal/{entry}', array('middleware' => 'auth', 'u
 # Evaluations
 Route::get('players/{players}/journal/{entry}/evaluation/{target}/', array('middleware' => 'auth', 'uses' => 'PlayersEvaluationController@index'));
 Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/create', array('as' => 'evaluation.create', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@create'));
-Route::post('players/{players}/journal/{entry}/evaluation/{target}/{creator}',  array('as' => 'evaluation.store', 'middleware' => 'auth', 'uses' => 'Pla)yersEvaluationController@store'));
+Route::post('players/{players}/journal/{entry}/evaluation/{target}/{creator}',  array('as' => 'evaluation.store', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@store'));
 Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}', array('as' => 'evaluation.show', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@show'));
 Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.edit',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@edit'));
 Route::post('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@update'));

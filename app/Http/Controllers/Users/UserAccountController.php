@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 
-class UserInfoController extends Controller {
+class UserAccountController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -17,7 +17,7 @@ class UserInfoController extends Controller {
 	{
 	
 
-		return view('pages/users.info.index');
+		return view('pages/users.account.index');
 
 	}
 
@@ -47,25 +47,10 @@ class UserInfoController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function linkUsar($user_id)
-	{	
-		return view('pages/users.info.link-usar', compact('user'));
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
 	public function show($user_id)
 	{
 		
-
-		$user = User::find($user_id);
-
-
-		return view('pages/users.info.show', compact('user'));
+		return view('pages/users.account.show', compact('user'));
 	}
 
 
@@ -77,8 +62,7 @@ class UserInfoController extends Controller {
 	 */
 	public function edit($user_id)
 	{
-		
-		return view('pages/users.info.edit', compact('user'));
+		//
 	}
 
 	/**

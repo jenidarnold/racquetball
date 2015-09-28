@@ -4,7 +4,7 @@
 	<style>
 
 	</style>
-@sstop
+@stop
 	
 @section('content')
 <div class="main-content">
