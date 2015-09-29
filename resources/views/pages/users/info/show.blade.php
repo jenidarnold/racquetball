@@ -77,28 +77,37 @@
 		<div class="col-sm-6 region col-sm-offset-3">
 			<div class="panel panel-default box-shadow--2dp">
 				<div class="list-group">				
-				  <a href="/users/{{$user->id}}/edit" class="list-group-item">
+				  <a href="/users/{{$user->id}}/info/name/edit" class="list-group-item">
 				  <div class="row">
 				  	<div class="col-sm-3 text-left field-name">Nickname</div>
-				  	<div class="col-sm-8 text-left">Julie </div>
+				  	<div class="col-sm-8 text-left">Rballer</div>
 				  	<div class="col-sm-1 text-right"><i class="fa fa-caret-right"></i></div>
 				   </div>
 				  </a>				  
 				</div>
 				<div class="list-group">
-				  <a href="/users/{{$user->id}}/edit" class="list-group-item">
+				  <a href="/users/{{$user->id}}/info/email/edit" class="list-group-item">
 				  <div class="row">
 				  	<div class="col-sm-3 text-left field-name">Email</div>
-				  	<div class="col-sm-8 text-left">Julie.enid@gmail.com </div>
+				  	<div class="col-sm-8 text-left">player@racquetballhub.com </div>
 				  	<div class="col-sm-1 text-right"><i class="fa fa-caret-right"></i></div>
 				  	</div>
 				  </a>				  
 				</div>
 				<div class="list-group">
-				  <a href="/users/{{$user->id}}/edit" class="list-group-item">
+				  <a href="/users/{{$user->id}}/info/phone/edit" class="list-group-item">
 				  <div class="row">
 				  	<div class="col-sm-3 text-left field-name">Phone</div>
 				  	<div class="col-sm-8 text-left">555-555-5555</div>
+				  	<div class="col-sm-1 text-right"><i class="fa fa-caret-right"></i></div>
+				  	</div>
+				  </a>				  
+				</div>
+				<div class="list-group">
+				  <a href="/users/{{$user->id}}/info/address/edit" class="list-group-item">
+				  <div class="row">
+				  	<div class="col-sm-3 text-left field-name">Address</div>
+				  	<div class="col-sm-8 text-left">123 Main St. City, TX 77777</div>
 				  	<div class="col-sm-1 text-right"><i class="fa fa-caret-right"></i></div>
 				  	</div>
 				  </a>				  

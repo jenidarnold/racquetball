@@ -50,10 +50,17 @@ Route::bind('participants', function($value, $route){
 
 ######  User  ################
 #
+#
 /* Personal Info */
 Route::get('users/{user_id}/info/show',  array('as' =>'user-show-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@show'));
-Route::get('users/{user_id}/info/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit'));
-Route::get('users/{user_id}/info/link-usar',  array('as' =>'link-usar', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@linkUsar'));
+Route::get('users/{user_id}/info/name/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_name'));
+Route::get('users/{user_id}/info/email/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_email'));
+Route::get('users/{user_id}/info/phone/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_phone'));
+Route::get('users/{user_id}/info/address/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_address'));
+
+Route::get('users/{user_id}/info/link-usar/show',  array('as' =>'show-link-usar', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@show_linkUsar'));
+Route::post('users/{user_id}/info/link-usar/edit',  array('as' =>'edit-link-usar', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_linkUsar'));
+
 
 /* Preferences */
 Route::get('users/{user}/preferences',  array('as' =>'user-edit-pref', 'middleware' => 'auth', 'uses' => 'Users\UserPreferencesController@edit'));

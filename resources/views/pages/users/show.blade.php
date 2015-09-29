@@ -90,7 +90,7 @@
 				<div class="list-group">
 				  <a href="/users/{{$user->id}}/info/show" class="list-group-item">Your personal info</a>
 				  <a href="#" class="list-group-item">Account history</a>
-				  <a href="/users/{{$user->id}}/info/link-usar" class="list-group-item">Link account to your USAR account</a>
+				  <a href="/users/{{$user->id}}/info/link-usar/show" class="list-group-item">Link account to your USAR account</a>
 				  <a href="#" class="list-group-item"></a>
 				</div>
 			</div>

@@ -47,10 +47,33 @@ class UserInfoController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function linkUsar($user_id)
+	public function show_linkUsar($user_id)
 	{	
-		return view('pages/users.info.link-usar', compact('user'));
+		$user = User::find($user_id);
+
+		return view('pages/users.info.show_link-usar', compact('user'));
 	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit_linkUsar($user_id)
+	{	
+		$user = User::find($user_id);
+
+		$username = Input::get("username");
+		$password = Input::get("password");
+
+
+		$user->link_Usar($user_id, $username, $password);
+
+
+		return view('pages/users.info.show_link-usar', compact('user'));
+	}
+
 
 	/**
 	 * Display the specified resource.
@@ -75,12 +98,47 @@ class UserInfoController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($user_id)
+	public function edit_name($user_id)
 	{
 		
-		return view('pages/users.info.edit', compact('user'));
+		return view('pages/users.info.edit_name', compact('user'));
 	}
 
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit_phone($user_id)
+	{
+		
+		return view('pages/users.info.edit_phone', compact('user'));
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit_email($user_id)
+	{
+		
+		return view('pages/users.info.edit_email', compact('user'));
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit_address($user_id)
+	{
+		
+		return view('pages/users.info.edit_address', compact('user'));
+	}
 	/**
 	 * Update the specified resource in storage.
 	 *
