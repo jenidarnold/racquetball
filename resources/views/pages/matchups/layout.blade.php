@@ -23,11 +23,11 @@
 	}
 	.lbl-player {
 		font-weight:600 !important; 
-		font-size:16pt !important;
+		font-size:14pt !important;
 	}
 	.player {
 		font-weight:600 !important; 
-		font-size:16pt !important;
+		font-size:14pt !important;
 	}
 	</style>
 @stop

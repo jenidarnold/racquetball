@@ -52,7 +52,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	 	$cc->matchAll(
 		 				array(
-		 					'player_id' => '/(?:.*?)Membership(.*?)/ms',	
+		 					'player_id' => '/&UID=(.*?)&/ms',	
 		 				))
 	 		->URLS($url);
 	 	$result = $cc->get();

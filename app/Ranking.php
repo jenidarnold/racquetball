@@ -65,7 +65,6 @@ class Ranking extends Model {
 			->paginate(10);
 			//->get();
 
-			var_dump($rankings);
 			return $rankings;
 	}
 }
