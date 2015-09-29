@@ -15,10 +15,10 @@ class UserWasRegistered extends Event {
 	 *
 	 * @return void
 	 */
-	public function __construct($userId)
+	public function __construct($data)
 	{
-		$this->userId = $userId;
-
+		$this->name = $data['name'];
+		$this->email = $data['email'];
 	}
 
 }

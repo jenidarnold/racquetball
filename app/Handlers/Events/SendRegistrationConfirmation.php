@@ -25,8 +25,12 @@ class SendRegistrationConfirmation {
 	 */
 	public function handle(UserWasRegistered $event)
 	{
-		//
-		dd($event);
+		\Mail::raw('A new user just registered', function($message)
+		{
+		    $message->from('notify@racquetballhub.com', 'RacquetballHub');
+
+		    $message->to('julie.enid@gmail.com')->subject('New RballHub Registration!');
+		});		
 	}
 
 }
