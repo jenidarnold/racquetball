@@ -59,4 +59,31 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	 	dd($result);
 	}
+
+	/**
+	 * User's permissions
+	 *
+	 */
+	public function permissions() {
+
+		return $this->hasMany('App\Permission', 'user_id', 'user_id');
+	}
+
+	public function hasPermission( $permission_id) {
+		$result = 0;
+		$result = \DB::table('permissions')
+			->where('user_id', '=', $this->id)
+			->where('permission_id', '=', $permission_id)
+			->count();
+
+		if ($result > 0 ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	}
+
+
 }

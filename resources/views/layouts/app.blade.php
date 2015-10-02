@@ -168,7 +168,7 @@
                                 <li><a href="{{ url('/users/'.Auth::user()->id) }}">My Account</a></li>
                                 <li><a href="{{ url('/players/'.Auth::user()->player_id) }}">Player Page</a></li>
                                 <li><a href="{{ url('/players/') }}">Favorites</a></li>
-                                @if (Auth::user()->id == 6)
+                                @if (Auth::user()->hasPermission(1))
 								<li><a href="{{ url('/admin/scraper') }}">Admin</a></li>
 								@endif
 								<li><a href="{{ url('/auth/logout') }}">Logout</a></li>
