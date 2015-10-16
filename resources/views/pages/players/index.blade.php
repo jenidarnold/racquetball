@@ -28,12 +28,13 @@
 			
 				    <div class="form-group">
 				    {!! Form::label('lblLookup', 'Player Lookup',array('for' => 'lblName', 'class' =>'control-label txt-lookup text-primary'))!!}
-					{!! Form::label('lblName', 'Name',array('for' => 'first_name', 'class' =>'control-label lbl-lookup'))!!}
-					{!! Form::text('first_name', null, ['class' => 'form-control', 'placeholder' =>'First', 'style' => 'width:160px'])!!}
-					{!! Form::text('last_name', null, ['class' => 'form-control', 'placeholder' =>'Last', 'style' => 'width:160px'])!!}
-					
+				    {!! Form::select('player_id', $players_list, $player_id, array('class' => 'player form-control', 'style' => 'font-weight:300; font-size:12pt; width:250px' )) !!}	
+									
 					</div>
 				 	<div class="form-group">
+				 	{!! Form::label('lblFilter', 'Filter By',array('for' => 'lblName', 'class' =>'control-label txt-lookup text-primary', 'style' => 'padding-left:20px;'))!!}
+				 	{!! Form::text('firstname', '', array('class' =>'control-label lbl-lookup', 'placeholder' => 'First Name'))!!}
+				 	{!! Form::text('lastname', '', array('class' =>'control-label lbl-lookup', 'placeholder' => 'Last Name'))!!}
 					{!! Form::label('lblGender', 'Gender', array('for' => 'gender', 'class' =>'control-label lbl-lookup'))!!}
 					{!! Form::select('gender', 
 				                 array('All' => 'All', 'Male' => 'Male', 'Female' => 'Female'), 
@@ -98,4 +99,20 @@
 			</table>
 	</div>
 </div>
+
 @stop
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+<script type="text/javascript">
+
+        $(document).ready(function(){           
+            $(".player").select2({
+            	placeholder: "Select a Player",
+            	allowClear: true,
+        	 	
+            });	
+
+            $(".player").select2("val", "");
+        });
+</script>

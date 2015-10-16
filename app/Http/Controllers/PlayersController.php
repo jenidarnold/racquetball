@@ -22,13 +22,20 @@ class PlayersController extends Controller {
 
 		$level = $request->input('level');
 		$gender = $request->input('gender');
-		$firstname = $request->input('first_name');
-		$lastname = $request->input('last_name');
-
+		$player_id = $request->input('player_id');
+		$firstname = $request->input('firstname');
+		$lastname = $request->input('lastname');
+		
+		//grid
 		$players = \DB::table('players')
 				->orderby('last_name')
 				->orderby('first_name');
 
+		//dropdown list
+		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
+		$players_list = $players_list->lists('last_first_name', 'player_id');
+				
+		//Filters
 		if (isset($gender)) {
 			if ($gender != 'All') {
 				$players = $players->where('gender', '=', $gender);
@@ -41,22 +48,21 @@ class PlayersController extends Controller {
 			}
 		}
 
-		if (isset($firstname)) {
-			if ($firstname != '') {
+		if (isset($player_id)) {
+			$players = $players->where('player_id',  '=', $player_id);
+		} else {
+			if (isset($firstname)) {
 				$players = $players->where('first_name',  'like', "%$firstname%");
+			}
+			if (isset($lastname)) {
+				$players = $players->where('last_name',  'like', "%$lastname%");
 			}
 		}
 
-		if (isset($lastname)) {
-			if ($lastname != '') {
-				$players = $players->where('last_name', 'like', "%$lastname%");		
-			}	
-		}
-
+		//Grid Paging
 		$players = $players->paginate(5);
 
-
-		return view('pages/players/index', compact('players', 'level', 'gender'));
+		return view('pages/players/index', compact('players', 'players_list', 'player_id', 'level', 'gender'));
 	}
 
 	/**
