@@ -213,8 +213,8 @@
 	</div>
 </div>
 @stop
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	<script type="text/javascript">
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
 		$(document).ready(function(){
 
 			//Vote Percentage color-code

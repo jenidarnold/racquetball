@@ -298,8 +298,22 @@ class Scraper {
 
  	}
 
- 	public function get_tournaments() 
+ 	public function get_tournaments($location, $time_period) 
  	{
+
+ 		switch($time_period) {
+ 			case "Past":
+ 				$tourney_page = "results.asp";
+ 				break;
+ 			case "Live":
+ 				$tourney_page = "live-events.asp";
+ 				break;
+ 			case "Future":
+				$tourney_page = "results.asp";
+ 				break;
+ 		}
+
+ 		$url ="http://www.usaracquetballevents.com/$location/$tourney_page";
 
 	 	$cc = new CopyCat;
 	 	$cc->setCurl(array(
@@ -317,7 +331,7 @@ class Scraper {
 	 		'end_date' => '/Date:<\/span>(?:.*?)-(.*?)</ms',
 	 		'img_logo' => '/gallery\/tourneyLogo\/(.*?)"/ms',
 	 		))
-	 		->URLS('http://www.usaracquetballevents.com/Texas/results.asp?showGrouping=0');	 		
+	 		->URLS($url);	
 
 	 	$result = $cc->get();
 

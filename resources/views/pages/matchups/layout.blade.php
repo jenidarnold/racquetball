@@ -56,8 +56,11 @@
 										{!! Form::submit('Vs', array('class' =>'btn btn-sm btn-success', 'style' => 'font-style:italic; font-weight:300; font-size:14pt')) !!}	
 										{!! Form::select('ddlPlayer2', $players_list, $player2->player_id, array('class' => 'player form-control', 'style' => 'font-weight:300; font-size:12pt; width:250px;text-align:center' )) !!}	
 										<span class='lbl-player text-primary' style='font-weight:600; font-size:18pt;'>Player 2</span>
-									</div>
-									
+									</div>									
+									<select class="player">
+									  <option value="1">Todd</option>
+									  <option value="2">Sam</option>
+									</select>
 								{!! Form::close() !!}	
 							</center>
 						</div>					
@@ -71,3 +74,15 @@
 @yield('matchup-content')
 
 @stop
+
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".player").select2({
+			placeholder: 'Choose a Player...',
+			firstBlank: true,
+		}); 		  
+	});
+
+</script>

@@ -21,22 +21,7 @@ class RankingsController extends Controller {
 		$group_id = 1;
 		$location_id = 0;
 
-
-		/*$latest_date = \DB::table('rankings')
-						->max('ranking_date');
-						
-		$groups = group::lists('name','group_id');
-		$locations = location::lists('location','location_id');
-
-		$rankings = \DB::table('rankings')
-				->leftJoin('players', 'rankings.player_id', '=', 'players.player_id')
-				->where('ranking_date', '=', $latest_date)
-				->get();
-
-		return view('pages/rankings', compact('rankings', 'groups', 'locations'));
-		*/
-
-		return \Redirect::route('rankings.show');
+		return \Redirect::route('rankings.show', array('Latest'));
 
 	}
 

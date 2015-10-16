@@ -9,7 +9,7 @@ Route::get('home', 'HomeController@index');
 Route::get('admin/scraper', ['middleware' => 'auth', 'uses' => 'Admin\ScreenScrapeController@scraper']);
 //Route::get('admin/rankings', 'Admin\ScreenScrapeController@rankings');
 Route::get('admin/rankings', array('as' => 'download_rankings', 'uses' => 'Admin\ScreenScrapeController@rankings'));
-Route::get('admin/tournaments', 'Admin\ScreenScrapeController@tournaments');
+Route::get('admin/tournaments', array('as' => 'download_tournaments', 'uses' => 'Admin\ScreenScrapeController@tournaments'));
 Route::get('admin/participants', array('as' => 'download_participants', 'uses' => 'Admin\ScreenScrapeController@participants'));
 Route::get('admin/player', array('as' => 'download_player', 'uses' => 'Admin\ScreenScrapeController@player'));
 Route::get('admin/matches', array('as' => 'download_matches', 'uses' => 'Admin\ScreenScrapeController@matches'));

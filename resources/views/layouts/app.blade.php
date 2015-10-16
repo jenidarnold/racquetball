@@ -4,16 +4,21 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Laravel</title>
+	<title>Racquetball Hub</title>
 
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
-
+	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 	<!-- Fontawesome -->
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="{{ asset('/js/datepicker.js') }}"></script>
+	<!--script src="http://code.jquery.com/jquery-2.1.4.min.js"></script-->
+    <!--script src="{{ asset('/js/datepicker.js') }}"></script-->
+    
+	<!--script src="{{ asset('/js/select2.js') }}"></script>
+	<link href="{{ asset('/css/select2.css') }}" rel="stylesheet">
+	<link href="{{ asset('/css/select2-bootstrap.css') }}" rel="stylesheet"-->
+	
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
@@ -91,7 +96,7 @@
 						</a>
 					</li>
 					<li>
-						<a class="navbar-brand" href="{{ url('/') }}">RacquetBall</a>
+						<a class="navbar-brand" href="{{ url('/') }}">RacquetBall Hub</a>
 					</li>
 					<li>
 						<a class="navbar-brand logo" href="#">					
@@ -144,8 +149,9 @@
                         <a href="/shop" class="navbar-link dropdown-toggle" data-toggle="dropdown">
                         Shop <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                             <li><a href="#">Advocare</a></li>
-                             <li><a href="#">Racquetball Warehouse</a></li>
+                             <li><a href="https://www.advocare.com/150450372/default.aspx" target="blank">Advocare</a></li>
+                             <li><a href="http://www.ektelon.com/" target="_blank">Ektelon</a></li>
+                             <li><a href="http://www.racquetballwarehouse.com" target="blank">Racquetball Warehouse</a></li>
                         </ul>
                     </li>
         	   	</ul>  
@@ -189,7 +195,7 @@
 
 
     @section('script')
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript">
 
         $(document).ready(function(){

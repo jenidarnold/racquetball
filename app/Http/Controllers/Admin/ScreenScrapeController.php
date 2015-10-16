@@ -53,8 +53,13 @@ class ScreenScrapeController extends Controller {
 		$success='';
 		$groups = Group::lists('name','group_id');
 		$locations = Location::lists('location','location_id');
-		$tournaments = Tournament::orderBy('start_date', 'desc')
+		//$tournaments = Tournament::orderBy('start_date', 'desc')
+		//	->lists('name','tournament_id');
+
+		$tournaments = Tournament::selectRaw('CONCAT(name, " (", start_date, ")") as name, tournament_id')
+			->orderBy('start_date', 'desc')
 			->lists('name','tournament_id');	
+
 		$players = Player::select('first_name', 'last_name', 'player_id',
 							\DB::raw('CONCAT(first_name, " ", last_name) as full_name'))
 				->orderBy('first_name')
@@ -100,12 +105,17 @@ class ScreenScrapeController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function tournaments()
+	public function tournaments(Request $request)
 	{	
+
+		$time_period = $request->input('time_period');
+		$location_id = $request->input('location_id');
+
+		$location =  Location::find($location_id)->location;
 
 		$ss = new Scraper();
 
-		$new_tournaments = $ss->get_tournaments();
+		$new_tournaments = $ss->get_tournaments($location, $time_period);
 		$tournaments = \DB::table('tournaments')
 			->orderBy('start_date', 'desc')
 			->get();

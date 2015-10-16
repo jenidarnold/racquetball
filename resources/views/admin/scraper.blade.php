@@ -25,16 +25,30 @@
 						</div>
 					@endif
 					<h3>Tournaments</h3>
-					<div class="row">
-						<form class="form-horizontal" role="form" method="GET" action="{{ url('/admin/tournaments') }}">
-							<input type="hidden" name="_token" value="{{ csrf_token() }}">
-							<div class="form-group">								
-								<div class="col-md-4 col-md-offset-1">
-									<button id="btnTournaments" type="submit" class="btn btn-primary">Download Tournaments</button>
-								</div>
-							</div>
-						</form>
+					{!! Form::open(array('route' => 'download_tournaments', 'method' => 'get')) !!}	
+					<div class="row">	
+						<div class="col-md-1 col-md-offset-0">
+                        	{!! Form::Label('ddlLocation', 'Location:', array('id' => 'lblLocation')) !!}
+                        </div>
+                        <div class="col-md-2 col-md-offset-0">
+							{!! Form::select('location_id', $locations, null, array('class' => 'form-control')) !!}
+						</div>
 					</div>
+					<div class="row">	
+						<div class="col-md-1 col-md-offset-0">
+                        	{!! Form::Label('ddlTimePeriod', 'Time Period:', array('id' => 'lblTimePeriod')) !!}
+                        </div>
+                        <div class="col-md-1 col-md-offset-0">
+							{!! Form::select('time_period', ['Past' => 'Past', 'Live' => 'Live', 'Future' => 'Future'], null, array('class' => 'form-control')) !!}
+						</div>
+					</div>
+					<div class="row">								
+						<div class="col-md-4 col-md-offset-1">
+							<br/>
+							<button id="btnTournaments" type="submit" class="btn btn-primary">Download Tournaments</button>
+						</div>				
+					</div>		
+					{!! Form::close() !!}
 
 					<h3>Participants</h3>
 					<div class="row">
@@ -105,7 +119,7 @@
 						<div class="col-md-1 col-md-offset-0">
                         	{!! Form::Label('ddlLocation', 'Location:', array('id' => 'lblLocation')) !!}
                         </div>
-                        <div class="col-md-4 col-md-offset-0">
+                        <div class="col-md-2 col-md-offset-0">
 							{!! Form::select('location_id', $locations, null, array('class' => 'form-control')) !!}
 						</div>
 					</div>

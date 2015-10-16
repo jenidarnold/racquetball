@@ -1,12 +1,12 @@
 @section('script')
 	@parent
-	<script src="{{ asset('js/select2.min.js') }}"></script>
-	<link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-	<link href="{{ asset('css/select2-bootstrap.min.css') }}" rel="stylesheet">
+	<script src="{{ asset('js/select2.js') }}"></script>
+	<link href="{{ asset('css/select2.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/select2-bootstrap.css') }}" rel="stylesheet">
 	
 	<script type="text/javascript">	 
 			
- $(function() {
+ /*$(function() {
 	// Dealer selection click
 	$('#dealer').click(function() {
 		if ( $('#dealer-select').css('display') == 'block' ) {
@@ -38,7 +38,7 @@
 	.on("select2-close", function() {
 		$('#dealer-select').css('display', 'none');
 	});
-});
+});*/
 
 	</script>
 @stop
