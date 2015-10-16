@@ -18,8 +18,8 @@ class TournamentsController extends Controller {
 	public function index()
 	{
 
-		$s = New Scraper();
-		$tournaments = $s->get_tournaments();
+		//$s = New Scraper();
+		//$tournaments = $s->get_tournaments();
 
 
 		$today = date('Y-m-d');

@@ -263,12 +263,15 @@ class Scraper {
 
 	 	$cc->matchAll(
 	 				array(
-	 					'player_id'   => '/<h1>(?:.*?)profile-player(?:.*?)&UID=(.*?)"/ms',
+	 					'player_id'   => '/href(?:.*?)profile-player(?:.*?)&UID=(.*?)"/ms',
 	 					'division_id' => '/drawOut(?:.*?)&divID=(.*?)>/ms',
 	 				))
-	 		->URLS('http://www.r2sports.com/tourney/EntryList.asp?TID='. $tid);	 		
+	 		->URLS('http://www.r2sports.com/website/participants.asp?TID='.$tid);
+	 		//->URLS('http://www.r2sports.com/tourney/EntryList.asp?TID='. $tid);	 		
 	 	$result_parts = $cc->get();
 
+
+	 	//dd($result_parts);
 
 		$participants = array();
 		$ss = New ScreenScraper;
