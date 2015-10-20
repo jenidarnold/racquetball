@@ -3,6 +3,7 @@
 use App\Vote;
 use App\Scraper;
 use App\User;
+use App\Ranking;
 
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
@@ -132,6 +133,20 @@ Route::get('api/profile/image', function(){
 	}
 
 	return $profile;
+});
+
+Route:get('api/rankings/history', function(){
+	$player_id = (int)Input::get('player_id');
+	$location_id = (int)Input::get('location_id');
+
+	
+	$rankings = Ranking::where('player_id', '=', $player_id)
+		->select('ranking_date', 'location_id', 'ranking')
+		->orderBy('ranking_date')
+		->get();
+
+	//dd($rankings);
+	return Response::json($rankings);
 });
 
 Route::get('api/vote/castvote', function(){

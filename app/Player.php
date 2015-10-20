@@ -43,7 +43,8 @@ class Player extends Model {
 
 		$ranks = $this->hasMany('App\Ranking', 'player_id', 'player_id');
 		$rank = $ranks->where("location_id", '=', "0")
-					->first();
+		      ->orderBy('ranking_date', 'desc')
+			  ->first();
 		if ($rank)
 		{
 			return $rank->ranking;
@@ -86,6 +87,7 @@ class Player extends Model {
 
 		$ranks = $this->hasMany('App\Ranking', 'player_id', 'player_id');
 		$ranks = $ranks->where("location_id", '=', $this->state_id)
+			->orderBy('ranking_date', 'desc')
 			->first();
 		
 		if (isset($ranks)) {
