@@ -87,6 +87,11 @@ class Match extends Model {
 		return $this->belongsTo('App\Tournament', 'tournament_id', 'tournament_id');
 	}
 
+	public function league() {
+
+		return $this->belongsTo('App\League', 'tournament_id', 'league_id');
+	}
+
 	public function getScores() {
 
 		return 5;

@@ -72,10 +72,8 @@
 				</h2>
 				<div class="list-group">
 				  <a href="/users/{{$user->id}}/edit" class="list-group-item">Change Username and/or Password</a>
-				  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-				  <a href="#" class="list-group-item">Morbi leo risus</a>
-				  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-				  <a href="#" class="list-group-item">Vestibulum at eros</a>
+				  <a href="/users/{{$user->id}}/info/link-usar/show" class="list-group-item">Link to your USAR account</a>
+				  <a href="/users/{{$user->id}}/info/link-fb/show" class="list-group-item">Link to your Facebook account</a>
 				</div>
 			</div>
 		</div>
@@ -90,8 +88,6 @@
 				<div class="list-group">
 				  <a href="/users/{{$user->id}}/info/show" class="list-group-item">Your personal info</a>
 				  <a href="#" class="list-group-item">Account history</a>
-				  <a href="/users/{{$user->id}}/info/link-usar/show" class="list-group-item">Link account to your USAR account</a>
-				  <a href="#" class="list-group-item"></a>
 				</div>
 			</div>
 		</div>

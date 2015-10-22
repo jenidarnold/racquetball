@@ -82,9 +82,10 @@
 
 	<div id="ChartDiv" style="width:600px;height:400px;display:inline-block"></div>
 @stop
-
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script type="text/javascript">
+    <script src="{{ asset('/js/jchartfx/jchartfx.system.js')}}"></script>
+    <script src="{{ asset('/js/jchartfx/jchartfx.coreVector.js')}}"></script>
+<script type="text/javascript">
 		$(document).ready(function(){
 			//Vote Percentage color-code
 			$('#li-profile').init(function(){	
@@ -92,63 +93,30 @@
 				el.addClass('active');
 			});
 							
+	  		var player_id = 192412;
+	  		var location_id =1;
+	  		var state = 'Texas';
+	  		var rankings;
 
-			$('#ChartDiv').init(function(){  
-
-
-          		var player_id = 192412;
-          		var location_id =1;
-          		var state = 'Texas';
-
-				chart1 = new cfx.Chart();
-	            chart1.getData().setSeries(1);
-	            //chart1.getAxisY().setMin(1);
-	            //chart1.getAxisY().setMax(100);
-	            var series1 = chart1.getSeries().getItem(0);
-	            //var series2 = chart1.getSeries().getItem(1);
-	            series1.setGallery(cfx.Gallery.Lines);
-	            //series2.setGallery(cfx.Gallery.Lines);
-	            series1.setText('National');
-	            //series2.setText(state);
-	            //
-	            var fields = chart1.getDataSourceSettings().getFields();
-				var field1 = new cfx.FieldMap();
-				var field2 = new cfx.FieldMap();
-				var field3 = new cfx.FieldMap();
-
-				field1.setName("ranking_date");
-				field1.setUsage(cfx.FieldUsage.Label);
-				fields.add(field1);
-
-				field2.setName("location_id");
-				field2.setUsage(cfx.FieldUsage.NotUsed);
-				fields.add(field2);
-
-				field3.setName("ranking");
-				field3.setUsage(cfx.FieldUsage.Value);
-				fields.add(field3);
-
-          		var divHolder = document.getElementById('ChartDiv');
-          		chart1.create(divHolder); 	
-
-
-	            $.ajax({
+	  		$.ajax({
 	            url: '{{ URL::to('api/rankings/history') }}',
 	            data: 'player_id=' + player_id + '&location_id=' + location_id,
 	            type: "GET",
 	            contentType: "application/json; charset=utf-8",
 	            dataType : "json",
 	            success: function (result) {
-	                chart1.setDataSource(result.d);
+	               rankings = result.d;
 	            },
 	            error: function (xhr, txt, err) {
 	                alert("error connecting to data: " + txt);            }
-	       		});
-		    });
+       		});		   
 
-		    //$("div", ".ChartDiv1").chart({
-            //            gallery:cfx.Gallery.Pie
-            //});
-		    
+			$("div", ".ChartDiv1").init(function(){
+		        chart1 = new cfx.Chart();
+		        chart1.setGallery(cfx.Gallery.Line);
+          		var divHolder = document.getElementById('ChartDiv');
+          		chart1.setDataSource(rankings);
+          		chart1.create(divHolder);
+		    });
 		});
 </script>	

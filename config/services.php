@@ -34,4 +34,14 @@ return [
 		'secret' => '',
 	],
 
+	'facebook' => [
+		'model'  => 'User',
+		'secret' => '',
+	],
+
+	'github' => [
+    	'client_id' => 'jenidarnold',
+    	'client_secret' => 'your-github-app-secret',
+    	'redirect' => 'http://your-callback-url',
+	],
 ];

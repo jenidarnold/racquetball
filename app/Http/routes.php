@@ -7,13 +7,17 @@ use App\Ranking;
 
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
-Route::get('admin/scraper', ['middleware' => 'auth', 'uses' => 'Admin\ScreenScrapeController@scraper']);
-//Route::get('admin/rankings', 'Admin\ScreenScrapeController@rankings');
-Route::get('admin/rankings', array('as' => 'download_rankings', 'uses' => 'Admin\ScreenScrapeController@rankings'));
-Route::get('admin/tournaments', array('as' => 'download_tournaments', 'uses' => 'Admin\ScreenScrapeController@tournaments'));
-Route::get('admin/participants', array('as' => 'download_participants', 'uses' => 'Admin\ScreenScrapeController@participants'));
-Route::get('admin/player', array('as' => 'download_player', 'uses' => 'Admin\ScreenScrapeController@player'));
-Route::get('admin/matches', array('as' => 'download_matches', 'uses' => 'Admin\ScreenScrapeController@matches'));
+
+Route::group(['namespace' => 'Admin', 'prefix' =>'admin'], function()
+{
+	Route::get('scraper', ['middleware' => 'auth', 'uses' => 'ScreenScrapeController@scraper']);
+	//Route::get('admin/rankings', 'Admin\ScreenScrapeController@rankings');
+	Route::get('rankings', array('as' => 'download_rankings', 'uses' => 'ScreenScrapeController@rankings'));
+	Route::get('tournaments', array('as' => 'download_tournaments', 'uses' => 'ScreenScrapeController@tournaments'));
+	Route::get('participants', array('as' => 'download_participants', 'uses' => 'ScreenScrapeController@participants'));
+	Route::get('player', array('as' => 'download_player', 'uses' => 'ScreenScrapeController@player'));
+	Route::get('matches', array('as' => 'download_matches', 'uses' => 'ScreenScrapeController@matches'));
+});
 
 Route::get('matchups', 'MatchupsController@index');
 Route::post('matchups', 'MatchupsController@show');
@@ -50,56 +54,58 @@ Route::bind('participants', function($value, $route){
 });
 
 ######  User  ################
-#
-#
-/* Personal Info */
-Route::get('users/{user_id}/info/show',  array('as' =>'user-show-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@show'));
-Route::get('users/{user_id}/info/name/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_name'));
-Route::get('users/{user_id}/info/email/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_email'));
-Route::get('users/{user_id}/info/phone/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_phone'));
-Route::get('users/{user_id}/info/address/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_address'));
+Route::group(['namespace' => 'Users', 'prefix' => 'users/{user_id}'], function()
+{
+	/* Personal Info */
+	Route::get('info/show',  array('as' =>'user-show-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@show'));
+	Route::get('info/name/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_name'));
+	Route::get('info/email/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_email'));
+	Route::get('info/phone/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_phone'));
+	Route::get('info/address/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_address'));
+	Route::get('info/link-usar/show',  array('as' =>'show-link-usar', 'middleware' => 'auth', 'uses' => 'UserInfoController@show_linkUsar'));
+	Route::post('info/link-usar/edit',  array('as' =>'edit-link-usar', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_linkUsar'));
 
-Route::get('users/{user_id}/info/link-usar/show',  array('as' =>'show-link-usar', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@show_linkUsar'));
-Route::post('users/{user_id}/info/link-usar/edit',  array('as' =>'edit-link-usar', 'middleware' => 'auth', 'uses' => 'Users\UserInfoController@edit_linkUsar'));
-
-
-/* Preferences */
-Route::get('users/{user}/preferences',  array('as' =>'user-edit-pref', 'middleware' => 'auth', 'uses' => 'Users\UserPreferencesController@edit'));
-
+	/* Preferences */
+	Route::get('preferences',  array('as' =>'user-edit-pref', 'middleware' => 'auth', 'uses' => 'Users\UserPreferencesController@edit'));
+});
 
 ##### Players #####################
-Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'middleware' => 'auth', 'uses' => 'PlayersController@getTournaments'));
-Route::get('players/{players}/biograph', 'Users\UserAccountController@show');
+Route::group(['prefix' => 'players/{players}'], function()
+{
+	Route::get('tournaments', array('as' => 'player.tournaments', 'middleware' => 'auth', 'uses' => 'PlayersController@getTournaments'));
+	#Route::get('biography', 'Users\UserAccountController@show');
 
-Route::get('players/{players}/tournaments', array('as' => 'player.tournaments', 'middleware' => 'auth',  'uses' => 'PlayersController@getTournaments'));
-Route::get('players/{players}/biography', array('as' => 'player.bio', 'middleware' => 'auth', 'uses' => 'PlayersController@getBio'));
-#Route::get('players/{players}/biography', 'PlayersProfileController@getBio');
+	Route::get('tournaments', array('as' => 'player.tournaments', 'middleware' => 'auth',  'uses' => 'PlayersController@getTournaments'));
+	Route::get('biography', array('as' => 'player.bio', 'middleware' => 'auth', 'uses' => 'PlayersController@getBio'));
+	#Route::get('biography', 'PlayersProfileController@getBio');
 
-/************   Journal  ***********/
-Route::get('players/{players}/evaluation/invite', array('as' => 'evaluation.invite',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@invite'));
-Route::post('players/{players}/evaluation/invite', array('as' => 'evaluation.invite.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@request'));
+	/************   Journal  ***********/
+	Route::get('evaluation/invite', array('as' => 'evaluation.invite',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@invite'));
+	Route::post('evaluation/invite', array('as' => 'evaluation.invite.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@request'));
 
+	Route::get('journal/', array('middleware' => 'auth', 'uses' => 'PlayersJournalController@index'));
+	Route::get('journal/{entry}', array('middleware' => 'auth', 'uses' => 'PlayersJournalController@show'));
+	# Evaluations
+	Route::get('journal/{entry}/evaluation/{target}/', array('middleware' => 'auth', 'uses' => 'PlayersEvaluationController@index'));
+	Route::get('journal/{entry}/evaluation/{target}/{creator}/create', array('as' => 'evaluation.create', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@create'));
+	Route::post('journal/{entry}/evaluation/{target}/{creator}',  array('as' => 'evaluation.store', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@store'));
+	Route::get('journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}', array('as' => 'evaluation.show', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@show'));
+	Route::get('journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.edit',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@edit'));
+	Route::post('journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@update'));
 
-Route::get('players/{players}/journal/', array('middleware' => 'auth', 'uses' => 'PlayersJournalController@index'));
-Route::get('players/{players}/journal/{entry}', array('middleware' => 'auth', 'uses' => 'PlayersJournalController@show'));
-# Evaluations
-Route::get('players/{players}/journal/{entry}/evaluation/{target}/', array('middleware' => 'auth', 'uses' => 'PlayersEvaluationController@index'));
-Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/create', array('as' => 'evaluation.create', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@create'));
-Route::post('players/{players}/journal/{entry}/evaluation/{target}/{creator}',  array('as' => 'evaluation.store', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@store'));
-Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}', array('as' => 'evaluation.show', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@show'));
-Route::get('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.edit',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@edit'));
-Route::post('players/{players}/journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@update'));
-
-# Opponents
-
-Route::get('players/{players}/journal/{entry}/opponent', 'PlayersOpponentController@index');
-Route::get('players/{players}/journal/{entry}/opponent/create', array('as' => 'opponent.create',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@create'));
-Route::get('players/{players}/journal/{entry}/opponent/{target_id}', array('as' => 'opponent.evaluation.store',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@store'));
-Route::post('players/{players}/journal/{entry}/opponent',  array('as' => 'opponent.store',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@store'));
-Route::get('players/{players}/journal/{entry}/opponent/{player_id}', array('as' => 'opponent.show',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@show'));
-Route::get('players/{players}/journal/{entry}/opponent/{player_id}/edit', array('as' => 'opponent.edit',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@edit'));
-Route::post('players/{players}/journal/{entry}/opponent/{player_id}/edit', array('as' => 'opponent.update', 'middleware' => 'auth',  'uses' => 'PlayersOpponentController@update'));
-Route::get('players/{players}/journal/{entry}/opponent/{player_id}/evaluate', array('as' => 'opponent.update',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@evaluate'));
+	# Opponents
+	Route::group(['prefix' => 'journal/{entry}'], function()
+	{
+		Route::get('opponent', 'PlayersOpponentController@index');
+		Route::get('opponent/create', array('as' => 'opponent.create',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@create'));
+		Route::get('opponent/{target_id}', array('as' => 'opponent.evaluation.store',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@store'));
+		Route::post('opponent',  array('as' => 'opponent.store',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@store'));
+		Route::get('opponent/{player_id}', array('as' => 'opponent.show',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@show'));
+		Route::get('opponent/{player_id}/edit', array('as' => 'opponent.edit',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@edit'));
+		Route::post('opponent/{player_id}/edit', array('as' => 'opponent.update', 'middleware' => 'auth',  'uses' => 'PlayersOpponentController@update'));
+		Route::get('opponent/{player_id}/evaluate', array('as' => 'opponent.update',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@evaluate'));
+	});
+});
 
 Route::resource('users', 'UserController');
 Route::resource('rankings', 'RankingsController');
@@ -108,6 +114,18 @@ Route::resource('tournaments', 'TournamentsController');
 Route::resource('tournaments.participants', 'ParticipantsController');
 Route::resource('tournaments.divisions', 'DivisionsController');
 //Route::resource('tournaments.divisions.participaints', 'ParticipantsController');
+
+
+// Socialites (facebook)
+
+// Redirect to github to authenticate
+Route::get('github', 'AccountController@github_redirect');
+// Get back to redirect url
+Route::get('account/github', 'AccountController@github');
+// Redirect to facebook to authenticate
+Route::get('facebook', 'AccountController@facebook_redirect');
+// Get back to redirect url
+Route::get('account/facebook', 'AccountController@facebook');
 
 //APIs
 Route::get('api/profile/download', function(){
@@ -141,7 +159,7 @@ Route:get('api/rankings/history', function(){
 
 	
 	$rankings = Ranking::where('player_id', '=', $player_id)
-		->select('ranking_date', 'location_id', 'ranking')
+		->select('ranking_date', 'ranking')
 		->orderBy('ranking_date')
 		->get();
 

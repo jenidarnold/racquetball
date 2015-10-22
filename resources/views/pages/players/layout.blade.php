@@ -23,7 +23,7 @@
 		.nav-pills {
 			font-weight: 600;
 			font-size: 12pt;
-			padding-left: 25px;
+			padding-left: 5px;
 		}
 
 		.player-logo{
@@ -38,7 +38,7 @@
 	<div class="row">
 		<div class="col-md-2">			
 			<div class="player-nav-container">	
-				<nav class="navbar navbar-inverse">
+				<nav class="navbar navbar-inverse-no">
 				<div style="text-align:left">					
 					<div class="player-logo">
 			   			@if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
