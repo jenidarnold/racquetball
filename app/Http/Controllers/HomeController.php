@@ -33,14 +33,20 @@ class HomeController extends Controller {
 	 */
 	public function index()
 	{
-		$user = \Auth::user();
+		/*$user = \Auth::user();
+
+		$lastLogin = date_create("2015/9/1");
+		$today = date_create(date("Y/m/d"));
 
 		//If player go to Player Profile page
 		if ($user->player_id > 0){
 			return Redirect::action('PlayersJournalController@index', array($user->player_id));
-		}else {
-			return view('pages/home');
-		}
+		}elseif ($lastLogin->diff($today)->days > 7){
+		//	/* Remind user to link their account to USAR */
+		//	return Redirect::action('Users\UserInfoController@show_linkUsar', array($user->id, $lastLogin));
+		//}else {
+		return view('pages/home');			
+		//}*/
 	}
 
 }

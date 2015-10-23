@@ -6,7 +6,7 @@ use App\User;
 use App\Ranking;
 
 Route::get('/', 'WelcomeController@index');
-Route::get('home', 'HomeController@index');
+Route::get('home', ['middleware' => 'auth.player','uses' => 'HomeController@index']);
 
 Route::group(['namespace' => 'Admin', 'prefix' =>'admin'], function()
 {

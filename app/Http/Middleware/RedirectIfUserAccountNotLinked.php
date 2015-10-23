@@ -4,7 +4,7 @@ use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 
-class RedirectIfAuthenticated {
+class RedirectIfUserAccountNotLinked {
 
 	/**
 	 * The Guard implementation.
@@ -33,12 +33,21 @@ class RedirectIfAuthenticated {
 	 */
 	public function handle($request, Closure $next)
 	{
+		$user = \Auth::user();
 
-		if ($this->auth->check())
-		{
+		$lastLogin = date_create("2015/9/1");
+		$today = date_create(date("Y/m/d"));
+
+		//If player go to Player Profile page
+		if ($user->player_id > 0){
+			return new RedirectResponse(action('PlayersJournalController@index', array($user->player_id)));
+		}elseif ($lastLogin->diff($today)->days > 7){
+			/* Remind user to link their account to USAR */
+			return new RedirectResponse(action('Users\UserInfoController@show_linkUsar', array($user->id)));
+		}else {
 			return new RedirectResponse(url('/home'));
 		}
-		
-		return $next($request);		
+		return $next($request);
 	}
+
 }
