@@ -9,16 +9,23 @@ use Illuminate\Http\Request;
 class UserController extends Controller {
 
 	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+	
+	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
 	public function index()
 	{
-	
-
 		return view('pages/users.index');
-
 	}
 
 	/**
@@ -48,8 +55,7 @@ class UserController extends Controller {
 	 * @return Response
 	 */
 	public function show($user)
-	{
-		
+	{		
 		return view('pages/users.show', compact('user'));
 	}
 	
@@ -61,7 +67,6 @@ class UserController extends Controller {
 	 */
 	public function edit($user)
 	{
-	
 		return view('pages/users.account.edit', compact('user'));
 	}
 
@@ -73,7 +78,6 @@ class UserController extends Controller {
 	 */
 	public function update($user)
 	{
-
        	//User::where('id', $user->id)->update(array('email' => Input::get('email'), 'password' => bcrypt(Input::get('password'))));
 	   
 	   \Session::flash('alert-class', 'alert-success');

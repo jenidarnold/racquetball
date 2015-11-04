@@ -63,6 +63,7 @@
 @stop	
 
 @section('matchup-content')
+
 <div class="main-content">
 	<div class="row">
 		<div class="col-sm-3">	
@@ -80,9 +81,9 @@
 					<tr>
 						<td>
 						@if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found'))	
-							<img class='img-profile img-thumbnail' src={{ 'http://www.r2sports.com/tourney/imageGallery/gallery/player/'.$player1->player_id.'_normal.jpg' }} ></a>
+							<img class='img-profile img-thumbnail' src={{ Config::get('constants.player_logo.base_path') . $player1->player_id . Config::get('constants.player_logo.suffix') }} >
 						@else
-							<img class='img-profile img-thumbnail' src='images/racquet-right.png'>
+							<img class='img-profile img-thumbnail' src={{ Config::get('constants.player_logo.default_image')}}>
 						@endif
 						</td>
 					</tr>

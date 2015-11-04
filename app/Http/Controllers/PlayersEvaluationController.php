@@ -15,6 +15,17 @@ use Illuminate\Http\Request;
 class PlayersEvaluationController extends Controller {
 
 	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware('auth');
+		$this->user = \Auth::user();
+	}
+	
+	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
@@ -27,12 +38,10 @@ class PlayersEvaluationController extends Controller {
 			->orderBy('created_at', 'desc')
 			->paginate(5);
 
-
 		$peer_evals = PlayerEvaluation::where('player_id', '=', $target_id)
 			->where('creator_id', '!=', $player->player_id)
 			->orderBy('created_at', 'desc')
 			->paginate(5);
-
 
 		$opp_evals = PlayerEvaluation::where('player_id', '!=', $target_id)
 			->where('creator_id', '=', $player->player_id)
@@ -78,7 +87,6 @@ class PlayersEvaluationController extends Controller {
 	 */
 	public function store($player, $entry)
 	{
-
 		$categories = EvaluationCategory::all();
 		$input = Input::all();
 
@@ -116,8 +124,8 @@ class PlayersEvaluationController extends Controller {
 	public function show($player, $entry, $target, $creator, $evaluation_id)
 	{
 
-		$categories = EvaluationCategory::all();
 		$evaluation = PlayerEvaluation::find($evaluation_id);
+		$categories = EvaluationCategory::all();		
 		$scores =EvaluationScore::where('evaluation_id' , '=', $evaluation_id);
 
 		return view('pages/players/journal/evaluation/show', compact('categories', 'player', 'entry' ,'evaluation', 'scores'));
@@ -132,8 +140,8 @@ class PlayersEvaluationController extends Controller {
 	public function edit($player, $entry, $target, $creator, $evaluation_id)
 	{
 		
-		$categories = EvaluationCategory::all();
 		$evaluation = PlayerEvaluation::find($evaluation_id);
+		$categories = EvaluationCategory::all();
 		$scores =EvaluationScore::where('evaluation_id' , '=', $evaluation_id);
 
 		return view('pages/players/journal/evaluation/edit', compact('categories', 'player', 'entry' ,'evaluation', 'scores'));
@@ -164,20 +172,19 @@ class PlayersEvaluationController extends Controller {
 	/**
 	 * Player Tournament History
 	 */
-	public function getTournaments($player){
+	public function getTournaments($player)
+	{
 	
 		$matches = $player->getMatches();
 		$tournaments = $player->getTournaments();
-
-		//return view('pages/players/show', compact('player', 'matches', 'tournaments'));
 		return view('pages/players/tournaments', compact('player', 'matches', 'tournaments'));
 	}
 
 	/**
 	 * Player Tournament History
 	 */
-	public function getBio($player){
-	
+	public function getBio($player)
+	{	
 		return view('pages/players/bio', compact('player'));
 	}
 }

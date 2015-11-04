@@ -5,11 +5,29 @@ use App\Tournament;
 use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Repositories\TournamentRepository;
 use Illuminate\Http\Request;
 
 class TournamentsController extends Controller {
 
+	/**
+     * The tournament repository instance.
+     *
+     * @var TournamentRepository
+     */
+    protected $tournaments;
+
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(TournamentRepository $tournaments)
+	{
+		$this->middleware('auth');
+        $this->tournaments = $tournaments;
+	}
+	
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -21,20 +39,9 @@ class TournamentsController extends Controller {
 		//$s = New Scraper();
 		//$tournaments = $s->get_tournaments();
 
-
-		$today = date('Y-m-d');
-		$past_tournaments = Tournament::where('end_date', '<', date('Y-m-d'))
-							->orderBy('start_date', 'desc')							
-							->paginate(5);							
-
-		$live_tournaments = Tournament::where('start_date', '<=', date('Y-m-d'))
-							->where('end_date', '>=', date('Y-m-d'))
-							->orderBy('start_date')
-							->paginate(5);
-
-		$future_tournaments = Tournament::where('start_date', '>', date('Y-m-d'))
-						    ->orderBy('start_date')							
-							->paginate(5);
+		$past_tournaments = $this->tournaments->past()->paginate(5);							
+		$live_tournaments = $this->tournaments->live()->paginate(5);
+		$future_tournaments = $this->tournaments->future()->paginate(5);
 
 		return view('pages/tournaments.index', compact('past_tournaments','live_tournaments', 'future_tournaments'));
 	}
@@ -71,7 +78,6 @@ class TournamentsController extends Controller {
 		$s = New Scraper();
 		$participants = $tournament->participants;
 
-		var_dump($participants);
 		//Removed because: This needs to be evaluated for speed and overwhelming the original site
 		//$updated = false;
 		//foreach ($participants as $participant){

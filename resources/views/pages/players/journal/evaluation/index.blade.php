@@ -52,7 +52,7 @@
 		</div>
 	</div>
 	<div class="row" style="padding-top:10px">
-		<h3>Fellow Evaluations</h3>
+		<h3>Peer Evaluations</h3>
 		<h4>These are evalutions completed by those whom I've sent an evaluation invitation to assess my skills in their opinion</h4>
 	</div>
 	<div class="row">

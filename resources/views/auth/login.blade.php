@@ -1,11 +1,41 @@
 @extends('layouts.app')
 
+@section('style')
+	<style type="text/css">
+	.cred {
+		font-size:14pt;
+		font-weight: 400;
+		text-align: center;
+	}
+	</style>
+@stop
+
 @section('content')
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-heading">Login</div>
+			<div class="panel panel-info">
+				<div class="panel-heading cred"><span class="cred">Login using one of your social media accounts</span></div>
+				<div class="panel-body">
+					<div class="col-md-3 col-md-offset-2">
+						<a class="btn btn-block btn-social btn-twitter">
+    						<i class="fa fa-twitter"></i> Sign in with Twitter
+ 						</a>
+					</div>
+					<div class="col-md-3">
+						<a class="btn btn-block btn-social btn-facebook">
+    						<i class="fa fa-facebook"></i> Sign in with Facebook
+ 						</a>
+					</div>
+					<div class="col-md-3">
+						<a class="btn btn-block btn-social btn-google">
+    						<i class="fa fa-google"></i> Sign in with Google
+ 						</a>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-warning">
+				<div class="panel-heading cred"><span class="cred">Or Enter Your Login Credentials</span></div>
 				<div class="panel-body">
 					@if (count($errors) > 0)
 						<div class="alert alert-danger">
@@ -52,7 +82,12 @@
 								<a class="btn btn-link" href="{{ url('/password/email') }}">Forgot Your Password?</a>
 							</div>
 						</div>
+
 					</form>
+					<br>
+						<div>
+
+						</div>
 				</div>
 			</div>
 		</div>

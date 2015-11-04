@@ -6,7 +6,7 @@ use App\User;
 use App\Ranking;
 
 Route::get('/', 'WelcomeController@index');
-Route::get('home', ['middleware' => 'auth.player','uses' => 'HomeController@index']);
+Route::get('home', ['uses' => 'HomeController@index']);
 
 Route::group(['namespace' => 'Admin', 'prefix' =>'admin'], function()
 {
@@ -57,53 +57,53 @@ Route::bind('participants', function($value, $route){
 Route::group(['namespace' => 'Users', 'prefix' => 'users/{user_id}'], function()
 {
 	/* Personal Info */
-	Route::get('info/show',  array('as' =>'user-show-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@show'));
-	Route::get('info/name/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_name'));
-	Route::get('info/email/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_email'));
-	Route::get('info/phone/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_phone'));
-	Route::get('info/address/edit',  array('as' =>'user-edit-info', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_address'));
-	Route::get('info/link-usar/show',  array('as' =>'show-link-usar', 'middleware' => 'auth', 'uses' => 'UserInfoController@show_linkUsar'));
-	Route::post('info/link-usar/edit',  array('as' =>'edit-link-usar', 'middleware' => 'auth', 'uses' => 'UserInfoController@edit_linkUsar'));
+	Route::get('info/show',  array('as' =>'user-show-info', 'uses' => 'UserInfoController@show'));
+	Route::get('info/name/edit',  array('as' =>'user-edit-info', 'uses' => 'UserInfoController@edit_name'));
+	Route::get('info/email/edit',  array('as' =>'user-edit-info', 'uses' => 'UserInfoController@edit_email'));
+	Route::get('info/phone/edit',  array('as' =>'user-edit-info', 'uses' => 'UserInfoController@edit_phone'));
+	Route::get('info/address/edit',  array('as' =>'user-edit-info', 'uses' => 'UserInfoController@edit_address'));
+	Route::get('info/link-usar/show',  array('as' =>'show-link-usar', 'uses' => 'UserInfoController@show_linkUsar'));
+	Route::post('info/link-usar/edit',  array('as' =>'edit-link-usar', 'uses' => 'UserInfoController@edit_linkUsar'));
 
 	/* Preferences */
-	Route::get('preferences',  array('as' =>'user-edit-pref', 'middleware' => 'auth', 'uses' => 'Users\UserPreferencesController@edit'));
+	Route::get('preferences',  array('as' =>'user-edit-pref', 'uses' => 'Users\UserPreferencesController@edit'));
 });
 
 ##### Players #####################
 Route::group(['prefix' => 'players/{players}'], function()
 {
-	Route::get('tournaments', array('as' => 'player.tournaments', 'middleware' => 'auth', 'uses' => 'PlayersController@getTournaments'));
+	Route::get('tournaments', array('as' => 'player.tournaments', 'uses' => 'PlayersController@getTournaments'));
 	#Route::get('biography', 'Users\UserAccountController@show');
 
-	Route::get('tournaments', array('as' => 'player.tournaments', 'middleware' => 'auth',  'uses' => 'PlayersController@getTournaments'));
-	Route::get('biography', array('as' => 'player.bio', 'middleware' => 'auth', 'uses' => 'PlayersController@getBio'));
+	Route::get('tournaments', array('as' => 'player.tournaments', 'uses' => 'PlayersController@getTournaments'));
+	Route::get('biography', array('as' => 'player.bio', 'uses' => 'PlayersController@getBio'));
 	#Route::get('biography', 'PlayersProfileController@getBio');
 
 	/************   Journal  ***********/
-	Route::get('evaluation/invite', array('as' => 'evaluation.invite',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@invite'));
-	Route::post('evaluation/invite', array('as' => 'evaluation.invite.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@request'));
+	Route::get('evaluation/invite', array('as' => 'evaluation.invite', 'uses' => 'PlayersEvaluationController@invite'));
+	Route::post('evaluation/invite', array('as' => 'evaluation.invite.update', 'uses' => 'PlayersEvaluationController@request'));
 
-	Route::get('journal/', array('middleware' => 'auth', 'uses' => 'PlayersJournalController@index'));
-	Route::get('journal/{entry}', array('middleware' => 'auth', 'uses' => 'PlayersJournalController@show'));
+	Route::get('journal/', array('uses' => 'PlayersJournalController@index'));
+	Route::get('journal/{entry}', array('uses' => 'PlayersJournalController@show'));
 	# Evaluations
-	Route::get('journal/{entry}/evaluation/{target}/', array('middleware' => 'auth', 'uses' => 'PlayersEvaluationController@index'));
-	Route::get('journal/{entry}/evaluation/{target}/{creator}/create', array('as' => 'evaluation.create', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@create'));
-	Route::post('journal/{entry}/evaluation/{target}/{creator}',  array('as' => 'evaluation.store', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@store'));
-	Route::get('journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}', array('as' => 'evaluation.show', 'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@show'));
-	Route::get('journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.edit',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@edit'));
-	Route::post('journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.update',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@update'));
+	Route::get('journal/{entry}/evaluation/{target}/', array('uses' => 'PlayersEvaluationController@index'));
+	Route::get('journal/{entry}/evaluation/{target}/{creator}/create', array('as' => 'evaluation.create', 'uses' => 'PlayersEvaluationController@create'));
+	Route::post('journal/{entry}/evaluation/{target}/{creator}',  array('as' => 'evaluation.store', 'uses' => 'PlayersEvaluationController@store'));
+	Route::get('journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}', array('as' => 'evaluation.show', 'uses' => 'PlayersEvaluationController@show'));
+	Route::get('journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.edit', 'uses' => 'PlayersEvaluationController@edit'));
+	Route::post('journal/{entry}/evaluation/{target}/{creator}/{evaluation_id}/edit', array('as' => 'evaluation.update', 'uses' => 'PlayersEvaluationController@update'));
 
 	# Opponents
 	Route::group(['prefix' => 'journal/{entry}'], function()
 	{
 		Route::get('opponent', 'PlayersOpponentController@index');
-		Route::get('opponent/create', array('as' => 'opponent.create',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@create'));
-		Route::get('opponent/{target_id}', array('as' => 'opponent.evaluation.store',  'middleware' => 'auth', 'uses' => 'PlayersEvaluationController@store'));
-		Route::post('opponent',  array('as' => 'opponent.store',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@store'));
-		Route::get('opponent/{player_id}', array('as' => 'opponent.show',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@show'));
-		Route::get('opponent/{player_id}/edit', array('as' => 'opponent.edit',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@edit'));
-		Route::post('opponent/{player_id}/edit', array('as' => 'opponent.update', 'middleware' => 'auth',  'uses' => 'PlayersOpponentController@update'));
-		Route::get('opponent/{player_id}/evaluate', array('as' => 'opponent.update',  'middleware' => 'auth', 'uses' => 'PlayersOpponentController@evaluate'));
+		Route::get('opponent/create', array('as' => 'opponent.create', 'uses' => 'PlayersOpponentController@create'));
+		Route::get('opponent/{target_id}', array('as' => 'opponent.evaluation.store', 'uses' => 'PlayersEvaluationController@store'));
+		Route::post('opponent',  array('as' => 'opponent.store', 'uses' => 'PlayersOpponentController@store'));
+		Route::get('opponent/{player_id}', array('as' => 'opponent.show', 'uses' => 'PlayersOpponentController@show'));
+		Route::get('opponent/{player_id}/edit', array('as' => 'opponent.edit', 'uses' => 'PlayersOpponentController@edit'));
+		Route::post('opponent/{player_id}/edit', array('as' => 'opponent.update', 'uses' => 'PlayersOpponentController@update'));
+		Route::get('opponent/{player_id}/evaluate', array('as' => 'opponent.update', 'uses' => 'PlayersOpponentController@evaluate'));
 	});
 });
 
@@ -113,8 +113,6 @@ Route::resource('players', 'PlayersController');
 Route::resource('tournaments', 'TournamentsController');
 Route::resource('tournaments.participants', 'ParticipantsController');
 Route::resource('tournaments.divisions', 'DivisionsController');
-//Route::resource('tournaments.divisions.participaints', 'ParticipantsController');
-
 
 // Socialites (facebook)
 

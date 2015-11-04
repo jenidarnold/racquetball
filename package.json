@@ -1,7 +1,21 @@
 {
+<<<<<<< HEAD
   "private": true,
   "devDependencies": {
     "gulp": "^3.8.8",
     "laravel-elixir": "*"
+=======
+  "name": "bootstrap-social",
+  "version": "4.10.1",
+  "main": "bootstrap-social.css",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lipis/bootstrap-social.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "~3",
+    "font-awesome": "~4.4"
+>>>>>>> 9d5ca4cd624e6a6f723a4a560b0c48c6cc22b90f
   }
 }

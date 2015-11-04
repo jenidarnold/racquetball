@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 /vendor
 /node_modules
 .env
+=======
+.DS_Store
+dev
+>>>>>>> 9d5ca4cd624e6a6f723a4a560b0c48c6cc22b90f

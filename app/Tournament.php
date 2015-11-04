@@ -26,22 +26,39 @@ class Tournament extends Model {
 	 */
 	// protected $hidden = ['password', 'remember_token'];
 
+	/**
+	 * [participants description]
+	 * @return [type] [description]
+	 */
 	public function participants() {
 
 		return $this->hasMany('App\Participant', 'tournament_id', 'tournament_id');
 	}
 
-
+	/**
+	 * [divisions description]
+	 * @return [type] [description]
+	 */
 	public function divisions() {
 
 		return $this->hasMany('App\TournamentDivision', 'tournament_id', 'tournament_id');
 	}
 
+	/**
+	 * [matches description]
+	 * @return [type] [description]
+	 */
 	public function matches() {
 
 		return $this->hasMany('App\Match', 'tournament_id', 'tournament_id');
 	}
 
+	/**
+	 * [getMatches description]
+	 * @param  [type] $tournament_id [description]
+	 * @param  [type] $player_id     [description]
+	 * @return [type]                [description]
+	 */
 	public function getMatches($tournament_id, $player_id) {
 
 		$m = \DB::table('matches')

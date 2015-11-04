@@ -14,6 +14,16 @@ use Illuminate\Http\Request;
 class MatchupsController extends Controller {
 
 	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+
+	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
@@ -21,7 +31,10 @@ class MatchupsController extends Controller {
 	public function index()
 	{
 	
-		$players = Player::orderby('last_name')->orderby('first_name')->get();
+		$players = Player::orderby('last_name')
+			->orderby('first_name')
+			->get();
+			
 		$players_list = $players->lists('last_first_name', 'player_id');
 		
 		$player1 = (object)	['player_id' => '-1'];
@@ -57,7 +70,7 @@ class MatchupsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Request $request)
+	public function show(Request $request, Vote $votes)
 	{
 		
 		$player1ID = Input::get('ddlPlayer1');
@@ -77,10 +90,7 @@ class MatchupsController extends Controller {
 		$skills = Skill::orderby('skill_id')
 			->get();
 
-		$votes = new Vote();
 		$voter_id = \Auth::user()->id;
-
-
 
 		return view('pages/matchups.show', compact('players_list', 'player1', 'player2', 'head2head', 'skills', 'votes', 'voter_id'));
 	}
