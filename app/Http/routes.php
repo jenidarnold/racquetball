@@ -151,18 +151,44 @@ Route::get('api/profile/image', function(){
 	return $profile;
 });
 
-Route:get('api/rankings/history', function(){
+Route::get('api/rankings/history', function(){
 	$player_id = (int)Input::get('player_id');
 	$location_id = (int)Input::get('location_id');
 
 	
 	$rankings = Ranking::where('player_id', '=', $player_id)
-		->select('ranking_date', 'ranking')
+		->select('ranking_date',  'location_id', 'ranking')
 		->orderBy('ranking_date')
 		->get();
 
-	//dd($rankings);
-	return Response::json($rankings);
+//return Response::json($rankings);
+ 	$national = [
+ 				[ "ranking_date"=> "1/1/2015", "National"=> 233 ], 
+	 		    [ "ranking_date"=> "2/1/2015", "National"=> 203 ], 
+	 		    [ "ranking_date"=> "3/1/2015", "National"=> 194 ], 
+	 		    [ "ranking_date"=> "4/1/2015", "National"=> 187],
+ 		     ];
+ 	$state = [
+ 				[ "ranking_date"=> "1/1/2015",  "Texas"=> 33], 
+	 		    [ "ranking_date"=> "2/1/2015",  "Texas"=> 27], 
+	 		    [ "ranking_date"=> "3/1/2015",  "Texas"=> 15], 
+	 		    [ "ranking_date"=> "4/1/2015",  "Texas"=> 10],
+ 		     ];
+
+ 	$compare = [
+ 				[ "ranking_date"=> "1/1/2015", "You"=> 233,  "Other1"=> 222, "Other2"=> 215], 
+	 		    [ "ranking_date"=> "2/1/2015", "You"=> 203 , "Other1"=> 215, "Other2"=> 208], 
+	 		    [ "ranking_date"=> "3/1/2015", "You"=> 194 , "Other1"=> 226, "Other2"=> 199], 
+	 		    [ "ranking_date"=> "4/1/2015", "You"=> 187,  "Other1"=> 230, "Other2"=> 189],
+ 		     ];
+
+ 	$rankings = [
+ 					"National" => $national,
+ 				  	"State" => $state,
+ 				  	"Compare" => $compare
+ 				];
+ 				
+	return $rankings;
 });
 
 Route::get('api/vote/castvote', function(){

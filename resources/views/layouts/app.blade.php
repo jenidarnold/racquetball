@@ -6,6 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Racquetball Hub</title>
 
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Josefin+Slab">	
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/jchartfx/jchartfx.userInterface.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/jchartfx/Attributes/jchartfx.attributes.css') }}" rel="stylesheet">
@@ -116,8 +118,8 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
                 @if (Auth::guest())
-                    <li><a class="navbar-link" href="{{ url('/demo') }}"> 
-                        <i class="fa fa-home" style="color:black1"></i> Demo</a></li>
+                    <!--li><a class="navbar-link" href="{{ url('/demo') }}"> 
+                        <i class="fa fa-home" style="color:black1"></i> Demo</a></li-->
                 @else
 					<li><a class="navbar-link" href="{{ url('/') }}"> 
 						<i class="fa fa-home" style="color:black1"></i> Home</a></li>

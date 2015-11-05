@@ -68,6 +68,7 @@
 			<table class="table">
 				<thead>
 					<th>Profile</th>
+					<th>ID</th>
 					<th>First Name</th>
 					<th>Last Name</th>
 					<th>Gender</th>
@@ -83,6 +84,7 @@
 								<img class='img-profile img-thumbnail' style="width:100px" src='/images/racquet-right.png'>
 							@endif
 						</td>
+						<td>{{ $player->player_id }}  </td>
 						<td>{{ $player->first_name }}  </td>
 						<td>{{ $player->last_name }}  </td>
 						<td>{{ $player->gender }}</td>
