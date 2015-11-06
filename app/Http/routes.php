@@ -3,7 +3,9 @@
 use App\Vote;
 use App\Scraper;
 use App\User;
+use App\Player;
 use App\Ranking;
+use App\Location;
 
 Route::get('/', 'WelcomeController@index');
 Route::get('home', ['uses' => 'HomeController@index']);
@@ -153,41 +155,174 @@ Route::get('api/profile/image', function(){
 
 Route::get('api/rankings/history', function(){
 	$player_id = (int)Input::get('player_id');
+	$group_id = Input::get('group_id');	
 	$location_id = (int)Input::get('location_id');
+	$location = Location::find($location_id);
+	$player = Player::find($player_id);
 
-	
 	$rankings = Ranking::where('player_id', '=', $player_id)
 		->select('ranking_date',  'location_id', 'ranking')
 		->orderBy('ranking_date')
 		->get();
 
-//return Response::json($rankings);
- 	$national = [
- 				[ "ranking_date"=> "1/1/2015", "National"=> 233 ], 
-	 		    [ "ranking_date"=> "2/1/2015", "National"=> 203 ], 
-	 		    [ "ranking_date"=> "3/1/2015", "National"=> 194 ], 
-	 		    [ "ranking_date"=> "4/1/2015", "National"=> 187],
- 		     ];
- 	$state = [
- 				[ "ranking_date"=> "1/1/2015",  "Texas"=> 33], 
-	 		    [ "ranking_date"=> "2/1/2015",  "Texas"=> 27], 
-	 		    [ "ranking_date"=> "3/1/2015",  "Texas"=> 15], 
-	 		    [ "ranking_date"=> "4/1/2015",  "Texas"=> 10],
- 		     ];
+	/*National Ranking*/
+	$national = Ranking::where('player_id', '=', $player_id)
+		->where('location_id', '=', 0)
+		->select('ranking_date',  'ranking')
+		->orderBy('ranking_date')
+		->get();
 
- 	$compare = [
- 				[ "ranking_date"=> "1/1/2015", "You"=> 233,  "Other1"=> 222, "Other2"=> 215], 
-	 		    [ "ranking_date"=> "2/1/2015", "You"=> 203 , "Other1"=> 215, "Other2"=> 208], 
-	 		    [ "ranking_date"=> "3/1/2015", "You"=> 194 , "Other1"=> 226, "Other2"=> 199], 
-	 		    [ "ranking_date"=> "4/1/2015", "You"=> 187,  "Other1"=> 230, "Other2"=> 189],
- 		     ];
+	$query = "
+		SELECT 
+			date_format(ranking_date, '%m/%d/%Y') as ranking_date,
+			ranking
+		FROM
+			rankings
+		WHERE
+			player_id = $player_id
+			AND location_id = 0
+			AND group_id = $group_id
+		ORDER BY 
+			ranking_date
+		";
 
+	$national = \DB::select(DB::raw($query)); 
+	$arr_national = array();
+	foreach ($national as $key => $n) {
+		$row = array();
+		$row['ranking_date'] = $n->ranking_date;
+		$row['National'] = intval($n->ranking);
+		array_push($arr_national, $row);
+	}
+
+
+	//dd($player);
+
+	/*State Ranking*/
+	$query = "
+		SELECT 
+			date_format(ranking_date, '%m/%d/%Y') as ranking_date,
+			ranking
+		FROM
+			rankings
+		WHERE
+			player_id = $player_id
+			AND group_id = $group_id
+			AND location_id = $location_id
+		ORDER BY 
+			ranking_date
+		";
+
+	$state = \DB::select(DB::raw($query)); 
+	$arr_state = array();
+	foreach ($state as $key => $n) {
+		$row = array();
+		$row['ranking_date'] = $n->ranking_date;
+		$row["$location->location"] = intval($n->ranking);
+		array_push($arr_state, $row);
+	}
+
+	/*Compare closest 3 rankings */
+    /*get compare player ranking above*/
+	$query_player1_id = "
+		SELECT 
+			player_id
+		FROM
+			rankings
+		WHERE
+			location_id = $location_id
+			AND group_id = $group_id
+			and ranking < $player->state_rank
+		ORDER BY 
+			ranking_date DESC, ranking DESC
+		LIMIT 1
+		";
+	$compare_player_1 = Player::find(\DB::select(DB::raw($query_player1_id))[0]->player_id);
+
+    /*get compare2 id */
+    /*get compare player ranking below*/
+
+	$query_player2_id = "
+		SELECT 
+			player_id
+		FROM
+			rankings
+		WHERE
+			location_id = $location_id
+			AND group_id = $group_id
+			and ranking > $player->state_rank
+		ORDER BY 
+			ranking_date DESC, ranking 
+		LIMIT 1
+		";
+
+	$compare_player_2 = Player::find(\DB::select(DB::raw($query_player2_id))[0]->player_id);
+
+    /*get comare 1 player history */
+	$query_compare = "
+		SELECT 
+			*
+		FROM
+			(
+				SELECT 
+					date_format(ranking_date, '%m/%d/%Y') as ranking_date,
+					ranking as my_ranking
+				FROM
+					rankings
+				WHERE
+					player_id = $player_id
+					AND group_id = $group_id
+					AND location_id = $location_id
+			) as p1
+		INNER JOIN
+			(
+				SELECT 
+					date_format(ranking_date, '%m/%d/%Y') as ranking_date,
+					ranking as c1_ranking
+				FROM
+					rankings
+				WHERE
+					player_id = $compare_player_1->player_id
+					AND group_id = $group_id
+					AND location_id = $location_id
+			) as p2
+		ON p1.ranking_date = p2.ranking_date
+		INNER JOIN
+			(
+				SELECT 
+					date_format(ranking_date, '%m/%d/%Y') as ranking_date,
+					ranking as c2_ranking
+				FROM
+					rankings
+				WHERE
+					player_id = $compare_player_2->player_id
+					AND group_id = $group_id
+					AND location_id = $location_id
+			) as p3 
+		ON p2.ranking_date = p3.ranking_date	
+		ORDER BY 
+			p1.ranking_date
+		";
+
+
+	$compare = \DB::select(DB::raw($query_compare)); 
+
+	$arr_compare = array();
+	/* Add players history*/
+	foreach ($compare as $key => $n) {
+		$row = array();
+		$row['ranking_date'] = $n->ranking_date;
+		$row["$compare_player_1->first_name"] = intval($n->c1_ranking);
+		$row["$player->first_name"] = intval($n->my_ranking);
+		$row["$compare_player_2->first_name"] = intval($n->c2_ranking);
+		array_push($arr_compare, $row);
+	}
+	
  	$rankings = [
- 					"National" => $national,
- 				  	"State" => $state,
- 				  	"Compare" => $compare
- 				];
- 				
+		"National" => $arr_national,
+	  	"State" => $arr_state,
+	  	"Compare" => $arr_compare
+	];
 	return $rankings;
 });
 

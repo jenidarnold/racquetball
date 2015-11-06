@@ -109,14 +109,19 @@
 				el.addClass('active');
 			});
 							
-	  		var player_id = 192412;
-	  		var location_id =1;
-	  		var state = 'Texas';
-	  		var rankings;
+	  		var player_id = {{ $player->player_id }};
+	  		var location_id = {{ $player->state_id }};
+	  		var gender = '{{ $player->gender }}';
+	  		var group_id =1;
+
+	  		if (gender.toLowerCase() == 'female') {
+	  			group_id =2;
+	  		} 
+
 
 	  		$.ajax({
 	            url: '{{ URL::to('api/rankings/history') }}',
-	            data: 'player_id=' + player_id + '&location_id=' + location_id,
+	            data: 'player_id=' + player_id + '&location_id=' + location_id + '&group_id=' + group_id,
 	            type: "GET",
 	            contentType: "application/json; charset=utf-8",
 	            dataType : "json",
@@ -126,27 +131,28 @@
 	               compare = result["Compare"];
 
 	               $("div", ".divNational").init(function(){
-				        chart1 = new cfx.Chart();
-				        chart1.setGallery(cfx.Gallery.Lines);
+				        chartNational = new cfx.Chart();
+				        chartNational.setGallery(cfx.Gallery.Lines);		
+						chartNational.getAxisY().getDataFormat().setFormat(cfx.AxisFormat.Number);
 		          		var divHolder = document.getElementById('divNational');
-		          		chart1.setDataSource(national);
-		          		chart1.create(divHolder);
+		          		chartNational.setDataSource(national);
+		          		chartNational.create(divHolder);
 				    });
 
 	               $("div", ".divState").init(function(){
-				        chart1 = new cfx.Chart();
-				        chart1.setGallery(cfx.Gallery.Lines);
+				        chartState = new cfx.Chart();
+				        chartState.setGallery(cfx.Gallery.Lines);
 		          		var divHolder = document.getElementById('divState');
-		          		chart1.setDataSource(state);
-		          		chart1.create(divHolder);
+		          		chartState.setDataSource(state);
+		          		chartState.create(divHolder);
 				    });
 
 	               $("div", ".divCompare").init(function(){
-				        chart1 = new cfx.Chart();
-				        chart1.setGallery(cfx.Gallery.Lines);
+				        chartCompare = new cfx.Chart();
+				        chartCompare.setGallery(cfx.Gallery.Lines);
 		          		var divHolder = document.getElementById('divCompare');
-		          		chart1.setDataSource(compare);
-		          		chart1.create(divHolder);
+		          		chartCompare.setDataSource(compare);
+		          		chartCompare.create(divHolder);
 				    });
 	            },
 	            error: function (xhr, txt, err) {
