@@ -51,9 +51,9 @@
 								{!! Form::open(array('class' => 'form-inline', 'role' => 'form')) !!}
 									<div class="form-group" style="padding-bottom:10px">
 										<span class='lbl-player text-primary' style='font-weight:600; font-size:18pt'>Player 1</span>
-										{!! Form::select('ddlPlayer1', $players_list, $player1->player_id, array('class' => 'player form-control', 'style' => 'font-weight:300; font-size:12pt; width:250px' )) !!}	
+										{!! Form::select('ddlPlayer1', $players_list, $player1->player_id, array('class' => 'player1 form-control', 'style' => 'font-weight:300; font-size:12pt; width:250px' )) !!}	
 										{!! Form::submit('Vs', array('class' =>'btn btn-sm btn-success', 'style' => 'font-style:italic; font-weight:300; font-size:14pt')) !!}	
-										{!! Form::select('ddlPlayer2', $players_list, $player2->player_id, array('class' => 'player form-control', 'style' => 'font-weight:300; font-size:12pt; width:250px;text-align:center' )) !!}	
+										{!! Form::select('ddlPlayer2', $players_list, $player2->player_id, array('class' => 'player2 form-control', 'style' => 'font-weight:300; font-size:12pt; width:250px;text-align:center' )) !!}	
 										<span class='lbl-player text-primary' style='font-weight:600; font-size:18pt;'>Player 2</span>
 									</div>																		
 								{!! Form::close() !!}	
@@ -73,8 +73,17 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 <script type="text/javascript">
+	$(document).ready(function(){           
+        $(".player1").select2({
+        	placeholder: "Select a Player",
+        	allowClear: true,    	 	
+        });	
+        $(".player1").select2("val", "");
 
-        $(document).ready(function(){           
-            $(".player").select2();	
+    	$(".player2").select2({
+        	placeholder: "Select a Player",
+        	allowClear: true,    	 	
         });
+        $(".player2").select2("val", "");
+    });
 </script>

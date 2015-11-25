@@ -96,12 +96,13 @@
 			<div id="divCompare" class="rankings"></div>
 		</div>
 	</div>
-</div>			
+</div>	
+
 @stop
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="{{ asset('/js/jchartfx/jchartfx.system.js')}}"></script>
     <script src="{{ asset('/js/jchartfx/jchartfx.coreVector.js')}}"></script>
-<script type="text/javascript">
+	<script type="text/javascript">
 		$(document).ready(function(){
 			//Vote Percentage color-code
 			$('#li-profile').init(function(){	
@@ -112,12 +113,11 @@
 	  		var player_id = {{ $player->player_id }};
 	  		var location_id = {{ $player->state_id }};
 	  		var gender = '{{ $player->gender }}';
-	  		var group_id =1;
+	  		var group_id =1; //Male
 
 	  		if (gender.toLowerCase() == 'female') {
 	  			group_id =2;
 	  		} 
-
 
 	  		$.ajax({
 	            url: '{{ URL::to('api/rankings/history') }}',

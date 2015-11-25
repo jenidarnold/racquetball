@@ -15,7 +15,8 @@ class UserInfoController extends Controller {
 	 */
 	public function __construct()
 	{
-		$this->middleware('auth');
+		//$this->middleware('auth');
+		$this->middleware('cors');
 	}
 	
 	/**
@@ -60,7 +61,6 @@ class UserInfoController extends Controller {
 	public function show_linkUsar($user_id)
 	{	
 		$user = User::find($user_id);
-
 		return view('pages/users.info.show_link-usar', compact('user'));
 	}
 
@@ -72,18 +72,13 @@ class UserInfoController extends Controller {
 	 */
 	public function edit_linkUsar($user_id)
 	{	
-		$user = User::find($user_id);
 
+		$user = User::find($user_id);
 		$username = Input::get("username");
 		$password = Input::get("password");
-
-
 		$user->link_Usar($user_id, $username, $password);
-
-
 		return view('pages/users.info.show_link-usar', compact('user'));
 	}
-
 
 	/**
 	 * Display the specified resource.
@@ -93,14 +88,9 @@ class UserInfoController extends Controller {
 	 */
 	public function show($user_id)
 	{
-		
-
 		$user = User::find($user_id);
-
-
 		return view('pages/users.info.show', compact('user'));
 	}
-
 
 	/**
 	 * Show the form for editing the specified resource.
@@ -109,8 +99,7 @@ class UserInfoController extends Controller {
 	 * @return Response
 	 */
 	public function edit_name($user_id)
-	{
-		
+	{		
 		return view('pages/users.info.edit_name', compact('user'));
 	}
 
@@ -121,8 +110,7 @@ class UserInfoController extends Controller {
 	 * @return Response
 	 */
 	public function edit_phone($user_id)
-	{
-		
+	{		
 		return view('pages/users.info.edit_phone', compact('user'));
 	}
 
@@ -133,8 +121,7 @@ class UserInfoController extends Controller {
 	 * @return Response
 	 */
 	public function edit_email($user_id)
-	{
-		
+	{		
 		return view('pages/users.info.edit_email', compact('user'));
 	}
 
@@ -145,8 +132,7 @@ class UserInfoController extends Controller {
 	 * @return Response
 	 */
 	public function edit_address($user_id)
-	{
-		
+	{		
 		return view('pages/users.info.edit_address', compact('user'));
 	}
 	/**

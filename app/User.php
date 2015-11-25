@@ -1,6 +1,10 @@
 <?php namespace App;
 
-use Gidlov\Copycat\Copycat;
+use Guzzlehttp;
+use GuzzleHttp\Message\Request;
+use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Cookie\FileCookieJar;
+//use Gidlov\Copycat\Copycat;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -37,69 +41,40 @@ class User extends Model implements AuthenticatableContract,
 	 */
 	protected $hidden = ['password', 'remember_token'];
 
+	/**
+	 * [link_Usar description]
+	 * @param  [type] $userId   [description]
+	 * @param  [type] $username [description]
+	 * @param  [type] $password [description]
+	 * @return [type]           [description]
+	 */
 	public static function link_Usar($userId, $username, $password) {
+		//file to store cookie data
+		$cookieFile = '/var/www/racquetball/jar.txt';
+		$jar = new FileCookieJar($cookieFile, true);
 
-		$postinfo = "userName=".$username."&password=".$password;
-	 	$url = 'https://www.r2sports.com/membership/login.asp';
-	 	//$url = 'https://www.r2sports.com/membership/loginCheck.asp?TID=&sportOrganizationID=0&returnToRefPage=&directorID=';
+		$url = 'https://www.r2sports.com/';
 
-	 /*	$cc = new CopyCat;
-	 	$cc->setCurl(array(
-	 		CURLOPT_RETURNTRANSFER => 1,
-	 		CURLOPT_CONNECTTIMEOUT => 5,
-	 		CURLOPT_HTTPHEADER, "Content-Type: text/html; charset=iso-8859-1",
-	 		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
-	 		CURLOPT_SSL_VERIFYPEER => 0,
-            CURLOPT_FOLLOWLOCATION => 1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-			CURLOPT_POST => 1, 
-			CURLOPT_POSTFIELDS => $postinfo,
-	 	));
+		// Need to add the token to the header?
+		//X-CSRF-Token: [token]
+	 	// Create a client with a base URI
+		$client = new \GuzzleHttp\Client(['base_uri' => $url, 'cookies' => $jar ]);
+		// Send a request to https://foo.com/api/test
+		$response = $client->request('GET', 'membership/loginCheck.asp?TID=&sportOrganizationID=0&returnToRefPage=&directorID=', [
+			'form_params' => [
+				'userName' => $username,
+				'password' => $password
+				]			
+		]);
 
-	 	$cc->match(
-	 				array(
-	 					'player_id' => '/(?:.*?)&UID=(.*?)&/s',	
-	 				))
- 			->URLS($url);
-	 	$result = $cc->get();
+		//dd($response);
+		//$body = $response->getBody();
 
-	 	dd($cc);
-		*/
+		//echo $header;
+		//echo $body;
 
-	 	// set HTTP header
-		$headers = array(
-		    'Content-Type: application/json'
-		);
-
-		// set POST params
-		$fields = array(
-		    'userName' => $username,
-		    'password' => $password,
-		);
-		$url = 'https://www.r2sports.com/membership/login.asp';
-
-		// Open connection
-		$ch = curl_init();
-
-		// Set the url, number of POST vars, POST data
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
-
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-
-		// Execute post
-		$result = curl_exec($ch);
-
-		// Close connection
-		curl_close($ch);
-		$result_arr = json_decode($result, true);
-
-	 	dd($result_arr);
 	}
-
+		  
 	/**
 	 * User's permissions
 	 *

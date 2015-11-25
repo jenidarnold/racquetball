@@ -107,14 +107,13 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 <script type="text/javascript">
+    $(document).ready(function(){           
+        $(".player").select2({
+        	placeholder: "Select a Player",
+        	allowClear: true,
+    	 	
+        });	
 
-        $(document).ready(function(){           
-            $(".player").select2({
-            	placeholder: "Select a Player",
-            	allowClear: true,
-        	 	
-            });	
-
-            $(".player").select2("val", "");
-        });
+        $(".player").select2("val", "");
+    });
 </script>

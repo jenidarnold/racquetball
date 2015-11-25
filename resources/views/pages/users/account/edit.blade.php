@@ -40,7 +40,7 @@
 			<label class="describe">Edit your Username and Password</label>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row" id="vueapp">
 		<div class="col-md-6 col-md-offset-3">			
 			<div class="user-form panel panel-default box-shadow--2dp">				
 				{!! Form::model($user, array('route' => array('users.update', $user->id), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'PUT')) !!}
@@ -54,25 +54,54 @@
 					<div class="form-group">
 						<label class="col-md-5 control-label">New Password:</label>
 						<div class="col-md-6">
-							<input type="password" class="form-control" name="password">
+							<input type="password" class="form-control" name="password" v-model="password">
 						</div>
 					</div>	
 					<div class="form-group">
 						<label class="col-md-5 control-label">Confirm Password:</label>
 						<div class="col-md-6">
-							<input type="password" class="form-control" name="password">
+							<input type="password" class="form-control" name="password" v-model="confirm">
 						</div>
 					</div>			
 					<div class="form-group">
 						<div class="col-md-6 col-md-offset-3">
-							{!!  Form::submit('Submit', array('class' => 'btn btn-success')) !!}
-							<button type="button" class="btn btn-warning">Cancel</button>
+							{!!  Form::submit('Submit', array('class' => 'btn btn-success',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}
+							<button type="button" class="btn btn-warning" v-show="!error" @click ="cancelled">Cancel</button>
 						</div>
+					</div>
+					<div class="alert alert-danger" v-show="password != '' && confirm != '' && (password != confirm)" v-model="error">
+					  	Passwords do not match. Please re-enter.
 					</div>
 				{!! Form::close() !!}		
 					
+				<!--pre>
+					@{{ $data |  json}}
+				</pre-->	
 			</div>
 		</div>
 	</div>
 </div>
+@stop
+@section('script')
+	<!--script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.1/vue.min.js"></script-->
+	<script type="text/javascript">
+		new Vue({
+			el:  '#vueapp',
+			data:  {
+				password: '',
+				confirm: '',
+				error: '',
+			},
+			methods: {
+				submitted: function() {
+					alert('handle submitted; used for calling ajax for example');
+				},
+				cancelled: function() {
+					alert('cancelled');
+				},
+			}
+
+		});
+	</script>
+	@parent
 @stop

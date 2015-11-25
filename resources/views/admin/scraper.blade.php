@@ -1,5 +1,17 @@
 @extends('layouts.app')
 
+@section('style')
+	<style type="text/css">
+		.player{
+			width:300px;
+		}
+		.tournament{
+			width:600px;
+		}
+		
+		
+	</style>
+@stop
 @section('content')
 <div class="container-fluid">
 	<div class="row">
@@ -57,7 +69,7 @@
 							{!! Form::Label('ddlTournaments', 'Tournament:', array('id' => 'lblTournament')) !!}
 						</div>
 						<div class="col-md-6 col-md-offset-0">
-							{!! Form::select('tournament_id', $tournaments, null, array('class' => 'form-control')) !!}	
+							{!! Form::select('tournament_id', $tournaments, null, array('class' => 'tournament form-control')) !!}	
 						</div>
 					</div>
 					<div class="row">
@@ -67,7 +79,6 @@
 						</div>					
 						{!! Form::close() !!}
 					</div>
-
 
 					<h3>Player Profiles</h3>
 					<div class="row">
@@ -94,7 +105,7 @@
 							{!! Form::Label('txtMatches', 'Player:', array('id' => 'lblMatches')) !!}
 						</div>
 						<div class="col-md-2 col-md-offset-0">
-							{!! Form::select('player_id', $players, null, array('class' => 'form-control')) !!}	
+							{!! Form::select('player_id', $players, null, array('class' => 'player form-control')) !!}	
 						</div>
 					</div>
 					<div class="row">					
@@ -138,4 +149,22 @@
 		</div>
 	</div>
 </div>
-@endsection
+@stop
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function(){           
+            $(".player").select2({
+            	placeholder: "Select a Player",
+            	allowClear: true,        	 	
+            });	
+            $(".player").select2("val", "");
+
+            $(".tournament").select2({
+            	placeholder: "Select a Tournament",
+            	allowClear: true,        	 	
+            });	
+            $(".tournament").select2("val", "");
+        });
+</script>

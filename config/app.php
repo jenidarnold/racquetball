@@ -185,6 +185,7 @@ return [
 		'Event'     => 'Illuminate\Support\Facades\Event',
 		'File'      => 'Illuminate\Support\Facades\File',
 		'Gate' 		=> 'Illuminate\Support\Facades\Gate',
+		'Guzzle'	=> 'Guzzlehttp\Guzzle',
 		'Hash'      => 'Illuminate\Support\Facades\Hash',
 		'Input'     => 'Illuminate\Support\Facades\Input',
 		'Inspiring' => 'Illuminate\Foundation\Inspiring',

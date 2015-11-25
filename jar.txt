@@ -1,0 +1,1 @@
+[{"Name":"ASPSESSIONIDSWSSARSS","Value":"HLBDLCBCNBLNNELBGNOEJCLF","Domain":"www.r2sports.com","Path":"\/","Max-Age":null,"Expires":null,"Secure":true,"Discard":false,"HttpOnly":false},{"Name":"ASPSESSIONIDQURRCSST","Value":"GPHAJONCKIGPLDGLPJNNPEPK","Domain":"www.r2sports.com","Path":"\/","Max-Age":null,"Expires":null,"Secure":true,"Discard":false,"HttpOnly":false}]

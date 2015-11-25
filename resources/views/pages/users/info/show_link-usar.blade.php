@@ -72,7 +72,7 @@
 						</div>
 					</div>
 					<div class="form-group"> 
-						<div class="alert-info col-sm-6 col-sm-offset-3">Note: We not store your USAR username and password</div>
+						<div class="alert-info col-sm-6 col-sm-offset-3">Note: We do not store your USAR username and password</div>
 					</div>
 				{!! Form::close() !!}							
 			</div>

@@ -7,6 +7,10 @@ use App\Player;
 use App\Ranking;
 use App\Location;
 
+Route::get('vuetest', function(){
+	return view('pages/players/journal/vue');
+});
+
 Route::get('/', 'WelcomeController@index');
 Route::get('home', ['uses' => 'HomeController@index']);
 
@@ -20,6 +24,12 @@ Route::group(['namespace' => 'Admin', 'prefix' =>'admin'], function()
 	Route::get('player', array('as' => 'download_player', 'uses' => 'ScreenScrapeController@player'));
 	Route::get('matches', array('as' => 'download_matches', 'uses' => 'ScreenScrapeController@matches'));
 });
+
+Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
+{
+	Route::get('referee', 'RefereeController@index');
+});
+
 
 Route::get('matchups', 'MatchupsController@index');
 Route::post('matchups', 'MatchupsController@show');
