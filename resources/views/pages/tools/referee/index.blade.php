@@ -79,7 +79,7 @@
 							@{{ player3_name }}
 							<i class="fa fa-circle" 
 								v-bind:class="[faults >= 1? classRed : classBlack]" 
-								v-show="server = player3_num ">
+								v-show="server == player3_num ">
 							</i>
 						</div>
 						<div class="player col-md-1"v-show="isDoubles">/</div>
@@ -106,6 +106,9 @@
 			<div class="col-xs-2">
 				<button v-on:click="fault" class="btn btn-warning">Fault</button>	
 			</div>
+			<div class="col-xs-2">
+				<button v-on:click="undo" class="btn btn-default">Undo</button>	
+			</div>
 		</div>	
 		<div class="row">
 			<div class="col-xs-6 alert alert-success" v-if="winner !=''">
@@ -113,10 +116,9 @@
 				<h2>@{{ winner }}</h3>			
 			</div>
 		</div>
-					
-		 <pre>@{{ $data | json }} </pre> 
-		}
-		}
+		<br/>			
+		<pre>@{{ $data | json }} </pre> 	
+		
 	</div>
 
 	<template id="player-template">
@@ -141,7 +143,6 @@
 				return {
 					scores: [ 0, 0, 0, 0, 0],
 					games: 0,
-
 				}
 			}
 		});		
@@ -153,15 +154,16 @@
 				classLoss: 'loss',
 				classRed: 'red',
 				classBlack: 'black',
-				initServer: 1,
+				initServer: 3,
+				server: 3,
 				max_players: 4, 
-				server: 1,
+				score_steps: [],
 				game: 1,
 				faults: 0,
 				score_max: 11,  // 11 or 15
 				tiebreaker: 7, // 7 or 11
-				game_max: 3,  // 2 or 3
-				total_games: 5,  // 3 or 5
+				game_max: 2,  // 2 or 3
+				total_games: 3,  // 3 or 5
 				win_by: 1, // 1 or 2
 				winner: '',
 				player1_name: 'Missy',
@@ -226,7 +228,9 @@
 
 			methods: {
 				point: function (event){
-					this.faults = 0;					
+					this.faults = 0;
+					this.score_steps.push('point');
+
 					if (this.isTiebreaker){}
 
 					if (this.server < 3) {
@@ -242,8 +246,8 @@
 						this.game+=1;
 						this.team1_games +=1;
 
-						//Change server start of next game
-						this.changeServer();
+						//Change serving Team start of next game
+						this.changeServingTeam();
 					}
 					if ((this.team2_scores[this.game-1].score >= this.score_max) && 
 						((this.team2_scores[this.game-1].score - this.team1_scores[this.game-1].score) >= this.win_by))
@@ -251,7 +255,7 @@
 						this.game+=1;
 						this.team2_games +=1;
 
-						this.changeServer();
+						this.changeServingTeam();
 					}
 
 					if (this.team1_games == this.game_max) {
@@ -262,15 +266,50 @@
 						this.winner = 'The winner is ' + this.player3_name + ' ' + this.player4_name;
 					}
 				},
+				undoPoint: function (event){
+					//restore any faults
+                    this.restoreFault();
+
+                    //checkf if start of new game
+                    if (this.team1_scores[this.game-1].score + this.team2_scores[this.game-1].score ==0) {
+                    	this.game -=1;
+                    	//decrement team_game
+                    	//team1_games -=1;
+                    	//team2_games -=2;
+                    	this.undoServingTeam();
+                    }
+
+                    //remove point
+                    if (this.server < 3) {
+						//this.team1_scores[this.game-1].score -=1;
+					}
+					else {
+						//this.team2_scores[this.game-1].score =1;
+					}
+				},
 				fault: function (event){
 					this.faults +=1;
 
 					if (this.faults == 2 ) {
-						this.faults = 0;
+					    this.score_steps.push('doublefault');
 						this.sideout(event);
+					}else{
+					    this.score_steps.push('fault');
 					};
 				},
+				undoFault: function (event){
+					this.faults = 0;
+				},
+				restoreFault: function(event){ 
+					//restore any faults
+                    last_step = this.score_steps.pop();
+                    if (last_step == 'fault'){
+                    	this.faults = 1;
+                    }
+                    this.score_steps.push(last_step);
+				},
 				sideout: function (event){
+					this.score_steps.push('sideout');
 					this.faults = 0;
 					if (this.isDoubles) {
 						if (this.server == 4 ) {
@@ -289,15 +328,47 @@
 						}
 					};
 				},
+				undoSideout: function (event){				
+					this.restoreFault();
 
-				changeServer: function(event){
+                    if (this.isDoubles) {
+						if (this.server == 1 ) {
+							this.server = 4;
+						}
+						else {
+							this.server -= 1;
+						}
+					}
+					else {
+						if (this.server == 1) {
+							this.server = 3;
+						}
+						else {
+							this.server = 1;
+						}
+					};
+				},
+				changeServingTeam: function(event){
 					//Change server start of next game
 					//tiebreaker
-					if(this.game == this.game_max -1) {
-						//team with highest score serves
-						
+					//					
+					for (var i in this.team2_scores)
+					{
+						//alert(i);
+						t1+= this.team2_scores[i].score;
+						//alert(t1);
 					}
 
+					if(this.game == this.total_games) {
+						var t1;
+						var t2;
+
+						for (var i in this.team2_scores)
+						{
+							t1+= this.team2_scores[i].score;
+						}
+						
+					}
 					//Alternate serving team
 					if (this.initServer == 1) {
 						this.server  = 3;
@@ -306,6 +377,51 @@
 					else{
 						this.server  = 1;
 						this.initServer = 1;
+					}
+					this.score_steps.push('changeServingTeam');
+				},
+				undoServingTeam: function(event){
+					//Change server start of next game
+					//tiebreaker
+					//???				
+					
+					//Alternate serving team
+					if (this.initServer == 1) {
+						this.server  = 3;
+						this.initServer = 3;
+					}
+					else{
+						this.server  = 1;
+						this.initServer = 1;
+					}
+				},
+				undo: function(){
+
+					var last_step = this.score_steps.pop();
+					switch (last_step) {
+						case "point":
+							this.undoPoint();                            
+							break;
+						case "fault":
+							this.undoFaul();					
+							break;
+						case "doublefault":
+							this.faults = 1;
+							last_step = this.score_steps.pop();
+                            if (last_step == 'changeServingTeam'){
+                            	this.undoServingTeam();
+                            }else if(last_step == 'sideout') {
+                            	this.undoSideout();
+                            }	
+
+							break;
+						case "sideout":
+							this.undoSideout();
+							break;
+						case "undo":
+
+							break;						
+
 					}
 				}
 			}
