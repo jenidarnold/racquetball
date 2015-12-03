@@ -19,6 +19,11 @@
 	.score{
 		font-weight: 500;
 		font-size: 14pt;
+		text-align: center;
+	}
+
+	.th-games {
+		text-align: center;
 	}
 	.tr-games{
 		font-weight: 700;
@@ -32,6 +37,9 @@
 	.black{
 		color:black;
 	}
+	.team { 
+		font-size: :14pt;
+	}
 
 
 	</style>
@@ -42,15 +50,34 @@
 <div class="container">
 	<div id="myvue">
 		<div class="row">
+			<div class="panel-body">
+				<form class="form-inline" role="form">
+					<div class="col-xs-6 form-group">
+						<label for="team1" class="control-label" >Team 1</label>
+					    <input class="form-control" id="team1" placeholder="Player 1" v-model="player1_name">
+					    <input class="form-control" placeholder="Player 2" v-model="player2_name">
+					</div>				
+					<div class="col-xs-6 form-group">
+					    <label for="team2" class="control-label" >Team 2</label>
+					    <input class="form-control" id="team2" placeholder="Player 1" v-model="player3_name">
+					    <input class="form-control" placeholder="Player 2" v-model="player4_name">
+					</div>
+					<div class="col-xs-2 form-group">
+					    <button class="btn btn-primary" v-on:click:="createMatch">Create</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
 			<table class="table table-condensed col-md-8">
 				<tr class="tr-games label-info ">
-					<td></td>
-					<td class="col-xs-1">Gm</td>
-					<td class="col-xs-1">1</td>
-					<td class="col-xs-1">2</td>
-					<td class="col-xs-1">3</td>
-					<td class="col-xs-1">4</td>
-					<td class="col-xs-1">5</td>
+					<th></td>
+					<th class="col-xs-1 th-games">Games</th>
+					<th class="col-xs-1 th-games">1</th>
+					<th class="col-xs-1 th-games">2</th>
+					<th class="col-xs-1 th-games">3</th>
+					<th class="col-xs-1 th-games">4</th>
+					<th class="col-xs-1 th-games">5</th>
 				</tr>
 				<tr>
 					<td>
@@ -70,7 +97,9 @@
 							</i>
 						</div>
 					</td>
-					<td></td>
+					<td class="score">
+						<div v-show="game > 1">@{{ team1_games }} </div>
+					</td>
 					<td class="score" v-for="g in team1_scores" v-if="game >= g.gm" v-bind:class="[g.score < score_max && g.gm < game? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} </td>
 				</tr>
 				<tr>
@@ -91,7 +120,9 @@
 							</i>
 						</div>
 					</td>
-					<td></td>
+					<td class="score">
+						<div v-show="game > 1">@{{ team2_games }} </div>
+					</td>
 					<td class="score" v-for="g in team2_scores" v-if="game >= g.gm" v-bind:class="[g.score < score_max && g.gm < game? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} </td>
 				</tr>
 			</table>
@@ -154,8 +185,8 @@
 				classLoss: 'loss',
 				classRed: 'red',
 				classBlack: 'black',
-				initServer: 3,
-				server: 3,
+				initServer: 1,
+				server: 1,
 				max_players: 4, 
 				score_steps: [],
 				game: 1,
@@ -166,10 +197,10 @@
 				total_games: 3,  // 3 or 5
 				win_by: 1, // 1 or 2
 				winner: '',
-				player1_name: 'Missy',
-				player2_name: 'Kaylee',
-				player3_name: 'TJ',
-				player4_name: 'Richie',
+				player1_name: '',
+				player2_name: '',
+				player3_name: '',
+				player4_name: '',
 				player1_num: 1,
 				player2_num: 2,
 				player3_num: 3,
@@ -227,6 +258,9 @@
 			},
 
 			methods: {
+				createMatch: function(event){ 
+					// enable point, sideout, fault, etc
+				},
 				point: function (event){
 					this.faults = 0;
 					this.score_steps.push('point');
@@ -270,8 +304,8 @@
 					//restore any faults
                     this.restoreFault();
 
-                    //checkf if start of new game
-                    if (this.team1_scores[this.game-1].score + this.team2_scores[this.game-1].score ==0) {
+                    //checkf if start of new game, but not the first game
+                    if ((this.game > 1) && (this.team1_scores[this.game-1].score + this.team2_scores[this.game-1].score ==0)) {
                     	this.game -=1;
                     	//decrement team_game
                     	//team1_games -=1;
@@ -281,10 +315,10 @@
 
                     //remove point
                     if (this.server < 3) {
-						//this.team1_scores[this.game-1].score -=1;
+						this.team1_scores[this.game-1].score -=1;
 					}
 					else {
-						//this.team2_scores[this.game-1].score =1;
+						this.team2_scores[this.game-1].score =1;
 					}
 				},
 				fault: function (event){
@@ -305,8 +339,12 @@
                     last_step = this.score_steps.pop();
                     if (last_step == 'fault'){
                     	this.faults = 1;
+                    	this.score_steps.push(last_step);
                     }
-                    this.score_steps.push(last_step);
+                    if (last_step == 'doublefault'){
+                    	this.faults = 1;
+                    }
+                    //this.score_steps.push(last_step);
 				},
 				sideout: function (event){
 					this.score_steps.push('sideout');
@@ -403,7 +441,7 @@
 							this.undoPoint();                            
 							break;
 						case "fault":
-							this.undoFaul();					
+							this.undoFault();					
 							break;
 						case "doublefault":
 							this.faults = 1;
