@@ -40,8 +40,13 @@
 	.team { 
 		font-size: :14pt;
 	}
-
-
+	.form-inline > * {
+	   margin:5px 5px;
+	}
+	.lbl-team {
+		font-weight: 700;
+		font-size: 14pt;
+	}
 	</style>
 @stop
 
@@ -49,109 +54,129 @@
 
 <div class="container">
 	<div id="myvue">
-		<div class="row">
-			<div class="panel-body">
+		<div class="panel panel-primary" v-show="showSetup">			
+			<div class="panel-heading">Setup</div>
+			<div class="panel-body">	
 				<form class="form-inline" role="form">
-					<div class="col-xs-6 form-group">
-						<label for="team1" class="control-label" >Team 1</label>
-					    <input class="form-control" id="team1" placeholder="Player 1" v-model="player1_name">
-					    <input class="form-control" placeholder="Player 2" v-model="player2_name">
-					</div>				
-					<div class="col-xs-6 form-group">
-					    <label for="team2" class="control-label" >Team 2</label>
-					    <input class="form-control" id="team2" placeholder="Player 1" v-model="player3_name">
-					    <input class="form-control" placeholder="Player 2" v-model="player4_name">
-					</div>
-					<div class="col-xs-2 form-group">
-					    <button class="btn btn-primary" v-on:click:="createMatch">Create</button>
+					<div class="row">									
+						<div class="col-xs-12 form-group">
+							<label for="team1" class="control-label lbl-team">Team 1</label>
+						    <input class="form-control" id="team1" placeholder="Player 1" v-model="player1_name">
+						    <input class="form-control" placeholder="Player 2" v-model="player2_name">
+						</div>				
+						<div class="col-xs-12 form-group">
+						    <label for="team2" class="control-label lbl-team">Team 2</label>
+						    <input class="form-control" id="team2" placeholder="Player 1" v-model="player3_name">
+						    <input class="form-control" placeholder="Player 2" v-model="player4_name">
+						</div>						
 					</div>
 				</form>
 			</div>
-		</div>
-		<div class="row">
-			<table class="table table-condensed col-md-8">
-				<tr class="tr-games label-info ">
-					<th></td>
-					<th class="col-xs-1 th-games">Games</th>
-					<th class="col-xs-1 th-games">1</th>
-					<th class="col-xs-1 th-games">2</th>
-					<th class="col-xs-1 th-games">3</th>
-					<th class="col-xs-1 th-games">4</th>
-					<th class="col-xs-1 th-games">5</th>
-				</tr>
-				<tr>
-					<td>
-						<div class="player col-md-3">
-							@{{ player1_name }}
-							<i class="fa fa-circle" 
-								v-bind:class="[faults >= 1? classRed : classBlack]" 
-								v-show="server == player1_num">
-							</i> 
-						</div>
-						<div class="player col-md-1"v-show="isDoubles">/</div>
-						<div class="player col-md-3"v-show="isDoubles">
-							@{{ player2_name }}
-							<i class="fa fa-circle" 
-								v-bind:class="[faults >= 1? classRed : classBlack]" 
-								v-show="server == player2_num">
-							</i>
-						</div>
-					</td>
-					<td class="score">
-						<div v-show="game > 1">@{{ team1_games }} </div>
-					</td>
-					<td class="score" v-for="g in team1_scores" v-if="game >= g.gm" v-bind:class="[g.score < score_max && g.gm < game? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} </td>
-				</tr>
-				<tr>
-					<td>
-						<div class="player col-md-3">
-							@{{ player3_name }}
-							<i class="fa fa-circle" 
-								v-bind:class="[faults >= 1? classRed : classBlack]" 
-								v-show="server == player3_num ">
-							</i>
-						</div>
-						<div class="player col-md-1"v-show="isDoubles">/</div>
-						<div class="player col-md-3"v-show="isDoubles">
-							@{{ player4_name }}
-							<i class="fa fa-circle" 
-								v-bind:class="[faults >= 1? classRed : classBlack]" 
-								v-show="server == player4_num ">
-							</i>
-						</div>
-					</td>
-					<td class="score">
-						<div v-show="game > 1">@{{ team2_games }} </div>
-					</td>
-					<td class="score" v-for="g in team2_scores" v-if="game >= g.gm" v-bind:class="[g.score < score_max && g.gm < game? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} </td>
-				</tr>
-			</table>
-		</div>
-		<div class="row">		
-			<div class="col-xs-2">	
-				<button v-on:click="point" class="btn btn-success">Point</button>
-			</div>			
-			<div class="col-xs-2">
-				<button v-on:click="sideout" class="btn btn-danger">Side Out</button>	
-			</div>
-			<div class="col-xs-2">
-				<button v-on:click="fault" class="btn btn-warning">Fault</button>	
-			</div>
-			<div class="col-xs-2">
-				<button v-on:click="undo" class="btn btn-default">Undo</button>	
-			</div>
-		</div>	
-		<div class="row">
-			<div class="col-xs-6 alert alert-success" v-if="winner !=''">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<h2>@{{ winner }}</h3>			
+			<div class="panel-footer">
+			    <button class="btn btn-success" v-on:click="createMatch">Start</button>
+			    <button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
+			    <input type="checkbox" id="chkPreview" v-model="preview">
+				<label for="chkPreview">Preview</label>
 			</div>
 		</div>
-		<br/>			
-		<pre>@{{ $data | json }} </pre> 	
-		
+		<div class="panel panel-primary" v-show="isStarted || preview">
+			<div class="panel-heading">Match</div>
+			<div class="panel-body">
+				<div class="row">			
+					<table class="table table-condensed col-md-12">
+						<tr class="tr-games label-info ">
+							<th></th>
+							<th class="col-xs-1 th-games">Games</th>
+							<th class="col-xs-1 th-games">1</th>
+							<th class="col-xs-1 th-games">2</th>
+							<th class="col-xs-1 th-games">3</th>
+							<th class="col-xs-1 th-games">4</th>
+							<th class="col-xs-1 th-games">5</th>
+						</tr>
+						<tr>
+							<td>
+								<div class="player col-md-3">
+									@{{ player1_name }}
+									<i class="fa fa-circle" 
+										v-bind:class="[faults >= 1? classRed : classBlack]" 
+										v-show="server == player1_num">
+									</i> 
+								</div>
+								<div class="player col-md-1"v-show="player2_name != ''">/</div>
+								<div class="player col-md-3"v-show="player2_name != ''">
+									@{{ player2_name }}
+									<i class="fa fa-circle" 
+										v-bind:class="[faults >= 1? classRed : classBlack]" 
+										v-show="server == player2_num">
+									</i>
+								</div>
+							</td>
+							<td class="score">
+								<div v-show="game > 1">@{{ team1_games }} </div>
+							</td>
+							<td class="score" v-for="g in team1_scores" v-if="game >= g.gm" v-bind:class="[g.score < score_max && g.gm < game? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} </td>
+						</tr>
+						<tr>
+							<td>
+								<div class="player col-md-3">
+									@{{ player3_name }}
+									<i class="fa fa-circle" 
+										v-bind:class="[faults >= 1? classRed : classBlack]" 
+										v-show="server == player3_num ">
+									</i>
+								</div>
+								<div class="player col-md-1"v-show="player4_name != ''">/</div>
+								<div class="player col-md-3"v-show="player4_name != ''">
+									@{{ player4_name }}
+									<i class="fa fa-circle" 
+										v-bind:class="[faults >= 1? classRed : classBlack]" 
+										v-show="server == player4_num ">
+									</i>
+								</div>
+							</td>
+							<td class="score">
+								<div v-show="game > 1">@{{ team2_games }} </div>
+							</td>
+							<td class="score" v-for="g in team2_scores" v-if="game >= g.gm" v-bind:class="[g.score < score_max && g.gm < game? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} </td>
+						</tr>
+					</table>				
+				</div>
+			</div>
+			<div class="panel-footer">			 
+				<div class="row">
+					<div class="col-xs-6">		
+						<button v-on:click="point" class="btn btn-success" v-bind:class="isStarted? classEnabled : classDisabled">Point</button>
+						<button v-on:click="sideout" class="btn btn-danger" v-bind:class="isStarted? classEnabled : classDisabled">Side Out</button>	
+						<button v-on:click="fault" class="btn btn-warning" v-bind:class="isStarted? classEnabled : classDisabled">Fault</button>	
+						<button v-on:click="undo" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">Undo</button>	
+					</div>
+					<div class="col-xs-2 col-xs-offset-4">
+						<button v-on:click="resetMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
+					</div>	
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-xs-6 alert alert-success" v-if="winner !=''">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<h2>@{{ winner }}</h2>			
+					</div>
+				</div>	
+			</div>
+		</div>
 	</div>
-
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row col-xs-12">
+				<input type="checkbox" id="chkDebug" v-model="debug">
+				<label for="chkDebug">Debug</label>
+			</div>
+			<div class="row" v-show = "debug">
+				<pre>@{{ $data | json }} </pre> 
+			</div>
+		</div>
+	</div>
 	<template id="player-template">
 		<table>
 			<tr>
@@ -181,10 +206,15 @@
 		new Vue({
 			el: '#myvue',
 			data: {	
+				debug: false,
 				classWin: 'win',
 				classLoss: 'loss',
 				classRed: 'red',
 				classBlack: 'black',
+				classEnabled: 'active',
+				classDisabled: 'disabled',
+				showSetup: true,
+				isStarted: false,
 				initServer: 1,
 				server: 1,
 				max_players: 4, 
@@ -208,37 +238,26 @@
 				team1_games: 0,
 				team2_games: 0,
 				team1_scores: [{score: 0, gm: 1}, {score:0, gm: 2} , {score: 0, gm:3}, {score: 0, gm:4}, {score:0, gm:5}],
-				team2_scores: [{score: 0, gm: 1}, {score:0, gm: 2} , {score: 0, gm:3}, {score: 0, gm:4}, {score:0, gm:5}],
-
-				// player1: [
-				// 		{ name: 'Missy'},
-				// 		{ number: 1 },
-				// 		{ scores: [ 
-				// 			{score: 0}, 
-				// 			{score: 0}, 
-				// 			{score: 0} , 
-				// 			{score: 0}, 
-				// 			{score:0}
-				// 			]
-				// 		},
-				// 		{ games: 0},
-				// 	],
-				// player2: [
-				// 		{ name: 'Kaylee'},
-				// 		{ number: 1 },
-				// 		{ scores: [ 
-				// 			{score: 0}, 
-				// 			{score: 0}, 
-				// 			{score: 0} , 
-				// 			{score: 0}, 
-				// 			{score:0}
-				// 			]
-				// 		},
-				// 		{ games: 0},
-				// 	],			
+				team2_scores: [{score: 0, gm: 1}, {score:0, gm: 2} , {score: 0, gm:3}, {score: 0, gm:4}, {score:0, gm:5}],				
 			},
 			computed: {
-				isDoubles: function(){
+				max_players: function () {
+					this.max_players = 0;
+
+					if (this.player1_name != ''){
+						this.max_players+=1; 
+					}
+					if (this.player2_name != ''){
+						this.max_players+=1; 
+					}
+					if (this.player3_name != ''){
+						this.max_players+=1; 
+					}
+					if (this.player4_name != ''){
+						this.max_players+=1; 
+					}
+				},
+				isDoubles: function(){					
 					if (this.max_players == 4) {
 						return true;
 					}
@@ -260,7 +279,18 @@
 			methods: {
 				createMatch: function(event){ 
 					// enable point, sideout, fault, etc
+					this.isStarted = true;
+					this.showSetup = false;
 				},
+				resetMatch: function(event){ 
+					// disable point, sideout, fault, etc
+					this.isStarted = false;
+					this.showSetup = true;
+					this.player1_name = '';
+					this.player2_name = '';
+					this.player3_name = '';
+					this.player4_name = '';
+				},				
 				point: function (event){
 					this.faults = 0;
 					this.score_steps.push('point');
