@@ -37,11 +37,19 @@
 	.black{
 		color:black;
 	}
-	.team { 
-		font-size: :14pt;
+	.indent { 	
+	   padding-top: 10px;
+	   padding-bottom:  10px;
+	   padding-left: 25px;
+	   padding-right: 5px;
 	}
 	.form-inline > * {
-	   margin:5px 5px;
+	   margin: 5px 5px;
+	   padding-right: 5px;
+	}
+	h4  > *{
+	   padding-top: 10px;
+	   padding-bottom:  10px;
 	}
 	.lbl-team {
 		font-weight: 700;
@@ -55,21 +63,39 @@
 <div class="container">
 	<div id="myvue">
 		<div class="panel panel-primary" v-show="showSetup">			
-			<div class="panel-heading">Setup</div>
+			<div class="panel-heading"><h3>Setup</h3></div>
 			<div class="panel-body">	
 				<form class="form-inline" role="form">
+					<h4><i class="fa fa-clock-o"></i> Game Format: 
+						<select v-model="game" class="form-control">
+								  <option v-for="game in game_formats" v-bind:value="game">
+								    @{{ game.name }}
+								  </option>
+						</select>
+					 	<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
+					 	<i class="fa fa-thumbs-down"></i> Appeals: @{{ game.appeals }}
+					</h4>
+					<h4><i class="fa fa-user-plus"></i> Players</h4>
 					<div class="row">									
 						<div class="col-xs-12 form-group">
-							<label for="team1" class="control-label lbl-team">Team 1</label>
+							<label for="team1" class="control-label lbl-team indent">Team 1</label>
 						    <input class="form-control" id="team1" placeholder="Player 1" v-model="player1_name">
 						    <input class="form-control" placeholder="Player 2" v-model="player2_name">
 						</div>				
 						<div class="col-xs-12 form-group">
-						    <label for="team2" class="control-label lbl-team">Team 2</label>
+						    <label for="team2" class="control-label lbl-team indent">Team 2</label>
 						    <input class="form-control" id="team2" placeholder="Player 1" v-model="player3_name">
 						    <input class="form-control" placeholder="Player 2" v-model="player4_name">
 						</div>						
 					</div>
+					<h4><i class="fa fa-circle"></i> Starting Server
+						<select v-model="server" class="form-control">
+								  <option v-for="player in players" v-bind:value="player.pos">
+								    @{{ player.name }}
+								  </option>
+						</select>
+					</h4>
+					
 				</form>
 			</div>
 			<div class="panel-footer">
@@ -80,7 +106,9 @@
 			</div>
 		</div>
 		<div class="panel panel-primary" v-show="isStarted || preview">
-			<div class="panel-heading">Match</div>
+			<div class="panel-heading">
+				<h3>Match: @{{ timer.match | secondsToTime}}  Game: @{{timer.game | secondsToTime}}  Timeout: @{{timer.timeout | reversTime}} Injury: @{{timer.injury | reverseTime}}</h3>
+			</div>
 			<div class="panel-body">
 				<div class="row">			
 					<table class="table table-condensed col-md-12">
@@ -145,18 +173,29 @@
 			<div class="panel-footer">			 
 				<div class="row">
 					<div class="col-xs-6">		
-						<button v-on:click="point" class="btn btn-success" v-bind:class="isStarted? classEnabled : classDisabled">Point</button>
-						<button v-on:click="sideout" class="btn btn-danger" v-bind:class="isStarted? classEnabled : classDisabled">Side Out</button>	
-						<button v-on:click="fault" class="btn btn-warning" v-bind:class="isStarted? classEnabled : classDisabled">Fault</button>	
-						<button v-on:click="undo" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">Undo</button>	
+						<button v-on:click="point" class="btn btn-success" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
+						<button v-on:click="sideout" class="btn btn-danger" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
+						<button v-on:click="fault" class="btn btn-warning" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
+						<button v-on:click="undo" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>							
 					</div>
-					<div class="col-xs-2 col-xs-offset-4">
+					<div class="col-xs-1 col-xs-offset-4">
+						<button v-on:click="endMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
+					</div>	
+					<div class="col-xs-1">
 						<button v-on:click="resetMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
 					</div>	
+				</div>
+			<div class="panel-body">	
+				<div class="row">
+					<div class="col-xs-6">
+						<button v-on:click="timeout" class="btn btn-warning" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-clock-o"> Timeout</i></button>	
+						<button v-on:click="appeal" class="btn btn-danger" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-thumbs-down"> Appeal</i></button>	
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">
+			<div class="panel-body">
 				<div class="row">
 					<div class="col-xs-6 alert alert-success" v-if="winner !=''">
 						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -173,7 +212,9 @@
 				<label for="chkDebug">Debug</label>
 			</div>
 			<div class="row" v-show = "debug">
+			    @{{ players_list}}
 				<pre>@{{ $data | json }} </pre> 
+
 			</div>
 		</div>
 	</div>
@@ -191,6 +232,7 @@
 @section('script')
 	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.1/vue.js"></script>
 	<script>
+		Vue.config.debug = true;
 
 		Vue.component('my-player', {
 			template:'#player-template',
@@ -207,6 +249,7 @@
 			el: '#myvue',
 			data: {	
 				debug: false,
+				preview: false,
 				classWin: 'win',
 				classLoss: 'loss',
 				classRed: 'red',
@@ -217,9 +260,9 @@
 				isStarted: false,
 				initServer: 1,
 				server: 1,
-				max_players: 4, 
 				score_steps: [],
-				game: 1,
+				game_num: 1,
+				timer: {match: 0 , game: 0 , timeout: 0, injury: 0},
 				faults: 0,
 				score_max: 11,  // 11 or 15
 				tiebreaker: 7, // 7 or 11
@@ -227,6 +270,14 @@
 				total_games: 3,  // 3 or 5
 				win_by: 1, // 1 or 2
 				winner: '',
+				game: [],
+				game_formats: [ 	
+							{id: 1, name:'11',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, secs:30, appeals:3},
+							{id: 2, name:'15',  games:3,  points:15, tie:7, win_by: 1, timeouts:3, secs:20, appeals:3},
+							{id: 3, name:'Pro', games:5,  points:7,  tie:7, win_by: 2, timeouts:3, secs:40, appeals:3},
+							{id: 4, name:'Iron', timeouts:1, secs:60, appeals:3}
+						],
+				players: [],
 				player1_name: '',
 				player2_name: '',
 				player3_name: '',
@@ -237,27 +288,40 @@
 				player4_num: 4,
 				team1_games: 0,
 				team2_games: 0,
-				team1_scores: [{score: 0, gm: 1}, {score:0, gm: 2} , {score: 0, gm:3}, {score: 0, gm:4}, {score:0, gm:5}],
-				team2_scores: [{score: 0, gm: 1}, {score:0, gm: 2} , {score: 0, gm:3}, {score: 0, gm:4}, {score:0, gm:5}],				
+				team1_scores: [
+								{score: 0, gm: 1, min: 0, to: 0, apl:0 }, 
+								{score: 0, gm: 2, min: 0, to: 0, apl:0 }, 
+								{score: 0, gm: 3, min: 0, to: 0, apl:0 },  
+								{score: 0, gm: 4, min: 0, to: 0, apl:0 }, 
+								{score: 0, gm: 5, min: 0, to: 0, apl:0 }, 
+							],
+				team2_scores: [
+								{score: 0, gm: 1, time: 0}, {score:0, gm: 2, time: 0} , {score: 0, gm:3, time: 0}, {score: 0, gm:4, time: 0}, {score:0, gm:5, time: 0}
+							],				
 			},
 			computed: {
-				max_players: function () {
+				players_list: function() {
 					this.max_players = 0;
-
+					this.players = [ { pos:1, name:''}, { pos:2, name:''}, { pos:3, name:''}, { pos:4, name:''}];
+				
 					if (this.player1_name != ''){
 						this.max_players+=1; 
+						this.players[0].name = this.player1_name;
 					}
 					if (this.player2_name != ''){
 						this.max_players+=1; 
+						this.players[1].name = this.player2_name;
 					}
 					if (this.player3_name != ''){
 						this.max_players+=1; 
+						this.players[2].name = this.player3_name;
 					}
 					if (this.player4_name != ''){
 						this.max_players+=1; 
+						this.players[3].name = this.player4_name;
 					}
-				},
-				isDoubles: function(){					
+				},				
+				isDoubles: function(){	
 					if (this.max_players == 4) {
 						return true;
 					}
@@ -266,7 +330,7 @@
 					}
 				},
 				isTiebreaker: function(){
-					if(this.game == this.total_games) {
+					if(this.game_num == this.total_games) {
 						this.score_max = this.tiebreaker;
 						return true;
 					}
@@ -275,12 +339,30 @@
 					}
 				}
 			},
-
+			filters: {
+				secondsToTime: function(secs) {
+					secs = secs.toString();
+					var date = new Date(null);
+        			date.setSeconds(secs); // specify value for SECONDS here
+        			return date.toISOString().substr(11, 8);					
+				},
+				playerFormatter: function(val) {
+			          var newVal = '';
+			          this.players.map(function(el){ 
+			              if (val == el.value){
+			                  newVal = el.value + ' ' + el.text;
+			              }
+			          });
+			          return newVal;
+			      }
+			},
 			methods: {
 				createMatch: function(event){ 
 					// enable point, sideout, fault, etc
 					this.isStarted = true;
 					this.showSetup = false;
+					this.initServer = this.server;
+					this.startTimer();
 				},
 				resetMatch: function(event){ 
 					// disable point, sideout, fault, etc
@@ -290,7 +372,63 @@
 					this.player2_name = '';
 					this.player3_name = '';
 					this.player4_name = '';
-				},				
+					this.max_players = 0;
+					this.players= [];
+					this.stopTimer();
+				},	
+				endMatch: function(event){
+					this.stopTimer();
+				},
+				startTimer: function(name){
+					var that = this;			
+
+					if (name == 'match') {
+						matchTimer = setInterval(function(){
+							that.timer.match +=1;
+						}, 1000);
+					}
+
+					if (name == 'game') {
+						gameTimer = setInterval(function(){
+							that.timer.game +=1;
+						}, 1000);	
+					}				
+				},
+				stopTimer: function(event){
+					var that = this;
+					clearInterval(matchTimer);
+					that.timer.match =0;
+
+					clearInterval(matchTimer);
+					that.timer.game =0;
+
+					clearInterval(matchTimer);
+					that.timer.timeout =0;
+
+					clearInterval(matchTimer);
+					that.timer.injury =0;
+				},
+				countDownTimer: function (duration, display) {
+					var that = this;
+				    var timer = duration, minutes, seconds;
+				    setInterval(function () {
+				        minutes = parseInt(timer / 60, 10);
+				        seconds = parseInt(timer % 60, 10);
+
+				        minutes = minutes < 10 ? "0" + minutes : minutes;
+				        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+				        display.textContent = minutes + ":" + seconds;
+
+				        if (--timer < 0) {
+				            timer = duration;
+				        }
+				    }, 1000);
+				},
+				changeInitServer: function(options){
+					console.log(options.pos);
+					this.initServer = options.pos;
+				},			
 				point: function (event){
 					this.faults = 0;
 					this.score_steps.push('point');
@@ -298,25 +436,25 @@
 					if (this.isTiebreaker){}
 
 					if (this.server < 3) {
-						this.team1_scores[this.game-1].score +=1;
+						this.team1_scores[this.game_num-1].score +=1;
 					}
 					else {
-						this.team2_scores[this.game-1].score +=1;
+						this.team2_scores[this.game_num-1].score +=1;
 					}					
 
-					if ((this.team1_scores[this.game-1].score >= this.score_max) && 
-						((this.team1_scores[this.game-1].score - this.team2_scores[this.game-1].score) >= this.win_by))
+					if ((this.team1_scores[this.game_num-1].score >= this.score_max) && 
+						((this.team1_scores[this.game_num-1].score - this.team2_scores[this.game_num-1].score) >= this.win_by))
 					{
-						this.game+=1;
+						this.game_num+=1;
 						this.team1_games +=1;
 
 						//Change serving Team start of next game
 						this.changeServingTeam();
 					}
-					if ((this.team2_scores[this.game-1].score >= this.score_max) && 
-						((this.team2_scores[this.game-1].score - this.team1_scores[this.game-1].score) >= this.win_by))
+					if ((this.team2_scores[this.game_num-1].score >= this.score_max) && 
+						((this.team2_scores[this.game_num-1].score - this.team1_scores[this.game_num-1].score) >= this.win_by))
 					{
-						this.game+=1;
+						this.game_num+=1;
 						this.team2_games +=1;
 
 						this.changeServingTeam();
@@ -335,8 +473,8 @@
                     this.restoreFault();
 
                     //checkf if start of new game, but not the first game
-                    if ((this.game > 1) && (this.team1_scores[this.game-1].score + this.team2_scores[this.game-1].score ==0)) {
-                    	this.game -=1;
+                    if ((this.game_num > 1) && (this.team1_scores[this.game_num-1].score + this.team2_scores[this.game_num-1].score ==0)) {
+                    	this.game_num -=1;
                     	//decrement team_game
                     	//team1_games -=1;
                     	//team2_games -=2;
@@ -345,10 +483,10 @@
 
                     //remove point
                     if (this.server < 3) {
-						this.team1_scores[this.game-1].score -=1;
+						this.team1_scores[this.game_num-1].score -=1;
 					}
 					else {
-						this.team2_scores[this.game-1].score =1;
+						this.team2_scores[this.game_num-1].score =1;
 					}
 				},
 				fault: function (event){
@@ -416,6 +554,18 @@
 						}
 					};
 				},
+				timeout: function(event) {
+
+				},
+				undoTimeout: function(event){
+
+				},
+				appeal: function(event) {
+
+				},
+				undoAppeal: function(event){
+
+				},
 				changeServingTeam: function(event){
 					//Change server start of next game
 					//tiebreaker
@@ -427,7 +577,7 @@
 						//alert(t1);
 					}
 
-					if(this.game == this.total_games) {
+					if(this.game_num == this.total_games) {
 						var t1;
 						var t2;
 
