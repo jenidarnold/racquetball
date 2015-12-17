@@ -191,7 +191,6 @@
 							<td class="score">
 								<div class="col-xs-4" v-show="isStarted">
 									<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal2" class="btn btn-warning btn-xs" v-bind:class="isStarted && team[2].timeouts > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[2].timeouts }}</span>
-									<span class="badge">@{{timer.team[2].timeout | secondsToTime}}</span>
 									</button>
 								</div>
 								<div class="col-xs-2" v-show="isStarted">
@@ -232,14 +231,15 @@
 	    <!-- Modal content-->
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h3 class="modal-title">Team 1 Time Out!</h3>
+	       	<h3 class="modal-title">Team 1 Time Out!</h3>
 	      </div>
 	      <div class="modal-body">
-	        <center><h1><span class="label label-warning timer"> @{{timer.team[1].timeout | secondsToTime}}</h1></center>
+	        <center>
+    	    	<h1><span class="label label-warning timer"> @{{timer.team[1].timeout | secondsToTime}}</h1></span>
+            </center>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" v-on:click="timeout(1)" class="btn btn-default" data-dismiss="modal">Time In</button>
 	      </div>
 	    </div>
 	  </div>
@@ -251,14 +251,13 @@
 	    <!-- Modal content-->
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h3 class="modal-title">Team 2 Time Out!</h3>
+	      	 <h3 class="modal-title">Team 2 Time Out!</h3>
 	      </div>
 	      <div class="modal-body">
 	        <center><h1><span class="label label-warning timer"> @{{timer.team[2].timeout | secondsToTime}}</h1></center>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" v-on:click="timeout(2)" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
 	  </div>
@@ -350,10 +349,10 @@
 				winner: '',
 				game: [],
 				game_formats: [ 	
-							{id: 1, name:'11',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, secs:30, appeals:3},
-							{id: 2, name:'15',  games:3,  points:15, tie:7, win_by: 1, timeouts:3, secs:20, appeals:3},
-							{id: 3, name:'Pro', games:5,  points:7,  tie:7, win_by: 2, timeouts:3, secs:40, appeals:3},
-							{id: 4, name:'Iron', timeouts:1, secs:60, appeals:3}
+							{id: 1, name:'11',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, timeout_secs:5, injury_secs:10, appeals:3},
+							{id: 2, name:'15',  games:3,  points:15, tie:7, win_by: 1, timeouts:3, timeout_secs:6, injury_secs:15, appeals:3},
+							{id: 3, name:'Pro', games:5,  points:11, tie:7, win_by: 2, timeouts:3, timeout_secs:7, injury_secs:20, appeals:3},
+							{id: 4, name:'Iron', games:3,  points:7, tie:7, win_by: 1, timeouts:1, timeout_secs:9, injury_secs:0, appeals:0}
 						],
 				players: [],
 				player1_name: 'Player 1',
@@ -459,7 +458,12 @@
 						var date = new Date(null);
         				date.setSeconds(secs); // specify value for SECONDS here
         				return date.toISOString().substr(11, 8);
-        			}					
+        			} else
+        			{
+
+        				return "Time has expired";
+        			}	
+
 				}
 			},				
 			methods: {
@@ -475,6 +479,9 @@
 					this.team[1].appeals = this.game.appeals;
 					this.team[2].timeouts = this.game.timeouts;
 					this.team[2].appeals = this.game.appeals;
+
+					this.timer.team[1].injury = this.game.injury_secs;
+					this.timer.team[2].injury = this.game.injury_secs;
 				},
 				resetMatch: function(event){ 
 					// disable point, sideout, fault, etc
@@ -521,14 +528,27 @@
 					}	
 
 					if (name == 'timeout') {
+						//reset timer
+						that.timer.team[teamNum].timeout = that.game.timeout_secs;
 						timeoutTimer = setInterval(function(){
-							that.timer.team[teamNum].timeout +=1;
+
+							that.timer.team[teamNum].timeout -=1;
+
+							//timeout is over
+							if (that.timer.team[teamNum].timeout < 0) {
+								that.timer.team[teamNum].timeout = 0;
+								//that.stopTimer(timeoutTimer);
+							}
 						}, 1000);	
 					}	
 
-					if (name == 'injury') {
+					if (name == 'injury') {						
 						injuryTimer = setInterval(function(){
-							that.timer.injury +=1;
+							that.timer.injury -=1;
+							//injury timeout is over
+							if (that.timer.team[teamNum].timeout == 0) {
+
+							}
 						}, 1000);	
 					}				
 				},
