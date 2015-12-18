@@ -109,15 +109,7 @@
 			</div>
 		</div>
 		<div class="panel panel-primary" v-show="isStarted || preview">
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-xs-2">
-					    <h4><span class="label label-success">Match: @{{ timer.match | secondsToTime}} </span></h4>
-					</div>
-					<div class="col-xs-2">
-					    <h4><span class="label label-warning">Game: @{{timer.game | secondsToTime}} </span></h4>
-					</div>
-				</div>
+			<div class="panel-heading">				
 				<div class="row">
 					<div class="col-xs-6 alert alert-success" v-if="winner !=''">
 						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -136,6 +128,7 @@
 							<th class="col-xs-1 th-games">3</th>
 							<th class="col-xs-1 th-games">4</th>
 							<th class="col-xs-1 th-games">5</th>
+							<th class="col-xs-1 th-games"></th>
 						</tr>
 						<tr>
 							<td>								
@@ -168,7 +161,8 @@
 									<span class="badge">@{{ team[1].wins }}</span>
 								</div>
 							</td>
-							<td class="score" v-for="g in team[1]" v-if="game_num >= g.gm" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} </td>
+							<td class="score" v-for="g in team[1]" v-if="game_num >= g.gm" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} 								
+							</td>
 						</tr>
 						<tr>
 							<td>								
@@ -193,12 +187,22 @@
 									<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal2" class="btn btn-warning btn-xs" v-bind:class="isStarted && team[2].timeouts > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[2].timeouts }}</span>
 									</button>
 								</div>
-								<div class="col-xs-2" v-show="isStarted">
+								<div class="col-xs-4" v-show="isStarted">
 									<button v-on:click="appeal" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"> <span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals  }}</span></button>
 								</div>								
 								<div class="col-xs-1"v-show="game_num > 1"><span class="badge">@{{ team[2].wins }}</span></div>
 							</td>
 							<td class="score" v-for="g in team[2]" v-if="game_num >= g.gm" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} </td>
+						</tr>
+						<tr class="tr-games label-info ">
+							<th></th>
+							<th class="th-games"></th>
+							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 1" >@{{ timer.game[1] | secondsToTime }}</span></th>
+							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 2" >@{{ timer.game[2] | secondsToTime }}</span></th>
+							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 3" >@{{ timer.game[3] | secondsToTime }}</span></th>
+							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 4" >@{{ timer.game[4] | secondsToTime }}</span></th>
+							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 5" >@{{ timer.game[5] | secondsToTime }}</span></th>
+							<th class="col-xs-1 th-games"><span class="label label-success">@{{ timer.match | secondsToTime }}</span></th>
 						</tr>
 					</table>				
 				</div>
@@ -292,9 +296,10 @@
 	<script>
 
 		var matchTimer;
-		var gameTimer;
-		var injuryTimer;
-		var timeoutTimer;
+		var gameTimer; //current game timer
+		var injuryTimer; 
+		var timeoutTimer;  //team timeouts
+		var intermissionTimer; //timeout between games
 
 		Vue.config.debug = false;
 
@@ -328,7 +333,17 @@
 				game_num: 1,
 				timer: {
 						match: 0 , 
-						game: 0 , 
+						game: {
+								1:0,
+								2:0,
+								3:0,
+								4:0,
+								5:0,
+							},
+						between: {
+								normal: 120,
+								tiebreaker: 300
+						},
 						team: {
 								1:{						
 									timeout: 0, 
@@ -458,9 +473,8 @@
 						var date = new Date(null);
         				date.setSeconds(secs); // specify value for SECONDS here
         				return date.toISOString().substr(11, 8);
-        			} else
+        			} else if (secs == 0)
         			{
-
         				return "Time has expired";
         			}	
 
@@ -492,25 +506,27 @@
 					this.player3_name = '';
 					this.player4_name = '';
 					this.max_players = 0;
-					this.players= [];
-					this.stopTimer();
+					this.players= [];					
 
 					this.team[1].timeouts = game.timeouts;
 					this.team[1].appeals = game.appeals;
 					this.team[2].timeouts = game.timeouts;
 					this.team[2].appeals = game.appeals;
+
+					this.endMatch();
 				},	
 				endMatch: function(event){
-					this.stopTimer(matchTimer);
 					this.stopTimer(gameTimer);
+					this.stopTimer(matchTimer);
 				},
 				endGame: function(event){
-					this.stopTimer(gameTimer);	
-					this.team[1].timeouts = game.timeouts;
-					this.team[1].appeals = game.appeals;
-					this.team[2].timeouts = game.timeouts;
-					this.team[2].appeals = game.appeals;
+					this.stopTimer(gameTimer);
 
+					this.startTimer('game');	
+					this.team[1].timeouts = this.game.timeouts;
+					this.team[1].appeals = this.game.appeals;
+					this.team[2].timeouts = this.game.timeouts;
+					this.team[2].appeals = this.game.appeals;
 				},
 				startTimer: function(name, teamNum){
 					var that = this;			
@@ -523,7 +539,7 @@
 
 					if (name == 'game') {
 						gameTimer = setInterval(function(){
-							that.timer.game +=1;
+							that.timer.game[that.game_num] +=1;
 						}, 1000);	
 					}	
 
@@ -562,7 +578,7 @@
 						that.timer.match = 0;
 					}	
 					if (name == 'game') {
-						that.timer.game = 0;
+						that.timer.game[that.game_num] = 0;
 					}	
 					if (name == 'timeout') {
 						that.timer.timeout = 0;
@@ -609,6 +625,8 @@
 					if ((this.team[1][this.game_num].score >= this.score_max) && 
 						((this.team[1][this.game_num].score - this.team[2][this.game_num].score) >= this.win_by))
 					{
+						//Game is over
+						this.endGame();
 						this.game_num+=1;
 						this.team[1].wins +=1;
 
