@@ -2,62 +2,65 @@
 
 @section('style')
 	<style>
-	.player {
-		font-weight: 500;
-		font-size: 14pt;
-	}
-	.win{
-		font-weight: 500;
-		color: green;
-		font-size: 14pt;
-	}
-	.loss{
-		font-weight: 500;
-		color: red;
-		font-size: 14pt;
-	}
-	.score{
-		font-weight: 500;
-		font-size: 14pt;
-		text-align: center;
-	}
-
-	.th-games {
-		text-align: center;
-	}
-	.tr-games{
-		font-weight: 700;
-		font-size: 14pt;
-	}
-
-	.red{
-		color:red;
-	}
-
-	.black{
-		color:black;
-	}
-	.indent { 	
-	   padding-top: 10px;
-	   padding-bottom:  10px;
-	   padding-left: 25px;
-	   padding-right: 5px;
-	}
-	.form-inline > * {
-	   margin: 5px 5px;
-	   padding-right: 5px;
-	}
-	h4  > *{
-	   padding-top: 10px;
-	   padding-bottom:  10px;
-	}
-	.lbl-team {
-		font-weight: 700;
-		font-size: 14pt;
-	}
-	.timer {
-		text-align: center;
-	}
+		.player {
+			font-weight: 500;
+			font-size: 14pt;
+		}
+		.win {
+			font-weight: 500;
+			color: green;
+			font-size: 14pt;
+		}
+		.loss {
+			font-weight: 500;
+			color: red;
+			font-size: 14pt;
+		}
+		.score {
+			font-weight: 500;
+			font-size: 14pt;
+			text-align: center;
+		}
+		.th-games {
+			text-align: center;
+		}
+		.tr-games {
+			font-weight: 700;
+			font-size: 14pt;
+		}
+		.red {
+			color:red;
+		}
+		.black {
+			color:black;
+		}
+		.indent { 	
+		   padding-top: 10px;
+		   padding-bottom:  10px;
+		   padding-left: 25px;
+		   padding-right: 5px;
+		}
+		.form-inline > * {
+		   margin: 5px 5px;
+		   padding-right: 5px;
+		}
+		h4  > *{
+		   padding-top: 10px;
+		   padding-bottom:  10px;
+		}
+		.lbl-team {
+			font-weight: 700;
+			font-size: 14pt;
+		}
+		.timer {
+			text-align: center;
+		}
+		.timeout .modal-backdrop {
+	    	background-color: red;
+		}
+		.winner .modal-backdrop {
+	    	background-color: green;
+		}
 	</style>
 @stop
 
@@ -93,12 +96,11 @@
 					</div>
 					<h4><i class="fa fa-circle"></i> Starting Server
 						<select v-model="server" class="form-control">
-								  <option v-for="player in players" v-bind:value="player.pos">
-								    @{{ player.name }}
-								  </option>
+						  	<option v-for="player in players" v-bind:value="player.pos">
+						    	@{{ player.name }}
+						  	</option>
 						</select>
-					</h4>
-					
+					</h4>					
 				</form>
 			</div>
 			<div class="panel-footer">
@@ -109,13 +111,7 @@
 			</div>
 		</div>
 		<div class="panel panel-primary" v-show="isStarted || preview">
-			<div class="panel-heading">				
-				<div class="row">
-					<div class="col-xs-6 alert alert-success" v-if="winner !=''">
-						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-						<h2>@{{ winner }}</h2>			
-					</div>
-				</div>	
+			<div class="panel-heading">								
 			</div>
 			<div class="panel-body">
 				<div class="row">			
@@ -132,7 +128,7 @@
 						</tr>
 						<tr>
 							<td>								
-								<div class="player col-md-4">
+								<div class="player col-md-5">
 									@{{ player1_name }}
 									<i class="fa fa-circle" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
@@ -140,7 +136,7 @@
 									</i> 
 								</div>
 								<div class="player col-md-1"v-show="player2_name != ''">/</div>
-								<div class="player col-md-4"v-show="player2_name != ''">
+								<div class="player col-md-5"v-show="player2_name != ''">
 									@{{ player2_name }}
 									<i class="fa fa-circle" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
@@ -161,12 +157,14 @@
 									<span class="badge">@{{ team[1].wins }}</span>
 								</div>
 							</td>
-							<td class="score" v-for="g in team[1]" v-if="game_num >= g.gm" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} 								
+							<td class="score" v-for="g in team[1].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
+								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>&nbsp;
 							</td>
+							<td>&nbsp;</td>
 						</tr>
 						<tr>
 							<td>								
-								<div class="player col-md-4">
+								<div class="player col-md-5">
 									@{{ player3_name }}
 									<i class="fa fa-circle" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
@@ -174,7 +172,7 @@
 									</i>
 								</div>
 								<div class="player col-md-1"v-show="player4_name != ''">/</div>
-								<div class="player col-md-4"v-show="player4_name != ''">
+								<div class="player col-md-5"v-show="player4_name != ''">
 									@{{ player4_name }}
 									<i class="fa fa-circle" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
@@ -188,11 +186,14 @@
 									</button>
 								</div>
 								<div class="col-xs-4" v-show="isStarted">
-									<button v-on:click="appeal" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"> <span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals  }}</span></button>
+									<button v-on:click="appeal" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"> <span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals }}</span></button>
 								</div>								
 								<div class="col-xs-1"v-show="game_num > 1"><span class="badge">@{{ team[2].wins }}</span></div>
 							</td>
-							<td class="score" v-for="g in team[2]" v-if="game_num >= g.gm" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">@{{ g.score }} </td>
+							<td class="score" v-for="g in team[2].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
+								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>&nbsp;
+							</td>
+							<td>&nbsp;</td>
 						</tr>
 						<tr class="tr-games label-info ">
 							<th></th>
@@ -213,7 +214,7 @@
 						<button v-on:click="point" class="btn btn-success" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
 						<button v-on:click="sideout" class="btn btn-danger" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
 						<button v-on:click="fault" class="btn btn-warning" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
-						<button v-on:click="undo" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>					
+						<button v-on:click="undo" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>	
 					</div>
 					<div class="col-xs-1 col-xs-offset-4">
 						<button v-on:click="endMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
@@ -229,8 +230,8 @@
 		</div>
 	</div>
 
-	<!-- Modal -->
-	<div id="timeoutModal1" class="modal fade" role="dialog">
+	<!-- Modal Team 1 Time out-->
+	<div id="timeoutModal1" class="timeout modal fade" role="dialog">
 	  <div class="modal-dialog">
 	    <!-- Modal content-->
 	    <div class="modal-content">
@@ -249,8 +250,8 @@
 	  </div>
 	</div>
 
-	<!-- Modal -->
-	<div id="timeoutModal2" class="modal fade" role="dialog">
+	<!-- Modal Team 2 Time out-->
+	<div id="timeoutModal2" class="timeout modal fade" role="dialog">
 	  <div class="modal-dialog">
 	    <!-- Modal content-->
 	    <div class="modal-content">
@@ -267,6 +268,24 @@
 	  </div>
 	</div>
 
+	<!-- Modal Winner-->
+	<div id="winnerModal" class="winner modal fade" role="dialog" v-if="winnner != ''">
+	  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content modal-success">
+	      	<div class="modal-body">
+		      	<div class="row">
+					<center><h2>@{{ winner }}</h2></center>
+				</div>	
+	      	</div>
+	      	<div class="modal-footer">
+	        	<button type="button" v-on:click="timeout(2)" class="btn btn-default" data-dismiss="modal">Close</button>
+	      	</div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Debug Panel -->
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="row col-xs-12">
@@ -282,8 +301,7 @@
 	</div>
 	<template id="player-template">
 		<table>
-			<tr>
-				
+			<tr>			
 			</tr>
 		</table>
 	</template>
@@ -385,21 +403,23 @@
 									timeouts: 0,
 									appeals: 0,
 									injury: 0,
-									1: 	{
-											score: 0, gm: 1, min: 0
-										}, 
-									2: {
-											score: 0, gm: 2, min: 0
-										},
-									3: {
-											score: 0, gm: 3, min: 0
-										},
-									4: {
-											score: 0, gm: 4, min: 0
-										},
-									5: {
-											score: 0, gm: 5, min: 0
-										},
+									games: {
+										1: 	{
+												score: 0, gm: 1
+											}, 
+										2: {
+												score: 0, gm: 2
+											},
+										3: {
+												score: 0, gm: 3, 
+											},
+										4: {
+												score: 0, gm: 4, 
+											},
+										5: {
+												score: 0, gm: 5, 
+											},
+										}
 								},						
 							2: 	
 								{
@@ -407,21 +427,23 @@
 									timeouts: 0,
 									appeals: 0,
 									injury: 0,
-									1: 	{
-											score: 0, gm: 1, min: 0
-										}, 
-									2: {
-											score: 0, gm: 2, min: 0
-										},
-									3: {
-											score: 0, gm: 3, min: 0
-										},
-									4: {
-											score: 0, gm: 4, min: 0
-										},
-									5: {
-											score: 0, gm: 5, min: 0
-										},
+									games: {
+										1: 	{
+												score: 0, gm: 1
+											}, 
+										2: {
+												score: 0, gm: 2
+											},
+										3: {
+												score: 0, gm: 3, 
+											},
+										4: {
+												score: 0, gm: 4, 
+											},
+										5: {
+												score: 0, gm: 5, 
+											},
+										}
 								}
 							}							
 			},								
@@ -508,12 +530,13 @@
 					this.max_players = 0;
 					this.players= [];					
 
-					this.team[1].timeouts = game.timeouts;
-					this.team[1].appeals = game.appeals;
-					this.team[2].timeouts = game.timeouts;
-					this.team[2].appeals = game.appeals;
+					this.team[1].timeouts = this.game.timeouts;
+					this.team[1].appeals = this.game.appeals;
+					this.team[2].timeouts = this.game.timeouts;
+					this.team[2].appeals = this.game.appeals;
 
 					this.endMatch();
+					$('#winnerModal').modal('show');
 				},	
 				endMatch: function(event){
 					this.stopTimer(gameTimer);
@@ -616,14 +639,14 @@
 					}
 
 					if (this.server < 3) {
-						this.team[1][this.game_num].score +=1;
+						this.team[1].games[this.game_num].score +=1;
 					}
 					else {
-						this.team[2][this.game_num].score +=1;
+						this.team[2].games[this.game_num].score +=1;
 					}					
 
-					if ((this.team[1][this.game_num].score >= this.score_max) && 
-						((this.team[1][this.game_num].score - this.team[2][this.game_num].score) >= this.win_by))
+					if ((this.team[1].games[this.game_num].score >= this.score_max) && 
+						((this.team[1].games[this.game_num].score - this.team[2].games[this.game_num].score) >= this.win_by))
 					{
 						//Game is over
 						this.endGame();
@@ -633,8 +656,8 @@
 						//Change serving Team start of next game
 						this.changeServingTeam();
 					}
-					if ((this.team[2][this.game_num].score >= this.score_max) && 
-						((this.team[2][this.game_num].score - this.team[1][this.game_num].score) >= this.win_by))
+					if ((this.team[2].games[this.game_num].score >= this.score_max) && 
+						((this.team[2].games[this.game_num].score - this.team[1].games[this.game_num].score) >= this.win_by))
 					{
 						this.game_num+= 1;
 						this.team[2].wins += 1;
@@ -643,11 +666,13 @@
 					}
 
 					if (this.team[1].wins == this.game_max) {
-						this.winner = 'The winner is ' + this.player1_name + ' ' + this.player2_name;
+						this.winner = 'The winner is ' + this.player1_name + ' & ' + this.player2_name;
+						$('#winnerModal').modal('show');
 					}
 
 					if (this.team[2].wins == this.game_max) {
-						this.winner = 'The winner is ' + this.player3_name + ' ' + this.player4_name;
+						this.winner = 'The winner is ' + this.player3_name + ' & ' + this.player4_name;
+						$('#winnerModal').modal('show');
 					}
 				},
 				undoPoint: function (event){
@@ -655,7 +680,7 @@
                     this.restoreFault();
 
                     //check if start of new game, but not the first game
-                    if ((this.game_num > 1) && (this.team[1][this.game_num].score + this.team[2][this.game_num].score == 0 )) {
+                    if ((this.game_num > 1) && (this.team[1].games[this.game_num].score + this.team[2].games[this.game_num].score == 0 )) {
                     	this.game_num -= 1;
                     	//decrement team_game
                     	//team[1].wins -=1;
@@ -665,10 +690,10 @@
 
                     //remove point
                     if (this.server < 3) {
-						this.team[1][this.game_num].score -= 1;
+						this.team[1].games[this.game_num].score -= 1;
 					}
 					else {
-						this.team[2][this.game_num].score = 1;
+						this.team[2].games[this.game_num].score = 1;
 					}
 				},
 				fault: function (event){
@@ -763,10 +788,10 @@
 				changeServingTeam: function(event){
 					//Change server start of next game
 					//tiebreaker							
-					for (var i in this.team[2])
+					for (var i in this.team[2].games)
 					{
 						//alert(i);
-						t1+= this.team[2][i].score;
+						t1+= this.team[2].games[i].score;
 						//alert(t1);
 					}
 
@@ -774,9 +799,9 @@
 						var t1;
 						var t2;
 
-						for (var i in this.team[2])
+						for (var i in this.team[2].games)
 						{
-							t1+= this.team[2][i].score;
+							t1+= this.team[2].games[i].score;
 						}						
 					}
 					//Alternate serving team
