@@ -148,6 +148,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li class=""><a href="{{ url('/tools/referee') }}">Referee</a></li>
+                            <li class=""><a href="{{ url('/tools/shotselection') }}">Shot Selection</a></li>
                         </ul>
                     </li>    
                     <!-- Social Media -->

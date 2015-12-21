@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 
-class RefereeController extends Controller {
+class ShotSelectionController extends Controller {
 
 	/**
 	 * Create a new controller instance.
@@ -25,7 +25,7 @@ class RefereeController extends Controller {
 	 */
 	public function index()
 	{
-		return view('pages/tools.referee.index');
+		return view('pages/tools.shotselection.index');
 	}
 
 	/**
@@ -57,7 +57,7 @@ class RefereeController extends Controller {
 	public function show($user_id)
 	{
 		
-		return view('pages/tools.referee.show', compact('user'));
+		return view('pages/tools.shotselection.show', compact('user'));
 	}
 
 
