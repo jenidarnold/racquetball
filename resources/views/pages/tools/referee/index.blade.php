@@ -130,7 +130,7 @@
 							<td>								
 								<div class="player col-md-5">
 									@{{ player1_name }}
-									<i class="fa fa-circle" 
+									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
 										v-show="server == player1_num">
 									</i> 
@@ -138,7 +138,7 @@
 								<div class="player col-md-1"v-show="player2_name != ''">/</div>
 								<div class="player col-md-5"v-show="player2_name != ''">
 									@{{ player2_name }}
-									<i class="fa fa-circle" 
+									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
 										v-show="server == player2_num">
 									</i>
@@ -158,7 +158,7 @@
 								</div>
 							</td>
 							<td class="score" v-for="g in team[1].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
-								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>&nbsp;
+								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>
 							</td>
 							<td>&nbsp;</td>
 						</tr>
@@ -166,7 +166,7 @@
 							<td>								
 								<div class="player col-md-5">
 									@{{ player3_name }}
-									<i class="fa fa-circle" 
+									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
 										v-show="server == player3_num ">
 									</i>
@@ -174,7 +174,7 @@
 								<div class="player col-md-1"v-show="player4_name != ''">/</div>
 								<div class="player col-md-5"v-show="player4_name != ''">
 									@{{ player4_name }}
-									<i class="fa fa-circle" 
+									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
 										v-show="server == player4_num ">
 									</i>
@@ -191,7 +191,7 @@
 								<div class="col-xs-1"v-show="game_num > 1"><span class="badge">@{{ team[2].wins }}</span></div>
 							</td>
 							<td class="score" v-for="g in team[2].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
-								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>&nbsp;
+								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>
 							</td>
 							<td>&nbsp;</td>
 						</tr>
@@ -268,6 +268,24 @@
 	  </div>
 	</div>
 
+	<!-- Modal Intermission -->
+	<div id="intermissionModal" class="intermission modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	      	 <h3 class="modal-title">Intermission</h3>
+	      </div>
+	      <div class="modal-body">
+	        <center><h1><span class="label label-warning timer"> @{{timer.intermission[game_num - 1] | secondsToTime}}</h1></center>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" v-on:click="intermission('stop')" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
 	<!-- Modal Winner-->
 	<div id="winnerModal" class="winner modal fade" role="dialog" v-if="winnner != ''">
 	  <div class="modal-dialog">
@@ -295,7 +313,6 @@
 			<div class="row" v-show = "debug">
 			    @{{ players_list}}
 				<pre>@{{ $data | json }} </pre> 
-
 			</div>
 		</div>
 	</div>
@@ -358,9 +375,11 @@
 								4:0,
 								5:0,
 							},
-						between: {
-								normal: 120,
-								tiebreaker: 300
+						intermission: {
+								1:0,
+								2:0,
+								3:0,
+								4:0,
 						},
 						team: {
 								1:{						
@@ -382,10 +401,10 @@
 				winner: '',
 				game: [],
 				game_formats: [ 	
-							{id: 1, name:'11',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, timeout_secs:5, injury_secs:10, appeals:3},
-							{id: 2, name:'15',  games:3,  points:15, tie:7, win_by: 1, timeouts:3, timeout_secs:6, injury_secs:15, appeals:3},
-							{id: 3, name:'Pro', games:5,  points:11, tie:7, win_by: 2, timeouts:3, timeout_secs:7, injury_secs:20, appeals:3},
-							{id: 4, name:'Iron', games:3,  points:7, tie:7, win_by: 1, timeouts:1, timeout_secs:9, injury_secs:0, appeals:0}
+							{id: 1, name:'11',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, timeout_secs:5, intermission_norm:10, intermission_tb:15, injury_secs:10, appeals:3},
+							{id: 2, name:'15',  games:3,  points:15, tie:7, win_by: 1, timeouts:3, timeout_secs:6, intermission_norm:10, intermission_tb:15, injury_secs:15, appeals:3},
+							{id: 3, name:'Pro', games:5,  points:11, tie:7, win_by: 2, timeouts:3, timeout_secs:7, intermission_norm:10, intermission_tb:15, injury_secs:20, appeals:3},
+							{id: 4, name:'Iron', games:3,  points:7, tie:7, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0}
 						],
 				players: [],
 				player1_name: 'Player 1',
@@ -497,7 +516,7 @@
         				return date.toISOString().substr(11, 8);
         			} else if (secs == 0)
         			{
-        				return "Time has expired";
+        				return "";
         			}	
 
 				}
@@ -511,6 +530,7 @@
 					this.startTimer('match');
 					this.startTimer('game');
 
+					this.total_games = this.game.games;
 					this.team[1].timeouts = this.game.timeouts;
 					this.team[1].appeals = this.game.appeals;
 					this.team[2].timeouts = this.game.timeouts;
@@ -518,6 +538,16 @@
 
 					this.timer.team[1].injury = this.game.injury_secs;
 					this.timer.team[2].injury = this.game.injury_secs;
+
+					for (var i = 1; i <= this.total_games-1; i++) {
+						if (i == this.total_games-1) {
+							this.timer.intermission[i] = this.game.intermission_tb;
+						}
+						else{
+							this.timer.intermission[i] = this.game.intermission_norm;
+						}
+					};
+
 				},
 				resetMatch: function(event){ 
 					// disable point, sideout, fault, etc
@@ -529,6 +559,8 @@
 					this.player4_name = '';
 					this.max_players = 0;
 					this.players= [];					
+					this.winner = '';
+					this.game_num = 1;
 
 					this.team[1].timeouts = this.game.timeouts;
 					this.team[1].appeals = this.game.appeals;
@@ -544,12 +576,16 @@
 				},
 				endGame: function(event){
 					this.stopTimer(gameTimer);
-
-					this.startTimer('game');	
+					
 					this.team[1].timeouts = this.game.timeouts;
 					this.team[1].appeals = this.game.appeals;
 					this.team[2].timeouts = this.game.timeouts;
 					this.team[2].appeals = this.game.appeals;
+
+					if (this.game_num < this.total_games){
+						this.intermission('start');
+						$('#intermissionModal').modal('show');
+					}
 				},
 				startTimer: function(name, teamNum){
 					var that = this;			
@@ -570,13 +606,8 @@
 						//reset timer
 						that.timer.team[teamNum].timeout = that.game.timeout_secs;
 						timeoutTimer = setInterval(function(){
-
-							that.timer.team[teamNum].timeout -=1;
-
-							//timeout is over
-							if (that.timer.team[teamNum].timeout < 0) {
-								that.timer.team[teamNum].timeout = 0;
-								//that.stopTimer(timeoutTimer);
+							if (that.timer.team[teamNum].timeout > 0) {
+								that.timer.team[teamNum].timeout -=1;
 							}
 						}, 1000);	
 					}	
@@ -584,9 +615,13 @@
 					if (name == 'injury') {						
 						injuryTimer = setInterval(function(){
 							that.timer.injury -=1;
-							//injury timeout is over
-							if (that.timer.team[teamNum].timeout == 0) {
+						}, 1000);	
+					}	
 
+					if (name == 'intermission') {						
+						intermissionTimer = setInterval(function(){
+							if (that.timer.intermission[that.game_num-1] > 0) {
+								that.timer.intermission[that.game_num-1] -=1;
 							}
 						}, 1000);	
 					}				
@@ -774,6 +809,16 @@
 						else {
 							alert('No more timeouts');
 						}
+					}	
+				},
+				intermission: function(action) {
+
+					if (action =='stop') {
+						this.stopTimer(intermissionTimer);
+						intermissionTimer = undefined;
+						this.startTimer('game');	
+					} else {
+						this.startTimer('intermission');						
 					}	
 				},
 				undoTimeout: function(event){
