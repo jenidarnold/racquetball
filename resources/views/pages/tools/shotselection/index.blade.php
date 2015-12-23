@@ -13,6 +13,12 @@
 		.subtitle{
 			text-align: center
 		}
+		.red {
+			color: red;
+		}		
+		.blue {
+			color: blue;
+		}
 		.pass {
 			color:green;
 		}
@@ -56,7 +62,7 @@
 				<!-- Dropdowns -->
 				<div class="col-xs-3">
 					<div class="form-group">
-						<label for="off_position" class="control-label">Offense</label>
+						<label for="off_position" class="control-label"><i class="fa fa-circle blue"></i> Offense</label>
 						<select id="off_position" v-model="off_position" class="form-control" v-on:change="reset_legend()">
 							<option v-for="pos in player.positions" v-bind:value="pos">
 							    @{{ pos }}
@@ -64,7 +70,7 @@
 						</select>
 					</div>				
 					<div class="form-group">
-					    <label for="def_position" class="control-label">Defense</label>		
+					    <label for="def_position" class="control-label"><i class="fa fa-circle red"></i> Defense</label>		
 					    <select id="def_position" v-model="def_position" class="form-control" v-on:change="reset_legend()">
 							<option v-for="pos in player.positions" v-bind:value="pos">
 							    @{{ pos }}
@@ -120,44 +126,70 @@
 							<circle v-if="show_player(off_position, 'back')" cx="160" cy="550" r="15" stroke="black" stroke-width="2" fill="blue" />
 
 							<!-- Offense = FRONT Defense = FRONT -->
-							<!-- Pass Front Court -->
+							<!-- Pass DTL-->
 							<polyline v-if="show_shot('front','front', 1, 1, 1)" points="170,240 200,10 250,500" class="pass_path" />
-							<!-- Ceiling Front Court -->
-							<polyline v-if="show_shot('front','front', 3, 2, 20)" points="170,240 200,200, 230, 50, 200,10 230,500" class="ceiling_path" />
-							<!-- Z-shot Front Court -->
-							<polyline v-if="show_shot('front','front', 3, 3, 22)" points="170,240 50,10, 10, 50, 300,550 50,550" class="ceiling_path" />
+							<!-- Ceiling -->
+							<polyline v-if="show_shot('front','front', 3, 2, 20)" points="170,240 200,10 290,580" class="ceiling_path" />
+							<!-- Z-shot -->
+							<polyline v-if="show_shot('front','front', 3, 3, 22)" points="170,240 50,10, 10, 50, 300,580 50,580" class="ceiling_path" />
 
 
 							<!-- Offense = FRONT Defense = CENTER -->
-							<polyline v-if="show_shot('front','center', 2, 1, 1)" points="170,240 200,10 205,200" class="kill_path" />
-							<polyline v-if="show_shot('front','center', 4, 30, 2)" points="170,240 200,10 250,500" class="pinch_path" />
-							<polyline v-if="show_shot('front','center', 4, 31, 2)" points="170,240 200,10 250,500" class="pinch_path" />
-							<!-- Pass DTL Center Court -->
-							<polyline v-if="show_shot('front','center', 1, 1, 3)" points="170,240 200,10 250,500" class="pass_path" />
-							<!-- Pass Wide Center Court -->
-							<polyline v-if="show_shot('front','center', 1, 3, 3)" points="180,400 100,10 10,300 250,500" class="pass_path" />
+							<!-- Kill -->
+							<polyline v-if="show_shot('front','center', 2, 1, 10)" points="170,240 200,10 205,200" class="kill_path" />
+							<!-- Pinch -->
+							<polyline v-if="show_shot('front','center', 4, 2, 30)" points="170,240 300,30 280,10, 250,50" class="pinch_path" />
+							<!-- Reverse Pinch -->
+							<polyline v-if="show_shot('front','center', 4, 2, 31)" points="170,240 10,30 30,10 60,50" class="pinch_path" />
+							<!-- Pass DTL  -->
+							<polyline v-if="show_shot('front','center', 1, 1, 1)" points="170,240 230,10 250,500" class="pass_path" />
+							<!-- Pass Wide-Angle -->
+							<polyline v-if="show_shot('front','center', 1, 3, 3)" points="170,240 100,10 10,300 200,500" class="pass_path" />
 							
 
 							<!-- Offense = FRONT Defense = BACK -->
-
+							<!-- Kill -->
+							<polyline v-if="show_shot('front','back', 2, 1, 10)" points="170,240 200,10 205,200" class="kill_path" />
+							<!-- Pinch -->
+							<polyline v-if="show_shot('front','back', 4, 2, 30)" points="170,240 300,30 280,10, 250,50" class="pinch_path" />
+							<!-- Reverse Pinch -->
+							<polyline v-if="show_shot('front','back', 4, 2, 31)" points="170,240 10,30 30,10 60,50" class="pinch_path" />
+							<!-- Pass-KILL DTL  -->
+							<polyline v-if="show_shot('front','back', 1, 3, 1)" points="170,240 230,10 250,300" class="pass_path" />							
 
 							<!-- Offense = CENTER Defense = FRONT -->
-							<!-- Pass DTL Center Court -->
+							<!-- Pass DTL -->
 							<polyline v-if="show_shot('center','front', 1, 1, 1)" points="180,400 240,10 250,500" class="pass_path" />
-							<!-- Pass Cross Center Court -->
-							<polyline v-if="show_shot('center','front', 1, 2, 2)" points="180,400 100,10 40,500" class="pass_path" />						
-							<!-- Pass Wide Center Court -->
-							<polyline v-if="show_shot('center','front', 1, 3, 3)" points="180,400 100,10 10,300 250,500" class="pass_path" />						
-							<!-- Ceiling Front Court -->
-							<polyline v-if="show_shot('center','front', 3, 3, 20)" points="180,400 240,260, 230, 50, 200,10 230,500" class="ceiling_path" />
-							<!-- Z-shot Front Court -->
-							<polyline v-if="show_shot('center','front', 3, 3, 22)" points="180,400 50,10, 10, 50, 300,550 50,550" class="ceiling_path" />
+							<!-- Pass Cross Court -->
+							<polyline v-if="show_shot('center','front', 1, 2, 2)" points="180,400 80,10 40,500" class="pass_path" />						
+							<!-- Pass Wide-Angle  -->
+							<polyline v-if="show_shot('center','front', 1, 3, 3)" points="180,400 100,10 10,300 200,500" class="pass_path" />						
+							<!-- Ceiling  -->
+							<polyline v-if="show_shot('center','front', 3, 3, 20)" points="180,400 240,10, 290,580" class="ceiling_path" />
+							<!-- Z-shot -->
+							<polyline v-if="show_shot('center','front', 3, 3, 22)" points="180,400 50,10, 10, 50, 300,580 50,580" class="ceiling_path" />
 
 
 							<!-- Offense = CENTER Defense = CENTER -->
+							<!-- Pinch -->
+							<polyline v-if="show_shot('center','center', 4, 2, 30)" points="180,400 300,30 280,10, 250,50" class="pinch_path" />
+							<!-- Pass DTL -->
+							<polyline v-if="show_shot('center','center', 1, 1, 1)" points="180,400 240,10 250,500" class="pass_path" />
+							<!-- Pass Wide-Angle  -->
+							<polyline v-if="show_shot('center','center', 1, 1, 3)" points="180,400 100,10 10,300 200,500" class="pass_path" />	
+							<!-- Ceiling  -->
+							<polyline v-if="show_shot('center','center', 3, 3, 20)" points="180,400 200,10 290,580" class="ceiling_path" />
+							<!-- Z-shot -->
+							<polyline v-if="show_shot('center','center', 3, 3, 22)" points="180,400 50,10, 10, 50, 300,580 50,580" class="ceiling_path" />
+
 
 							<!-- Offense = CENTER Defense = BACK -->
-
+							<!-- Kill -->
+							<polyline v-if="show_shot('center','back', 2, 1, 10)" points="160,390 200,10 205,200" class="kill_path" />
+							<!-- Pinch -->
+							<polyline v-if="show_shot('center','back', 4, 2, 30)" points="160,390 300,30 280,10, 250,50" class="pinch_path" />
+							<!-- Reverse Pinch -->
+							<polyline v-if="show_shot('center','back', 4, 2, 31)" points="160,390 10,30 30,10 60,50" class="pinch_path" />
 
 
 							<!-- Offense = BACK Defense = FRONT -->
