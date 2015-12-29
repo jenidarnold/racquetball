@@ -205,7 +205,7 @@
 					</div>
 					</center>
 				</div>
-				<!-- -->
+				<!-- Drop downs Filter Shot Selections -->
 				<div class="col-xs-3">
 					<div class="form-group">
 						<label for="shot_types" class="control-label">Shot Types:</label>
@@ -226,6 +226,7 @@
 							<option value="4">1st & 2nd Only</option>
 						</select>
 					</div>
+					<!-- Legend -->
 					<div class="form-group">
 						<label for="shot_types" class="control-label">Shots by Name:</label>
 						<div class="well well-sm">

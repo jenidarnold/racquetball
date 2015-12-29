@@ -29,6 +29,7 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 {
 	Route::get('referee', 'RefereeController@index');
 	Route::get('shotselection', 'ShotSelectionController@index');
+	Route::get('doublesmatcher', 'DoublesMatcherController@index');
 });
 
 
