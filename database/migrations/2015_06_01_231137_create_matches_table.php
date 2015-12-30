@@ -34,7 +34,7 @@ class CreateMatchesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('matches');
+		//Schema::drop('matches');
 	}
 
 }

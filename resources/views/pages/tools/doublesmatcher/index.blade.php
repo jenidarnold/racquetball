@@ -31,12 +31,12 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<form class="form-inline" role="form">
-									<ul v-for="q in survey">
-										<span class="question">@{{q.id}}. @{{ q.question }}</span>
+									<ul v-for="q in questions">
+										<span class="question">@{{q.id}}. @{{ q.question }}</span><br/>
 										<select v-model="score[q.id]" class="form-control" v-on:change="computeScore">
 										  <option value="0" selected="true"></option>
-										  <option v-for="a in q.answers" v-bind:value="a.weight">
-										    @{{ a.text }}
+										  <option v-for="a in answers | filterBy q.id in 'question_id'" v-bind:value="a.value">
+										    @{{ a.answer }}
 										  </option>
 										</select>
 									</ul>
@@ -78,7 +78,6 @@
 					<label for="chkDebug">Debug</label>
 				</div>
 				<div class="row" v-show = "debug">
-				   @{{ questions }}
 				   <pre>@{{ $data | json }} </pre> 
 				</div>
 			</div>
@@ -101,6 +100,8 @@
 					score: {},
 					total_score: 0,
 					questions: [],
+					answers: [],
+					player_answers: [],
 					survey: {
 								1: {
 									id: 1,
@@ -211,17 +212,30 @@
 			},		
 			ready: function() {
                 this.getQuestions();
+                this.getAnswers();
             },		
 			methods: {
 				getQuestions: function() {
                     $.ajax({
                         context: this,
-                        url: "/tools/api/doublesmatcher/questions",
+                        url: "/tools/doublesmatcher/api/questions",
                         success: function (result) {
                             this.$set("questions", result);
                         },
 						error:function(x,e) {
 							console.log("error getting questions: " + e.message);
+						}
+                    });
+                },
+                getAnswers: function() {
+                    $.ajax({
+                        context: this,
+                        url: "/tools/doublesmatcher/api/answers",
+                        success: function (result) {
+                            this.$set("answers", result);
+                        },
+						error:function(x,e) {
+							console.log("error getting answers: " + e.message);
 						}
                     });
                 },
@@ -240,7 +254,6 @@
 							this.players[pid].match += this.players[pid].diff[sid-1]
 						}
 					};
-					return true;
 				}
 			}
 		});	

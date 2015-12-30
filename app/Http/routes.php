@@ -29,8 +29,9 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 {
 	Route::get('referee', 'RefereeController@index');
 	Route::get('shotselection', 'ShotSelectionController@index');
-	Route::get('doublesmatcher', 'DoublesMatcherController@index');
-	Route::get('api/doublesmatcher/questions', 'MatchmakerQuestionsController@index');
+	Route::get('doublesmatcher', 'Matchmaker\MatchmakerController@index');
+	Route::get('doublesmatcher/api/questions', 'Matchmaker\QuestionsController@index');
+	Route::get('doublesmatcher/api/answers', 'Matchmaker\AnswersController@index');
 });
 
 

@@ -29,6 +29,6 @@ class CreateMatchmakerQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('tournament_matches');
+        Schema::drop('matchmaker_questions');
     }
 }

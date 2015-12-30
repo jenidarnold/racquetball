@@ -12,7 +12,15 @@ class CreateMatchmakerAnswersTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('matchmaker_answers', function(Blueprint $table)
+        {
+            $table->increments('id');
+            $table->integer('question_id');
+            $table->integer('order_num');
+            $table->string('answer');
+            $table->string('value');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -22,6 +30,6 @@ class CreateMatchmakerAnswersTable extends Migration
      */
     public function down()
     {
-        //
+        //Schema::drop('matchmaker_answers');
     }
 }

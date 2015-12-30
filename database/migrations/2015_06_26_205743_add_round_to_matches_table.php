@@ -24,9 +24,9 @@ class AddRoundToMatchesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('round', function($t){
-			$t->dropColumn('round');
-		});
+		//Schema::table('matches', function($t){
+		//	$t->dropColumn('round');
+		//});
 	}
 
 
