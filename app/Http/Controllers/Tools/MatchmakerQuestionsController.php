@@ -5,8 +5,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
+use App\MatchmakerQuestion;
 
-class DoublesMatcherController extends Controller {
+class MatchmakerQuestionsController extends DoublesMatcherController {
 
 	/**
 	 * Create a new controller instance.
@@ -25,7 +26,7 @@ class DoublesMatcherController extends Controller {
 	 */
 	public function index()
 	{
-		return view('pages/tools.doublesmatcher.index', compact('questions'));
+		return response()->json(MatchmakerQuestion::get());
 	}
 
 	/**
@@ -47,19 +48,6 @@ class DoublesMatcherController extends Controller {
 	{
 		//
 	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($user_id)
-	{
-		
-		return view('pages/tools.doublesmatcher.show', compact('user'));
-	}
-
 
 	/**
 	 * Show the form for editing the specified resource.

@@ -70,19 +70,17 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
-
-	<!-- Debug Panel -->
-	<div class="panel panel-default">
-		<div class="panel-body">
-			<div class="row col-xs-12">
-				<input type="checkbox" id="chkDebug" v-model="debug">
-				<label for="chkDebug">Debug</label>
-			</div>
-			<div class="row" v-show = "debug">
-			    @{{ players_list}}
-				<pre>@{{ $data | json }} </pre> 
+		<!-- Debug Panel -->
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="row col-xs-12">
+					<input type="checkbox" id="chkDebug" v-model="debug">
+					<label for="chkDebug">Debug</label>
+				</div>
+				<div class="row" v-show = "debug">
+				   @{{ questions }}
+				   <pre>@{{ $data | json }} </pre> 
+				</div>
 			</div>
 		</div>
 	</div>
@@ -97,61 +95,87 @@
 		Vue.config.debug = false;
 
 		new Vue({
-			el: '#myvue',
+			el: '#myvue',			
 			data: {	
 					debug: false,
 					score: {},
 					total_score: 0,
+					questions: [],
 					survey: {
-						1: {
-							id: 1,
-							question: 'Are you a Power player, Control Player, or Balanced Player?', 
-							answers : { 
-								1: { text: 'Power Player',weight: 1 },
-								3: { text: 'Balanced Player', weight: 0 },									
-								2: { text: 'Control Player', weight: 2 },					
-							}
-						},
-						2: {
-							id: 2,
-							question: 'I Prefer to Shoot or Retrieve the ball?', 
-							answers : { 
-								1: { text: 'Shoot', weight: 1 },
-								2: { text: 'Retrieve', weight: 2 },
-							}
-						},
-						3: {
-							id: 3,
-							question: 'I play Level-headed or Emotionally?', 
-							answers : { 
-								1: { text: 'Level-headed', weight: 1 },
-								2: { text: 'Emotionally', weight: 2 },
-							}
-						},
-						4: {
-							id: 4,
-							question: 'I play Calm or Psyched Up?', 
-							answers : { 
-								1: { text: 'Calm', weight: 2 },
-								2: { text: 'Psyched Up', weight: 1 },
-							}
-						},
-						5: {
-							id: 5,
-							question: 'I play Left-Handed or Right-Handed?', 
-							answers : { 
-								1: { text: 'Left-Handed', weight: 1 },
-								2: { text: 'Right-Handed', weight: 2 },
-							}
-						},
-						6: {
-							id: 6,
-							question: 'My preferred game tempo is:', 
-							answers : { 
-								1: { text: 'Slow and Methodical', weight: 1 },
-								2: { text: 'Fast-paced', weight: 2 },
-							}
-						},
+								1: {
+									id: 1,
+									question: 'Are you a Power player, Control Player, or Balanced Player?', 
+									category: 'complement',
+									answers : { 
+										1: { text: 'Power Player',weight: 1 },
+										3: { text: 'Balanced Player', weight: 0 },									
+										2: { text: 'Control Player', weight: 2 },					
+									}
+								},
+								2: {
+									id: 2,
+									question: 'Do you prefer to Shoot or Retrieve the ball?', 
+									category: 'complement',
+									answers : { 
+										1: { text: 'Shoot', weight: 1 },
+										2: { text: 'Retrieve', weight: 2 },
+									}
+								},
+								3: {
+									id: 3,
+									question: 'Do you play Level-headed or Emotionally?', 
+									category: 'complement',
+									answers : { 
+										1: { text: 'Level-headed', weight: 1 },
+										2: { text: 'Emotionally', weight: 2 },
+									}
+								},
+								4: {
+									id: 4,
+									question: 'Do you play Calm or Psyched Up?', 
+									category: 'complement',
+									answers : { 
+										1: { text: 'Calm', weight: 1 },
+										2: { text: 'Psyched Up', weight: 2 },
+									}
+								},
+								5: {
+									id: 5,
+									question: 'Are Left-Handed or Right-Handed?', 
+									category: 'complement',
+									answers : { 
+										1: { text: 'Left-Handed', weight: 1 },
+										2: { text: 'Right-Handed', weight: 2 },
+									}
+								},
+								6: {
+									id: 6,
+									question: 'My preferred game tempo is:', 
+									category: 'same',
+									answers : { 
+										1: { text: 'Slow and Methodical', weight: 1 },
+										2: { text: 'Fast-paced', weight: 2 },
+									}
+								},
+								7: {
+									id: 7,
+									question: 'Do you prefer to play Left-side or Right-side of the court?', 
+									category: 'complement',
+									answers : { 
+										1: { text: 'Left', weight: 1 },
+										2: { text: 'Either', weight: 0 },
+										3: { text: 'Right', weight: 2 },
+									},
+								8: {
+									id: 8,
+									question: 'Do you prefer to cover the Front or Back court?', 
+									category: 'complement',
+									answers : { 
+										1: { text: 'Front', weight: 1 },
+										2: { text: 'Either', weight: 0 },
+										3: { text: 'Back', weight: 2 },
+									}
+								},
 					},
 					players: {
 						1: {id: 1,
@@ -177,14 +201,30 @@
 							scores: [0,0,1,1,1,1],
 							diff: [],
 							match: 0
-						},					
-				},
-			},								
+							},					
+					},
+				},	
+			},							
 			computed: {				
 			},
 			filters: {
-			},				
+			},		
+			ready: function() {
+                this.getQuestions();
+            },		
 			methods: {
+				getQuestions: function() {
+                    $.ajax({
+                        context: this,
+                        url: "/tools/api/doublesmatcher/questions",
+                        success: function (result) {
+                            this.$set("questions", result);
+                        },
+						error:function(x,e) {
+							console.log("error getting questions: " + e.message);
+						}
+                    });
+                },
 				computeScore: function(){
 					this.total_score = 0;			
 					for (var id in this.score) {
@@ -200,6 +240,7 @@
 							this.players[pid].match += this.players[pid].diff[sid-1]
 						}
 					};
+					return true;
 				}
 			}
 		});	
