@@ -32,6 +32,9 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 	Route::get('doublesmatcher', 'Matchmaker\MatchmakerController@index');
 	Route::get('doublesmatcher/api/questions', 'Matchmaker\QuestionsController@index');
 	Route::get('doublesmatcher/api/answers', 'Matchmaker\AnswersController@index');
+	Route::get('doublesmatcher/api/players', 'Matchmaker\PlayersController@players');
+	Route::get('doublesmatcher/api/players/{player_id}/answers', 'Matchmaker\PlayersController@answersByPlayer');
+	Route::get('doublesmatcher/api/players/answers', 'Matchmaker\PlayersController@answers');
 });
 
 

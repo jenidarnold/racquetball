@@ -16,6 +16,17 @@
 			font-size: 12pt;
 			font-weight: 500;
 		}
+
+		.profile {
+			position: relative;
+			height: 50px;
+			width: 50px;
+		}
+		.img-profile{
+			width: 100%;
+			height: auto;
+			overflow: hidden;
+		}
 	</style>
 @stop
 
@@ -24,7 +35,7 @@
 <div class="container">
 	<div id="myvue">
 		<div class="row">
-			<div class="col-xs-8">
+			<div class="col-xs-7">
 				<div class="panel panel-primary">			
 					<div class="panel-heading"><h3>Questionaire</h3></div>
 					<div class="panel-body">	
@@ -46,19 +57,24 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-4">
+			<div class="col-xs-5">
 				<div class="panel panel-success">			
 					<div class="panel-heading"><h3>Matches</h3></div>
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-xs-12">
-								<ul v-for="p in players | orderBy 'match' -1">
+								<ul v-for="m in matches">
 									<div class="row">
-										<div class="col-xs-4">
-											<span class="player">@{{p.name}} </h4>
+										<div class="col-xs-2">
+											<div class="profile">
+												<img class='img-profile' v-bind:src="m.pid | profile">
+											</div>
 										</div>
-										<div class="col-xs-8">
-											<span v-for="s in p.match">
+										<div class="col-xs-7">
+											<span class="player">@{{players[m.pid].first_name}} @{{players[m.pid].last_name}}</span>		
+										</div>
+										<div class="col-xs-3">
+											<span v-for="s in m.score">
 												<i class ="fa fa-star fa-xs star"></i>
 											</span>
 										</div>
@@ -91,7 +107,7 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.1/vue.js"></script>
 	<script>
 
-		Vue.config.debug = false;
+		Vue.config.debug = true;
 
 		new Vue({
 			el: '#myvue',			
@@ -101,118 +117,25 @@
 					total_score: 0,
 					questions: [],
 					answers: [],
-					player_answers: [],
-					survey: {
-								1: {
-									id: 1,
-									question: 'Are you a Power player, Control Player, or Balanced Player?', 
-									category: 'complement',
-									answers : { 
-										1: { text: 'Power Player',weight: 1 },
-										3: { text: 'Balanced Player', weight: 0 },									
-										2: { text: 'Control Player', weight: 2 },					
-									}
-								},
-								2: {
-									id: 2,
-									question: 'Do you prefer to Shoot or Retrieve the ball?', 
-									category: 'complement',
-									answers : { 
-										1: { text: 'Shoot', weight: 1 },
-										2: { text: 'Retrieve', weight: 2 },
-									}
-								},
-								3: {
-									id: 3,
-									question: 'Do you play Level-headed or Emotionally?', 
-									category: 'complement',
-									answers : { 
-										1: { text: 'Level-headed', weight: 1 },
-										2: { text: 'Emotionally', weight: 2 },
-									}
-								},
-								4: {
-									id: 4,
-									question: 'Do you play Calm or Psyched Up?', 
-									category: 'complement',
-									answers : { 
-										1: { text: 'Calm', weight: 1 },
-										2: { text: 'Psyched Up', weight: 2 },
-									}
-								},
-								5: {
-									id: 5,
-									question: 'Are Left-Handed or Right-Handed?', 
-									category: 'complement',
-									answers : { 
-										1: { text: 'Left-Handed', weight: 1 },
-										2: { text: 'Right-Handed', weight: 2 },
-									}
-								},
-								6: {
-									id: 6,
-									question: 'My preferred game tempo is:', 
-									category: 'same',
-									answers : { 
-										1: { text: 'Slow and Methodical', weight: 1 },
-										2: { text: 'Fast-paced', weight: 2 },
-									}
-								},
-								7: {
-									id: 7,
-									question: 'Do you prefer to play Left-side or Right-side of the court?', 
-									category: 'complement',
-									answers : { 
-										1: { text: 'Left', weight: 1 },
-										2: { text: 'Either', weight: 0 },
-										3: { text: 'Right', weight: 2 },
-									},
-								8: {
-									id: 8,
-									question: 'Do you prefer to cover the Front or Back court?', 
-									category: 'complement',
-									answers : { 
-										1: { text: 'Front', weight: 1 },
-										2: { text: 'Either', weight: 0 },
-										3: { text: 'Back', weight: 2 },
-									}
-								},
-					},
-					players: {
-						1: {id: 1,
-							name: 'Michael',
-							scores: [1,1,1,1,1,1],
-							diff: [],
-							match: 0,
-						},
-						2: {id: 2,
-							name: 'Brandon',
-							scores: [0,2,1,1,1,2],
-							diff: [],
-							match: 0,
-						},
-						3: {id: 3,
-							name: 'Justin',
-							scores: [1,1,1,1,1,2],
-							diff: [],
-							match: 0
-						},
-						4: {id: 4,
-							name: 'Barry',
-							scores: [0,0,1,1,1,1],
-							diff: [],
-							match: 0
-							},					
-					},
-				},	
+					players: [],
+					player_answers:[],
+					player_scores:{},
+					matches: [],	
 			},							
-			computed: {				
+			computed: {	
+				
 			},
 			filters: {
+				profile: function(pid) {
+				var baseURL = 'http://www.r2sports.com/tourney/imageGallery/gallery/player/';				
+				return baseURL + pid + '_normal.jpg';
+				}
 			},		
 			ready: function() {
                 this.getQuestions();
                 this.getAnswers();
+                this.getPlayers();
+                this.getPlayerAnswers();
             },		
 			methods: {
 				getQuestions: function() {
@@ -239,21 +162,57 @@
 						}
                     });
                 },
+                getPlayers: function() {
+                    $.ajax({
+                        context: this,
+                        url: "/tools/doublesmatcher/api/players",
+                        success: function (result) {
+                            this.$set("players", result);
+                        },
+						error:function(x,e) {
+							console.log("error getting players: " + e.message);
+						}
+                    });
+                },
+                getPlayerAnswers: function(player_id) {
+                    $.ajax({
+                        context: this,
+                        url: "/tools/doublesmatcher/api/players/answers",
+                        success: function (result) {
+                            this.$set("player_answers", result);
+                        },
+						error:function(x,e) {
+							console.log("error getting player answers: " + e.message);
+						}
+                    });
+                },				
 				computeScore: function(){
 					this.total_score = 0;			
 					for (var id in this.score) {
 						var weight =  parseInt(this.score[id]);
 						this.total_score+=  weight;
 					};
+					
+					for (var p in this.player_answers) {						
+						var player_id = this.player_answers[p].player_id;
+						var question_id = this.player_answers[p].question_id;
+						var answer_id = this.player_answers[p].answer_id;
 
-					for (var pid in this.players) {
-						this.players[pid].match = 0;
-						for (var sid in this.score) {
-							this.players[pid].diff[sid-1] =  Math.abs(this.players[pid].scores[parseInt(sid)-1] - this.score[sid]) ;
+console.log(player_id + ' ' + answer_id + ' ' + question_id);
+						var value = this.answers[answer_id].value;
+						var score =  Math.abs(value - this.score[question_id]) ;
+						if ((Number.isInteger(value)) && (Number.isInteger(parseInt(player_id)))) {
+							if (!this.player_scores[player_id]){
+								this.player_scores[player_id] = { pid: player_id, score: 0 };
+							}
+							this.player_scores[player_id].score += value;
+						}				
+					}
 
-							this.players[pid].match += this.players[pid].diff[sid-1]
-						}
-					};
+					this.matches = [];
+					for (var player_id in this.player_scores) {
+						this.matches.push(this.player_scores[player_id]);
+					}					
 				}
 			}
 		});	
