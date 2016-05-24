@@ -168,12 +168,16 @@
 										<tr>
 											<td class='rank'><sup>@{{ $m->p1_rank }}</sup></td>
 											<td class="player_name">{{ $m->p1_last_name }}, {{ $m->p1_first_name }} </td>			
-											<td class="score">{{ $m->player1_id }} </td>	
+											@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
+											<td class="score">{{$g["games"]->first()->score1 }}</td>
+											@endforeach	
 										</tr>
 										<tr>
 											<td class='rank'><sup>@{{  $m->p2_rank }}</sup></td>
 											<td class="player_name">{{ $m->p2_last_name }}, {{ $m->p2_first_name }} </td>			
-											<td class="score">{{ $m->player2_id }} </td>	
+											@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
+											<td class="score">{{$g["games"]->first()->score2 }}</td>
+											@endforeach		
 										</tr>										
 									</table>
 								</td>
@@ -188,7 +192,7 @@
 							<tr><td><h5>No Matches</h5></td></tr>
 						@endif
 						</table>
-					<table class="table match">
+					{{-- <table class="table match">
 						<th>Week #</th>
 						<th>Match #</th>
 						<th>Result</th>
@@ -216,7 +220,7 @@
 								<button class="btn btn-danger btn-sm" v-on:click="deleteMatch(m.id)">Delete</button>
 							</td>
 						</tr>
-					</table>
+					</table> --}}
 				</div>
 			</div>
 		</div>			
@@ -232,96 +236,51 @@
 				<div class="col-xs-12">
 				{!! Form::model($league, array('route' => array('tools.league.match.add'), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'PUT')) !!}
 				{!! Form::hidden ('_token', csrf_token()) !!}
-				{!! Form::hidden ('league_id', $league->league_id) !!}					
-					<div class="form-group" style="padding-bottom:10px">						
-						<label for="ddlMatchPlayer1" class="control-label col-xs-2">Player 1:</label>
+				{!! Form::hidden ('league_id', $league->league_id) !!}	
+					<div class="form-group">
+						<label for="match_date" class="control-label col-xs-1">Date:</label>
+						<div class="col-xs-2">
+							<div class="input-group date date-picker" data-provide="datepicker">						
+							    <input type="text" class="form-control" name="match_date">
+							    <div class="input-group-addon">
+							        <span class="glyphicon glyphicon-th"></span>
+							    </div>
+							</div>
+						</div>
+					</div>				
+					<div class="form-group">						
+						<label for="ddlMatchPlayer1" class="control-label col-xs-1">Player 1:</label>
 						<div class="col-xs-3">
 							{!! Form::select('ddlMatchPlayer1', $players_list, '', 
-								    array('class' => 'player form-control', 'name' => 'player1_id',
-							       'style' => 'font-weight:300; font-size:11pt; width:200px',
-					        )) !!}
+								    array('class' => 'player form-control', 'name' => 'player1_id')) !!}
 						</div>
-						<label for="ddlMatchPlayer2" class="control-label col-xs-2">Player 2:</label>
+						<label for="p1_score" class="control-label col-xs-1">Score:</label>
+						<div class="col-xs-1">
+							<input name="p1_score" type="text" class="form-control">
+						</div>						
+					</div>
+					<div class="form-group">
+						<label for="ddlMatchPlayer2" class="control-label col-xs-1">Player 2:</label>
 						<div class="col-xs-3">
-							{!! Form::select('ddlMatchPlayer1', $players_list, '', 
-								    array('class' => 'player form-control', 'name' => 'player2_id',
-							       'style' => 'font-weight:300; font-size:11pt; width:200px',
-					        )) !!}
+							{!! Form::select('ddlMatchPlayer2', $players_list, '', 
+								    array('class' => 'player form-control', 'name' => 'player2_id')) !!}
 						</div>
+						<label for="p2_score" class="control-label col-xs-1">Score:</label>
+						<div class="col-xs-1">
+							<input name="p2_score" type="text" class="form-control">
+						</div>
+					</div>
+					<div class="form-group">
 						<div class="col-xs-3">
-				    		{!!  Form::submit('Submit', array('class' => 'btn btn-success',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}
-							<button type="button" class="btn btn-warning" v-show="!error" @click ="cancelled">Cancel</button>
+				    		{!!  Form::submit('Submit', array('class' => 'btn btn-success btn-sm',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}
+							<button type="button" class="btn btn-warning btn-sm" v-show="!error" @click ="cancelled">Cancel</button>
 				    	</div>						   
 					</div>																
 				{!! Form::close() !!}
 				</div>
 			</div>
 		</div>	
-	</div>
-	<!-- Display Add Match Results  -->
-	<div class="panel panel-warning" v-show="true">
-		<div class="panel-heading">	
-			<h4>Edit Match</h4>				
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-xs-12">
-					{!! Form::open(array('class' => 'form-horizontal', 'role' => 'form')) !!}
-						<div class="form-group" style="padding-bottom:10px">						
-							<label for="ddlMatchPlayer1" class="control-label ">Player 1:</label>	
-							<div>					
-							{!! Form::select('ddlMatchPlayer1', $players_list, '', 
-								    array('class' => 'player form-control', 'name' => 'player1_id',
-							       'style' => 'font-weight:300; font-size:11pt; width:200px',
-							        )) !!}
-							</div>
-						</div>
-						<div class="form-group">
-							 <label for="txtPlayer1Score" class="control-label ">Score:</label>
-							 <input id="txtPlayer1Score" type="text" class="txt-score form-control"> 
-						</div>
-						<div class="form-group">
-							<label for="ddlMatchPlayer2" class="control-label">Player 2:</label>
-							<div>
-							{!! Form::select('ddlMatchPlayer1', $players_list, '', 
-								    array('class' => 'player form-control', 'name' => 'player2_id',
-							       'style' => 'font-weight:300; font-size:11pt; width:200px',
-							        )) !!}
-							</div>	
-						</div>
-						<div class="form-group">
-							<label for="txtPlayer2Score" class="control-label ">Score:</label>
-							<input id="txtPlayer2Score" type="text" class="txt-score form-control"> 
-						</div>
-						<div class="col-xs-1">
-				    		<button class="btn btn-success btn-md" v-on:click="saveMatch(match_id)">Save</button>	
-				    	</div>	
-				    	<div class="col-xs-1">
-				    		<button class="btn btn-warning btn-md" v-on:click="cancelMatch()">Cancel</button>	
-				    	</div>														
-					{!! Form::close() !!}
-				</div>	
-			</div>
-		</div>	
-	</div>
-	<!-- Debug Panel -->
-	<div class="panel panel-default">
-		<div class="panel-body">
-			<div class="row col-xs-12">
-				<input type="checkbox" id="chkDebug" v-model="debug">
-				<label for="chkDebug">Debug</label>
-			</div>
-			<div class="row" v-show = "debug">
-				<pre>@{{ $data | json }} </pre> 
-			</div>
-		</div>
-	</div>
-	<template id="player-template">
-		<table>
-			<tr>			
-			</tr>
-		</table>
-	</template>
+	</div>	
 </div>
 
 @stop
@@ -336,12 +295,6 @@
 	        	allowClear: true,    	 	
 	        });	
 	        $(".player").select2("val", "");
-
-	        $(".player").on('change', function () {
-	        		var id = this.value;
-	        		var name = $(".player").select2('data')[0]['text'];
-			        vm.addPlayer(id, name);
-			      });
 	    });
 	</script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.1/vue.js"></script>

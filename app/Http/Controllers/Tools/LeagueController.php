@@ -4,6 +4,8 @@ use Input;
 use App\Player;
 use App\League;
 use App\Match;
+use App\Game;
+use App\MatchGame;
 use App\GameFormat;
 use App\GymLocation;
 use App\LeaguePlayer;
@@ -92,8 +94,8 @@ class LeagueController extends Controller {
         //     // store
             $league = new League;
             $league->name       = Input::get('league_title');
-            $league->start_date      = Input::get('start_date');
-            $league->end_date = Input::get('end_date');
+            $league->start_date = Input::get('start_date');
+            $league->end_date 	= Input::get('end_date');
             $league->save();
 		//}
         // redirect
@@ -150,8 +152,12 @@ class LeagueController extends Controller {
 		$players_list = $players->select(\DB::raw('concat (last_name, ", ", first_name) as last_first_name, players.player_id'))
 			->lists('last_first_name', 'player_id');
 
-		//dd($players_list);
-		return view('pages/tools.league.show', compact('league', 'players', 'matches', 'players_list'));
+		//Empty objects used to get Scores
+		$match = New MatchGame();
+		$game = New Game();
+
+
+		return view('pages/tools.league.show', compact('league', 'players', 'matches', 'match', 'game', 'players_list'));
 	}
 
 	/**
@@ -243,19 +249,39 @@ class LeagueController extends Controller {
 		$match_date = Input::get('match_date');
 		$player1_id = Input::get('player1_id');
 		$player2_id = Input::get('player2_id');
+		$p1_score = Input::get('p1_score');
+		$p2_score = Input::get('p2_score');
 		
-		if ((! is_null($player1_id)) && (! is_null($player2_id))) {		
+		$match_date =  new \DateTime($match_date);
+		$match_date = $match_date->format("Y-m-d h:m:s");
+
+		if ((! is_null($player1_id)) && (! is_null($player2_id))) {	
+			//create a new match	
 			$match = New Match;
 		 	$match->player1_id = $player1_id;
           	$match->player2_id = $player2_id;
           	$match->match_date = $match_date;
           	$match->save();
 
+          	//Add match to the current league
 			$league_match = New LeagueMatch;	
 			$league_match->league_id = $league_id;
           	$league_match->match_id = $match->match_id;
-          	$league_match->match_date = $match->match_date;
         	$league_match->save();
+
+        	//Create a game and add to the Match
+        	if ((! is_null($p1_score)) && (! is_null($p2_score))) {	
+        		$game = New Game;	
+				$game->score1 = $p1_score;
+				$game->score2 = $p2_score;
+        		$game->save();
+
+        		$match_game = New MatchGame;	
+	          	$match_game->match_id = $match->match_id;
+				$match_game->game_id = $game->id;				
+				$match_game->game_num = 1; //will be based on league format
+	        	$match_game->save();
+	        	}
         }
 
 		return \Redirect::route('tools.league.show', array($league_id));
@@ -297,12 +323,10 @@ class LeagueController extends Controller {
 				->orderby('last_name')
 				->orderby('first_name');
 
-
 		//dropdown list
 		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
 		$players_list = $players_list->lists('last_first_name', 'player_id');
 		
-
 		return view('pages/tools.league.edit', compact('league', 'players', 'players_list'));
 	}
 
