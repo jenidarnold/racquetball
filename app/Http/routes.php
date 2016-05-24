@@ -27,6 +27,18 @@ Route::group(['namespace' => 'Admin', 'prefix' =>'admin'], function()
 
 Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 {
+	Route::get('league', array('as' => 'tools.league', 'uses' => 'LeagueController@index'));	
+	Route::get('league/create', array('as' => 'tools.league.create', 'uses' => 'LeagueController@create'));
+	Route::post('league/store', array('as' => 'tools.league.store',  'uses' =>  'LeagueController@store'));
+	Route::get('league/{league_id}/', array('as' => 'tools.league.show', 'uses' => 'LeagueController@show'));
+	Route::get('league/{league_id}/join', array('as' => 'tools.league.join', 'uses' => 'LeagueController@join'));
+	Route::put('league/{league_id}/join', array('as' => 'tools.league.join', 'uses' => 'LeagueController@addPlayer'));
+	Route::get('league/{league_id}/edit', array('as' => 'tools.league.edit', 'uses' => 'LeagueController@edit'));
+	Route::post('league/{league_id}/edit', array('as' => 'tools.league.edit', 'uses' => 'LeagueController@update'));
+	Route::put('league/{league_id}/match/add', array('as' => 'tools.league.match.add', 'uses' => 'LeagueController@addMatch'));
+	Route::post('league/{league_id}/edit', array('as' => 'tools.league.match.edit', 'uses' => 'LeagueController@updateMatch'));
+
+	Route::get('league/{league_id}/players/count', 'LeagueController@playerCount');
 	Route::get('referee', 'RefereeController@index');
 	Route::get('shotselection', 'ShotSelectionController@index');
 	Route::get('doublesmatcher', 'Matchmaker\MatchmakerController@index');
@@ -35,6 +47,7 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 	Route::get('doublesmatcher/api/players', 'Matchmaker\PlayersController@players');
 	Route::get('doublesmatcher/api/players/{player_id}/answers', 'Matchmaker\PlayersController@answersByPlayer');
 	Route::get('doublesmatcher/api/players/answers', 'Matchmaker\PlayersController@answers');
+	Route::post('doublesmatcher/api/players/answers/save', 'Matchmaker\PlayersController@storePlayerAnswers');
 });
 
 

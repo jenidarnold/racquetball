@@ -27,7 +27,7 @@ class MatchmakerAnswersTableSeeder extends Seeder {
 			'question_id' => 1,
 			'order_num' => 2,
 			'answer' => 'Balanced Player',
-			'value' => 0,
+			'value' => 2,
 			]);
 
 		MatchmakerAnswer::create([
@@ -35,7 +35,7 @@ class MatchmakerAnswersTableSeeder extends Seeder {
 			'question_id' => 1,
 			'order_num' => 3,
 			'answer' => 'Control Player',
-			'value' => 2,
+			'value' => 3,
 			]);
 
 		MatchmakerAnswer::create([
@@ -43,7 +43,7 @@ class MatchmakerAnswersTableSeeder extends Seeder {
 			'question_id' => 2,
 			'order_num' => 1,
 			'answer' => 'Shoot',
-			'value' => 1,
+			'value' => 4,
 			]);
 
 		MatchmakerAnswer::create([
@@ -51,7 +51,7 @@ class MatchmakerAnswersTableSeeder extends Seeder {
 			'question_id' => 2,
 			'order_num' => 2,
 			'answer' => 'Retrieve',
-			'value' => 2,
+			'value' => 5,
 			]);
 
 		MatchmakerAnswer::create([
@@ -59,7 +59,7 @@ class MatchmakerAnswersTableSeeder extends Seeder {
 			'question_id' => 3,
 			'order_num' => 1,
 			'answer' => 'Level-headed',
-			'value' => 1,
+			'value' => 6,
 			]);
 
 		MatchmakerAnswer::create([
@@ -67,7 +67,7 @@ class MatchmakerAnswersTableSeeder extends Seeder {
 			'question_id' => 3,
 			'order_num' => 2,
 			'answer' => 'Emotionally',
-			'value' => 2,
+			'value' => 7,
 			]);
 	}
 }

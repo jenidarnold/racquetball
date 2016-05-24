@@ -17,7 +17,7 @@ class PlayersController extends MatchmakerController {
 	 */
 	public function __construct()
 	{
-		//$this->middleware('auth');
+		$this->middleware('auth');
 	}
 	
 	/**
@@ -50,7 +50,7 @@ class PlayersController extends MatchmakerController {
 	 */
 	public function answersByPlayer($player_id)
 	{
-		$answers = MatchmakerPlayerAnswer::where('player_id', '=', $player_id)->get();
+		//$answers = MatchmakerPlayerAnswer::where('player_id', '=', $player_id)->get();
 	
 		return response()->json($answers);
 	}
@@ -66,7 +66,7 @@ class PlayersController extends MatchmakerController {
 		$answers_list = array();
 
 		foreach ($answers as $a) {			
-			$answers_list[$a->player_id] = $a;
+			$answers_list[$a->player_id][$a->question_id] = $a;
 		}
 
 		return response()->json($answers_list);
@@ -79,17 +79,41 @@ class PlayersController extends MatchmakerController {
 	 */
 	public function create()
 	{
-		//
+	
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * Store Player Answers.
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function storePlayerAnswers(Request $request)
 	{
-		//
+		//return response()->json(
+		//	MatchmakerPlayerAnswer::create(['player_id' => 123,
+		//		'question_id' => 1,
+		//		'answer_id' => 1
+		//	]));
+		
+
+		$player_id = $request->player_id;
+		$player_answers = $request->player_answers;
+
+		$question_id = 1;
+		foreach ($player_answers as $a) {
+			$answer_id = $a[0];
+
+			$answer = MatchmakerPlayerAnswer::find($player_id)->where('question_id', '=', $question_id);
+		
+			//var_dump($answer->count());
+
+			$answer->question_id = $question_id;
+			$answer->answer_id = $answer_id;
+			$answer->save();
+
+			//next question
+			$question_id +=1;
+		}
 	}
 
 	/**

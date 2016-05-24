@@ -32,7 +32,7 @@ class MatchmakerQuestionsTableSeeder extends Seeder {
 			'id' => 3,
 			'category_id' => 1,
 			'order_num' => 3,
-			'question' => 'Do you prefer to Shoot or Retrieve the ball?',
+			'question' => 'Do you play Level-headed or Emotionally?',
 			]);
 	}
 }

@@ -69,7 +69,7 @@
 <div class="container">
 	<div id="myvue">
 		<div class="panel panel-primary" v-show="showSetup">			
-			<div class="panel-heading"><h3>Setup</h3></div>
+			<div class="panel-heading"><h3>Setup Match</h3></div>
 			<div class="panel-body">	
 				<form class="form-inline" role="form">
 					<h4><i class="fa fa-clock-o"></i> Game Format: 

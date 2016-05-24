@@ -75,6 +75,11 @@
     .box-shadow--16dp {
         box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
     }
+    .control-label {
+			font-weight: bold;
+			font-size: 10pt;
+		}
+    }
 </style>
 <body class="white" style="background-image1: url('/images/grey-bg.jpg');">
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.1/vue.min.js"></script>
@@ -149,6 +154,7 @@
                         <ul class="dropdown-menu">
                             <li class=""><a href="{{ url('/tools/referee') }}">Referee</a></li>
                             <li class=""><a href="{{ url('/tools/shotselection') }}">Shot Selection</a></li>
+                            <li class=""><a href="{{ url('/tools/league') }}">Leagues</a></li>
                         </ul>
                     </li>    
                     <!-- Social Media -->
@@ -221,6 +227,8 @@
             $(".clickable-row").click(function() {
                 window.document.location = $(this).data("href");
             });   
+
+           // $('.date-picker').datepicker();
         });
     </script>
 </body>

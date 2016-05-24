@@ -31,10 +31,23 @@ class League extends Model {
 		return $this->hasManyThrough('App\Player', 'App\LeaguePlayer', 'league_id', 'player_id');
 	}
 
+	public function getPlayers($league_id) {
+
+		$p = \DB::table('leagues')
+			->join('league_players', 'leagues.league_id', '=', 'league_players.league_id')
+			->join('players', 'players.player_id', '=', 'league_players.player_id')
+			->where('leagues.league_id', '=', $league_id)			
+			->select( '*')
+			->distinct();
+			
+		return $p;
+	}
+
 	public function matches() {
 
 		return $this->hasManyThrough('App\Match', 'App\LeagueMatch', 'league_id', 'tournament_id');
 	}
+
 
 	public function getMatches($league_id, $player_id) {
 

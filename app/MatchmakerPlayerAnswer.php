@@ -13,7 +13,7 @@ class MatchmakerPlayerAnswer extends Model
 	 */
 	protected $table = 'matchmaker_player_answers';
 
-	public $primaryKey = 'player_id';
+	protected $primaryKey = 'player_id';
 	/**
 	 * The attributes that are mass assignable.
 	 *

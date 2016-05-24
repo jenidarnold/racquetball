@@ -94,7 +94,7 @@ class Match extends Model {
 
 	public function getScores() {
 
-		return 5;
+		//return 5;
 		return $this->hasMany('App\MatchGame', 'match_id', 'game_id');
 	}
 }

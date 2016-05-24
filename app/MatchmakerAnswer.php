@@ -18,7 +18,7 @@ class MatchmakerAnswer extends Model
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['id', 'question_id', 'order_num', 'answer', 'value'];
+	protected $fillable = ['id', 'question_id', 'order_num', 'answer', 'value', 'conjugate'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.
