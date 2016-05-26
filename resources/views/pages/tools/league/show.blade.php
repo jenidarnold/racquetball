@@ -191,36 +191,7 @@
 						@if (count($m) ==0)
 							<tr><td><h5>No Matches</h5></td></tr>
 						@endif
-						</table>
-					{{-- <table class="table match">
-						<th>Week #</th>
-						<th>Match #</th>
-						<th>Result</th>
-						<th>Actions</th>
-						<tr v-for="m in matches | orderBy 'id'">
-							<td class='week_num'>@{{ m.week }} </td>
-							<td class='match_id'>@{{ m.id }} </td>
-							<td>
-								<table class="match">
-									<tr v-bind:class="{ 'winner': m.player1.points == 11 }">
-										<td class='rank'><sup>@{{ m.player1.rank }}</sup></td>
-										<td class="player_name">@{{ m.player1.name }} </td>
-										<td class="score">@{{ m.player1.points }} </td>
-									</tr>
-									<tr v-bind:class="{ 'winner': m.player2.points == 11}">
-										<td class='rank'><sup>@{{ m.player2.rank }}</sup></td>
-										<td class="player_name">@{{ m.player2.name }} </td>
-										<td class="score">@{{ m.player2.points }} </td>
-									</tr>
-								</table>
-							</td>
-							<td>
-								<button class="btn btn-success btn-sm" v-on:click="addMatch()">Add</button>
-								<button class="btn btn-warning btn-sm" v-on:click="editMatch(m.id)">Edit</button>
-								<button class="btn btn-danger btn-sm" v-on:click="deleteMatch(m.id)">Delete</button>
-							</td>
-						</tr>
-					</table> --}}
+						</table>					
 				</div>
 			</div>
 		</div>			

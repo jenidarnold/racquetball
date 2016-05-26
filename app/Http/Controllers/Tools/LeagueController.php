@@ -141,6 +141,91 @@ class LeagueController extends Controller {
 				->distinct()
 				->orderby('matches.match_id')
 				->get();
+
+		$p1_standings = \DB::table('league_matches')
+				->join('matches','league_matches.match_id', '=', 'matches.match_id')
+				->join('players as p1','p1.player_id', '=', 'matches.player1_id')
+				->join('match_games','match_games.match_id', '=', 'matches.match_id')			
+				->join('games as g','g.id', '=', 'match_games.game_id')
+				->where('league_id', '=', $league_id)
+				->select( 
+					'player_id',
+					'first_name', 				
+				 	'last_name' 
+					)	
+				->addSelect(\DB::raw('sum(score1) as score_total'))
+				->addSelect(\DB::raw('count(score1) as game_total'))
+				->groupby('p1.player_id');
+				
+		$p2_standings = \DB::table('league_matches')
+				->join('matches','league_matches.match_id', '=', 'matches.match_id')
+				->join('players as p2','p2.player_id', '=', 'matches.player2_id')
+				->join('match_games','match_games.match_id', '=', 'matches.match_id')			
+				->join('games as g','g.id', '=', 'match_games.game_id')
+				->where('league_id', '=', $league_id)
+				->select( 
+					'player_id',
+					'first_name', 				
+				 	'last_name' 
+					)	
+				->addSelect(\DB::raw('sum(score2) as score_total'))
+				->addSelect(\DB::raw('count(score2) as game_total'))
+				->groupby('p2.player_id');
+			
+		//$standings = $p1_standings->union($p2_standings)->get();
+
+		$standings = \DB::select(
+			\DB::raw(
+				"SELECT 
+					player_id, 
+					first_name, 				
+					last_name, 
+					sum(score_total), 
+					sum(game_total)
+				FROM 
+					(
+					SELECT 
+					    p1.player_id as player_id,
+						first_name, 				
+					 	last_name, 
+						sum(score1) as score_total,
+						count(score1) as game_total
+					from 
+						matches 
+						join league_matches on league_matches.match_id = matches.match_id
+						join players as p1 on p1.player_id = matches.player1_id
+						join match_games as mg on mg.match_id = matches.match_id
+						join games as g on g.id = mg.game_id
+					where 
+					    league_id = $league_id
+					group by 
+					    player_id
+					UNION ALL
+					SELECT 
+					    p2.player_id as player_id,
+						first_name, 				
+					 	last_name, 
+						sum(score2) as score_total,
+						count(score2) as game_total
+					from 
+						matches 
+						join league_matches on league_matches.match_id = matches.match_id
+						join players as p2 on p2.player_id = matches.player2_id
+						join match_games as mg on mg.match_id = matches.match_id
+						join games as g on g.id = mg.game_id
+					where 
+					    league_id = $league_id
+					group by 
+					    player_id 
+					 ) as T
+				group by 
+					    first_name, 				
+					 	last_name, player_id 
+				"
+				)
+			);
+
+		dd($standings);
 				
 		//dd($matches);
 		//dropdown list
