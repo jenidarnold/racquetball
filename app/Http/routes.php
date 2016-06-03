@@ -36,7 +36,7 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 	Route::get('league/{league_id}/edit', array('as' => 'tools.league.edit', 'uses' => 'LeagueController@edit'));
 	Route::post('league/{league_id}/edit', array('as' => 'tools.league.edit', 'uses' => 'LeagueController@update'));
 	Route::put('league/{league_id}/match/add', array('as' => 'tools.league.match.add', 'uses' => 'LeagueController@addMatch'));
-	Route::post('league/{league_id}/match/{match_id}/edit', array('as' => 'tools.league.match.edit', 'uses' => 'LeagueController@editMatch'));
+	Route::get('league/{league_id}/match/{match_id}/edit', array('as' => 'tools.league.match.edit', 'uses' => 'LeagueController@editMatch'));
 	Route::delete('league/{league_id}/match/{match_id}/delete', array('as' => 'tools.league.match.delete', 'uses' => 'LeagueController@deleteMatch'));
 	Route::post('league/{league_id}/edit', array('as' => 'tools.league.match.edit', 'uses' => 'LeagueController@updateMatch'));
 

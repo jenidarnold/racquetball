@@ -193,7 +193,7 @@
 								</td>
 								<td>
 					                {!! Form::close() !!}
-									{!! Form::open(array('route' => array('tools.league.match.edit', $league->league_id, $m->match_id), 'class' => 'pull-left')) !!}
+									{!! Form::open(array('route' => array('tools.league.match.edit',  $league->league_id, $m->match_id), 'class' => 'pull-left')) !!}
 					                    {!! Form::hidden('_method', 'GET') !!}
 					                    {!! Form::submit('Edit', array('class' => 'btn btn-warning btn-sm')) !!}
 					                {!! Form::close() !!}
@@ -216,9 +216,9 @@
 	</div>
 
 	<!-- Display Add Match  -->
-	<div class="panel panel-success" v-show="showAddMatch">
+	<div class="panel panel-success" v-show="showAddMatch || {{$isEdit}}">
 		<div class="panel-heading">	
-			<h4>Add New Match to {{$league->name}}</h4>				
+			<h4>Add/Edit Match in League: {{$league->name}}</h4>				
 		</div>
 		<div class="panel-body">
 			<div class="row">
@@ -230,7 +230,7 @@
 						<label for="match_date" class="control-label col-xs-2">Date:</label>
 						<div class="col-xs-2">
 							<div class="input-group date date-picker" data-provide="datepicker">						
-							    <input type="text" class="form-control" name="match_date">
+							    <input type="text" class="form-control" name="match_date" value="{{$edit_match->match_date}}">
 							    <div class="input-group-addon">
 							        <span class="glyphicon glyphicon-th"></span>
 							    </div>
@@ -240,23 +240,23 @@
 					<div class="form-group">						
 						<label for="ddlMatchPlayer1" class="control-label col-xs-2">Player 1:</label>
 						<div class="col-xs-4">
-							{!! Form::select('ddlMatchPlayer1', $players_list, '', 
-								    array('class' => 'player form-control', 'name' => 'player1_id')) !!}
+							{!! Form::select('ddlMatchPlayer1', $players_list, $edit_match->player1_id, 
+								    array('class' => 'player form-control', 'id' => 'player1_id', 'name' => 'player1_id')) !!}
 						</div>
 						<label for="p1_score" class="control-label col-xs-1">Score:</label>
 						<div class="col-xs-1">
-							<input name="p1_score" type="text" class="form-control">
+							<input name="p1_score" type="text" class="form-control" value="{{$edit_game->score1}}">
 						</div>						
 					</div>
 					<div class="form-group">
 						<label for="ddlMatchPlayer2" class="control-label col-xs-2">Player 2:</label>
 						<div class="col-xs-4">
-							{!! Form::select('ddlMatchPlayer2', $players_list, '', 
-								    array('class' => 'player form-control', 'name' => 'player2_id')) !!}
+							{!! Form::select('ddlMatchPlayer2', $players_list, $edit_match->player2_id, 
+								    array('class' => 'player form-control', 'id' => 'player2_id', 'name' => 'player2_id')) !!}
 						</div>
 						<label for="p2_score" class="control-label col-xs-1">Score:</label>
 						<div class="col-xs-1">
-							<input name="p2_score" type="text" class="form-control">
+							<input name="p2_score" type="text" class="form-control"  value="{{$edit_game->score2}}">
 						</div>
 					</div>
 					<div class="form-group">
@@ -283,7 +283,8 @@
 	        	placeholder: "Select a Player",
 	        	allowClear: true,    	 	
 	        });	
-	        $(".player").select2("val", "");
+	        $("#player1_id").select2("val", "");
+	        $("#player2_id").select2("val", "");
 	    });
 	</script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.1/vue.js"></script>

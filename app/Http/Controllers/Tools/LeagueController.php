@@ -228,13 +228,6 @@ class LeagueController extends Controller {
 				)
 			);
 				
-		//dd($standings);
-		//dropdown list
-		//$players_list = Player::orderby('last_name')->orderby('first_name')->get();
-		//$players_list = $players_list->lists('last_first_name', 'player_id');
-		
-		//DB::table('customers')->select(DB::raw('concat (first_name," ",last_name) as full_name,id'))->lists('full_name', 'id');
-
 		$players_list = $players->select(\DB::raw('concat (last_name, ", ", first_name) as last_first_name, players.player_id'))
 			->lists('last_first_name', 'player_id');
 
@@ -242,8 +235,12 @@ class LeagueController extends Controller {
 		$match = New MatchGame();
 		$game = New Game();
 
+		//Empty for Add/Edit Match
+		$edit_match = New Match();
+		$edit_game = New Game();
+		$isEdit = false;
 
-		return view('pages/tools.league.show', compact('league', 'players', 'standings', 'matches', 'match', 'game', 'players_list'));
+		return view('pages/tools.league.show', compact('isEdit','edit_match', 'edit_game','league', 'players', 'standings', 'matches', 'match', 'game', 'players_list'));
 	}
 
 	/**
@@ -444,6 +441,36 @@ class LeagueController extends Controller {
 		return view('pages/tools.league.edit', compact('league', 'players', 'players_list'));
 	}
 
+
+	public function editMatch($league_id, $match_id){
+
+		$league = League::find($league_id);
+		$players = \DB::table('league_players')
+				->where('leage_id', '=', $league_id)
+				->orderby('last_name')
+				->orderby('first_name');
+
+		//dropdown list
+		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
+		$players_list = $players_list->lists('last_first_name', 'player_id');
+
+		$match_date = "";
+		$player1_id = "";
+		$player2_id = "";
+		$score1 = "";
+		$score2 = "";
+
+		//get the match
+		$edit_match = Match::find($match_id);	
+		if(! is_null($edit_match)) {
+			
+			//Get the game
+			$match_game = MatchGame::find($match_id);
+			$edit_game = Game::find($match_game->game_id);
+
+		}
+		return view('pages/tools.league.match.edit', compact('edit_match', 'edit_game', 'league', 'players_list'));	
+	}
 	/**
 	 * Update the specified resource in storage.
 	 *
