@@ -4,6 +4,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class LeagueMatch extends Model {
 
+	//use SoftDeletingTrait;
+    protected $dates = ['deleted_at'];
+
 	/**
 	 * The database table used by the model.
 	 *

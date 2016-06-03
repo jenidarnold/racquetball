@@ -180,16 +180,17 @@ class LeagueController extends Controller {
 					player_id, 
 					first_name, 				
 					last_name, 
-					sum(score_total), 
-					sum(game_total)
+					sum(points) as points, 
+					sum(games) as games,
+					TRUNCATE(sum(points)/sum(games), 1) as avg			
 				FROM 
 					(
 					SELECT 
 					    p1.player_id as player_id,
 						first_name, 				
 					 	last_name, 
-						sum(score1) as score_total,
-						count(score1) as game_total
+						sum(score1) as points,
+						count(score1) as games
 					from 
 						matches 
 						join league_matches on league_matches.match_id = matches.match_id
@@ -205,8 +206,8 @@ class LeagueController extends Controller {
 					    p2.player_id as player_id,
 						first_name, 				
 					 	last_name, 
-						sum(score2) as score_total,
-						count(score2) as game_total
+						sum(score2) as points,
+						count(score2) as games
 					from 
 						matches 
 						join league_matches on league_matches.match_id = matches.match_id
@@ -220,14 +221,14 @@ class LeagueController extends Controller {
 					 ) as T
 				group by 
 					    first_name, 				
-					 	last_name, player_id 
+					 	last_name, 
+					 	player_id 
+				order by cast(sum(points) /sum(games) as decimal(10,2)) desc
 				"
 				)
 			);
-
-		dd($standings);
 				
-		//dd($matches);
+		//dd($standings);
 		//dropdown list
 		//$players_list = Player::orderby('last_name')->orderby('first_name')->get();
 		//$players_list = $players_list->lists('last_first_name', 'player_id');
@@ -242,7 +243,7 @@ class LeagueController extends Controller {
 		$game = New Game();
 
 
-		return view('pages/tools.league.show', compact('league', 'players', 'matches', 'match', 'game', 'players_list'));
+		return view('pages/tools.league.show', compact('league', 'players', 'standings', 'matches', 'match', 'game', 'players_list'));
 	}
 
 	/**
@@ -372,6 +373,34 @@ class LeagueController extends Controller {
 		return \Redirect::route('tools.league.show', array($league_id));
 	}
 	
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function deleteMatch(Request $request)
+	{
+
+		$league_id = Input::get('league_id');
+		$match_id = Input::get('match_id');
+		      	
+    	//Delete match and cascade delete its games
+		$match = Match::find($match_id);
+
+		if(!is_null($match)){
+			$match->delete();
+		}
+   
+	 	//Delete match from the current league
+		$league_match = LeagueMatch::find($league_id)
+			->where('match_id', '=', $match_id);			
+		$league_match->delete();
+     
+		return \Redirect::route('tools.league.show', array($league_id));
+	}
+	
+
 	/**
 	 * Display the specified resource.
 	 *

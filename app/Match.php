@@ -4,6 +4,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Match extends Model {
 
+	//use SoftDeletingTrait;
+    protected $dates = ['deleted_at'];
+
 	/**
 	 * The database table used by the model.
 	 *
@@ -19,6 +22,11 @@ class Match extends Model {
 	protected $fillable = ['match_id', 'tournament_id', 'match_date', 'match_division', 'player1_id', 'player2_id', 'winner_id', 'match_type'];
 
 	public $primaryKey ='match_id';
+	  
+	/**
+	 * [$dates description]
+	 * @var array
+	 */
 	
 	/**
 	 * The attributes excluded from the model's JSON form.

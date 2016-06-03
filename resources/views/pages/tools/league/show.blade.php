@@ -2,6 +2,9 @@
 
 @section('style')
 	<style>
+		th {
+			text-align: center
+		}
 		.txt-lookup {
 			font-weight: bold;
 			font-size: 10pt;
@@ -15,6 +18,7 @@
 		.player {
 			font-weight: 500;
 			font-size: 12pt;
+			width: 250px;
 		}
 		.player_name {
 			font-weight: 500;
@@ -81,6 +85,7 @@
 		.match .rank {			
 			font-weight: 200;
 			font-size: 8pt;
+			text-align: center;
 		}
 		.match .player_name {			
 			font-weight: 200;
@@ -90,6 +95,7 @@
 		.match .score {			
 			font-weight: 400;
 			font-size: 10pt;
+			text-align: center;
 		}
 		.match .winner {			
 			color:green;
@@ -118,7 +124,7 @@
 				</nav>
 			</div>	
 		<!-- Display League  -->	
-		<div class="panel panel-primary">
+		<div class="panel panel-primary" v-if="showStandings">
 			<div class="panel-heading">	
 				<h4>Overall Standings for {{$league->name}}</h4>						
 			</div>
@@ -126,33 +132,37 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<table class="table">
-							<th>Rank</th>
-							<th>Name</th>
-							<th># Gms</th>
-							<th>Total</th>
-							<th>Avg</th>
-							<th>Graph</th>
-							<th>Actions</th>
-							<tr v-for="player in player_results | orderBy 'avg' -1">
-								<td class='rank'>@{{ player.rank }} </td>
-								<td class="player_name">@{{ player.name }} </td>
-								<td class="score">@{{ player.games }} </td>
-								<td class="score">@{{ player.points }} </td>
-								<td class="score">@{{ player.avg }} </td>
-								<td>@{{ graphRank(league_id, player.id) }} </td>
-								<td><button class="btn btn-danger btn-xs" v-on:click="disablelayer(player.id)">Disable</button></td>	
-							</tr>
+							<th class="col-xs-1">Rank</th>
+							<th class="col-xs-2">Name</th>
+							<th class="col-xs-1"># Gms</th>
+							<th class="col-xs-1">Total</th>
+							<th class="col-xs-1">Avg</th>
+							@if($i=1)@endif
+							@foreach ($standings as $s)
+								<tr>									
+									<td class='rank'>{{ $i++}} </td>
+									<td class="player_name">{{ $s->first_name}}  {{$s->last_name }} </td>
+									<td class="score">{{ $s->games }} </td>
+									<td class="score">{{ $s->points }} </td>
+									<td class="score">{{ $s->avg }} </td>
+								</tr>
+							@endforeach
 						</table>
 					</div>
 				</div>
 			</div>			
 		</div>
 		<!-- Display Match Results  -->
-		<div class="panel panel-primary" v-show="true">
+		<div class="panel panel-primary" v-if="showResults">
 		<div class="panel-heading">	
 			<h4>Week by Week Match Results</h4>				
 		</div>
 		<div class="panel-body">
+			<div class="row">
+				<div class="col-xs-12">
+					<button type="button" class="btn btn-success btn-sm" v-on:click ="toggleShowAddMatch(true)">Add</button>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-xs-12">
 
@@ -166,14 +176,14 @@
 								<td>
 									<table class="match">
 										<tr>
-											<td class='rank'><sup>@{{ $m->p1_rank }}</sup></td>
+											<!--td class='rank'><sup></sup></td-->
 											<td class="player_name">{{ $m->p1_last_name }}, {{ $m->p1_first_name }} </td>			
 											@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
 											<td class="score">{{$g["games"]->first()->score1 }}</td>
 											@endforeach	
 										</tr>
 										<tr>
-											<td class='rank'><sup>@{{  $m->p2_rank }}</sup></td>
+											<!--td class='rank'><sup></sup></td-->
 											<td class="player_name">{{ $m->p2_last_name }}, {{ $m->p2_first_name }} </td>			
 											@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
 											<td class="score">{{$g["games"]->first()->score2 }}</td>
@@ -182,9 +192,17 @@
 									</table>
 								</td>
 								<td>
-									<button class="btn btn-success btn-sm" v-on:click="addMatch()">Add</button>
-									<button class="btn btn-warning btn-sm" v-on:click="editMatch(m.id)">Edit</button>
-									<button class="btn btn-danger btn-sm" v-on:click="deleteMatch(m.id)">Delete</button>
+					                {!! Form::close() !!}
+									{!! Form::open(array('route' => array('tools.league.match.edit', $league->league_id, $m->match_id), 'class' => 'pull-left')) !!}
+					                    {!! Form::hidden('_method', 'GET') !!}
+					                    {!! Form::submit('Edit', array('class' => 'btn btn-warning btn-sm')) !!}
+					                {!! Form::close() !!}
+									{!! Form::open(array('route' => array('tools.league.match.delete', $league->league_id, $m->match_id), 'class' => 'pull-left')) !!}
+					                    {!! Form::hidden('_method', 'DELETE') !!}
+										{!! Form::hidden ('league_id', $league->league_id) !!}	
+										{!! Form::hidden ('match_id', $m->match_id) !!}	
+					                    {!! Form::submit('Delete', array('class' => 'btn btn-danger btn-sm')) !!}
+					                {!! Form::close() !!}
 								</td>
 							</tr>
 						@endforeach
@@ -198,9 +216,9 @@
 	</div>
 
 	<!-- Display Add Match  -->
-	<div class="panel panel-success" v-show="true">
+	<div class="panel panel-success" v-show="showAddMatch">
 		<div class="panel-heading">	
-			<h4>Add New Match</h4>				
+			<h4>Add New Match to {{$league->name}}</h4>				
 		</div>
 		<div class="panel-body">
 			<div class="row">
@@ -209,7 +227,7 @@
 				{!! Form::hidden ('_token', csrf_token()) !!}
 				{!! Form::hidden ('league_id', $league->league_id) !!}	
 					<div class="form-group">
-						<label for="match_date" class="control-label col-xs-1">Date:</label>
+						<label for="match_date" class="control-label col-xs-2">Date:</label>
 						<div class="col-xs-2">
 							<div class="input-group date date-picker" data-provide="datepicker">						
 							    <input type="text" class="form-control" name="match_date">
@@ -220,8 +238,8 @@
 						</div>
 					</div>				
 					<div class="form-group">						
-						<label for="ddlMatchPlayer1" class="control-label col-xs-1">Player 1:</label>
-						<div class="col-xs-3">
+						<label for="ddlMatchPlayer1" class="control-label col-xs-2">Player 1:</label>
+						<div class="col-xs-4">
 							{!! Form::select('ddlMatchPlayer1', $players_list, '', 
 								    array('class' => 'player form-control', 'name' => 'player1_id')) !!}
 						</div>
@@ -231,8 +249,8 @@
 						</div>						
 					</div>
 					<div class="form-group">
-						<label for="ddlMatchPlayer2" class="control-label col-xs-1">Player 2:</label>
-						<div class="col-xs-3">
+						<label for="ddlMatchPlayer2" class="control-label col-xs-2">Player 2:</label>
+						<div class="col-xs-4">
 							{!! Form::select('ddlMatchPlayer2', $players_list, '', 
 								    array('class' => 'player form-control', 'name' => 'player2_id')) !!}
 						</div>
@@ -244,7 +262,7 @@
 					<div class="form-group">
 						<div class="col-xs-3">
 				    		{!!  Form::submit('Submit', array('class' => 'btn btn-success btn-sm',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}
-							<button type="button" class="btn btn-warning btn-sm" v-show="!error" @click ="cancelled">Cancel</button>
+							<button type="button" class="btn btn-warning btn-sm" v-show="!error" @click ="toggleShowAddMatch(false)">Cancel</button>
 				    	</div>						   
 					</div>																
 				{!! Form::close() !!}
@@ -278,29 +296,13 @@
 			data: {	
 				debug: false,
 				preview: false,
-				showSetup: true,
-				showLeague: false,
+				showStandings: true,
+				showResults: true,
+				showAddMatch: false,
 				league_id: 1,
 				league_title: '',
 				isStarted: false,
-				score_max: 11,
-				games: [], 	
-				players: [ 						
-					],
-				player_results: [
-						{id: 236113, rank: 3, name: 'A Perez, Evelyn',    games: 5,  points: 30,  avg: 6  },
-						{id: 9590,   rank: 2, name:  'Ackermann, Alex',    games: 10, points: 80,  avg: 8  },
-						{id: 21772,  rank: 1, name: 'Ackermann, Krystal', games: 10, points: 100, avg: 10 },
-					],	
-				matches: [
-					{id: 1, week: 1, player1: {id: 236113, rank:3, name: 'A Perez, Evelyn', points: 11},  player2: {id: 9590, rank:2, name: 'Ackermann, Alex', points: 4} },
-					{id: 2, week: 1, player1: {id: 236113, rank:3, name: 'A Perez, Evelyn', points: 6},  player2: {id: 21772, rank:1, name: 'Ackermann, Krystal', points: 11} },
-					{id: 3, week: 1, player1: {id: 21772, rank:1,  name: 'Ackermann, Krystal', points: 11},  player2: {id: 9590, rank:2, name: 'Ackermann, Alex', points: 8} },
-
-					{id: 4, week: 2, player1: {id: 236113, rank:2, name: 'A Perez, Evelyn', points: 5},  player2: {id: 9590, rank:3, name: 'Ackermann, Alex', points: 11} },
-					{id: 5, week: 2, player1: {id: 236113, rank:2, name: 'A Perez, Evelyn', points: 9},  player2: {id: 21772, rank:1, name: 'Ackermann, Krystal', points: 11} },
-					{id: 6, week: 2, player1: {id: 21772, rank:1,  name: 'Ackermann, Krystal', points: 11},  player2: {id: 9590, rank:3, name: 'Ackermann, Alex', points: 4} },
-				],				
+				score_max: 11,		
 			},		
 			ready: function() {
 				//ajax functions
@@ -311,6 +313,11 @@
 			filters: {				
 			},				
 			methods: {
+				toggleShowAddMatch: function(bool){
+					this.showAddMatch = bool;
+					this.showResults = ! bool;
+					this.showStandings = ! bool;
+				},
 				getLeagues: function(){
 
 				},
@@ -358,11 +365,7 @@
                     });
 					//this.players.push({"id": id, "name": name});
 					//console.log('Add Player: ' + this.players);
-				},
-				addMatch: function(id, name){
-					this.players.push({"id": id, "name": name});
-					console.log('Add Player: ' + this.players);
-				},
+				},				
 				deletePlayer: function(player_id){
 					
 				},
