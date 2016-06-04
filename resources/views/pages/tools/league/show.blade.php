@@ -36,7 +36,7 @@
 		}
 		.score {
 			font-weight: 500;
-			font-size: 14pt;
+			font-size: 10pt;
 			text-align: center;
 		}
 		.rank {
@@ -142,21 +142,23 @@
 							<th class="col-xs-2">Name</th>
 							<th class="col-xs-1" title="Total games won">W</th>
 							<th class="col-xs-1" title="Total games lost">L</th>
+							<th class="col-xs-1" title="Total number of games played"># Gms</th>
 							<th class="col-xs-1" title="Percent Won">PCT</th>
 							<th class="col-xs-1" title="Win or Loss Streak">Strk</th>
-							<th class="col-xs-1" title="Total number of games played"># Gms</th>
 							<th class="col-xs-1">Total Pts</th>
 							<th class="col-xs-1">Avg Pts</th>
 							@if($i=1)@endif
 							@foreach ($standings as $s)
 								<tr>									
 									<td class='rank'>{{ $i++}} </td>
-									<td class="player_name">{{ $s->first_name}}  {{$s->last_name }} </td>									
-									<td class="score">5</td>
-									<td class="score">2</td>
-									<td class="score">80%</td>
-									<td class="score">W3 | L3 </td>
+									<td class="player_name">{{ $s->first_name}}  {{$s->last_name }} </td>								
+									<td class="score">{{ $s->wins }}</td>
+									<td class="score">{{ $s->losses }}</td>
 									<td class="score">{{ $s->games }} </td>
+									<td class="score">{{ number_format(($s->wins/$s->games)*100,1) }}%</td>
+									@foreach ($match->where('player1_id', '=', $s->player_id)->orWhere('player2_id', '=', $s->player_id)->get() as $g)
+										<td class="score">{{$g}}</td>
+									@endforeach	
 									<td class="score">{{ $s->points }} </td>
 									<td class="score">{{ $s->avg }} </td>
 								</tr>
@@ -197,14 +199,14 @@
 										<tr>
 											<!--td class='rank'><sup></sup></td-->
 											<td class="player_name">{{ $m->p1_first_name }} {{ $m->p1_last_name }} </td>			
-											@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
+											@foreach ($match_game->whereMatchId($m->match_id)->with('games')->get() as $g)
 											<td class="score">{{$g["games"]->first()->score1 }}</td>
 											@endforeach	
 										</tr>
 										<tr>
 											<!--td class='rank'><sup></sup></td-->
 											<td class="player_name">{{ $m->p2_first_name }} {{ $m->p2_last_name }} </td>			
-											@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
+											@foreach ($match_game->whereMatchId($m->match_id)->with('games')->get() as $g)
 											<td class="score">{{$g["games"]->first()->score2 }}</td>
 											@endforeach		
 										</tr>										

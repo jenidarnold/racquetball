@@ -96,9 +96,8 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-xs-12">
-				{!! Form::model($league, array('route' => array('tools.league.match.update'), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'PUT')) !!}
+				{!! Form::model($league, array('route' => array('tools.league.match.update', $league->league_id, $match->match_id), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'PUT')) !!}
 				{!! Form::hidden ('_token', csrf_token()) !!}
-				{!! Form::hidden ('league_id', $league->league_id) !!}	
 					<div class="form-group">
 						<label for="match_date" class="control-label col-xs-2">Date:</label>
 						<div class="col-xs-2">

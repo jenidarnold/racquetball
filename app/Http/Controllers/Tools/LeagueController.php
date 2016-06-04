@@ -122,10 +122,11 @@ class LeagueController extends Controller {
 		$players_list =$this->listPlayers();
 				
 		//Empty objects used to get Scores
-		$match = New MatchGame();
+		$match = New Match();
+		$match_game = New MatchGame();
 		$game = New Game();
 
-		return view('pages/tools.league.show', compact('league', 'players', 'standings', 'matches', 'match', 'game', 'players_list'));
+		return view('pages/tools.league.show', compact('league', 'players', 'standings', 'matches', 'match', 'match_game', 'game', 'players_list'));
 	}
 
 	/**
@@ -221,16 +222,14 @@ class LeagueController extends Controller {
 	}
 
 	/**
-	 * Display the specified resource.
+	 * Create a new match
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
 	public function storeMatch(Request $request)
 	{
-
-		$player = New Player;
-
+		
 		$league_id = Input::get('league_id');
 		$match_date = Input::get('match_date');
 		$player1_id = Input::get('player1_id');
@@ -247,6 +246,11 @@ class LeagueController extends Controller {
 		 	$match->player1_id = $player1_id;
           	$match->player2_id = $player2_id;
           	$match->match_date = $match_date;
+          	if ($p1_score > $p2_score){
+          		$match->winner_id = $player1_id;
+          	}else{
+          		$match->winner_id = $player2_id;
+          	}
           	$match->save();
 
           	//Add match to the current league
@@ -275,7 +279,7 @@ class LeagueController extends Controller {
 	}
 	
 	/**
-	 * [editMatch description]
+	 * Display the form to edit a match
 	 * @param  [type] $league_id [description]
 	 * @param  [type] $match_id  [description]
 	 * @return [type]            [description]
@@ -309,14 +313,59 @@ class LeagueController extends Controller {
 	}
 
 	/**
-	 * Update the specified resource in storage.
+	 * Update a match
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function updateMatch($league_id)
-	{
-		//
+	public function updateMatch($league_id, $match_id)
+	{		
+		$match_date = Input::get('match_date');
+		$player1_id = Input::get('player1_id');
+		$player2_id = Input::get('player2_id');
+		$p1_score = Input::get('p1_score');
+		$p2_score = Input::get('p2_score');
+		
+		$match_date =  new \DateTime($match_date);
+		$match_date = $match_date->format("Y-m-d h:m:s");
+
+		if ((! is_null($player1_id)) && (! is_null($player2_id))) {	
+			//update match	
+			$match = Match::find($match_id);
+			if (! is_null($match)) {
+
+			 	$match->player1_id = $player1_id;
+	          	$match->player2_id = $player2_id;
+	          	$match->match_date = $match_date;
+	          	if ($p1_score > $p2_score){
+	          		$match->winner_id = $player1_id;
+	          	}else{
+	          		$match->winner_id = $player2_id;
+	          	}
+	          	$match->save();
+
+	        	//Find the game
+	        	$match_game = MatchGame::find($match_id);	
+        	
+	        	$game = New Game;
+	        	if (!is_null($match_game)) {	
+	        		$game = Game::find($match_game->game_id);
+	        	}else{
+	        		//Game doesnt exist. create record in match games
+	        		$game->save();
+	        		$match_game = New MatchGame;
+	        		$match_game->match_id = $match_id;
+	        		$match_game->game_id = $game->id;
+	        	}   
+	        	// update the game
+				$game->score1 = $p1_score;
+				$game->score2 = $p2_score;
+        		$game->save();	        	
+	        }
+        }
+
+        //Redirect to add more matches; add Save Message
+		return \Redirect::route('tools.league.match.edit', array($league_id, $match_id))->with('success', 'Match updated Successfully');
 	}
 
 	/**
@@ -424,37 +473,6 @@ class LeagueController extends Controller {
 	 */
 	public function getStandings($league_id)
 	{
-		//Player1 Standings
-		$p1_standings = \DB::table('league_matches')
-				->join('matches','league_matches.match_id', '=', 'matches.match_id')
-				->join('players as p1','p1.player_id', '=', 'matches.player1_id')
-				->join('match_games','match_games.match_id', '=', 'matches.match_id')			
-				->join('games as g','g.id', '=', 'match_games.game_id')
-				->where('league_id', '=', $league_id)
-				->select( 
-					'player_id',
-					'first_name', 				
-				 	'last_name' 
-					)	
-				->addSelect(\DB::raw('sum(score1) as score_total'))
-				->addSelect(\DB::raw('count(score1) as game_total'))
-				->groupby('p1.player_id');
-		
-		//Player2 Standings
-		$p2_standings = \DB::table('league_matches')
-				->join('matches','league_matches.match_id', '=', 'matches.match_id')
-				->join('players as p2','p2.player_id', '=', 'matches.player2_id')
-				->join('match_games','match_games.match_id', '=', 'matches.match_id')			
-				->join('games as g','g.id', '=', 'match_games.game_id')
-				->where('league_id', '=', $league_id)
-				->select( 
-					'player_id',
-					'first_name', 				
-				 	'last_name' 
-					)	
-				->addSelect(\DB::raw('sum(score2) as score_total'))
-				->addSelect(\DB::raw('count(score2) as game_total'))
-				->groupby('p2.player_id');			
 
 		//Union and group standings by player_id
 		$standings = \DB::select(
@@ -465,7 +483,9 @@ class LeagueController extends Controller {
 					last_name, 
 					sum(points) as points, 
 					sum(games) as games,
-					TRUNCATE(sum(points)/sum(games), 1) as avg			
+					TRUNCATE(sum(points)/sum(games), 1) as avg,
+					sum(wins) as wins,
+					sum(losses) as losses			
 				FROM 
 					(
 					SELECT 
@@ -473,7 +493,9 @@ class LeagueController extends Controller {
 						first_name, 				
 					 	last_name, 
 						sum(score1) as points,
-						count(score1) as games
+						count(score1) as games,
+						sum(CASE when winner_id = player_id THEN 1 ELSE 0 END) as wins,
+						sum(CASE when winner_id <> player_id THEN 1 ELSE 0 END) as losses
 					from 
 						matches 
 						join league_matches on league_matches.match_id = matches.match_id
@@ -490,7 +512,9 @@ class LeagueController extends Controller {
 						first_name, 				
 					 	last_name, 
 						sum(score2) as points,
-						count(score2) as games
+						count(score2) as games,
+						sum(CASE when winner_id = player_id THEN 1 ELSE 0 END) as wins,
+						sum(CASE when winner_id <> player_id THEN 1 ELSE 0 END) as losses
 					from 
 						matches 
 						join league_matches on league_matches.match_id = matches.match_id
