@@ -12,14 +12,14 @@ class AddForeignkeyLeaguematchTable extends Migration
      */
     public function up()
     {
-        Schema::table('league_matches', function($t){
-            $t->foreign('match_id')
-            ->references('match_id')
-            ->on('matches')
-            ->onDelete('cascade');
+        //Schema::table('league_matches', function($t){
+        //    $t->foreign('match_id')
+        //    ->references('match_id')
+        //    ->on('matches')
+        //    ->onDelete('cascade');
 
-            $t->softDeletes();
-        });
+        //    //$t->softDeletes();
+        //});
     }
 
     /**
@@ -29,9 +29,9 @@ class AddForeignkeyLeaguematchTable extends Migration
      */
     public function down()
     {
-        Schema::table('league_matches', function($t){
-            //$t->dropForeign('league_matches_match_id_foreign');
-            $t->dropForeign(['match_id']);
-        });
+        //Schema::table('league_matches', function($t){
+        //    //$t->dropForeign('league_matches_match_id_foreign');
+        //    $t->dropForeign(['match_id']);
+        //});
     }
 }
