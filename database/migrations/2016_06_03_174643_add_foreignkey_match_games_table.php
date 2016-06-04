@@ -17,7 +17,6 @@ class AddForeignkeyMatchGamesTable extends Migration
         //    ->references('id')
         //    ->on('games')
         //    ->onDelete('cascade');
-
         //    $t->softDeletes();
         //});
     }
