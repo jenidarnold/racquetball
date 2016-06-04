@@ -102,8 +102,8 @@
 				{!! Form::hidden ('_token', csrf_token()) !!}
 				{!! Form::hidden ('league_id', $league->league_id) !!}	
 					<div class="form-group">
-						<label for="match_date" class="control-label col-xs-2">Date:</label>
-						<div class="col-xs-2">
+						<label for="match_date" class="control-label col-xs-12 col-md-2">Date:</label>
+						<div class="col-xs-6 col-md-3">
 							<div class="input-group date date-picker" data-provide="datepicker">						
 							    <input type="text" class="form-control" name="match_date" value="">
 							    <div class="input-group-addon">
@@ -113,32 +113,33 @@
 						</div>
 					</div>				
 					<div class="form-group">						
-						<label for="ddlMatchPlayer1" class="control-label col-xs-2">Player 1:</label>
+						<label for="ddlMatchPlayer1" class="control-label col-xs-12 col-md-2">Player 1:</label>
 						<div class="col-xs-4">
 							{!! Form::select('ddlMatchPlayer1', $players_list, '', 
 								    array('class' => 'player form-control', 'id' => 'player1_id', 'name' => 'player1_id')) !!}
 						</div>
-						<label for="p1_score" class="control-label col-xs-1">Score:</label>
-						<div class="col-xs-1">
+						<label for="p1_score" class="control-label col-xs-12 col-md-1">Score:</label>
+						<div class="col-xs-3 col-md-1">
 							<input name="p1_score" type="text" class="form-control" value="">
 						</div>						
 					</div>
 					<div class="form-group">
-						<label for="ddlMatchPlayer2" class="control-label col-xs-2">Player 2:</label>
+						<label for="ddlMatchPlayer2" class="control-label col-xs-12 col-md-2">Player 2:</label>
 						<div class="col-xs-4">
 							{!! Form::select('ddlMatchPlayer2', $players_list, '', 
 								    array('class' => 'player form-control', 'id' => 'player2_id', 'name' => 'player2_id')) !!}
 						</div>
-						<label for="p2_score" class="control-label col-xs-1">Score:</label>
-						<div class="col-xs-1">
+						<label for="p2_score" class="control-label col-xs-12 col-md-1">Score:</label>
+						<div class="col-xs-3 col-md-1">
 							<input name="p2_score" type="text" class="form-control"  value="">
 						</div>
 					</div>
 					<div class="form-group">
-						<div class="col-xs-3">
-							{!!  Form::submit('Save', array('class' => 'btn btn-success btn-sm',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}			    		
+						<div class="col-xs-3 col-md-1">
+							{!!  Form::submit('Save', array('class' => 'btn btn-success btn-sm',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}	
+						</div>
+						<div class="col-xs-3 col-md-1">		    		
 							{!! HTML::linkRoute('tools.league.match.create', 'Cancel', array($league->league_id), array('class' => 'btn btn-danger btn-sm')) !!} 
-
 				    	</div>						   
 					</div>																
 				{!! Form::close() !!}

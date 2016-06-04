@@ -13,6 +13,7 @@ use App\LeagueMatch;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Redirect;
 use App\User;
 use Validator;
@@ -30,23 +31,23 @@ class LeagueController extends Controller {
 	}
 	
 	/**
-	 * Display a listing of the resource.
+	 * Display a listing of leagues.
 	 *
 	 * @return Response
 	 */
 	public function index(Request $request)
 	{
-		//grid
+		//Get Leagues
 		$leagues = \DB::table('leagues')
 				->orderby('start_date', 'desc')
 				->orderby('name')
-				->paginate(10);
-			
+				->paginate(5);
+
 		return view('pages/tools.league.index', compact('leagues'));
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Show the form for creating a League.
 	 *
 	 * @return Response
 	 */
@@ -65,13 +66,12 @@ class LeagueController extends Controller {
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * Store a newly created League.
 	 *
 	 * @return Response
 	 */
 	public function store()
-	{
-		
+	{		
   		//validate
         //read more on validation at http://laravel.com/docs/validation
         $rules = array(
@@ -105,7 +105,7 @@ class LeagueController extends Controller {
 	}
 
 	/**
-	 * Display the specified resource.
+	 * Display a League; Standings and Results
 	 *
 	 * @param  int  $id
 	 * @return Response
@@ -113,138 +113,23 @@ class LeagueController extends Controller {
 	public function show($league_id)
 	{
 		$league = New League;
-
-		$league = $league->find($league_id);
-
-		$players = \DB::table('league_players')
-				->join('players','players.player_id', '=', 'league_players.player_id')
-				->where('league_id', '=', $league_id)
-				->orderby('last_name')
-				->orderby('first_name');
-
-
-		$matches = \DB::table('league_matches')
-				->join('matches','league_matches.match_id', '=', 'matches.match_id')
-				->join('players as p1','p1.player_id', '=', 'matches.player1_id')
-				->join('players as p2','p2.player_id', '=', 'matches.player2_id')				
-				//->leftjoin('rankings as r1','r1.player_id', '=', 'matches.player1_id')
-				//->leftjoin('rankings as r2','r2.player_id', '=', 'matches.player2_id')
-				->where('league_id', '=', $league_id)
-				->select( '*',
-					'p1.first_name as p1_first_name', 				
-				 	'p1.last_name as p1_last_name' ,
-				//	'r1.ranking as p1_rank',
-					'p2.first_name as p2_first_name', 
-					'p2.last_name as p2_last_name'
-				//	'r2.ranking as p2_rank'
-				)				
-				->distinct()
-				->orderby('matches.match_id')
-				->get();
-
-		$p1_standings = \DB::table('league_matches')
-				->join('matches','league_matches.match_id', '=', 'matches.match_id')
-				->join('players as p1','p1.player_id', '=', 'matches.player1_id')
-				->join('match_games','match_games.match_id', '=', 'matches.match_id')			
-				->join('games as g','g.id', '=', 'match_games.game_id')
-				->where('league_id', '=', $league_id)
-				->select( 
-					'player_id',
-					'first_name', 				
-				 	'last_name' 
-					)	
-				->addSelect(\DB::raw('sum(score1) as score_total'))
-				->addSelect(\DB::raw('count(score1) as game_total'))
-				->groupby('p1.player_id');
+		$league = $league->find($league_id);		
+		$players = $this->getPlayers($league_id);
+		$matches = $this->getMatches($league_id);
+		$standings = $this->getStandings($league_id);		
+    	$standings = new LengthAwarePaginator($standings, count($standings), 5, 1);
+    	//Fixme: the page numbers are not working. url incorrect and the page size not being applied. shows all
+		$players_list =$this->listPlayers();
 				
-		$p2_standings = \DB::table('league_matches')
-				->join('matches','league_matches.match_id', '=', 'matches.match_id')
-				->join('players as p2','p2.player_id', '=', 'matches.player2_id')
-				->join('match_games','match_games.match_id', '=', 'matches.match_id')			
-				->join('games as g','g.id', '=', 'match_games.game_id')
-				->where('league_id', '=', $league_id)
-				->select( 
-					'player_id',
-					'first_name', 				
-				 	'last_name' 
-					)	
-				->addSelect(\DB::raw('sum(score2) as score_total'))
-				->addSelect(\DB::raw('count(score2) as game_total'))
-				->groupby('p2.player_id');
-			
-		//$standings = $p1_standings->union($p2_standings)->get();
-
-		$standings = \DB::select(
-			\DB::raw(
-				"SELECT 
-					player_id, 
-					first_name, 				
-					last_name, 
-					sum(points) as points, 
-					sum(games) as games,
-					TRUNCATE(sum(points)/sum(games), 1) as avg			
-				FROM 
-					(
-					SELECT 
-					    p1.player_id as player_id,
-						first_name, 				
-					 	last_name, 
-						sum(score1) as points,
-						count(score1) as games
-					from 
-						matches 
-						join league_matches on league_matches.match_id = matches.match_id
-						join players as p1 on p1.player_id = matches.player1_id
-						join match_games as mg on mg.match_id = matches.match_id
-						join games as g on g.id = mg.game_id
-					where 
-					    league_id = $league_id
-					group by 
-					    player_id
-					UNION ALL
-					SELECT 
-					    p2.player_id as player_id,
-						first_name, 				
-					 	last_name, 
-						sum(score2) as points,
-						count(score2) as games
-					from 
-						matches 
-						join league_matches on league_matches.match_id = matches.match_id
-						join players as p2 on p2.player_id = matches.player2_id
-						join match_games as mg on mg.match_id = matches.match_id
-						join games as g on g.id = mg.game_id
-					where 
-					    league_id = $league_id
-					group by 
-					    player_id 
-					 ) as T
-				group by 
-					    first_name, 				
-					 	last_name, 
-					 	player_id 
-				order by cast(sum(points) /sum(games) as decimal(10,2)) desc
-				"
-				)
-			);
-				
-		$players_list = $players->select(\DB::raw('concat (last_name, ", ", first_name) as last_first_name, players.player_id'))
-			->lists('last_first_name', 'player_id');
-
 		//Empty objects used to get Scores
 		$match = New MatchGame();
 		$game = New Game();
 
-		//Empty for Add/Edit Match
-		$edit_match = New Match();
-		$edit_game = New Game();
-		$isEdit = false;
-
-		return view('pages/tools.league.show', compact('isEdit','edit_match', 'edit_game','league', 'players', 'standings', 'matches', 'match', 'game', 'players_list'));
+		return view('pages/tools.league.show', compact('league', 'players', 'standings', 'matches', 'match', 'game', 'players_list'));
 	}
 
 	/**
-	 * Display the specified resource.
+	 * Display the form for joining the league
 	 *
 	 * @param  int  $id
 	 * @return Response
@@ -259,8 +144,6 @@ class LeagueController extends Controller {
 			->orderby('last_name')
 			->orderby('first_name')
 			->get();
-
-		//$players = Player::orderby('last_name')->orderby('first_name')->get();
 
 		//dropdown list
 		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
@@ -314,7 +197,6 @@ class LeagueController extends Controller {
         }
 
 		return \Redirect::route('tools.league.join', array($league_id));
-		//return Redirect::action('LeagueController@join', compact('league_id'));
 	}
 
 	/**
@@ -392,7 +274,6 @@ class LeagueController extends Controller {
 		return \Redirect::route('tools.league.match.create', array($league_id))->with('success', 'Match created Successfully');
 	}
 	
-
 	/**
 	 * [editMatch description]
 	 * @param  [type] $league_id [description]
@@ -465,28 +346,8 @@ class LeagueController extends Controller {
 		return \Redirect::route('tools.league.show', array($league_id));
 	}
 	
-
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function playerCount($league_id)
-	{
-
-		$league = New League;
-		$league = $league->find($league_id);
-		$players = $league->getPlayers($league_id)
-			->get();
-
-		$count = count($players);
-
-		return $count;
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
+	 * Show the form for editing the League.
 	 *
 	 * @param  int  $id
 	 * @return Response
@@ -494,22 +355,14 @@ class LeagueController extends Controller {
 	public function edit($league_id)
 	{
 		$league = New League;
-
 		$league = $league->find($league_id);
-
-		$players = \DB::table('league_players')
-				->where('leage_id', '=', $league_id)
-				->orderby('last_name')
-				->orderby('first_name');
+		$players = $this->getPlayers($league_id);
 
 		//dropdown list
-		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
-		$players_list = $players_list->lists('last_first_name', 'player_id');
+		$players_list = $this->listPlayers();
 		
 		return view('pages/tools.league.edit', compact('league', 'players', 'players_list'));
 	}
-
-
 	
 	/**
 	 * Update the specified resource in storage.
@@ -528,9 +381,188 @@ class LeagueController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($user_id)
+	public function destroy($league_id)
 	{
 		//
+	}
+
+	
+
+	/**
+	 * [getMatches description]
+	 * @param  [type] $league_id [description]
+	 * @return [type]            [description]
+	 */
+	public function getMatches($league_id)
+	{
+		$matches = \DB::table('league_matches')
+				->join('matches','league_matches.match_id', '=', 'matches.match_id')
+				->join('players as p1','p1.player_id', '=', 'matches.player1_id')
+				->join('players as p2','p2.player_id', '=', 'matches.player2_id')				
+				//->leftjoin('rankings as r1','r1.player_id', '=', 'matches.player1_id')
+				//->leftjoin('rankings as r2','r2.player_id', '=', 'matches.player2_id')
+				->where('league_id', '=', $league_id)
+				->select( '*',
+					'p1.first_name as p1_first_name', 				
+				 	'p1.last_name as p1_last_name' ,
+				//	'r1.ranking as p1_rank',
+					'p2.first_name as p2_first_name', 
+					'p2.last_name as p2_last_name'
+				//	'r2.ranking as p2_rank'
+				)				
+				->distinct()
+				->orderby('matches.match_id')
+				->get();
+
+		return $matches;
+	}
+
+	/**
+	 * [getStandings description]
+	 * @param  [type] $league_id [description]
+	 * @return [type]            [description]
+	 */
+	public function getStandings($league_id)
+	{
+		//Player1 Standings
+		$p1_standings = \DB::table('league_matches')
+				->join('matches','league_matches.match_id', '=', 'matches.match_id')
+				->join('players as p1','p1.player_id', '=', 'matches.player1_id')
+				->join('match_games','match_games.match_id', '=', 'matches.match_id')			
+				->join('games as g','g.id', '=', 'match_games.game_id')
+				->where('league_id', '=', $league_id)
+				->select( 
+					'player_id',
+					'first_name', 				
+				 	'last_name' 
+					)	
+				->addSelect(\DB::raw('sum(score1) as score_total'))
+				->addSelect(\DB::raw('count(score1) as game_total'))
+				->groupby('p1.player_id');
+		
+		//Player2 Standings
+		$p2_standings = \DB::table('league_matches')
+				->join('matches','league_matches.match_id', '=', 'matches.match_id')
+				->join('players as p2','p2.player_id', '=', 'matches.player2_id')
+				->join('match_games','match_games.match_id', '=', 'matches.match_id')			
+				->join('games as g','g.id', '=', 'match_games.game_id')
+				->where('league_id', '=', $league_id)
+				->select( 
+					'player_id',
+					'first_name', 				
+				 	'last_name' 
+					)	
+				->addSelect(\DB::raw('sum(score2) as score_total'))
+				->addSelect(\DB::raw('count(score2) as game_total'))
+				->groupby('p2.player_id');			
+
+		//Union and group standings by player_id
+		$standings = \DB::select(
+			\DB::raw(
+				"SELECT 
+					player_id, 
+					first_name, 				
+					last_name, 
+					sum(points) as points, 
+					sum(games) as games,
+					TRUNCATE(sum(points)/sum(games), 1) as avg			
+				FROM 
+					(
+					SELECT 
+					    p1.player_id as player_id,
+						first_name, 				
+					 	last_name, 
+						sum(score1) as points,
+						count(score1) as games
+					from 
+						matches 
+						join league_matches on league_matches.match_id = matches.match_id
+						join players as p1 on p1.player_id = matches.player1_id
+						join match_games as mg on mg.match_id = matches.match_id
+						join games as g on g.id = mg.game_id
+					where 
+					    league_id = $league_id
+					group by 
+					    player_id
+					UNION ALL
+					SELECT 
+					    p2.player_id as player_id,
+						first_name, 				
+					 	last_name, 
+						sum(score2) as points,
+						count(score2) as games
+					from 
+						matches 
+						join league_matches on league_matches.match_id = matches.match_id
+						join players as p2 on p2.player_id = matches.player2_id
+						join match_games as mg on mg.match_id = matches.match_id
+						join games as g on g.id = mg.game_id
+					where 
+					    league_id = $league_id
+					group by 
+					    player_id 
+					 ) as T
+				group by 
+					    first_name, 				
+					 	last_name, 
+					 	player_id 
+				order by cast(sum(points) /sum(games) as decimal(10,2)) desc
+				"
+				)
+			);
+		
+		return $standings;
+	}
+
+	/**
+	 * [getPlayers description]
+	 * @param  [type] $league_id [description]
+	 * @return [type]            [description]
+	 */
+	public function getPlayers($league_id)
+	{
+		$players = \DB::table('league_players')
+				->join('players','players.player_id', '=', 'league_players.player_id')
+				->where('league_id', '=', $league_id)
+				->orderby('last_name')
+				->orderby('first_name');
+
+		$players_list = $players->select(\DB::raw('concat (last_name, ", ", first_name) as last_first_name, players.player_id'))
+			->lists('last_first_name', 'player_id');
+
+		return $players;
+	}	
+
+	/**
+	 * List all Players registered in the system
+	 * @return [type] [description]
+	 */
+	public function listPlayers(){
+
+		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
+		$players_list = $players_list->lists('last_first_name', 'player_id');
+		
+
+		return $players_list;
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function playerCount($league_id)
+	{
+
+		$league = New League;
+		$league = $league->find($league_id);
+		$players = $league->getPlayers($league_id)
+			->get();
+
+		$count = count($players);
+
+		return $count;
 	}
 
 }

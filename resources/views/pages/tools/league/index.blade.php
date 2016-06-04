@@ -98,6 +98,12 @@
 		.txt-score {
 			width: 60px;
 		}
+		.closed {
+			background-color: lightgrey;
+		}
+		.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+		/*  background-color: #dff0d8;*/
+		}
 	</style>
 @stop
 
@@ -107,39 +113,57 @@
 	<div id="myvue">
 		<!-- Setup League  -->
 		<div class="panel panel-primary">			
-			<div class="panel-heading"><h3>Leagues</h3></div>
+			<div class="panel-heading"><h3>Racquetball Leagues</h3></div>
 			<div class="panel-body">
 				<div>
-					<table class="table">
+					<table class="table table-hover">
 						<thead>
 							<th></th>
 							<th></th>
 							<th>League Name</th>
-							<th>Start</th>
-							<th>End</th>
+							<th>Starts</th>
+							<th>Ends</th>
+							<th>Skill Level</th>							
+							<th>Format</th>
+							<th>Fee</th>
 							<th>Location</th>
 							<th>Director</th>
 							<th> # Players</th>
-							<th>Format</th>
 							<th>Description</th>
 						</thead>
-						@foreach ($leagues as $l)
-							<tr>
-								<td>
-									<a id={{"lnkLeague-$l->league_id"}} class="btn btn-warning btn-sm" href="{{ route('tools.league.show', [$l->league_id]) }}"><i class="fa fa-search"></i></a>
-								</td>
-								<td>
-									<a id={{"lnkLeague-$l->league_id"}} class="btn btn-success btn-sm" href="{{ route('tools.league.join', [$l->league_id]) }}">Join</i></a>
-								</td>					
-								<td>{{$l->name}}</td>
-								<td>{{$l->start_date}}</td>
-								<td>{{$l->end_date}}</td>
-								<td>L.A. Fitness Hebron/Midway</td>
-								<td><a href="">B. Zimmerman</a></td>
-								<td>@{{ getPlayerCount($l->league_id) }}</td>
-								<td>Round Robin: 1 game to 11</td>
-								<td>Bring it! No Whining allowed</td>
-							</tr>
+						@foreach ($leagues as $l)		
+							{{-- set isOpen --}}			
+							@if($isOpen = 1) 
+							@endif
+							{{-- check if league has ended --}}
+							@if( date_diff(new Datetime($l->end_date), new Datetime(), false)->format("%r%a") > 0)
+								{{-- set isOpen --}}
+								@if($isOpen = 0) 
+								@endif
+								<tr class="closed" title="This league has ended">
+							@else
+								<tr class="open" title="This league is open">
+							@endif
+									<td>
+										<a id={{"lnkLeague-$l->league_id"}} class="btn btn-warning btn-sm" href="{{ route('tools.league.show', [$l->league_id]) }}"><i class="fa fa-search"></i></a>
+									</td>
+									<td>
+										@if($isOpen == 1)
+										<a id={{"lnkLeague-$l->league_id"}} class="btn btn-success btn-sm" href="{{ route('tools.league.join', [$l->league_id]) }}">Join</i></a>
+										@endif
+									</td>					
+									<td>{{$l->name}}</td>
+									<td>{{date('m-d-y', strtotime($l->start_date))}}</td>
+									<td>{{date('m-d-y', strtotime($l->end_date))}}</td>
+									<td>A/B</td>
+									<td>Singles</td>
+									<td>$40</td>
+									<td>L.A.F. Midway</td>
+									<td><a href="">B. Zimmerman</a></td>
+									<td>@{{ getPlayerCount($l->league_id) }}</td>
+									<td>Singles Round Robin: 1 game to 11</td>
+									<td></td>
+								</tr>
 						@endforeach
 					</table>
 					<div>

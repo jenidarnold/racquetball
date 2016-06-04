@@ -126,7 +126,13 @@
 		<!-- Display League  -->	
 		<div class="panel panel-primary" v-if="showStandings">
 			<div class="panel-heading">	
-				<h4>Overall Standings for {{$league->name}}</h4>						
+				<div class="row">
+					<div class="col-xs-12 col-md-62">
+						<h4>{{$league->name}} Standings as of {{date('M d, y')}} </h4>
+						<h6>League runs {{date('M d, y', strtotime($league->start_date))}} to {{date('M d, y', strtotime($league->end_date))}}</h6>
+						
+					</div>										
+				</div>				
 			</div>
 			<div class="panel-body">
 				<div class="row">
@@ -134,20 +140,34 @@
 						<table class="table">
 							<th class="col-xs-1">Rank</th>
 							<th class="col-xs-2">Name</th>
-							<th class="col-xs-1"># Gms</th>
-							<th class="col-xs-1">Total</th>
-							<th class="col-xs-1">Avg</th>
+							<th class="col-xs-1" title="Total games won">W</th>
+							<th class="col-xs-1" title="Total games lost">L</th>
+							<th class="col-xs-1" title="Percent Won">PCT</th>
+							<th class="col-xs-1" title="Win or Loss Streak">Strk</th>
+							<th class="col-xs-1" title="Total number of games played"># Gms</th>
+							<th class="col-xs-1">Total Pts</th>
+							<th class="col-xs-1">Avg Pts</th>
 							@if($i=1)@endif
 							@foreach ($standings as $s)
 								<tr>									
 									<td class='rank'>{{ $i++}} </td>
-									<td class="player_name">{{ $s->first_name}}  {{$s->last_name }} </td>
+									<td class="player_name">{{ $s->first_name}}  {{$s->last_name }} </td>									
+									<td class="score">5</td>
+									<td class="score">2</td>
+									<td class="score">80%</td>
+									<td class="score">W3 | L3 </td>
 									<td class="score">{{ $s->games }} </td>
 									<td class="score">{{ $s->points }} </td>
 									<td class="score">{{ $s->avg }} </td>
 								</tr>
 							@endforeach
+							@if (count($matches) == 0)
+								<tr><td colspan="5" class ="score"><h4>No Matches</h4></td></tr>
+							@endif
 						</table>
+						<div>
+						{!! $standings->render() !!}
+					</div>
 					</div>
 				</div>
 			</div>			
@@ -165,7 +185,6 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-
 					<table class="table">
 						<th>Week #</th>
 						<th>Result</th>
@@ -177,14 +196,14 @@
 									<table class="match">
 										<tr>
 											<!--td class='rank'><sup></sup></td-->
-											<td class="player_name">{{ $m->p1_last_name }}, {{ $m->p1_first_name }} </td>			
+											<td class="player_name">{{ $m->p1_first_name }} {{ $m->p1_last_name }} </td>			
 											@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
 											<td class="score">{{$g["games"]->first()->score1 }}</td>
 											@endforeach	
 										</tr>
 										<tr>
 											<!--td class='rank'><sup></sup></td-->
-											<td class="player_name">{{ $m->p2_last_name }}, {{ $m->p2_first_name }} </td>			
+											<td class="player_name">{{ $m->p2_first_name }} {{ $m->p2_last_name }} </td>			
 											@foreach ($match->whereMatchId($m->match_id)->with('games')->get() as $g)
 											<td class="score">{{$g["games"]->first()->score2 }}</td>
 											@endforeach		
@@ -206,8 +225,8 @@
 								</td>
 							</tr>
 						@endforeach
-						@if (count($m) ==0)
-							<tr><td><h5>No Matches</h5></td></tr>
+						@if (count($matches) == 0)
+							<tr><td colspan="3" class ="score"><h4>No Matches</h4></td></tr>
 						@endif
 						</table>					
 				</div>
