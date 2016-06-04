@@ -12,15 +12,14 @@ class AddForeignkeyMatchGamesTable extends Migration
      */
     public function up()
     {
-         Schema::table('matches_games', function($t){
-            $t->foreign('game_id')
-            ->references('id')
-            ->on('games')
-            ->onDelete('cascade');
+        //Schema::table('matches_games', function($t){
+        //    $t->foreign('game_id')
+        //    ->references('id')
+        //    ->on('games')
+        //    ->onDelete('cascade');
 
-            $t->softDeletes();
-        });
-
+        //    $t->softDeletes();
+        //});
     }
 
     /**
@@ -30,8 +29,8 @@ class AddForeignkeyMatchGamesTable extends Migration
      */
     public function down()
     {
-         Schema::table('match_games', function($t){
-            $t->dropForeign(['game_id']);
-        });
+        //Schema::table('match_games', function($t){
+        //    $t->dropForeign(['game_id']);
+        //});
     }
 }
