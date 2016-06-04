@@ -35,11 +35,14 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 	Route::put('league/{league_id}/join', array('as' => 'tools.league.join', 'uses' => 'LeagueController@addPlayer'));
 	Route::get('league/{league_id}/edit', array('as' => 'tools.league.edit', 'uses' => 'LeagueController@edit'));
 	Route::post('league/{league_id}/edit', array('as' => 'tools.league.edit', 'uses' => 'LeagueController@update'));
-	Route::put('league/{league_id}/match/add', array('as' => 'tools.league.match.add', 'uses' => 'LeagueController@addMatch'));
-	Route::get('league/{league_id}/match/{match_id}/edit', array('as' => 'tools.league.match.edit', 'uses' => 'LeagueController@editMatch'));
-	Route::delete('league/{league_id}/match/{match_id}/delete', array('as' => 'tools.league.match.delete', 'uses' => 'LeagueController@deleteMatch'));
-	Route::post('league/{league_id}/edit', array('as' => 'tools.league.match.edit', 'uses' => 'LeagueController@updateMatch'));
 
+	// Lgeague Match
+	Route::get('league/{league_id}/match/create', array('as' => 'tools.league.match.create', 'uses' => 'LeagueController@createMatch'));
+	Route::post('league/{league_id}/match/store', array('as' => 'tools.league.match.store', 'uses' => 'LeagueController@storeMatch'));
+	Route::get('league/{league_id}/match/{match_id}/edit', array('as' => 'tools.league.match.edit', 'uses' => 'LeagueController@editMatch'));
+	Route::put('league/{league_id}/match/{match_id}/update', array('as' => 'tools.league.match.update', 'uses' => 'LeagueController@updateMatch'));
+	Route::delete('league/{league_id}/match/{match_id}/destroy', array('as' => 'tools.league.match.delete', 'uses' => 'LeagueController@destroyMatch'));
+	
 	Route::get('league/{league_id}/players/count', 'LeagueController@playerCount');
 	Route::get('referee', 'RefereeController@index');
 	Route::get('shotselection', 'ShotSelectionController@index');

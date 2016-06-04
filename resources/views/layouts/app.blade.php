@@ -229,6 +229,7 @@
             });   
 
            // $('.date-picker').datepicker();
+                    
         });
     </script>
 </body>

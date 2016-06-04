@@ -160,7 +160,7 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-xs-12">
-					<button type="button" class="btn btn-success btn-sm" v-on:click ="toggleShowAddMatch(true)">Add</button>
+					{!! HTML::linkRoute('tools.league.match.create', 'Add', array($league->league_id), array('class' => 'btn btn-success btn-sm')) !!} 
 				</div>
 			</div>
 			<div class="row">
@@ -214,62 +214,6 @@
 			</div>
 		</div>			
 	</div>
-
-	<!-- Display Add Match  -->
-	<div class="panel panel-success" v-show="showAddMatch || {{$isEdit}}">
-		<div class="panel-heading">	
-			<h4>Add/Edit Match in League: {{$league->name}}</h4>				
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-xs-12">
-				{!! Form::model($league, array('route' => array('tools.league.match.add'), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'PUT')) !!}
-				{!! Form::hidden ('_token', csrf_token()) !!}
-				{!! Form::hidden ('league_id', $league->league_id) !!}	
-					<div class="form-group">
-						<label for="match_date" class="control-label col-xs-2">Date:</label>
-						<div class="col-xs-2">
-							<div class="input-group date date-picker" data-provide="datepicker">						
-							    <input type="text" class="form-control" name="match_date" value="{{$edit_match->match_date}}">
-							    <div class="input-group-addon">
-							        <span class="glyphicon glyphicon-th"></span>
-							    </div>
-							</div>
-						</div>
-					</div>				
-					<div class="form-group">						
-						<label for="ddlMatchPlayer1" class="control-label col-xs-2">Player 1:</label>
-						<div class="col-xs-4">
-							{!! Form::select('ddlMatchPlayer1', $players_list, $edit_match->player1_id, 
-								    array('class' => 'player form-control', 'id' => 'player1_id', 'name' => 'player1_id')) !!}
-						</div>
-						<label for="p1_score" class="control-label col-xs-1">Score:</label>
-						<div class="col-xs-1">
-							<input name="p1_score" type="text" class="form-control" value="{{$edit_game->score1}}">
-						</div>						
-					</div>
-					<div class="form-group">
-						<label for="ddlMatchPlayer2" class="control-label col-xs-2">Player 2:</label>
-						<div class="col-xs-4">
-							{!! Form::select('ddlMatchPlayer2', $players_list, $edit_match->player2_id, 
-								    array('class' => 'player form-control', 'id' => 'player2_id', 'name' => 'player2_id')) !!}
-						</div>
-						<label for="p2_score" class="control-label col-xs-1">Score:</label>
-						<div class="col-xs-1">
-							<input name="p2_score" type="text" class="form-control"  value="{{$edit_game->score2}}">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-xs-3">
-				    		{!!  Form::submit('Submit', array('class' => 'btn btn-success btn-sm',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}
-							<button type="button" class="btn btn-warning btn-sm" v-show="!error" @click ="toggleShowAddMatch(false)">Cancel</button>
-				    	</div>						   
-					</div>																
-				{!! Form::close() !!}
-				</div>
-			</div>
-		</div>	
-	</div>	
 </div>
 
 @stop

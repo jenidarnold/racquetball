@@ -318,12 +318,33 @@ class LeagueController extends Controller {
 	}
 
 	/**
+	 * [createMatch description]
+	 * @param  [type] $league_id [description]
+	 * @param  [type] $match_id  [description]
+	 * @return [type]            [description]
+	 */
+	public function createMatch($league_id){
+
+		$league = League::find($league_id);
+		$players = \DB::table('league_players')
+				->where('leage_id', '=', $league_id)
+				->orderby('last_name')
+				->orderby('first_name');
+
+		//dropdown list
+		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
+		$players_list = $players_list->lists('last_first_name', 'player_id');
+
+		return view('pages/tools.league.match.create', compact('league', 'players_list'));	
+	}
+
+	/**
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function addMatch(Request $request)
+	public function storeMatch(Request $request)
 	{
 
 		$player = New Player;
@@ -367,16 +388,63 @@ class LeagueController extends Controller {
 	        	}
         }
 
-		return \Redirect::route('tools.league.show', array($league_id));
+        //Redirect to add more matches; add Save Message
+		return \Redirect::route('tools.league.match.create', array($league_id))->with('success', 'Match created Successfully');
 	}
 	
+
+	/**
+	 * [editMatch description]
+	 * @param  [type] $league_id [description]
+	 * @param  [type] $match_id  [description]
+	 * @return [type]            [description]
+	 */
+	public function editMatch($league_id, $match_id){
+
+		$league = League::find($league_id);
+		$players = \DB::table('league_players')
+				->where('leage_id', '=', $league_id)
+				->orderby('last_name')
+				->orderby('first_name');
+
+		//dropdown list
+		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
+		$players_list = $players_list->lists('last_first_name', 'player_id');
+
+		//get the match
+		$match = Match::find($match_id);	
+		if(! is_null($match)) {
+			
+			//Get the game
+			$match_game = MatchGame::find($match_id);
+
+			if(! is_null($match_game)) {
+				$game = Game::find($match_game->game_id);
+			}else {
+				$game = New Game;
+			}
+		}
+		return view('pages/tools.league.match.edit', compact('match', 'game', 'league', 'players_list'));	
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function updateMatch($league_id)
+	{
+		//
+	}
+
 	/**
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function deleteMatch(Request $request)
+	public function destroyMatch(Request $request)
 	{
 
 		$league_id = Input::get('league_id');
@@ -442,35 +510,7 @@ class LeagueController extends Controller {
 	}
 
 
-	public function editMatch($league_id, $match_id){
-
-		$league = League::find($league_id);
-		$players = \DB::table('league_players')
-				->where('leage_id', '=', $league_id)
-				->orderby('last_name')
-				->orderby('first_name');
-
-		//dropdown list
-		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
-		$players_list = $players_list->lists('last_first_name', 'player_id');
-
-		$match_date = "";
-		$player1_id = "";
-		$player2_id = "";
-		$score1 = "";
-		$score2 = "";
-
-		//get the match
-		$edit_match = Match::find($match_id);	
-		if(! is_null($edit_match)) {
-			
-			//Get the game
-			$match_game = MatchGame::find($match_id);
-			$edit_game = Game::find($match_game->game_id);
-
-		}
-		return view('pages/tools.league.match.edit', compact('edit_match', 'edit_game', 'league', 'players_list'));	
-	}
+	
 	/**
 	 * Update the specified resource in storage.
 	 *
