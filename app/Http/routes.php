@@ -27,6 +27,7 @@ Route::group(['namespace' => 'Admin', 'prefix' =>'admin'], function()
 
 Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 {
+	// League
 	Route::get('league', array('as' => 'tools.league', 'uses' => 'LeagueController@index'));	
 	Route::get('league/create', array('as' => 'tools.league.create', 'uses' => 'LeagueController@create'));
 	Route::post('league/store', array('as' => 'tools.league.store',  'uses' =>  'LeagueController@store'));
@@ -36,16 +37,24 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 	Route::get('league/{league_id}/edit', array('as' => 'tools.league.edit', 'uses' => 'LeagueController@edit'));
 	Route::post('league/{league_id}/edit', array('as' => 'tools.league.edit', 'uses' => 'LeagueController@update'));
 
-	// Lgeague Match
+	// League Match
 	Route::get('league/{league_id}/match/create', array('as' => 'tools.league.match.create', 'uses' => 'LeagueController@createMatch'));
 	Route::post('league/{league_id}/match/store', array('as' => 'tools.league.match.store', 'uses' => 'LeagueController@storeMatch'));
 	Route::get('league/{league_id}/match/{match_id}/edit', array('as' => 'tools.league.match.edit', 'uses' => 'LeagueController@editMatch'));
 	Route::put('league/{league_id}/match/{match_id}/update', array('as' => 'tools.league.match.update', 'uses' => 'LeagueController@updateMatch'));
 	Route::delete('league/{league_id}/match/{match_id}/destroy', array('as' => 'tools.league.match.delete', 'uses' => 'LeagueController@destroyMatch'));
 	
-	Route::get('league/{league_id}/players/count', 'LeagueController@playerCount');
+	// League API
+	Route::get('league/api/players/count', 'LeagueController@getPlayerCount');
+	Route::get('league/api/players/streak', 'LeagueController@getPlayerStreak');
+
+	//Referee
 	Route::get('referee', 'RefereeController@index');
+
+	//Shot Selection
 	Route::get('shotselection', 'ShotSelectionController@index');
+
+	//Doubles Matchmaker
 	Route::get('doublesmatcher', 'Matchmaker\MatchmakerController@index');
 	Route::get('doublesmatcher/api/questions', 'Matchmaker\QuestionsController@index');
 	Route::get('doublesmatcher/api/answers', 'Matchmaker\AnswersController@index');

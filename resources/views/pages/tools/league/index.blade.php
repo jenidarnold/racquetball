@@ -160,7 +160,7 @@
 									<td>$40</td>
 									<td>L.A.F. Midway</td>
 									<td><a href="">B. Zimmerman</a></td>
-									<td>@{{ getPlayerCount($l->league_id) }}</td>
+									<td>{{ $league_player->whereLeagueId($l->league_id)->count() }}</td>
 									<td>Singles Round Robin: 1 game to 11</td>
 									<td></td>
 								</tr>
@@ -201,32 +201,7 @@
 			filters: {				
 			},				
 			methods: {	
-				getPlayerCount: function(league_id){
-					var that = this;
-
-					$.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
-				        var token = $('input[name="_token"]').attr("value"); // or _token, whichever you are using
-				        if (token) {
-				            return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Object
-				        }
-				    });
-                    $.ajax({
-                        context: this,
-                        type: "GET",
-                        data: {
-                        	league_id: league_id
-                        },
-                        url: "/tools/league/" + league_id +"/players/count",
-                        success: function (result) {
-                            
-                            return result;
-                        },
-						error:function(x,e) {
-							console.log("error getting league player count: " + e.message);
-						}
-                    });
-					//this.players.push({"id": id, "name": name});
-					//console.log('Add Player: ' + this.players);
+				
 				},		
 			}
 		});	

@@ -37,13 +37,17 @@ class LeagueController extends Controller {
 	 */
 	public function index(Request $request)
 	{
+
 		//Get Leagues
 		$leagues = \DB::table('leagues')
 				->orderby('start_date', 'desc')
 				->orderby('name')
 				->paginate(5);
 
-		return view('pages/tools.league.index', compact('leagues'));
+		//Empty Objects for query in blade
+		$league_player = New LeaguePlayer;
+
+		return view('pages/tools.league.index', compact('leagues', 'league_player'));
 	}
 
 	/**
@@ -576,7 +580,7 @@ class LeagueController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function playerCount($league_id)
+	public function getPlayerCount($league_id)
 	{
 
 		$league = New League;
@@ -589,4 +593,55 @@ class LeagueController extends Controller {
 		return $count;
 	}
 
+	/**
+	 * [getPlayerStreak description]
+	 * @param  [type] $player_id [description]
+	 * @return [type]            [description]
+	 */
+	public function getPlayerStreak(){
+
+		$league_id = Input::get('league_id');
+		$player_id = Input::get('player_id');
+
+		$matches = Match::where('player1_id', '=', $player_id)
+			->orWhere('player2_id', '=', $player_id)
+			->orderby('match_date', 'desc')
+			->get();
+
+
+		if(!is_null($matches)){
+			
+			$last_match = $matches->take(1)->first();
+			$count=0;
+
+			if ($last_match->winner_id == $player_id){
+				$streak = "W";
+				//count win streak
+				foreach ($matches as $m) {
+					if ($m->winner_id == $player_id){
+						$count++;
+					}
+					else{
+						break;
+					}				
+				}
+			}
+			else{
+				$streak = "L";
+				//count loss streak
+				foreach ($matches as $m ) {
+					if ($m->winner_id != $player_id){
+						$count++;
+					}
+					else{
+						break;
+					}				
+				}			
+			}
+		}
+
+		$result = $streak.$count;
+
+		return $result;
+	}
 }

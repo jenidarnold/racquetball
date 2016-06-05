@@ -104,6 +104,12 @@
 		.txt-score {
 			width: 60px;
 		}
+		.win-streak {
+			color:green;
+		}
+		.loss-streak {
+			color:red;
+		}
 	</style>
 @stop
 
@@ -156,9 +162,7 @@
 									<td class="score">{{ $s->losses }}</td>
 									<td class="score">{{ $s->games }} </td>
 									<td class="score">{{ number_format(($s->wins/$s->games)*100,1) }}%</td>
-									@foreach ($match->where('player1_id', '=', $s->player_id)->orWhere('player2_id', '=', $s->player_id)->get() as $g)
-										<td class="score">{{$g}}</td>
-									@endforeach	
+									<td class="score"><div class="player_streak" pid="{{$s->player_id}}" lid="{{$league->league_id}}"></div></td>
 									<td class="score">{{ $s->points }} </td>
 									<td class="score">{{ $s->avg }} </td>
 								</tr>
@@ -248,9 +252,63 @@
 	        	placeholder: "Select a Player",
 	        	allowClear: true,    	 	
 	        });	
-	        $("#player1_id").select2("val", "");
-	        $("#player2_id").select2("val", "");
+	        
+	       function getStreak(league_id, player_id){
+				$.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
+			        var token = $('input[name="_token"]').attr("value"); // or _token, whichever you are using
+			        if (token) {
+			            return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Object
+			        }
+			    });
+                $.ajax({
+                    context: this,
+                    type: "GET",
+                    data: {
+                    	league_id: league_id,
+                    	player_id: player_id
+                    },
+                    url: "/tools/league/api/players/streak",
+                    success: function (result) {
+
+                        console.log( result);
+
+                        return result;
+                    },
+					error:function(x,e) {
+						console.log("error getttng streak: " + e.message);
+					}
+                });
+            }
+
+            $(".player_streak").each(function(){
+
+            	var league_id =$(this).attr("lid");
+            	var player_id =$(this).attr("pid");
+            	
+            	$.ajax({
+                    context: this,
+                    type: "GET",
+                    data: {
+                    	league_id: league_id,
+                    	player_id: player_id
+                    },
+                    url: "/tools/league/api/players/streak",
+                    success: function (result) {
+                        $(this).html(result);
+                        if (/W/i.test(result)){
+                        	$(this).addClass("win-streak");
+                        }else{                        	
+                        	$(this).addClass("loss-streak");
+                        }
+                    },
+					error:function(x,e) {
+						console.log("error getttng streak: " + e.message);
+					}
+                });
+            })
 	    });
+
+	    
 	</script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.1/vue.js"></script>
 	<script>
@@ -278,32 +336,8 @@
 			},
 			filters: {				
 			},				
-			methods: {
-				toggleShowAddMatch: function(bool){
-					this.showAddMatch = bool;
-					this.showResults = ! bool;
-					this.showStandings = ! bool;
-				},
-				getLeagues: function(){
-
-				},
-				saveLeague: function(){					
-					this.showLeague = true;
-					this.showSetup = false;		
-				},
-				setupLeague: function(event){ 
-					this.showLeague = true;
-					this.showSetup = false;					
-				},
-				resetLeague: function(event){ 
-					// disable point, sideout, fault, etc
-					this.showLeague = false;
-					this.showSetup = true;					
-					this.players = [];	
-					this.games = [];
-				},	
-				addPlayer: function(id, name){
-					var that = this;
+			methods: {				
+				getStreak: function(league_id, player_id){
 
 					$.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
 				        var token = $('input[name="_token"]').attr("value"); // or _token, whichever you are using
@@ -313,83 +347,23 @@
 				    });
                     $.ajax({
                         context: this,
-                        type: "POST",
+                        type: "GET",
                         data: {
-                        	leage_id: this.league_id,
-                        	player_id: this.player_id
+                        	league_id: league_id,
+                        	player_id: player_id
                         },
-                        url: "/tools/league/api/players/add",
+                        url: "/tools/league/api/players/streak",
                         success: function (result) {
-                            this.$set("player_answers", result);
-                            var players = result;
 
-                            that.players = players;
+                            this.$set("pid_"+ player_id + "_streak", result);
+
+                            return result;
                         },
 						error:function(x,e) {
-							console.log("error adding player: " + e.message);
+							console.log("error getttng streak: " + e.message);
 						}
                     });
-					//this.players.push({"id": id, "name": name});
-					//console.log('Add Player: ' + this.players);
-				},				
-				deletePlayer: function(player_id){
-					
-				},
-				getGraphRank: function(player_id) {
-					return "Show Graph here";
-      //               $.ajax({
-      //                   context: this,
-      //                   url: "/tools/leauge/api/graphRank",
-      //                   type: "POST",
-      //                   data: {
-      //                   	league_id: this.league_id,
-      //                   	player_id: player_id
-      //                   },
-      //                   success: function (result) {
-      //                       this.$set("player_answers", result);
-      //                   },
-						// error:function(x,e) {
-						// 	console.log("error getting player graph rank: " + e.message);
-						// }
-      //               });
-                },		
-				enterScore: function(player_id, score){
-				},
-				getPlayerAnswers: function(player_id) {
-                    $.ajax({
-                        context: this,
-                        url: "/tools/doublesmatcher/api/players/answers",
-                        success: function (result) {
-                            this.$set("player_answers", result);
-                        },
-						error:function(x,e) {
-							console.log("error getting player answers: " + e.message);
-						}
-                    });
-                },		
-                savePlayers: function() {                	
-                	$.ajaxPrefilter(function(options, originalOptions, xhr) { // this will run before each request
-				        var token = $('input[name="_token"]').attr("value"); // or _token, whichever you are using
-				        if (token) {
-				            return xhr.setRequestHeader('X-CSRF-TOKEN', token); // adds directly to the XmlHttpRequest Object
-				        }
-				    });
-                    $.ajax({
-                        context: this,
-                        type: "POST",
-                        data: {
-                        	player_id: this.player_id,
-                        	player_answers: this.score,
-                        },
-                        url: "/tools/doublesmatcher/api/players/answers/save",
-                        success: function (result) {
-                            this.$set("player_answers", result);
-                        },
-						error:function(x,e) {
-							console.log("error saving player answers: " + e.message);
-						}
-                    });
-                },		
+				},		               
 			}
 		});	
 	</script>
