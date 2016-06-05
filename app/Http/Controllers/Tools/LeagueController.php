@@ -109,12 +109,34 @@ class LeagueController extends Controller {
 	}
 
 	/**
-	 * Display a League; Standings and Results
+	 * Display a League Results
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
 	public function show($league_id)
+	{
+		$league = New League;
+		$league = $league->find($league_id);		
+		$players = $this->getPlayers($league_id);
+		$matches = $this->getMatches($league_id);
+		$players_list =$this->listPlayers();
+				
+		//Empty objects used to get Scores
+		$match = New Match();
+		$match_game = New MatchGame();
+		$game = New Game();
+
+		return view('pages/tools.league.show', compact('league', 'players', 'matches', 'match', 'match_game', 'game', 'players_list'));
+	}
+
+	/**
+	 * Display a League; Standings and Results
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function standings($league_id)
 	{
 		$league = New League;
 		$league = $league->find($league_id);		
@@ -130,7 +152,7 @@ class LeagueController extends Controller {
 		$match_game = New MatchGame();
 		$game = New Game();
 
-		return view('pages/tools.league.show', compact('league', 'players', 'standings', 'matches', 'match', 'match_game', 'game', 'players_list'));
+		return view('pages/tools.league.standings', compact('league', 'players', 'standings', 'matches', 'match', 'match_game', 'game', 'players_list'));
 	}
 
 	/**
