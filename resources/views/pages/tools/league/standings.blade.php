@@ -1,13 +1,29 @@
 @extends('pages.tools.layouts.league')
 
+@section('league_menu')
+	
+@stop
+
 @section('league_content')
-		<!-- Display League Standings -->	
-		<div class="panel panel-primary" v-if="showStandings">
+	<!-- Display League Standings -->	
+	@include('pages.tools.includes.league_header')
+	<!-- Menu -->
+	<nav class="navbar navbar-primary navbar-inverse col-xs-12">
+	  <div class="container-fluid">
+	    <ul class="nav navbar-nav">
+	      	<li><a href="/tools/league/">Leagues</a></li>
+	    	<li><a href="/tools/league/{{$league->league_id}}/join">Join</a></li>
+	      	<li class="active"><a href="#" active>Standings</a></li>
+	      	<li><a href="/tools/league/{{$league->league_id}}/">Matches</a></li>
+	    </ul>
+	  </div>
+	</nav>
+		<div class="panel panel-primary" v-if="showStandings">		
 			<div class="panel-heading">	
+			
 				<div class="row">
 					<div class="col-xs-12 col-md-62">
-						<h4>{{$league->name}} Standings as of {{date('M d, y')}} </h4>
-						<h6>League runs {{date('M d, y', strtotime($league->start_date))}} to {{date('M d, y', strtotime($league->end_date))}}</h6>						
+						<h4>Standings as of {{date('M d, y')}} </h4>						
 					</div>										
 				</div>				
 			</div>
@@ -28,7 +44,7 @@
 							@foreach ($standings as $s)
 								<tr>									
 									<td class='rank'>{{ $i++}} </td>
-									<td class="player_name">{{ $s->first_name}}  {{$s->last_name }} </td>								
+									<td class="player_name">{{ $s->first_name}} {{$s->last_name }} </td>								
 									<td class="score">{{ $s->wins }}</td>
 									<td class="score">{{ $s->losses }}</td>
 									<td class="score">{{ $s->games }} </td>

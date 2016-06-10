@@ -1,6 +1,5 @@
 @extends('pages.tools.layouts.league')
 
-
 @section('style')
 	@yield('style')
 	<style>
@@ -12,10 +11,33 @@
 	</style>
 @stop
 
+@section('league_menu')
+	<!-- Menu -->
+
+@stop
+
 @section('league_content')
-<!-- Setup League  -->
-<div class="panel panel-primary">			
-	<div class="panel-heading"><h3>Racquetball Leagues</h3></div>
+
+<!-- Leaue Home Intro -->
+	<div class="row">
+		<div clas="col-xs-12">
+			
+			<h3>Competitive Racquetball Leagues </h3>
+			<h4>
+			<p>
+			Find your level of play, enjoy a fun, fast-action game. 
+			</p>
+			</h4>
+		</div>
+	</div>
+	<nav class="navbar navbar-primary navbar-inverse col-xs-12">
+	  <div class="container-fluid">
+	    <ul class="nav navbar-nav">
+	      	<li class="active"><a href="#">Leagues</a></li>
+			<li><a id="lnkLeagueAdd" href="{{ route('tools.league.create') }}"></i>Create</a></li>li
+	    </ul>
+	  </div>
+	</nav>
 	<div class="panel-body">
 		<div>
 			<form class="form-horizontal" role="form">
@@ -23,7 +45,9 @@
 				<div class="row">	
 					@foreach($chunk_leagues as $l)				
 					<div class="col-xs-12 col-sm-5 l-card">
-						<h3><a id={{"lnkLeague-$l->league_id"}} class="btn btn-warning btn-lg col-xs-12 col-sm-12" href="{{ route('tools.league.show', [$l->league_id]) }}">{{$l->name}}</a></h3>					
+						<h3><a id={{"lnkLeague-$l->league_id"}} class="btn btn-primary btn-lg col-xs-12 col-sm-12" href="{{ route('tools.league.show', [$l->league_id]) }}">{{$l->name}}</a>
+
+						</h3>					
 						<div class="form-group">
 							<label class="control-label col-xs-3 col-sm-2" for="dates">Dates:</label>
 							<div class="col-xs-7 col-sm-10">
@@ -62,6 +86,12 @@
 						</div>
 						{{-- League Actions --}}
 						<div class="row">
+							<div class="col-xs-2">
+									<a id={{"lnkLeague-$l->league_id"}} class="btn btn-info btn-sm" href="{{ route('tools.league.show', [$l->league_id]) }}">View</i></a>
+							</div>
+							<div class="col-xs-3">
+								<button type="button" class="btn btn-primary btn-sm">Players <span class="badge">{{count($league_player->whereLeagueId($l->league_id))}}</span></button>
+							</div>
 							{{-- initialize isOpen league --}}
 							@if($isOpen = 1) 
 							@endif
@@ -70,80 +100,30 @@
 								{{-- set isOpen to false--}}
 								@if($isOpen = 0) 									
 								@endif			
-								<div class="col-xs-12">
+								<div class="col-xs-6">
 									<p class="text-danger">This league is closed.</p>
 								</div>					
 							@endif	
 							@if($isOpen == 1)
-								<div class="col-xs-1">
+								<div class="col-xs-2">
 									<a id={{"lnkLeague-$l->league_id"}} class="btn btn-success btn-sm" href="{{ route('tools.league.join', [$l->league_id]) }}">Join</i></a>
 								</div>
 							@endif
+								
 						</div>						
 					</div>
 					<div class="col-sm-1">&nbsp;</div>
 					@endforeach
 				</div>			
 			@endforeach
-			</form>
-		 {{-- Table Layout--}}
-			<table class="table table-hover">
-				<thead>
-					<th></th>
-					<th></th>
-					<th>League Name</th>
-					<th>Starts</th>
-					<th>Ends</th>
-					<th>Skill Level</th>							
-					<th>Format</th>
-					<th>Fee</th>
-					<th>Location</th>
-					<th>Director</th>
-					<th> # Players</th>
-					<th>Description</th>
-				</thead>
-				@foreach ($leagues as $l)		
-					{{-- set isOpen --}}			
-					@if($isOpen = 1) 
-					@endif
-					{{-- check if league has ended --}}
-					@if( date_diff(new Datetime($l->end_date), new Datetime(), false)->format("%r%a") > 0)
-						{{-- set isOpen --}}
-						@if($isOpen = 0) 
-						@endif
-						<tr class="closed" title="This league has ended">
-					@else
-						<tr class="open" title="This league is open">
-					@endif							
-							<td>
-								<a id={{"lnkLeague-$l->league_id"}} class="btn btn-warning btn-sm" href="{{ route('tools.league.show', [$l->league_id]) }}"><i class="fa fa-search"></i></a>
-							</td>
-							<td>
-								@if($isOpen == 1)
-								<a id={{"lnkLeague-$l->league_id"}} class="btn btn-success btn-sm" href="{{ route('tools.league.join', [$l->league_id]) }}">Join</i></a>
-								@endif
-							</td>					
-							<td>{{$l->name}}</td>
-							<td>{{date('m-d-y', strtotime($l->start_date))}}</td>
-							<td>{{date('m-d-y', strtotime($l->end_date))}}</td>
-							<td>A/B</td>
-							<td>Singles</td>
-							<td>$40</td>
-							<td>L.A.F. Midway</td>
-							<td><a href="">B. Zimmerman</a></td>
-							<td>{{ $league_player->whereLeagueId($l->league_id)->count() }}</td>
-							<td>Singles Round Robin: 1 game to 11</td>
-							<td></td>
-						</tr>
-				@endforeach
-			</table>
+			</form>			
 			<div>
 				{!! $leagues->render() !!}
 			</div>
 		</div>
 	</div>
 	<div class="panel-footer">
-		<a id="lnkLeagueAdd" class="btn btn-success btn-sm" href="{{ route('tools.league.create') }}"></i>Create League</a>
+	
 	</div>
 </div>
 

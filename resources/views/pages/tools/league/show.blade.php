@@ -1,6 +1,22 @@
 @extends('pages.tools.layouts.league')
 
+@section('league_menu')
+	<!-- Main Menu -->	
+@stop
+
 @section('league_content')
+	<!-- Display League Standings -->	
+	@include('pages.tools.includes.league_header')
+	<!-- Menu -->
+	<nav class="navbar navbar-primary navbar-inverse col-xs-12">
+	  <div class="container-fluid">
+	    <ul class="nav navbar-nav">
+	      	<li><a href="/tools/league/">Leagues</a></li>
+	    	<li><a href="/tools/league/{{$league->league_id}}/join">Join</a></li>
+	      	<li class="active"><a href="#" active>Standings</a></li>
+	      	<li><a href="/tools/league/{{$league->league_id}}/">Matches</a></li>
+	  </div>
+	</nav>
 		<!-- Display Match Results  -->
 		<div class="panel panel-primary" v-if="showResults">
 		<div class="panel-heading">	

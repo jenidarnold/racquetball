@@ -120,15 +120,10 @@
 	<div id="myvue" >
 		<!-- Navigation  -->	
 		<div class="row">
-			<nav class="navbar navbar-primary navbar-inverse col-xs-12">
-			  <div class="container-fluid">
-			    <ul class="nav navbar-nav">
-			      <li><a href="/tools/league/">Leagues</a></li>
-			      <li><a href="#">Standings</a></li>
-			      <li><a href="#">Matches</a></li>
-			    </ul>
-			  </div>
-			</nav>
+			@yield('league_header')
+		</div>	
+		<div class="row">
+			@yield('league_menu')
 		</div>	
 		<div class="row">
 			@yield('league_content')
