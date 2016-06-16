@@ -231,8 +231,10 @@
                 window.document.location = $(this).data("href");
             });   
 
-           // $('.date-picker').datepicker();
-                    
+            // $('.date-picker').datepicker();
+           
+            //Popovers must be initialized with jQuery: select the specified element and call the popover() method.
+            $('[data-toggle="popover"]').popover();          
         });
     </script>
 </body>

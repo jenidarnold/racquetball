@@ -46,8 +46,9 @@ class LeagueController extends Controller {
 
 		//Empty Objects for query in blade
 		$league_player = New LeaguePlayer;
+		$player = New Player;
 
-		return view('pages/tools.league.index', compact('leagues', 'league_player'));
+		return view('pages/tools.league.index', compact('leagues', 'league_player', 'player'));
 	}
 
 	/**
@@ -122,6 +123,8 @@ class LeagueController extends Controller {
 		$matches = $this->getMatches($league_id);
 		$players_list =$this->listPlayers();
 				
+		//dd($matches);
+
 		//Empty objects used to get Scores
 		$match = New Match();
 		$match_game = New MatchGame();
@@ -486,7 +489,7 @@ class LeagueController extends Controller {
 				//	'r2.ranking as p2_rank'
 				)				
 				->distinct()
-				->orderby('matches.match_id')
+				->orderby('matches.match_date', 'desc')
 				->get();
 
 		return $matches;

@@ -8,6 +8,9 @@
 			margin: 5px 0px 10px 30px;		
 			padding-bottom: 15px;	
 		}
+		.popover{
+		    width:200px;  
+		}
 	</style>
 @stop
 
@@ -17,17 +20,11 @@
 @stop
 
 @section('league_content')
-
-<!-- Leaue Home Intro -->
+<!-- League Home Intro -->
 	<div class="row">
-		<div clas="col-xs-12">
-			
-			<h3>Competitive Racquetball Leagues </h3>
-			<h4>
-			<p>
-			Find your level of play, enjoy a fun, fast-action game. 
-			</p>
-			</h4>
+		<div class="col-xs-11 col-xs-offset-1 col-sm-12 col-md-offset-0 ">			
+			<h3>Racquetball Leagues </h3>
+			<h4>Find your level of play, enjoy a fun, fast-action game.</h4>
 		</div>
 	</div>
 	<nav class="navbar navbar-primary navbar-inverse col-xs-12">
@@ -47,19 +44,25 @@
 					<div class="col-xs-12 col-sm-5 l-card">
 						<h3><a id={{"lnkLeague-$l->league_id"}} class="btn btn-primary btn-lg col-xs-12 col-sm-12" href="{{ route('tools.league.show', [$l->league_id]) }}">{{$l->name}}</a>
 
-						</h3>					
-						<div class="form-group">
-							<label class="control-label col-xs-3 col-sm-2" for="dates">Dates:</label>
-							<div class="col-xs-7 col-sm-10">
-								<label class="control-label text text-primary" id="dates">{{date('m-d-y', strtotime($l->start_date))}} to {{date('m-d-y', strtotime($l->end_date))}}</label>
-							</div>
-						</div>
+						</h3>
 						<div class="form-group">		
 							<label class="control-label col-xs-3 col-sm-2" for="location">Location:</label>
 							<div class="col-xs-7 col-sm-10">
 								<label class="control-label text text-primary" id="location">LA Fitness @ Midway</label>
 							</div>
+						</div>				
+						<div class="form-group">
+							<label class="control-label col-xs-3 col-sm-2" for="dates">Starts:</label>
+							<div class="col-xs-7 col-sm-10">
+								<label class="control-label text text-primary" id="start">{{date('m-d-y', strtotime($l->start_date))}}</label>
+							</div>
 						</div>
+						<div class="form-group">
+							<label class="control-label col-xs-3 col-sm-2" for="dates">Ends:</label>
+							<div class="col-xs-7 col-sm-10">
+								<label class="control-label text text-primary" id="end">{{date('m-d-y', strtotime($l->end_date))}}</label>
+							</div>
+						</div>						
 						<div class="form-group">						
 							<label class="control-label col-xs-3 col-sm-2" for="schedule">Schedule:</label>
 							<div class="col-xs-7 col-sm-10">
@@ -87,10 +90,15 @@
 						{{-- League Actions --}}
 						<div class="row">
 							<div class="col-xs-2">
-									<a id={{"lnkLeague-$l->league_id"}} class="btn btn-info btn-sm" href="{{ route('tools.league.show', [$l->league_id]) }}">View</i></a>
+								<a id={{"lnkLeague-$l->league_id"}} class="btn btn-info btn-sm" href="{{ route('tools.league.show', [$l->league_id]) }}">View</a>
 							</div>
-							<div class="col-xs-3">
-								<button type="button" class="btn btn-primary btn-sm">Players <span class="badge">{{count($league_player->whereLeagueId($l->league_id))}}</span></button>
+							<div class="col-xs-3">							    
+								<button type="button" class="btn btn-primary btn-sm"  data-toggle="popover" title="Players ({{count($league_player->whereLeagueId($l->league_id)->get())}})" 
+								data-html="true" data-content="
+								@foreach ($league_player->whereLeagueId($l->league_id)->get() as $p)
+                                    	<li>{{ $player->wherePlayerId($p->player_id)->first()->last_name }}, {{ $player->wherePlayerId($p->player_id)->first()->first_name }}</li>
+								@endforeach
+									">Players <span class="badge">{{count($league_player->whereLeagueId($l->league_id)->get())}}</span></button>
 							</div>
 							{{-- initialize isOpen league --}}
 							@if($isOpen = 1) 
@@ -99,8 +107,9 @@
 							@if( date_diff(new Datetime($l->end_date), new Datetime(), false)->format("%r%a") > 0)
 								{{-- set isOpen to false--}}
 								@if($isOpen = 0) 									
-								@endif			
-								<div class="col-xs-6">
+								@endif	
+								<div class="clearfix visible-xs"></div>	
+								<div class="col-xs-7">
 									<p class="text-danger">This league is closed.</p>
 								</div>					
 							@endif	
@@ -125,7 +134,6 @@
 	<div class="panel-footer">
 	
 	</div>
-</div>
 
 @stop
 

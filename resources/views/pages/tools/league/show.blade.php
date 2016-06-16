@@ -36,17 +36,26 @@
 						<th>Actions</th>
 						@foreach ($matches as $m)
 							<tr>
-								<td class='week_num'>{{ $m->match_date }} </td>
+								<td class='week_num'>{{ ceil(date_diff(new DateTime($m->match_date), new DateTime($league->start_date))->days /7)}} </td>
+								<td>{{ $m->match_date}}</td>
 								<td>
 									<table class="match">
+										@if($m->winner_id == $m->player1_id)
+										<tr class="winner">
+										@else
 										<tr>
+										@endif
 											<!--td class='rank'><sup></sup></td-->
 											<td class="player_name">{{ $m->p1_first_name }} {{ $m->p1_last_name }} </td>			
 											@foreach ($match_game->whereMatchId($m->match_id)->with('games')->get() as $g)
 											<td class="score">{{$g["games"]->first()->score1 }}</td>
 											@endforeach	
 										</tr>
+										@if($m->winner_id == $m->player2_id)
+										<tr class="winner">
+										@else
 										<tr>
+										@endif
 											<!--td class='rank'><sup></sup></td-->
 											<td class="player_name">{{ $m->p2_first_name }} {{ $m->p2_last_name }} </td>			
 											@foreach ($match_game->whereMatchId($m->match_id)->with('games')->get() as $g)

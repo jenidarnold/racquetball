@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('pages.tools.layouts.league')
 
 @section('style')
 	<style>
@@ -6,11 +6,16 @@
 	</style>
 @stop
 
-@section('content')
-
-<div class="container">
-	<div id="myvue">
-		<!-- Setup League  -->
+@section('league_content')
+	<nav class="navbar navbar-primary navbar-inverse col-xs-12">
+	  <div class="container-fluid">
+	    <ul class="nav navbar-nav">
+	      	<li><a href="{{ route('tools.league') }}">Leagues</a></li>
+			<li class="active"><a href="#">Create</a></li>
+	    </ul>
+	  </div>
+	</nav>
+		<!-- Create League  -->
 		<div class="panel panel-primary">			
 			<div class="panel-heading"><h3>Create League</h3></div>
 			<div class="panel-body">	
@@ -87,7 +92,6 @@
 			</div>
 		</div>		
 	</div>
-</div>
 @stop
 
 @section('script')
