@@ -116,6 +116,7 @@
 @stop
 
 @section('content')
+
 <div class="container">
 	<div id="myvue" >
 		<!-- Navigation  -->	

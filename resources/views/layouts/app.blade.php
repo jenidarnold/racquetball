@@ -219,6 +219,7 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
  	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+    <!--script src="//cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.min.js"></script-->
     <script src="{{ asset('/js/jchartfx/jchartfx.system.js')}}"></script>
     <script src="{{ asset('/js/jchartfx/jchartfx.coreVector.js')}}"></script>
     @yield('script')

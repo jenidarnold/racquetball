@@ -7,6 +7,12 @@
 @stop
 
 @section('league_content')
+	<div class="row">
+		<div class="col-xs-11 col-xs-offset-1 col-sm-12 col-md-offset-0 ">			
+			<h3>Racquetball Leagues </h3>
+			<h4>Find your level of play, enjoy a fun, fast-action game.</h4>
+		</div>
+	</div>
 	<nav class="navbar navbar-primary navbar-inverse col-xs-12">
 	  <div class="container-fluid">
 	    <ul class="nav navbar-nav">

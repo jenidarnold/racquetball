@@ -134,6 +134,55 @@ class LeagueController extends Controller {
 	}
 
 	/**
+	 * Show the form for editing the League.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit($league_id)
+	{
+		$league = New League;
+		$league = $league->find($league_id);
+		$players = $this->getPlayers($league_id);
+
+		//dropdown list
+		$players_list = $this->listPlayers();
+		$gyms = GymLocation::orderby('name')->get();
+		$gyms = $gyms->lists('name', 'id');
+
+		$formats = New GameFormat;
+
+		//dropdown list
+		$directors = Player::orderby('last_name')->orderby('first_name')->get();
+		$directors = $directors->lists('last_first_name', 'player_id');
+		
+		return view('pages/tools.league.edit', compact('league', 'players', 'players_list', 'gyms', 'formats', 'directors' ));
+	}
+	
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update($league_id)
+	{
+		//
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroy($league_id)
+	{
+		//
+	}
+
+
+	/**
 	 * Display a League; Standings and Results
 	 *
 	 * @param  int  $id
@@ -422,49 +471,7 @@ class LeagueController extends Controller {
 		$league_match->delete();
      
 		return \Redirect::route('tools.league.show', array($league_id));
-	}
-	
-	/**
-	 * Show the form for editing the League.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($league_id)
-	{
-		$league = New League;
-		$league = $league->find($league_id);
-		$players = $this->getPlayers($league_id);
-
-		//dropdown list
-		$players_list = $this->listPlayers();
-		
-		return view('pages/tools.league.edit', compact('league', 'players', 'players_list'));
-	}
-	
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($league_id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($league_id)
-	{
-		//
-	}
-
-	
+	}	
 
 	/**
 	 * [getMatches description]

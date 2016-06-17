@@ -18,6 +18,9 @@
 	  <div class="container-fluid">
 	    <ul class="nav navbar-nav">	    	
 	      	<li><a href="/tools/league/">Leagues</a></li>
+	      	<!--@ if($user->is_admin) -->
+	      	<li><a href="/tools/league/{{$league->league_id}}/edit">Edit</a></li>
+	      	<!--@ endif -->
 	    	<li class="active"><a href="#">Join</a></li>
 	      	<li><a href="/tools/league/{{$league->league_id}}/standings">Standings</a></li>
 	      	<li><a href="/tools/league/{{$league->league_id}}/">Matches</a></li>

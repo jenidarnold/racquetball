@@ -12,9 +12,13 @@
 	  <div class="container-fluid">
 	    <ul class="nav navbar-nav">
 	      	<li><a href="/tools/league/">Leagues</a></li>
+	      	<!--@ if($user->is_admin) -->
+	      	<li><a href="/tools/league/{{$league->league_id}}/edit">Edit</a></li>
+	      	<!--@ endif -->
 	    	<li><a href="/tools/league/{{$league->league_id}}/join">Join</a></li>
 	      	<li class="active"><a href="#" active>Standings</a></li>
 	      	<li><a href="/tools/league/{{$league->league_id}}/">Matches</a></li>
+	      	
 	    </ul>
 	  </div>
 	</nav>
@@ -127,7 +131,7 @@
                         }
                     },
 					error:function(x,e) {
-						console.log("error getttng streak: " + e.message);
+						console.log("error getting streak: " + e.message);
 					}
                 });
             })
