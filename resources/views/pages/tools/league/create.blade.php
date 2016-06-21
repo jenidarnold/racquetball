@@ -85,7 +85,7 @@
 					<div class="form-group">
 						<label for="detail" class="control-label col-xs-1">Details:</label>
 						<div class="col-xs-8">
-							<textarea name="detail" placeholder="League Detail" rows="4" type="text" class="form-control"></textarea>
+							<textarea name="detail" placeholder="League Detail" rows="3" type="text" class="form-control"></textarea>
 						</div>
 					</div>
 			    	<div class="form-group">
