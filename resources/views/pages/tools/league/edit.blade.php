@@ -89,7 +89,7 @@
 							<label class="control-label col-xs-3 col-sm-2" for="start_time">From:</label>
 							<div class="col-xs-7 col-sm-10">
 							    <div class="input-group timemask timepicker" >
-					                <input type="text" class="form-control" name="start_time" value="{{date('HH:ii p', strtotime($league->end_date))}}">
+					                <input type="text" class="form-control" name="start_time" value="{{date('HH:ii p', strtotime($league->start_date))}}">
 					               	<div class="input-group-addon">
 						                <span class="add-on clearpicker"><i class="fa fa-clock-o"></i></span>
 								    </div>
