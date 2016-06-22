@@ -89,8 +89,11 @@
 						</div>
 						{{-- League Actions --}}
 						<div class="row">
-							<div class="col-xs-3">
-								<a id={{"lnkLeague-$l->league_id"}} class="btn btn-info btn-sm" href="{{ route('tools.league.show', [$l->league_id]) }}">View</a>
+							<div class="col-xs-2">
+								<a id={{"lnkLeague-$l->league_id"}} class="btn btn-success btn-sm" href="{{ route('tools.league.show', [$l->league_id]) }}">View</a>
+							</div>
+							<div class="col-xs-2">
+								<a id={{"lnkLeague-$l->league_id"}} class="btn btn-info btn-sm" href="{{ route('tools.league.edit', [$l->league_id]) }}">Edit</a>
 							</div>
 							<div class="col-xs-3 col-sm-3">							    
 								<button type="button" class="btn btn-primary btn-sm"  data-toggle="popover" title="Players ({{count($league_player->whereLeagueId($l->league_id)->get())}})" 

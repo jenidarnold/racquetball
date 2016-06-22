@@ -28,7 +28,7 @@
 	  </div>
 	</nav>			
 	<div class="row">
-		<div class="col-xs-2">
+		<div class="col-md-3 col-xs-4">
 			<div class="panel panel-success">			
 				<div class="panel-heading">
 					<b>Players({{count($players)}})</b>
@@ -47,7 +47,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-xs-10">
+		<div class="col-xs-8 col-md-9">
 			{!! Form::model($league, array('route' => array('tools.league.join'), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'PUT')) !!}
 			{!! Form::hidden ('_token', csrf_token()) !!}
 			{!! Form::hidden ('league_id', $league->league_id) !!}
@@ -56,11 +56,11 @@
 				<label class="label label-info col-xs-12"><h5>Already a Registered Player?</h5></label>
 			</div>
 			<div class="form-group">
-				<label for="ddlPlayers" class="control-label col-xs-2">Search:</label>
-				<div class="col-xs-6">
+				<label for="ddlPlayers" class="control-label col-xs-3">Search:</label>
+				<div class="col-xs-9 col-sm-9">
 					{!! Form::select('player_id', $players_list, '', 
 						    array('class' => 'player form-control', 
-					       'style' => 'font-weight:300; font-size:10pt; width:300px',
+					       'style' => 'font-weight:300; font-size:10pt;',
 					        )) !!}
 				</div>
 			</div>
@@ -68,31 +68,31 @@
 				<label class="label label-info col-xs-12"><h5> Or Enter New Player Information </h5></label>
 			</div>
 			<div class="form-group">
-				<label for="first_name" class="control-label col-xs-2">First Name:</label>
-				<div class="col-xs-6">
+				<label for="first_name" class="control-label col-xs-3">First Name:</label>
+				<div class="col-xs-9">
 					<input placeholder="First Name" name="first_name" type="text" class="form-control">
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="last_name" class="control-label col-xs-2">Last Name:</label>
-				<div class="col-xs-6">
+				<label for="last_name" class="control-label col-xs-3">Last Name:</label>
+				<div class="col-xs-9">
 					<input placeholder="Last Name" name="last_name" type="text" class="form-control">
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="email" class="control-label col-xs-2">Email:</label>
-				<div class="col-xs-6">
+				<label for="email" class="control-label col-xs-3">Email:</label>
+				<div class="col-xs-9">
 					<input placeholder="Email" name="email" type="text" class="form-control">
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="phone" class="control-label col-xs-2">Phone:</label>
-				<div class="col-xs-6">
+				<label for="phone" class="control-label col-xs-3">Phone:</label>
+				<div class="col-xs-9">
 					<input placeholder="Phone" name="phone" type="text" class="form-control">
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-xs-6 col-xs-offset-3">
+				<div class="col-xs-9 col-xs-offset-3">
 					{!!  Form::submit('Submit', array('class' => 'btn btn-success',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}
 					<button type="button" class="btn btn-warning" v-show="!error" @click ="cancelled">Cancel</button>
 				</div>

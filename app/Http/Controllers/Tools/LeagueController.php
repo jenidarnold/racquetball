@@ -143,14 +143,19 @@ class LeagueController extends Controller {
 	{
 		$league = New League;
 		$league = $league->find($league_id);
-		$players = $this->getPlayers($league_id);
+		$players = $league->getPlayers($league_id)
+			->orderby('last_name')
+			->orderby('first_name')
+			->get();
 
-		//dropdown list
+
+		//dropdown lists
 		$players_list = $this->listPlayers();
 		$gyms = GymLocation::orderby('name')->get();
 		$gyms = $gyms->lists('name', 'id');
 
 		$formats = New GameFormat;
+		$formats = $formats->lists('format', 'format_id');
 
 		//dropdown list
 		$directors = Player::orderby('last_name')->orderby('first_name')->get();
@@ -167,7 +172,42 @@ class LeagueController extends Controller {
 	 */
 	public function update($league_id)
 	{
-		//
+		$name = Input::get('name');
+		$gym_id = Input::get('gym_id');
+		$format_id = Input::get('format_id');
+		$start_date = Input::get('start_date');
+		$end_date = Input::get('end_date');
+		$start_time = Input::get('start_time');
+		$end_time = Input::get('end_time');
+		
+
+		$start_date =  new \DateTime($start_date . ' '. $start_time);
+		$start_date = $start_date->format("Y-m-d H:i:s");
+
+		$end_date =  new \DateTime($end_date . ' '. $end_time);
+		$end_date = $end_date->format("Y-m-d H:i:s");
+
+		$fee = Input::get('fee');
+		$detail = Input::get('detail');
+
+		//update league	
+		$league = League::find($league_id);
+		if (! is_null($league)) {
+
+		 	$league->name = $name;
+          	$league->location_id = $gym_id;
+          	$league->format_id = $format_id;
+          	$league->start_date = $start_date;
+          	$league->end_date = $end_date;
+          	$league->fee = $fee;
+          	$league->detail = $detail;
+
+          	$league->save();        	
+        }     
+
+        //Redirect to add more matches; add Save Message
+		return \Redirect::route('tools.league.edit', array($league_id))->with('success', 'League updated Successfully');
+
 	}
 
 	/**

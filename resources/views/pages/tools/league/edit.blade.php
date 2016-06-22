@@ -2,7 +2,9 @@
 
 @section('style')
 	<style>
-
+	* {
+		  border-radius: 0 !important;
+		}
 	</style>
 @stop
 
@@ -28,38 +30,40 @@
 	</nav>
 		<!-- Edit League  -->
 		<div class="panel panel-primary">			
-			<!--div class="panel-heading"><h3>Edit League</h3></div -->
+			<div class="panel-heading">
+				<h4>Edit League Information</h4>
+			</div>
 			<div class="panel-body">	
 				{!! Form::model($league, array('route' => array('tools.league.edit', $league->league_id), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'POST')) !!}
 					{!! Form::hidden ('_token', csrf_token()) !!}
 					<div class="col-xs-12 col-sm-8 l-card">
 						<div class="form-group">
-							<label class="control-label col-xs-3 col-sm-2" for="league_title" >Title:</label>
-							<div class="col-xs-9 col-sm-10">
-								<input value="{{$league->name}}" id="league_title" type="text" class="form-control">
+							<label class="control-label col-xs-3 col-sm-2" for="name" >Title:</label>
+							<div class="col-xs-9 col-sm-8">
+								<input value="{{$league->name}}" name="name" type="text" class="form-control">
 							</div>
 						</div>
 						<div class="form-group">		
 							<label class="control-label col-xs-3 col-sm-2" for="location">Gym:</label>
-							<div class="col-xs-9 col-sm-10">								
-								{!! Form::select('ddlGyms', $gyms, '$location_id', 
-								    array('class' => 'gyms form-control', 
+							<div class="col-xs-9 col-sm-8">								
+								{!! Form::select('ddlGyms', $gyms, '$league->location_id', 
+								    array('class' => 'gyms form-control','id' => 'location_id',  'name' => 'location_id',
 							       'style' => 'font-weight:300; font-size:12pt;',
 							        )) !!}
 							</div>
 						</div>
 						<div class="form-group">						
 							<label class="control-label col-xs-3 col-sm-2" for="format">Format:</label>
-							<div class="col-xs-9 col-sm-10">
-								{!! Form::select('ddlFormats', $formats, '$format_id', 
-										    array('class' => 'formats form-control', 'name' => 'format_id',
-									       'style' => 'font-weight:300; font-size:11pt;',
+							<div class="col-xs-9 col-sm-6">
+								{!! Form::select('ddlFormats', $formats, '$league->format_id', 
+								    array('class' => 'formats form-control',  'id' => 'format_id', 'name' => 'format_id',
+							       'style' => 'font-weight:300; font-size:11pt;',
 						        )) !!}
 							</div>
 						</div>		
 						<div class="form-group">
 							<label class="control-label col-xs-3 col-sm-2" for="start_date">Starts:</label>
-							<div class="col-xs-7 col-sm-10">
+							<div class="col-xs-7 col-sm-6">
 								<div class="input-group date date-picker datetimepicker">
 								    <input type="text" class="form-control" name="start_date" value="{{date('m-d-y', strtotime($league->start_date))}}">
 								    <div class="input-group-addon">
@@ -70,7 +74,7 @@
 						</div>
 						<div class="form-group">
 							<label class="control-label col-xs-3 col-sm-2" for="end_date">Ends:</label>
-							<div class="col-xs-7 col-sm-10">
+							<div class="col-xs-7 col-sm-6">
 								<div class="input-group date date-picker datetimepicker">
 								    <input type="text" class="form-control" name="end_date" value="{{date('m-d-y', strtotime($league->end_date))}}">
 								    <div class="input-group-addon">
@@ -81,13 +85,13 @@
 						</div>
 						<div class="form-group">
 							<label class="control-label col-xs-3 col-sm-2" for="end_date">Day:</label>
-							<div class="col-xs-7 col-sm-10">
+							<div class="col-xs-7 col-sm-6">
 							  	<input type="text" class="form-control" name="day_of_week" readonly="true" value="{{date('l', strtotime($league->start_date))}}">
 							</div>
 						</div>						
 						<div class="form-group">						
 							<label class="control-label col-xs-3 col-sm-2" for="start_time">From:</label>
-							<div class="col-xs-7 col-sm-10">
+							<div class="col-xs-7 col-sm-6">
 							    <div class="input-group timemask timepicker" >
 					                <input type="text" class="form-control" name="start_time" value="{{date('HH:ii p', strtotime($league->start_date))}}">
 					               	<div class="input-group-addon">
@@ -98,7 +102,7 @@
 						</div>
 						<div class="form-group">						
 							<label class="control-label col-xs-3 col-sm-2" for="end_time">To:</label>
-							<div class="col-xs-7 col-sm-10">
+							<div class="col-xs-7 col-sm-6">
 								<div class="input-group timemask timepicker" >
 								    <input type="text" class="form-control" name="end_time" value="{{date('HH:ii p', strtotime($league->end_date))}}">
 								    <div class="input-group-addon">
@@ -109,15 +113,15 @@
 						</div>
 						
 						<div class="form-group">						
-							<label class="control-label col-xs-3 col-sm-2" for="fees">Fee:</label>
-							<div class="col-xs-4 col-sm-2">
-								<input value="{{$league->fee}}" id="fees" type="text" class="form-control">
+							<label class="control-label col-xs-3 col-sm-2" for="fee">Fee:</label>
+							<div class="col-xs-4 col-sm-3">
+								<input value="{{$league->fee}}" name="fee" type="text" class="form-control">
 							</div>
 						</div>
 						<div class="form-group">						
-							<label class="control-label col-xs-3 col-sm-2" for="details">Details:</label>
+							<label class="control-label col-xs-3 col-sm-2" for="detail">Details:</label>
 							<div class="col-xs-12 col-sm-10">
-								<textarea value="{{$league->detail}}" id="league_title"  rows="3" rows class="form-control"></textarea>
+								<textarea name="detail"  rows="3" rows class="form-control">{{$league->detail}}</textarea>
 							</div>
 						</div>
 					</div>					
@@ -129,47 +133,47 @@
 					</div>
 				</form>
 			</div>
-		</div>
-
-		<!-- Setup Players  -->		
-		<div class="panel panel-primary" >			
-			<div class="panel-heading"><h3>Edit Players</h3></div>
-			<div class="panel-body">	
-				<div class="col-md-12 col-md-offset-0">
-					{!! Form::open(array('class' => 'form-horizontal', 'role' => 'form')) !!}
-						<div class="form-group" style="padding-bottom:10px">						
-							<label for="ddlPlayers" class="control-label col-xs-1">Player:</label>
-							<div class="col-xs-8">
-								{!! Form::select('ddlPlayers', $players_list, '', 
-									    array('class' => 'player form-control', 
-								       'style' => 'font-weight:300; font-size:12pt; width:250px',
-								        )) !!}
-						    	<button class="btn btn-warning btn-md" v-on:click="createPlayer">New</button>	
-						    </div>
-						</div>																
-					{!! Form::close() !!}
+			<!-- Edit Players  -->		
+			<div class="panel panel-primary" >			
+				<div class="panel-heading">
+					<h4>Edit Players</h4>
 				</div>
-				<div class="row">
-					<div class="col-xs-8">
+				<div class="panel-body">	
+					<div class="col-md-12 col-md-offset-0">
+						{!! Form::open( array('route' => array('tools.league.join', $league->league_id), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'POST')) !!}
+						{!! Form::hidden ('_token', csrf_token()) !!}
+					
+							<div class="form-group" style="padding-bottom:10px">						
+								<label for="ddlPlayers" class="control-label col-xs-1">Player:</label>
+								<div class="col-xs-8">
+									{!! Form::select('ddlPlayers', $players_list, '', 
+										    array('class' => 'player form-control', 
+									       'style' => 'font-weight:300; font-size:12pt; width:250px',
+									        )) !!}
+							    	<div class="col-xs-10 col-xs-offset-3">
+									{!!  Form::submit('Submit', array('class' => 'btn btn-success',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}
+									<button type="button" class="btn btn-warning" v-show="!error" @click ="cancelled">Cancel</button>
+							</div>
+							    </div>
+							</div>																
+						{!! Form::close() !!}
+					</div>				
+					<div class="row">				
 						<table class="table">
-							<th>ID</th>
-							<th>Name</th>
-							<th></th>
-							<tr v-for="player in players | orderBy 'name'">
-								<td>@{{ player.id }} </td>
-								<td>@{{ player.name }} </td>
-								<td><button class="btn btn-danger btn-xs" v-on:click="deletePlayer(player.id)">Delete</button></td>	
+							@foreach ($players as $p)
+							<tr>
+								<td class="player_name">{{ $p->last_name }}, {{ $p->first_name }} </td>						
 							</tr>
+							@endforeach
+							@if (count($players) ==0)
+								<tr><td><h5>No Players</h5></td></tr>
+							@endif
 						</table>
+						</div>
 					</div>
-				</div>
-			</div>			
+				</div>			
+			</div>
 		</div>
-		<div class="panel" v-show="showSetup">
-		    <button class="btn btn-success" v-on:click="saveLeague">Save</button>
-		    <button class="btn btn-danger" v-on:click="resetLeague">Cancel</button>
-		</div>
-	</div>
 </div>
 @stop
 
@@ -194,13 +198,13 @@
 	        	placeholder: "Select a Format",
 	        	allowClear: true,    	 	
 	        });	
-	        $(".formats").select2("val", "");   
+	        //$(".formats").select2("val", "");   
 
 	        $(".gyms").select2({
 	        	placeholder: "Select a Gym",
 	        	allowClear: true,    	 	
 	        });	
-	        $(".gyms").select2("val", "");
+	        //$(".gyms").select2("val", "");
 	        
 	        //$(".directors").select2({
 	        //	placeholder: "Select a Director",

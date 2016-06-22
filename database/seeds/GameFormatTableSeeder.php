@@ -14,30 +14,25 @@ class GameFormatTableSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('game_formats')->delete();
-
-		GameFormat::create([
-			'format_id' => '1',
-			'format' => 'Singles'
-		]);
 		
 		GameFormat::create([
+			'format_id' => '1',
+			'format' => '1 game to 11'
+		]);
+
+		GameFormat::create([
 			'format_id' => '2',
-			'format' => 'Doubles'
+			'format' => 'Best of 3 games to 11'
 		]);
 
 		GameFormat::create([
 			'format_id' => '3',
-			'format' => 'Cutthroat'
+			'format' => 'Best of 3 games to 15'
 		]);
 
 		GameFormat::create([
 			'format_id' => '4',
-			'format' => 'In and Out'
-		]);
-		
-		GameFormat::create([
-			'format_id' => '5',
-			'format' => 'Iron Man'
+			'format' => 'Best of 5 games to 11'
 		]);
 	}
 
