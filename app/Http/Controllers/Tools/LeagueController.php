@@ -47,8 +47,10 @@ class LeagueController extends Controller {
 		//Empty Objects for query in blade
 		$league_player = New LeaguePlayer;
 		$player = New Player;
+		$gym = New GymLocation;
+		$format = new GameFormat;
 
-		return view('pages/tools.league.index', compact('leagues', 'league_player', 'player'));
+		return view('pages/tools.league.index', compact('leagues', 'league_player', 'player', 'gym', 'format'));
 	}
 
 	/**
@@ -173,7 +175,7 @@ class LeagueController extends Controller {
 	public function update($league_id)
 	{
 		$name = Input::get('name');
-		$gym_id = Input::get('gym_id');
+		$location_id = Input::get('location_id');
 		$format_id = Input::get('format_id');
 		$start_date = Input::get('start_date');
 		$end_date = Input::get('end_date');
@@ -181,27 +183,40 @@ class LeagueController extends Controller {
 		$end_time = Input::get('end_time');
 		
 
-		$start_date =  new \DateTime($start_date . ' '. $start_time);
+		// Date formatted for saving
+		$start_date =  new \DateTime($start_date);
 		$start_date = $start_date->format("Y-m-d H:i:s");
 
-		$end_date =  new \DateTime($end_date . ' '. $end_time);
+		$end_date =  new \DateTime($end_date);
 		$end_date = $end_date->format("Y-m-d H:i:s");
+
+		//Time formated for saving
+		$start_time =  new \DateTime($start_time);
+		$start_time = $start_time->format("Y-m-d H:i:s");
+
+		$end_time =  new \DateTime($end_time);
+		$end_time = $end_time->format("Y-m-d H:i:s");
+
 
 		$fee = Input::get('fee');
 		$detail = Input::get('detail');
+
 
 		//update league	
 		$league = League::find($league_id);
 		if (! is_null($league)) {
 
 		 	$league->name = $name;
-          	$league->location_id = $gym_id;
+          	$league->location_id = $location_id;
           	$league->format_id = $format_id;
           	$league->start_date = $start_date;
           	$league->end_date = $end_date;
+          	$league->start_time = $start_time;
+          	$league->end_time = $end_time;
           	$league->fee = $fee;
           	$league->detail = $detail;
 
+         	//dd($league);
           	$league->save();        	
         }     
 
@@ -279,7 +294,7 @@ class LeagueController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function addPlayer(Request $request)
+	public function storePlayer(Request $request)
 	{
 
 		$player = New Player;
@@ -319,6 +334,30 @@ class LeagueController extends Controller {
 	}
 
 	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroyPlayer(Request $request)
+	{
+
+		$league_id = Input::get('league_id');
+		$player_id = Input::get('player_id');
+		     	
+    	//Delete player from the League
+		$player = LeaguePlayer::find($league_id)
+			->where('league_id','=', $league_id)
+			->where('player_id', '=', $player_id);
+
+		if(!is_null($player)){
+			$player->delete();
+		}
+		//return \Redirect::route('tools.league.edit', array($league_id));
+		return \Redirect::to(\URL::previous() . "#players");
+	}	
+
+	/**
 	 * [createMatch description]
 	 * @param  [type] $league_id [description]
 	 * @param  [type] $match_id  [description]
@@ -328,7 +367,7 @@ class LeagueController extends Controller {
 
 		$league = League::find($league_id);
 		$players = \DB::table('league_players')
-				->where('leage_id', '=', $league_id)
+				->where('league_id', '=', $league_id)
 				->orderby('last_name')
 				->orderby('first_name');
 

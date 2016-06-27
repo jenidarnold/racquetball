@@ -16,7 +16,7 @@ class League extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['league_id', 'name', 'location_id', 'format_id', 'start_date', 'end_date', 'img_logo'];
+	protected $fillable = ['league_id', 'name', 'location_id', 'format_id', 'start_date', 'end_date', 'start_time', 'end_time', 'fee', 'detail' ,'img_logo'];
 
 	public $primaryKey = 'league_id';
 	/**

@@ -75,8 +75,7 @@
 									</table>
 								</td>
 								<td class='text-center'>
-					                {!! Form::close() !!}
-									{!! Form::open(array('route' => array('tools.league.match.edit',  $league->league_id, $m->match_id), 'class' => '')) !!}
+					               {!! Form::open(array('route' => array('tools.league.match.edit',  $league->league_id, $m->match_id), 'class' => '')) !!}
 					                    {!! Form::hidden('_method', 'GET') !!}
 					                    {!! Form::submit('Edit', array('class' => 'btn btn-warning btn-xs')) !!}
 					                {!! Form::close() !!}
@@ -111,8 +110,6 @@
 	        	allowClear: true,    	 	
 	        });		       	      
 	    });
-
-	    
 	</script>
 	<script>
 		

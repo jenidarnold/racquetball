@@ -5,6 +5,9 @@
 	.link {
 		active: none;
 	}
+	* {
+	  border-radius: 0 !important;
+	}
 	</style>
 @stop
 @section('league_menu')

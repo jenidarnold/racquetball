@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('style')
-	<style>
+	<style>	
 	* {
 		  border-radius: 0 !important;
 		}
@@ -36,7 +36,7 @@
 			<div class="panel-body">	
 				{!! Form::model($league, array('route' => array('tools.league.edit', $league->league_id), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'POST')) !!}
 					{!! Form::hidden ('_token', csrf_token()) !!}
-					<div class="col-xs-12 col-sm-8 l-card">
+					<div class="col-xs-12 col-sm-8">
 						<div class="form-group">
 							<label class="control-label col-xs-3 col-sm-2" for="name" >Title:</label>
 							<div class="col-xs-9 col-sm-8">
@@ -46,7 +46,7 @@
 						<div class="form-group">		
 							<label class="control-label col-xs-3 col-sm-2" for="location">Gym:</label>
 							<div class="col-xs-9 col-sm-8">								
-								{!! Form::select('ddlGyms', $gyms, '$league->location_id', 
+								{!! Form::select('ddlGyms', $gyms, $league->location_id, 
 								    array('class' => 'gyms form-control','id' => 'location_id',  'name' => 'location_id',
 							       'style' => 'font-weight:300; font-size:12pt;',
 							        )) !!}
@@ -55,7 +55,7 @@
 						<div class="form-group">						
 							<label class="control-label col-xs-3 col-sm-2" for="format">Format:</label>
 							<div class="col-xs-9 col-sm-6">
-								{!! Form::select('ddlFormats', $formats, '$league->format_id', 
+								{!! Form::select('ddlFormats', $formats, $league->format_id, 
 								    array('class' => 'formats form-control',  'id' => 'format_id', 'name' => 'format_id',
 							       'style' => 'font-weight:300; font-size:11pt;',
 						        )) !!}
@@ -64,7 +64,7 @@
 						<div class="form-group">
 							<label class="control-label col-xs-3 col-sm-2" for="start_date">Starts:</label>
 							<div class="col-xs-7 col-sm-6">
-								<div class="input-group date date-picker datetimepicker">
+								<div class="input-group date date-picker datetimepicker" id="divStartDate">
 								    <input type="text" class="form-control" name="start_date" value="{{date('m-d-y', strtotime($league->start_date))}}">
 								    <div class="input-group-addon">
 								        <i class="fa fa-calendar"></i>
@@ -86,14 +86,14 @@
 						<div class="form-group">
 							<label class="control-label col-xs-3 col-sm-2" for="end_date">Day:</label>
 							<div class="col-xs-7 col-sm-6">
-							  	<input type="text" class="form-control" name="day_of_week" readonly="true" value="{{date('l', strtotime($league->start_date))}}">
+							  	<input type="text" class="form-control" name="day_of_week" id="day_of_week" readonly="true" value="{{date('l', strtotime($league->start_date))}}">
 							</div>
 						</div>						
 						<div class="form-group">						
 							<label class="control-label col-xs-3 col-sm-2" for="start_time">From:</label>
 							<div class="col-xs-7 col-sm-6">
 							    <div class="input-group timemask timepicker" >
-					                <input type="text" class="form-control" name="start_time" value="{{date('HH:ii p', strtotime($league->start_date))}}">
+					                <input type="text" class="form-control" name="start_time" value="{{date('HH:ii p', strtotime($league->start_time))}}">
 					               	<div class="input-group-addon">
 						                <span class="add-on clearpicker"><i class="fa fa-clock-o"></i></span>
 								    </div>
@@ -104,7 +104,7 @@
 							<label class="control-label col-xs-3 col-sm-2" for="end_time">To:</label>
 							<div class="col-xs-7 col-sm-6">
 								<div class="input-group timemask timepicker" >
-								    <input type="text" class="form-control" name="end_time" value="{{date('HH:ii p', strtotime($league->end_date))}}">
+								    <input type="text" class="form-control" name="end_time" value="{{date('HH:ii p', strtotime($league->end_time))}}">
 								    <div class="input-group-addon">
 								        <span class="add-on clearpicker"><i class="fa fa-clock-o"></i></span>
 								    </div>
@@ -134,35 +134,47 @@
 				</form>
 			</div>
 			<!-- Edit Players  -->		
-			<div class="panel panel-primary" >			
+			<div class="panel panel-primary" >	
+				<a name="players"></a>
 				<div class="panel-heading">
 					<h4>Edit Players</h4>
 				</div>
 				<div class="panel-body">	
-					<div class="col-md-12 col-md-offset-0">
+					<div class="col-xs-12 col-sm-8">
 						{!! Form::open( array('route' => array('tools.league.join', $league->league_id), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'POST')) !!}
-						{!! Form::hidden ('_token', csrf_token()) !!}
-					
+						{!! Form::hidden ('_token', csrf_token()) !!}				
 							<div class="form-group" style="padding-bottom:10px">						
-								<label for="ddlPlayers" class="control-label col-xs-1">Player:</label>
+								<label for="ddlPlayers" class="control-label col-xs-3 col-sm-2">Add Player:</label>
 								<div class="col-xs-8">
 									{!! Form::select('ddlPlayers', $players_list, '', 
 										    array('class' => 'player form-control', 
 									       'style' => 'font-weight:300; font-size:12pt; width:250px',
-									        )) !!}
-							    	<div class="col-xs-10 col-xs-offset-3">
-									{!!  Form::submit('Submit', array('class' => 'btn btn-success',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}
-									<button type="button" class="btn btn-warning" v-show="!error" @click ="cancelled">Cancel</button>
+							        )) !!}
+								</div>
 							</div>
-							    </div>
-							</div>																
+							<div class="form-group" style="padding-bottom:10px">
+						    	<div class="col-xs-10 col-xs-offset-3 col-sm-4">
+									{!!  Form::submit('Submit', array('class' => 'btn btn-success btn-xs',  'v-show' => '!error', 'v-on:submit.prevent' =>'submitted')) !!}
+									<button type="button" class="btn btn-warning btn-xs" v-show="!error" @click ="cancelled">Cancel</button>
+								</div>
+						    </div>																
 						{!! Form::close() !!}
 					</div>				
-					<div class="row">				
+					<div class="col-xs-12 col-sm-6">		
 						<table class="table">
 							@foreach ($players as $p)
 							<tr>
-								<td class="player_name">{{ $p->last_name }}, {{ $p->first_name }} </td>						
+								<td class="player_name">{{ $p->last_name }}, {{ $p->first_name }} </td>
+								<td>
+									{!! Form::open(['route' => ['tools.league.player.delete', 
+									          $league->league_id, $p->player_id]]) 
+									 !!}
+					                    {!! Form::hidden('_method', 'DELETE') !!}
+										{!! Form::hidden ('league_id', $league->league_id) !!}	
+										{!! Form::hidden ('player_id', $p->player_id) !!}	
+					                    {!! Form::submit('Delete', array('class' => 'btn btn-danger btn-xs')) !!}
+					                {!! Form::close() !!}
+								</td>		
 							</tr>
 							@endforeach
 							@if (count($players) ==0)
@@ -190,6 +202,7 @@
 	      	$('.datetimepicker').datetimepicker({
 	      	     format: 'MM/DD/YYYY',
 	      	});
+
 	      	 $('.timepicker').datetimepicker({
                 format: 'hh:mm a',
             });
@@ -204,7 +217,12 @@
 	        	placeholder: "Select a Gym",
 	        	allowClear: true,    	 	
 	        });	
-	        //$(".gyms").select2("val", "");
+
+	        $(".player").select2({
+	        	placeholder: "Select a Player",
+	        	allowClear: true,    	 	
+	        });	
+	        $(".player").select2("val", "");
 	        
 	        //$(".directors").select2({
 	        //	placeholder: "Select a Director",

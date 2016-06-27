@@ -4,6 +4,12 @@
 	
 	@yield('style')
 	<style>
+		.panel-heading  {
+		  border-radius: 0 !important;
+		}
+	 	.navbar  {
+		  border-radius: 0 !important;
+		}
 		th {
 			text-align: center
 		}

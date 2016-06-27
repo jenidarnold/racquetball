@@ -27,7 +27,7 @@
 			
 				<div class="row">
 					<div class="col-xs-12 col-md-62">
-						<h4>Standings as of {{date('M d, y')}} </h4>						
+						<h4>Standings as of {{date('M d, Y')}} </h4>						
 					</div>										
 				</div>				
 			</div>
