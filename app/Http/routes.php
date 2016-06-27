@@ -32,6 +32,7 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 	Route::get('league/create', array('as' => 'tools.league.create', 'uses' => 'LeagueController@create'));
 	Route::post('league/store', array('as' => 'tools.league.store',  'uses' =>  'LeagueController@store'));
 	Route::get('league/{league_id}/', array('as' => 'tools.league.show', 'uses' => 'LeagueController@show'));
+	Route::get('league/{league_id}/player/{player_id}', array('as' => 'tools.league.player', 'uses' => 'LeagueController@showPlayer'));
 	Route::get('league/{league_id}/standings', array('as' => 'tools.league.show', 'uses' => 'LeagueController@standings'));
 	Route::get('league/{league_id}/join', array('as' => 'tools.league.join', 'uses' => 'LeagueController@join'));
 	Route::put('league/{league_id}/join', array('as' => 'tools.league.join', 'uses' => 'LeagueController@storePlayer'));

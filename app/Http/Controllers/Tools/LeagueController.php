@@ -289,6 +289,37 @@ class LeagueController extends Controller {
 	}
 
 	/**
+	 * Display a League Results
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function showPlayer($league_id, $player_id)
+	{
+		$league = New League;
+		$league = $league->find($league_id);
+
+		$player = New Player;
+		$player = $player->find($player_id);
+
+		//dd($player);
+
+		$players = $this->getPlayers($league_id);
+		$matches = $this->getMatches($league_id, $player_id);
+		$players_list =$this->listPlayers();
+				
+		//dd($matches);
+
+		//Empty objects used to get Scores
+		$match = New Match();
+		$match_game = New MatchGame();
+		$game = New Game();
+
+		return view('pages/tools.league.player', compact('league', 'player', 'players', 'matches', 'match', 'match_game', 'game', 'players_list'));
+	}
+
+
+	/**
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
@@ -557,26 +588,37 @@ class LeagueController extends Controller {
 	 * @param  [type] $league_id [description]
 	 * @return [type]            [description]
 	 */
-	public function getMatches($league_id)
+	public function getMatches($league_id, $player_id = null)
 	{
 		$matches = \DB::table('league_matches')
-				->join('matches','league_matches.match_id', '=', 'matches.match_id')
-				->join('players as p1','p1.player_id', '=', 'matches.player1_id')
-				->join('players as p2','p2.player_id', '=', 'matches.player2_id')				
-				//->leftjoin('rankings as r1','r1.player_id', '=', 'matches.player1_id')
-				//->leftjoin('rankings as r2','r2.player_id', '=', 'matches.player2_id')
-				->where('league_id', '=', $league_id)
-				->select( '*',
-					'p1.first_name as p1_first_name', 				
-				 	'p1.last_name as p1_last_name' ,
-				//	'r1.ranking as p1_rank',
-					'p2.first_name as p2_first_name', 
-					'p2.last_name as p2_last_name'
-				//	'r2.ranking as p2_rank'
-				)				
-				->distinct()
-				->orderby('matches.match_date', 'desc')
-				->get();
+			->join('matches','league_matches.match_id', '=', 'matches.match_id')
+			->join('players as p1','p1.player_id', '=', 'matches.player1_id')
+			->join('players as p2','p2.player_id', '=', 'matches.player2_id')				
+			//->leftjoin('rankings as r1','r1.player_id', '=', 'matches.player1_id')
+			//->leftjoin('rankings as r2','r2.player_id', '=', 'matches.player2_id')
+			->where('league_id', '=', $league_id)
+			;
+				
+		if (!is_null($player_id)) {
+			$matches = $matches->where(function($matches) use ($player_id) {
+				return $matches
+					->where('p1.player_id', '=', $player_id)
+					->orWhere('p2.player_id', '=', $player_id);
+			});
+		}
+
+		$matches = $matches->select( '*',
+			'p1.first_name as p1_first_name', 				
+		 	'p1.last_name as p1_last_name' ,
+		//	'r1.ranking as p1_rank',
+			'p2.first_name as p2_first_name', 
+			'p2.last_name as p2_last_name'
+		//	'r2.ranking as p2_rank'
+			)			
+			->distinct()
+			->orderby('matches.match_date', 'desc')
+			->get();
+
 
 		return $matches;
 	}

@@ -144,7 +144,7 @@
 						{!! Form::open( array('route' => array('tools.league.join', $league->league_id), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'POST')) !!}
 						{!! Form::hidden ('_token', csrf_token()) !!}				
 							<div class="form-group" style="padding-bottom:10px">						
-								<label for="ddlPlayers" class="control-label col-xs-3 col-sm-2">Add Player:</label>
+								<label for="ddlPlayers" class="control-label col-xs-3 col-sm-2">Add:</label>
 								<div class="col-xs-8">
 									{!! Form::select('ddlPlayers', $players_list, '', 
 										    array('class' => 'player form-control', 
