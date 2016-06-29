@@ -49,14 +49,15 @@
 								<td class='text-center'>{{ ceil(date_diff(new DateTime($m->match_date), new DateTime($league->start_date))->days /7)}} </td>
 								<td class='text-center'>{{date('m-d-y', strtotime($m->match_date))}}</td>
 								<td>
-									<table class="match">
+									<table class="match">										
 										@if($m->winner_id == $m->player1_id)
 										<tr class="winner">
 										@else
 										<tr>
 										@endif
-											<!--td class='rank'><sup></sup></td-->
-											<td class="player_name">{{ $m->p1_first_name }} {{ $m->p1_last_name }} </td>			
+										<!--td class='rank'><sup></sup></td-->
+											<td class="player_name">
+												<a href="{{ route('tools.league.player', [ $league->league_id, $m->player1_id]) }}">{{ $m->p1_first_name }} {{ $m->p1_last_name }} </a></td>			
 											@foreach ($match_game->whereMatchId($m->match_id)->with('games')->get() as $g)
 											<td class="score">{{$g["games"]->first()->score1 }}</td>
 											@endforeach	
@@ -67,7 +68,7 @@
 										<tr>
 										@endif
 											<!--td class='rank'><sup></sup></td-->
-											<td class="player_name">{{ $m->p2_first_name }} {{ $m->p2_last_name }} </td>			
+											<td class="player_name"><a href="{{ route('tools.league.player', [ $league->league_id, $m->player2_id]) }}">{{ $m->p2_first_name }} {{ $m->p2_last_name }} </a></td>			
 											@foreach ($match_game->whereMatchId($m->match_id)->with('games')->get() as $g)
 											<td class="score">{{$g["games"]->first()->score2 }}</td>
 											@endforeach		

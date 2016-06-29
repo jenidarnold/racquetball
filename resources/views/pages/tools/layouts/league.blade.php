@@ -107,8 +107,12 @@
 		}
 		.match .winner {			
 			color:green;
-			font-weight: 300;
+			font-weight: 500;
 		}
+		.winner a{
+			color:green;
+			font-weight: 500;
+		}	
 		.txt-score {
 			width: 60px;
 		}

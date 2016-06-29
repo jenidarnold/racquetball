@@ -398,13 +398,16 @@ class LeagueController extends Controller {
 
 		$league = League::find($league_id);
 		$players = \DB::table('league_players')
+				->join('players', 'players.player_id', '=', 'league_players.player_id')
 				->where('league_id', '=', $league_id)
 				->orderby('last_name')
 				->orderby('first_name');
 
 		//dropdown list
-		$players_list = Player::orderby('last_name')->orderby('first_name')->get();
-		$players_list = $players_list->lists('last_first_name', 'player_id');
+		//$players_list = Player::orderby('last_name')->orderby('first_name')->get();
+		$players_list = $players
+						->selectRaw('CONCAT(last_name, ", ",  first_name) as last_first_name, players.player_id')
+						->lists('last_first_name', 'players.player_id');
 
 		return view('pages/tools.league.match.create', compact('league', 'players_list'));	
 	}

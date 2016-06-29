@@ -48,7 +48,8 @@
 							@foreach ($standings as $s)
 								<tr>									
 									<td class='rank'>{{ $i++}} </td>
-									<td class="player_name">{{ $s->first_name}} {{$s->last_name }} </td>								
+									<td class="player_name">
+										<a href="{{ route('tools.league.player', [ $league->league_id, $s->player_id]) }}">	{{ $s->first_name}} {{$s->last_name }} </a></td>								
 									<td class="score">{{ $s->wins }}</td>
 									<td class="score">{{ $s->losses }}</td>
 									<td class="score">{{ $s->games }} </td>
