@@ -99,9 +99,9 @@
 				{!! Form::model($league, array('route' => array('tools.league.match.update', $league->league_id, $match->match_id), 'role' => 'form', 'class'=> 'form-horizontal','method' => 'PUT')) !!}
 				{!! Form::hidden ('_token', csrf_token()) !!}
 					<div class="form-group">
-						<label for="match_date" class="control-label col-xs-2">Date:</label>
-						<div class="col-xs-2">
-							<div class="input-group date date-picker" data-provide="datepicker">						
+						<label for="match_date" class="control-label col-xs-12 col-sm-2">Date:</label>
+						<div class="col-xs-7 col-sm-3">
+							<div class="input-group date date-picker datetimepicker" data-provide="datepicker">						
 							    <input type="text" class="form-control" name="match_date" value="{{$match->match_date}}">
 							    <div class="input-group-addon">
 							        <span class="glyphicon glyphicon-th"></span>
@@ -110,24 +110,24 @@
 						</div>
 					</div>				
 					<div class="form-group">						
-						<label for="ddlMatchPlayer1" class="control-label col-xs-2">Player 1:</label>
-						<div class="col-xs-4">
+						<label for="ddlMatchPlayer1" class="control-label col-xs-12 col-sm-2">Player 1:</label>
+						<div class="col-xs-12 col-sm-4">
 							{!! Form::select('ddlMatchPlayer1', $players_list, $match->player1_id, 
 								    array('class' => 'player form-control', 'id' => 'player1_id', 'name' => 'player1_id')) !!}
 						</div>
-						<label for="p1_score" class="control-label col-xs-1">Score:</label>
-						<div class="col-xs-1">
+						<label for="p1_score" class="control-label col-xs-12 col-sm-2">Score:</label>
+						<div class="col-xs-3 col-sm-2">
 							<input name="p1_score" type="text" class="form-control" value="{{$game->score1}}">
 						</div>						
 					</div>
 					<div class="form-group">
-						<label for="ddlMatchPlayer2" class="control-label col-xs-2">Player 2:</label>
-						<div class="col-xs-4">
+						<label for="ddlMatchPlayer2" class="control-label col-xs-12 col-sm-2">Player 2:</label>
+						<div class="col-xs-12 col-sm-4">
 							{!! Form::select('ddlMatchPlayer2', $players_list, $match->player2_id, 
 								    array('class' => 'player form-control', 'id' => 'player2_id', 'name' => 'player2_id')) !!}
 						</div>
-						<label for="p2_score" class="control-label col-xs-1">Score:</label>
-						<div class="col-xs-1">
+						<label for="p2_score" class="control-label col-xs-12 col-sm-2">Score:</label>
+						<div class="col-xs-3 col-sm-2">
 							<input name="p2_score" type="text" class="form-control"  value="{{$game->score2}}">
 						</div>
 					</div>

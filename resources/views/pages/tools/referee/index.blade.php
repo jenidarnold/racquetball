@@ -41,10 +41,10 @@
 		   padding-right: 5px;
 		}
 		.form-inline > * {
-		   margin: 5px 5px;
+		   margin: 5px 5px 5px 5px;
 		   padding-right: 5px;
 		}
-		h4  > *{
+		h3  > *{
 		   padding-top: 10px;
 		   padding-bottom:  10px;
 		}
@@ -69,51 +69,77 @@
 <div class="container">
 	<div id="myvue">
 		<div class="panel panel-primary" v-show="showSetup">			
-			<div class="panel-heading"><h3>Setup Match</h3></div>
+			<div class="panel-heading"><h3>Score Keeper</h3></div>
 			<div class="panel-body">	
-				<form class="form-inline" role="form">
-					<h4><i class="fa fa-clock-o"></i> Game Format: 
-						<select v-model="game" class="form-control">
-								  <option v-for="game in game_formats" v-bind:value="game">
-								    @{{ game.name }}
-								  </option>
-						</select>
-					 	<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
-					 	<i class="fa fa-thumbs-down"></i> Appeals: @{{ game.appeals }}
-					</h4>
-					<h4><i class="fa fa-user-plus"></i> Players</h4>
-					<div class="row">									
-						<div class="col-xs-12 form-group">
-							<label for="team1" class="control-label lbl-team indent">Team 1</label>
+				<form class="form-inline1" role="form">	
+					<div class="row">			
+				    	<h3>1. Setup Match Format</h3>
+					    <div class="col-xs-12 col-sm-4 form-group">
+							<label for="title" class="control-label lbl-team">Match Title:</label>
+							<input class="form-control" id="title" placeholder="Enter Match Title" v-model="match_title">
+					    </div>
+					    <div class="col-xs-12 col-sm-4 form-group">				    
+							<label for="game_format" class="control-label lbl-team">Game Format: </label>
+							<select v-model="game" id="game_format" class="form-control">
+									  <option v-for="game in game_formats" v-bind:value="game">
+									    @{{ game.name }}
+									  </option>
+							</select>					
+						 	<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
+						 	<i class="fa fa-thumbs-down"></i> Appeals: @{{ game.appeals }}
+						</div>
+					</div>
+					<div class="row">
+						<h3>2. Setup Players</h3>				
+						<div class="col-xs-12  col-sm-4 form-group">
+							<label for="team1" class="control-label lbl-team ">Team 1:</label>
 						    <input class="form-control" id="team1" placeholder="Player 1" v-model="player1_name">
 						    <input class="form-control" placeholder="Player 2" v-model="player2_name">
 						</div>				
-						<div class="col-xs-12 form-group">
-						    <label for="team2" class="control-label lbl-team indent">Team 2</label>
+						<div class="col-xs-12  col-sm-4 form-group">
+						    <label for="team2" class="control-label lbl-team ">Team 2:</label>
 						    <input class="form-control" id="team2" placeholder="Player 1" v-model="player3_name">
 						    <input class="form-control" placeholder="Player 2" v-model="player4_name">
 						</div>						
 					</div>
-					<h4><i class="fa fa-circle"></i> Starting Server
-						<select v-model="server" class="form-control">
-						  	<option v-for="player in players" v-bind:value="player.pos">
-						    	@{{ player.name }}
-						  	</option>
-						</select>
-					</h4>					
+					<div class="row">	
+						<h3>3. Select Starting Server</h3>
+						<div class="col-xs-12 col-sm-4 form-group">
+							<select v-model="server" class="form-control col-xs-12 col-sm-12">
+							  	<option v-for="player in players" v-bind:value="player.pos">
+							    	@{{ player.name }}
+							  	</option>
+							</select>	
+						</div>
+					</div>	
 				</form>
 			</div>
 			<div class="panel-footer">
 			    <button class="btn btn-success" v-on:click="createMatch">Start</button>
 			    <button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
-			    <input type="checkbox" id="chkPreview" v-model="preview">
-				<label for="chkPreview">Preview</label>
 			</div>
 		</div>
-		<div class="panel panel-primary" v-show="isStarted || preview">
-			<div class="panel-heading">								
+		<div class="panel panel-primary" v-show="isStarted">
+			<div class="panel-heading">	
+				<h3> 
+					@{{ match_title }}
+				</h3>
 			</div>
 			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-12">		
+						<button v-on:click="point" class="btn btn-success" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
+						<button v-on:click="sideout" class="btn btn-danger" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
+						<button v-on:click="fault" class="btn btn-warning" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
+						<button v-on:click="undo" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>	
+					</div>
+					<div class="col-xs-1 col-xs-offset-4">
+						<button v-on:click="endMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
+					</div>	
+					<div class="col-xs-1">
+						<button v-on:click="resetMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
+					</div>	
+				</div>	
 				<div class="row">			
 					<table class="table table-condensed col-md-12">
 						<tr class="tr-games label-info ">
@@ -208,26 +234,6 @@
 					</table>				
 				</div>
 			</div>
-			<div class="panel-footer">			 
-				<div class="row">
-					<div class="col-xs-6">		
-						<button v-on:click="point" class="btn btn-success" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
-						<button v-on:click="sideout" class="btn btn-danger" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
-						<button v-on:click="fault" class="btn btn-warning" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
-						<button v-on:click="undo" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>	
-					</div>
-					<div class="col-xs-1 col-xs-offset-4">
-						<button v-on:click="endMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
-					</div>	
-					<div class="col-xs-1">
-						<button v-on:click="resetMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
-					</div>	
-				</div>			
-		</div>
-		<div class="panel">
-			<div class="panel-body">				
-			</div>
-		</div>
 	</div>
 
 	<!-- Modal Team 1 Time out-->
@@ -303,19 +309,6 @@
 	  </div>
 	</div>
 
-	<!-- Debug Panel -->
-	<div class="panel panel-default">
-		<div class="panel-body">
-			<div class="row col-xs-12">
-				<input type="checkbox" id="chkDebug" v-model="debug">
-				<label for="chkDebug">Debug</label>
-			</div>
-			<div class="row" v-show = "debug">
-			    @{{ players_list}}
-				<pre>@{{ $data | json }} </pre> 
-			</div>
-		</div>
-	</div>
 	<template id="player-template">
 		<table>
 			<tr>			
@@ -366,6 +359,7 @@
 				server: 1,
 				score_steps: [],
 				game_num: 1,
+				match_title: '',
 				timer: {
 						match: 0 , 
 						game: {
