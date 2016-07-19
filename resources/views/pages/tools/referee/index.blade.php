@@ -97,13 +97,13 @@
 						<h3>2. Setup Players</h3>				
 						<div class="col-xs-12  col-sm-4 form-group">
 							<label for="team1" class="control-label lbl-team ">Team 1:</label>
-						    <input class="form-control" id="team1" placeholder="Player 1" v-model="players[0].name">
-						    <input class="form-control" placeholder="Player 2" v-model="players[1].name">
+						    <input class="form-control" id="team1" v-model="players[1].name">
+						    <input class="form-control" v-model="players[2].name">
 						</div>				
 						<div class="col-xs-12  col-sm-4 form-group">
 						    <label for="team2" class="control-label lbl-team ">Team 2:</label>
-						    <input class="form-control" id="team2" placeholder="Player 1" v-model="players[2].name">
-						    <input class="form-control" placeholder="Player 2" v-model="players[3].name">
+						    <input class="form-control" id="team2" v-model="players[3].name">
+						    <input class="form-control" v-model="players[4].name">
 						</div>						
 					</div>
 					<div class="row">	
@@ -142,16 +142,16 @@
 					</tr>
 					<tr>
 						<td class="col-xs-9">
-							<div class="player-sum">@{{ players[0].name }}
+							<div class="player-sum">@{{ players[1].name }}
 								<i class="fa fa-circle fa-xs" 
 									v-bind:class="[faults >= 1? classRed : classBlack]" 
-									v-show="server == players[0].pos">
+									v-show="server == players[1].pos">
 								</i> 
-								<span class="player-sum" v-show="player2_name != ''">/</span>
-								<span class="player-sum" v-show="player2_name != ''">@{{ players[1].name }}
+								<span class="player-sum" v-show="players[2].name != ''">/</span>
+								<span class="player-sum" v-show="players[2].name != ''">@{{ players[2].name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
-										v-show="server == players[1].pos">
+										v-show="server == players[2].pos">
 									</i>
 								</span>
 							</div>
@@ -175,16 +175,16 @@
 					</tr>
 					<tr>
 						<td class="col-xs-9">
-							<div class="player-sum">@{{ players[2].name }}
+							<div class="player-sum">@{{ players[3].name }}
 								<i class="fa fa-circle fa-xs" 
 									v-bind:class="[faults >= 1? classRed : classBlack]" 
-									v-show="server == players[2].pos ">
+									v-show="server == players[3].pos ">
 								</i>
-								<span class="player-sum" v-show="player2_name != ''">/</span>
-								<span class="player-sum" v-show="player2_name != ''">@{{ players[3].name }}
+								<span class="player-sum" v-show="players[4].name != ''">/</span>
+								<span class="player-sum" v-show="players[4].name != ''">@{{ players[4].name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
-										v-show="server == players[3].pos ">
+										v-show="server == players[4].pos ">
 									</i>
 								</span>
 							</div>
@@ -305,6 +305,10 @@
 	  </div>
 	</div>
 
+	<div>
+     @{{ debug| json }}
+	</div>
+
 	<template id="player-template">
 		<table>
 			<tr>			
@@ -341,7 +345,7 @@
 		new Vue({
 			el: '#myvue',
 			data: {	
-				debug: false,
+				debug: true,
 				preview: false,
 				classWin: 'win',
 				classLoss: 'loss',
@@ -383,23 +387,29 @@
 							}
 				},
 				faults: 0,
-				score_max: 11,  // 11 or 15
-				tiebreaker: 7, // 7 or 11
-				game_max: 2,  // 2 or 3
+				score_max: 11,   // 11 or 15
+				tiebreaker: 7,   // 7 or 11
+				game_max: 2,     // 2 or 3
 				total_games: 3,  // 3 or 5
-				win_by: 1, // 1 or 2
+				win_by: 1,       // 1 or 2
 				winner: '',
 				game: [],
 				game_formats: [ 	
-							{id: 1, name:'11',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, timeout_secs:5, intermission_norm:10, intermission_tb:15, injury_secs:10, appeals:3},
-							{id: 2, name:'15',  games:3,  points:15, tie:7, win_by: 1, timeouts:3, timeout_secs:6, intermission_norm:10, intermission_tb:15, injury_secs:15, appeals:3},
-							{id: 3, name:'Pro', games:5,  points:11, tie:7, win_by: 2, timeouts:3, timeout_secs:7, intermission_norm:10, intermission_tb:15, injury_secs:20, appeals:3},
-							{id: 4, name:'Iron', games:3,  points:7, tie:7, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0}
+							{id: 1, name:'Two games to 11; Tie to 7',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, timeout_secs:5, intermission_norm:10, intermission_tb:15, injury_secs:10, appeals:3},
+							{id: 2, name:'Two games to 15; Tie to 11',  games:3,  points:15, tie:11, win_by: 1, timeouts:3, timeout_secs:6, intermission_norm:10, intermission_tb:15, injury_secs:15, appeals:3},
+							{id: 3, name:'Best of 5 games to 11', games:5,  points:11, tie:7, win_by: 2, timeouts:3, timeout_secs:7, intermission_norm:10, intermission_tb:15, injury_secs:20, appeals:3},
+							{id: 4, name:'One game to 11', games:1,  points:11, tie:0, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0},
+							{id: 5, name:'One game to 15', games:1,  points:15, tie:0, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0}
 						],
-				players: [ {name:'Player 1', pos: 1 }, {name:'Player 2', pos:2}, {name:'Player 3', pos:3}, {name:'Player 4', pos:4}],			
+				players: { 	1: {name:'Player 1', pos: 1 }, 
+							2: {name:'Player 2', pos: 2 },  
+							3: {name:'Player 3', pos: 3 }, 
+							4: {name:'Player 4', pos: 4 }
+						},			
 				team: 	{
 							1: 	
 								{
+									serves:1,
 									wins: 0,
 									timeouts: 0,
 									appeals: 0,
@@ -424,6 +434,7 @@
 								},						
 							2: 	
 								{
+									serves:1,
 									wins: 0,
 									timeouts: 0,
 									appeals: 0,
@@ -449,28 +460,8 @@
 							}							
 			},								
 			computed: {
-				players_list: function() {
-					this.max_players = 0;
-					this.players = [ { pos:1, name:''}, { pos:2, name:''}, { pos:3, name:''}, { pos:4, name:''}];
-				
-					if (this.player1_name != ''){
-						this.max_players+=1; 
-						this.players[0].name = this.player1_name;
-					}
-					if (this.player2_name != ''){
-						this.max_players+=1; 
-						this.players[1].name = this.player2_name;
-					}
-					if (this.player3_name != ''){
-						this.max_players+=1; 
-						this.players[2].name = this.player3_name;
-					}
-					if (this.player4_name != ''){
-						this.max_players+=1; 
-						this.players[3].name = this.player4_name;
-					}
-				},				
 				isDoubles: function(){	
+									
 					if (this.max_players == 4) {
 						return true;
 					}
@@ -512,7 +503,34 @@
 					this.startTimer('match');
 					this.startTimer('game');
 
+					//Set # of players
+					this.max_players = 0;
+					if (this.players[1].name != ''){
+						this.max_players+=1; 
+					}
+					if (this.players[2].name != ''){
+						this.max_players+=1; 
+					}
+					if (this.players[3].name != ''){
+						this.max_players+=1; 
+					}
+					if (this.players[4].name != ''){
+						this.max_players+=1; 
+					}	
+
+
 					this.total_games = this.game.games;
+
+					//Team settings 
+					if (this.isDoubles){
+						if ((this.server == 1) || (this.server==2)){
+							this.team[1].serves = 1;
+						}
+						else {
+							this.team[2].serves = 2;
+						}
+					}
+
 					this.team[1].timeouts = this.game.timeouts;
 					this.team[1].appeals = this.game.appeals;
 					this.team[2].timeouts = this.game.timeouts;
@@ -521,6 +539,7 @@
 					this.timer.team[1].injury = this.game.injury_secs;
 					this.timer.team[2].injury = this.game.injury_secs;
 
+					
 					for (var i = 1; i <= this.total_games-1; i++) {
 						if (i == this.total_games-1) {
 							this.timer.intermission[i] = this.game.intermission_tb;
@@ -535,17 +554,19 @@
 					// disable point, sideout, fault, etc
 					this.isStarted = false;
 					this.showSetup = true;
-					this.player1_name = '';
-					this.player2_name = '';
-					this.player3_name = '';
-					this.player4_name = '';
-					this.max_players = 0;
-					this.players= [];					
+					this.players[0].name = 'Player 1';
+					this.players[1].name = 'Player 2';
+					this.players[2].name = 'Player 3';
+					this.players[3].name = 'Player 4';
+					this.max_players = 0;		
 					this.winner = '';
 					this.game_num = 1;
 
+
+					this.team[1].serves = 1;
 					this.team[1].timeouts = this.game.timeouts;
 					this.team[1].appeals = this.game.appeals;
+					this.team[2].serves = 1;
 					this.team[2].timeouts = this.game.timeouts;
 					this.team[2].appeals = this.game.appeals;
 
@@ -683,12 +704,12 @@
 					}
 
 					if (this.team[1].wins == this.game_max) {
-						this.winner = 'The winner is ' + this.player1_name + ' & ' + this.player2_name;
+						this.winner = 'The winner is ' + this.players[0].name + ' & ' + this.players[1].name;
 						$('#winnerModal').modal('show');
 					}
 
 					if (this.team[2].wins == this.game_max) {
-						this.winner = 'The winner is ' + this.player3_name + ' & ' + this.player4_name;
+						this.winner = 'The winner is ' + this.players[2].name + ' & ' + this.players[3].name;
 						$('#winnerModal').modal('show');
 					}
 				},
@@ -741,22 +762,44 @@
 				sideout: function (event){
 					this.score_steps.push('sideout');
 					this.faults = 0;
-					if (this.isDoubles) {
-						if (this.server == 4 ) {
-							this.server = 1;
-						}
-						else {
-							this.server += 1;
-						}
-					}
-					else {
-						if (this.server == 1) {
+
+					if ((this.server == 1) || this.server == 2){
+						this.team[1].serves -=1;
+						if (this.team[1].serves > 0) {
+							if (this.server == 1) {
+								this.server = 2;
+							}
+							else{
+								this.server = 1;
+							}
+						}else { //Serve goes to Team 2
+							if (this.isDoubles){
+								this.team[1].serves = 2;
+							}
+							else {
+								this.team[1].serves = 1;
+							}
 							this.server = 3;
 						}
-						else {
+					}else{
+						this.team[2].serves -=1;
+						if (this.team[2].serves > 0) {
+							if (this.server == 3) {
+								this.server = 4;
+							}
+							else{
+								this.server = 3;
+							}
+						}else { //Serve goes to Team 1
+							if (this.isDoubles){
+								this.team[2].serves = 2;
+							}
+							else {
+								this.team[2].serves = 1;
+							}
 							this.server = 1;
 						}
-					};
+					}
 				},
 				undoSideout: function (event){				
 					this.restoreFault();
