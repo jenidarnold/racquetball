@@ -6,27 +6,31 @@
 			font-weight: 500;
 			font-size: 14pt;
 		}
+		.player-sum {
+			font-weight: 200;
+			font-size: 10pt;
+		}
 		.win {
 			font-weight: 500;
 			color: green;
-			font-size: 14pt;
+			font-size: 8pt;
 		}
 		.loss {
 			font-weight: 500;
 			color: red;
-			font-size: 14pt;
+			font-size: 8pt;
 		}
 		.score {
 			font-weight: 500;
-			font-size: 14pt;
+			font-size: 8pt;
 			text-align: center;
 		}
 		.th-games {
 			text-align: center;
 		}
 		.tr-games {
-			font-weight: 700;
-			font-size: 14pt;
+			font-weight: 300;
+			font-size: 8pt;
 		}
 		.red {
 			color:red;
@@ -126,113 +130,105 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				<div class="row">
-					<div class="col-xs-12">		
-						<button v-on:click="point" class="btn btn-success" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
-						<button v-on:click="sideout" class="btn btn-danger" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
-						<button v-on:click="fault" class="btn btn-warning" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
-						<button v-on:click="undo" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>	
-					</div>
-					<div class="col-xs-1 col-xs-offset-4">
-						<button v-on:click="endMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
-					</div>	
-					<div class="col-xs-1">
-						<button v-on:click="resetMatch" class="btn btn-default" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
-					</div>	
-				</div>	
-				<div class="row">			
-					<table class="table table-condensed col-md-12">
-						<tr class="tr-games label-info ">
-							<th></th>
-							<th class="th-games"></th>
-							<th class="col-xs-1 th-games">1</th>
-							<th class="col-xs-1 th-games">2</th>
-							<th class="col-xs-1 th-games">3</th>
-							<th class="col-xs-1 th-games">4</th>
-							<th class="col-xs-1 th-games">5</th>
-							<th class="col-xs-1 th-games"></th>
-						</tr>
-						<tr>
-							<td>								
-								<div class="player col-md-5">
-									@{{ player1_name }}
-									<i class="fa fa-circle fa-xs" 
-										v-bind:class="[faults >= 1? classRed : classBlack]" 
-										v-show="server == player1_num">
-									</i> 
-								</div>
-								<div class="player col-md-1"v-show="player2_name != ''">/</div>
-								<div class="player col-md-5"v-show="player2_name != ''">
-									@{{ player2_name }}
+				<table class="table col-xs-12">
+					<tr class="tr-games label-info ">
+						<th class="col-xs-9 th-games"></th>
+						<th class="col-xs- th-games"></th>
+						<th class="col-xs- th-games"><span v-if="game_num >= 1">1</span></th>
+						<th class="col-xs- th-games"><span v-if="game_num >= 2">2</span></th>
+						<th class="col-xs- th-games"><span v-if="game_num >= 3">3</span></th>
+						<th class="col-xs- th-games"><span v-if="game_num >= 4">4</span></th>
+						<th class="col-xs- th-games"><span v-if="game_num >= 5">5</span></th>
+					</tr>
+					<tr>
+						<td class="col-xs-9">
+							<div class="player-sum">@{{ player1_name }}
+								<i class="fa fa-circle fa-xs" 
+									v-bind:class="[faults >= 1? classRed : classBlack]" 
+									v-show="server == player1_num">
+								</i> 
+								<span class="player-sum" v-show="player2_name != ''">/</span>
+								<span class="player-sum" v-show="player2_name != ''">@{{ player2_name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
 										v-show="server == player2_num">
 									</i>
-								</div>
-							</td>							
-							<td class="score">
-								<div class="col-xs-4" v-show="isStarted">
-									<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
-									  <span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[1].timeouts }}</span>									  
-									  </button>
-									</div>
-								<div class="col-xs-4" v-show="isStarted">
-									<button v-on:click="appeal" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[1].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[1].appeals  }}</span></button>
-								</div>								
-								<div class="col-xs-1" v-show="game_num > 1">
-									<span class="badge">@{{ team[1].wins }}</span>
-								</div>
-							</td>
-							<td class="score" v-for="g in team[1].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
+								</span>
+							</div>
+							<div class="" v-show="isStarted">
+								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
+								  <span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[1].timeouts }}</span></button>
+								<span class="" v-show="isStarted">
+									<button v-on:click="appeal" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[1].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[1].appeals  }}</span>
+									</button>
+								</span>
+							</div>	
+						</td>
+						<td class="score">															
+							<div class="" v-show="game_num > 1">
+								<span class="badge">@{{ team[1].wins }}</span>
+							</div>
+						</td>
+						<td class="score" v-for="g in team[1].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
 								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>
-							</td>
-							<td>&nbsp;</td>
-						</tr>
-						<tr>
-							<td>								
-								<div class="player col-md-5">
-									@{{ player3_name }}
-									<i class="fa fa-circle fa-xs" 
-										v-bind:class="[faults >= 1? classRed : classBlack]" 
-										v-show="server == player3_num ">
-									</i>
-								</div>
-								<div class="player col-md-1"v-show="player4_name != ''">/</div>
-								<div class="player col-md-5"v-show="player4_name != ''">
-									@{{ player4_name }}
+						</td>
+					</tr>
+					<tr>
+						<td class="col-xs-9">
+							<div class="player-sum">@{{ player3_name }}
+								<i class="fa fa-circle fa-xs" 
+									v-bind:class="[faults >= 1? classRed : classBlack]" 
+									v-show="server == player3_num ">
+								</i>
+								<span class="player-sum" v-show="player2_name != ''">/</span>
+								<span class="player-sum" v-show="player2_name != ''">@{{ player4_name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
 										v-show="server == player4_num ">
 									</i>
-								</div>
-							</td>
-							<td class="score">
-								<div class="col-xs-4" v-show="isStarted">
-									<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal2" class="btn btn-warning btn-xs" v-bind:class="isStarted && team[2].timeouts > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[2].timeouts }}</span>
-									</button>
-								</div>
-								<div class="col-xs-4" v-show="isStarted">
-									<button v-on:click="appeal" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"> <span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals }}</span></button>
-								</div>								
-								<div class="col-xs-1"v-show="game_num > 1"><span class="badge">@{{ team[2].wins }}</span></div>
-							</td>
-							<td class="score" v-for="g in team[2].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
+								</span>
+							</div>
+							<div class="" v-show="isStarted">
+								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
+								<span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[2].timeouts }}</span></button>							
+								<span class="col-xs" v-show="isStarted">
+									<button v-on:click="appeal" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals  }}</span></button>
+								</span>	
+							</div>
+						</td>
+						<td class="score">
+							<div class="col-xs" v-show="game_num > 1"><span class="badge">@{{ team[2].wins }}</span></div>
+						</td>
+						<td class="score" v-for="g in team[2].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
 								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>
-							</td>
-							<td>&nbsp;</td>
-						</tr>
-						<tr class="tr-games label-info ">
-							<th></th>
-							<th class="th-games"></th>
-							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 1" >@{{ timer.game[1] | secondsToTime }}</span></th>
-							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 2" >@{{ timer.game[2] | secondsToTime }}</span></th>
-							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 3" >@{{ timer.game[3] | secondsToTime }}</span></th>
-							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 4" >@{{ timer.game[4] | secondsToTime }}</span></th>
-							<th class="col-xs-1 th-games"><span class="label label-primary" v-if="game_num >= 5" >@{{ timer.game[5] | secondsToTime }}</span></th>
-							<th class="col-xs-1 th-games"><span class="label label-success">@{{ timer.match | secondsToTime }}</span></th>
-						</tr>
-					</table>				
+						</td>
+					</tr>
+					<tr class="tr-games label-info ">
+						<td></td>
+						<td class="th-games"></td>
+						<td class=" th-games"><span class="label label-primary" v-if="game_num >= 1" >@{{ timer.game[1] | secondsToTime }}</span></td>
+						<td class=" th-games"><span class="label label-primary" v-if="game_num >= 2" >@{{ timer.game[2] | secondsToTime }}</span></td>
+						<td class=" th-games"><span class="label label-primary" v-if="game_num >= 3" >@{{ timer.game[3] | secondsToTime }}</span></td>
+						<div class=" th-games"><span class="label label-primary" v-if="game_num >= 4" >@{{ timer.game[4] | secondsToTime }}</span></td>
+						<td class=" th-games"><span class="" v-if="game_num >= 5" >@{{ timer.game[5] | secondsToTime }}</span></td>
+						<td class=" th-games"><span class="label label-success">@{{ timer.match | secondsToTime }}</span></td>
+					</tr>
+				</table>						
+				
+				<div class="">
+					<div class="col-xs-12">		
+						<button v-on:click="point" class="btn btn-success btn-sm" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
+						<button v-on:click="sideout" class="btn btn-danger btn-sm" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
+						<button v-on:click="fault" class="btn btn-warning btn-sm" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>							
+					</div>
 				</div>
+				<div class="">	
+					<div class="col-xs-12 col-sm-offset-4">
+						<button v-on:click="undo" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>	
+						<button v-on:click="endMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
+						<button v-on:click="resetMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
+					</div>	
+				</div>	
 			</div>
 	</div>
 
@@ -329,7 +325,7 @@
 		var timeoutTimer;  //team timeouts
 		var intermissionTimer; //timeout between games
 
-		Vue.config.debug = false;
+		Vue.config.debug = true;
 
 		Vue.component('my-player', {
 			template:'#player-template',
