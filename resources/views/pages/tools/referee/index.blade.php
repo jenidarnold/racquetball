@@ -97,13 +97,13 @@
 						<h3>2. Setup Players</h3>				
 						<div class="col-xs-12  col-sm-4 form-group">
 							<label for="team1" class="control-label lbl-team ">Team 1:</label>
-						    <input class="form-control" id="team1" placeholder="Player 1" v-model="player1_name">
-						    <input class="form-control" placeholder="Player 2" v-model="player2_name">
+						    <input class="form-control" id="team1" placeholder="Player 1" v-model="players[0].name">
+						    <input class="form-control" placeholder="Player 2" v-model="players[1].name">
 						</div>				
 						<div class="col-xs-12  col-sm-4 form-group">
 						    <label for="team2" class="control-label lbl-team ">Team 2:</label>
-						    <input class="form-control" id="team2" placeholder="Player 1" v-model="player3_name">
-						    <input class="form-control" placeholder="Player 2" v-model="player4_name">
+						    <input class="form-control" id="team2" placeholder="Player 1" v-model="players[2].name">
+						    <input class="form-control" placeholder="Player 2" v-model="players[3].name">
 						</div>						
 					</div>
 					<div class="row">	
@@ -142,16 +142,16 @@
 					</tr>
 					<tr>
 						<td class="col-xs-9">
-							<div class="player-sum">@{{ player1_name }}
+							<div class="player-sum">@{{ players[0].name }}
 								<i class="fa fa-circle fa-xs" 
 									v-bind:class="[faults >= 1? classRed : classBlack]" 
-									v-show="server == player1_num">
+									v-show="server == players[0].pos">
 								</i> 
 								<span class="player-sum" v-show="player2_name != ''">/</span>
-								<span class="player-sum" v-show="player2_name != ''">@{{ player2_name }}
+								<span class="player-sum" v-show="player2_name != ''">@{{ players[1].name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
-										v-show="server == player2_num">
+										v-show="server == players[1].pos">
 									</i>
 								</span>
 							</div>
@@ -175,16 +175,16 @@
 					</tr>
 					<tr>
 						<td class="col-xs-9">
-							<div class="player-sum">@{{ player3_name }}
+							<div class="player-sum">@{{ players[2].name }}
 								<i class="fa fa-circle fa-xs" 
 									v-bind:class="[faults >= 1? classRed : classBlack]" 
-									v-show="server == player3_num ">
+									v-show="server == players[2].pos ">
 								</i>
 								<span class="player-sum" v-show="player2_name != ''">/</span>
-								<span class="player-sum" v-show="player2_name != ''">@{{ player4_name }}
+								<span class="player-sum" v-show="player2_name != ''">@{{ players[3].name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classBlack]" 
-										v-show="server == player4_num ">
+										v-show="server == players[3].pos ">
 									</i>
 								</span>
 							</div>
@@ -396,15 +396,7 @@
 							{id: 3, name:'Pro', games:5,  points:11, tie:7, win_by: 2, timeouts:3, timeout_secs:7, intermission_norm:10, intermission_tb:15, injury_secs:20, appeals:3},
 							{id: 4, name:'Iron', games:3,  points:7, tie:7, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0}
 						],
-				players: [],
-				player1_name: 'Player 1',
-				player2_name: 'Player 2',
-				player3_name: 'Player 3',
-				player4_name: 'Player 4',
-				player1_num: 1,
-				player2_num: 2,
-				player3_num: 3,
-				player4_num: 4,
+				players: [ {name:'Player 1', pos: 1 }, {name:'Player 2', pos:2}, {name:'Player 3', pos:3}, {name:'Player 4', pos:4}],			
 				team: 	{
 							1: 	
 								{
