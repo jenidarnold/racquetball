@@ -43,7 +43,11 @@
 		font-size: 14pt;
 		font-weight: 500;
 	}
-
+	.logo {
+		height: 35px;
+		padding: 0px;
+		margin: 0px;
+	}
     .row {
         width: 100%;
     }
@@ -104,19 +108,14 @@
 				</button>
 				<ul class="nav navbar-nav">
 					<li>
-						<a class="navbar-brand logo" href="#">					
-							<img style="height:25px" src="{{ asset('/images/racquet-right.png') }}">					
+						<a class="navbar-brand" href="#">					
+							<!-- img class="logo" src="{{ asset('/images/racquet-right.png') }}" -->					
 						</a>
 					</li>
 					<li>
-						<a class="navbar-brand" href="{{ url('/') }}">RacquetBall Hub</a>
-					</li>
-					<li>
-						<a class="navbar-brand logo" href="#">					
-							<img style="height:25px" src="{{ asset('/images/racquet-left.png') }}">					
-						</a>
-					</li>
-					
+						<a class="navbar-brand hidden-xs" href="{{ url('/') }}">RacquetBall Hub</a>
+						<a class="navbar-brand hidden-sm hidden-md hidden-lg" href="{{ url('/') }}">RBH</a>
+					</li>										
 				</ul>			
 			</div>
 

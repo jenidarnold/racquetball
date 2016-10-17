@@ -8,21 +8,21 @@
 		}
 		.player-sum {
 			font-weight: 200;
-			font-size: 10pt;
+			font-size: 12pt;
 		}
 		.win {
 			font-weight: 500;
 			color: green;
-			font-size: 8pt;
+			font-size: 9pt;
 		}
 		.loss {
 			font-weight: 500;
 			color: red;
-			font-size: 8pt;
+			font-size: 9pt;
 		}
 		.score {
 			font-weight: 500;
-			font-size: 8pt;
+			font-size: 12pt;
 			text-align: center;
 		}
 		.th-games {
@@ -30,13 +30,19 @@
 		}
 		.tr-games {
 			font-weight: 300;
-			font-size: 8pt;
+			font-size: 9pt;
+		}
+		.game-time{
+			font-size: 10pt;
 		}
 		.red {
 			color:red;
 		}
 		.black {
 			color:black;
+		}
+		.purple {
+			color:#7E43CB;
 		}
 		.indent { 	
 		   padding-top: 10px;
@@ -73,11 +79,11 @@
 <div class="container">
 	<div id="myvue">
 		<div class="panel panel-primary" v-show="showSetup">			
-			<div class="panel-heading"><h3>Score Keeper</h3></div>
+			<div class="panel-heading"><h3>Racquetball Score Keeper</h3></div>
 			<div class="panel-body">	
-				<form class="form-inline1" role="form">	
+				<form class="form-inline" role="form">	
 					<div class="row">			
-				    	<h3>1. Setup Match Format</h3>
+				    	<h3>Setup Match</h3>
 					    <div class="col-xs-12 col-sm-4 form-group">
 							<label for="title" class="control-label lbl-team">Match Title:</label>
 							<input class="form-control" id="title" placeholder="Enter Match Title" v-model="match_title">
@@ -85,29 +91,44 @@
 					    <div class="col-xs-12 col-sm-4 form-group">				    
 							<label for="game_format" class="control-label lbl-team">Game Format: </label>
 							<select v-model="game" id="game_format" class="form-control">
-									  <option v-for="game in game_formats" v-bind:value="game">
-									    @{{ game.name }}
-									  </option>
-							</select>					
-						 	<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
+							  	<option v-for="game in game_formats" v-bind:value="game">
+							    	@{{ game.name }}
+							  	</option>
+							</select>		
+						<!-- Show Timeouts and Appeals after select Game Format -->			
+						<!-- 
+							<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
 						 	<i class="fa fa-thumbs-down"></i> Appeals: @{{ game.appeals }}
+						-->
 						</div>
 					</div>
 					<div class="row">
-						<h3>2. Setup Players</h3>				
-						<div class="col-xs-12  col-sm-4 form-group">
-							<label for="team1" class="control-label lbl-team ">Team 1:</label>
-						    <input class="form-control" id="team1" v-model="players[1].name">
-						    <input class="form-control" v-model="players[2].name">
+						<h3>Setup Players</h3>	
+						<div class="row">
+							<div class="col-xs-12  col-sm-4 form-group">
+								<label class="radio-inline">
+							      	<input type="radio" name="optNumPlayers" value="2" >Singles
+							    </label>
+							    <label class="radio-inline">
+							      	<input type="radio" name="optNumPlayers" value="4" checked>Doubles
+							    </label>
+							</div>
+						</div>
+						<div class="row">			
+							<div class="col-xs-12  col-sm-4 form-group">
+								<label for="team1" class="control-label lbl-team ">Team 1:</label>
+							    <input class="form-control" id="team1" v-model="players[1].name" placeholder="Enter Player 1">
+							    <input class="form-control" v-model="players[2].name" placeholder="Enter Player 2">
+							</div>				
+							<div class="col-xs-12  col-sm-4 form-group">
+							    <label for="team2" class="control-label lbl-team ">Team 2:</label>
+							    <input class="form-control" id="team2" v-model="players[3].name" placeholder="Enter Player 1">
+							    <input class="form-control" v-model="players[4].name" placeholder="Enter Player 2">
+							</div>	
 						</div>				
-						<div class="col-xs-12  col-sm-4 form-group">
-						    <label for="team2" class="control-label lbl-team ">Team 2:</label>
-						    <input class="form-control" id="team2" v-model="players[3].name">
-						    <input class="form-control" v-model="players[4].name">
-						</div>						
 					</div>
 					<div class="row">	
-						<h3>3. Select Starting Server</h3>
+						<h3>Select Starting Server</h3>
 						<div class="col-xs-12 col-sm-4 form-group">
 							<select v-model="server" class="form-control col-xs-12 col-sm-12">
 							  	<option v-for="player in players" v-bind:value="player.pos">
@@ -144,22 +165,22 @@
 						<td class="col-xs-9">
 							<div class="player-sum">@{{ players[1].name }}
 								<i class="fa fa-circle fa-xs" 
-									v-bind:class="[faults >= 1? classRed : classBlack]" 
+									v-bind:class="[faults >= 1? classRed : classPurple]" 
 									v-show="server == players[1].pos">
 								</i> 
 								<span class="player-sum" v-show="players[2].name != ''">/</span>
 								<span class="player-sum" v-show="players[2].name != ''">@{{ players[2].name }}
 									<i class="fa fa-circle fa-xs" 
-										v-bind:class="[faults >= 1? classRed : classBlack]" 
+										v-bind:class="[faults >= 1? classRed : classPurple]"  
 										v-show="server == players[2].pos">
 									</i>
 								</span>
 							</div>
 							<div class="" v-show="isStarted">
-								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
+								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-md" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
 								  <span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[1].timeouts }}</span></button>
 								<span class="" v-show="isStarted">
-									<button v-on:click="appeal" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[1].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[1].appeals  }}</span>
+									<button v-on:click="appeal" class="btn btn-danger btn-md" v-bind:class="isStarted && team[1].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[1].appeals  }}</span>
 									</button>
 								</span>
 							</div>	
@@ -177,22 +198,22 @@
 						<td class="col-xs-9">
 							<div class="player-sum">@{{ players[3].name }}
 								<i class="fa fa-circle fa-xs" 
-									v-bind:class="[faults >= 1? classRed : classBlack]" 
+									v-bind:class="[faults >= 1? classRed : classPurple]" 
 									v-show="server == players[3].pos ">
 								</i>
 								<span class="player-sum" v-show="players[4].name != ''">/</span>
 								<span class="player-sum" v-show="players[4].name != ''">@{{ players[4].name }}
 									<i class="fa fa-circle fa-xs" 
-										v-bind:class="[faults >= 1? classRed : classBlack]" 
+										v-bind:class="[faults >= 1? classRed : classPurple]" 
 										v-show="server == players[4].pos ">
 									</i>
 								</span>
 							</div>
 							<div class="" v-show="isStarted">
-								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
+								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-md" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
 								<span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[2].timeouts }}</span></button>							
 								<span class="col-xs" v-show="isStarted">
-									<button v-on:click="appeal" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals  }}</span></button>
+									<button v-on:click="appeal" class="btn btn-danger btn-md" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals  }}</span></button>
 								</span>	
 							</div>
 						</td>
@@ -206,25 +227,31 @@
 					<tr class="tr-games label-info ">
 						<td></td>
 						<td class="th-games"></td>
-						<td class=" th-games"><span class="label label-primary" v-if="game_num >= 1" >@{{ timer.game[1] | secondsToTime }}</span></td>
-						<td class=" th-games"><span class="label label-primary" v-if="game_num >= 2" >@{{ timer.game[2] | secondsToTime }}</span></td>
-						<td class=" th-games"><span class="label label-primary" v-if="game_num >= 3" >@{{ timer.game[3] | secondsToTime }}</span></td>
-						<div class=" th-games"><span class="label label-primary" v-if="game_num >= 4" >@{{ timer.game[4] | secondsToTime }}</span></td>
-						<td class=" th-games"><span class="" v-if="game_num >= 5" >@{{ timer.game[5] | secondsToTime }}</span></td>
-						<td class=" th-games"><span class="label label-success">@{{ timer.match | secondsToTime }}</span></td>
+						<td class="th-games game-time"><span class="label label-primary" v-if="game_num >= 1" >@{{ timer.game[1] | secondsToTime }}</span></td>
+						<td class="th-games game-time"><span class="label label-primary" v-if="game_num >= 2" >@{{ timer.game[2] | secondsToTime }}</span></td>
+						<td class="th-games game-time"><span class="label label-primary" v-if="game_num >= 3" >@{{ timer.game[3] | secondsToTime }}</span></td>
+						<td class="th-games game-time"><span class="label label-primary" v-if="game_num >= 4" >@{{ timer.game[4] | secondsToTime }}</span></td>
+						<td class=" th-games game-time"><span class="" v-if="game_num >= 5" >@{{ timer.game[5] | secondsToTime }}</span></td>						
+					</tr>
+					<tr class="tr-games label-info ">
+						<td colspan="5">&nbsp;</td>
+						<td colspan="2" class=" th-games game-time"><span class="label label-success">Match: @{{ timer.match | secondsToTime }}</span></td>
 					</tr>
 				</table>						
 				
-				<div class="">
-					<div class="col-xs-12">		
-						<button v-on:click="point" class="btn btn-success btn-sm" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
-						<button v-on:click="sideout" class="btn btn-danger btn-sm" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
-						<button v-on:click="fault" class="btn btn-warning btn-sm" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>							
+				<div class="col-xs-12">
+					<div class="col-xs-6">		
+						<button v-on:click="point" class="btn btn-block btn-success btn-md" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
+						<button v-on:click="sideout" class="btn btn-block btn-danger btn-md" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
+					</div>
+					<div class="col-xs-6">	
+						<button v-on:click="fault" class="btn btn-block btn-warning btn-md" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
+						<button v-on:click="undo" class="btn btn-block btn-default btn-md" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo/Redo</button>					
 					</div>
 				</div>
-				<div class="">	
+				<div class="row">	
 					<div class="col-xs-12 col-sm-offset-4">
-						<button v-on:click="undo" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>	
+						<br/>
 						<button v-on:click="endMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
 						<button v-on:click="resetMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
 					</div>	
@@ -289,7 +316,7 @@
 	</div>
 
 	<!-- Modal Winner-->
-	<div id="winnerModal" class="winner modal fade" role="dialog" v-if="winnner != ''">
+	<div id="winnerModal" class="winner modal fade" role="dialog" v-if="winner != ''">
 	  <div class="modal-dialog">
 	    <!-- Modal content-->
 	    <div class="modal-content modal-success">
@@ -304,11 +331,6 @@
 	    </div>
 	  </div>
 	</div>
-
-	<div>
-     @{{ debug| json }}
-	</div>
-
 	<template id="player-template">
 		<table>
 			<tr>			
@@ -320,7 +342,7 @@
 @stop
 
 @section('script')
-	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/1.0.1/vue.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
 	<script>
 
 		var matchTimer;
@@ -351,6 +373,7 @@
 				classLoss: 'loss',
 				classRed: 'red',
 				classBlack: 'black',
+				classPurple: 'purple',
 				classEnabled: 'active',
 				classDisabled: 'disabled',
 				showSetup: true,
@@ -395,16 +418,16 @@
 				winner: '',
 				game: [],
 				game_formats: [ 	
-							{id: 1, name:'Two games to 11; Tie to 7',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, timeout_secs:5, intermission_norm:10, intermission_tb:15, injury_secs:10, appeals:3},
-							{id: 2, name:'Two games to 15; Tie to 11',  games:3,  points:15, tie:11, win_by: 1, timeouts:3, timeout_secs:6, intermission_norm:10, intermission_tb:15, injury_secs:15, appeals:3},
+							{id: 1, name:'2 games to 11; Tie to 7',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, timeout_secs:5, intermission_norm:10, intermission_tb:15, injury_secs:10, appeals:3},
+							{id: 2, name:'2 games to 15; Tie to 11',  games:3,  points:15, tie:11, win_by: 1, timeouts:3, timeout_secs:6, intermission_norm:10, intermission_tb:15, injury_secs:15, appeals:3},
 							{id: 3, name:'Best of 5 games to 11', games:5,  points:11, tie:7, win_by: 2, timeouts:3, timeout_secs:7, intermission_norm:10, intermission_tb:15, injury_secs:20, appeals:3},
-							{id: 4, name:'One game to 11', games:1,  points:11, tie:0, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0},
-							{id: 5, name:'One game to 15', games:1,  points:15, tie:0, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0}
+							{id: 4, name:'1 game to 11', games:1,  points:11, tie:0, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0},
+							{id: 5, name:'1 game to 15', games:1,  points:15, tie:0, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0}
 						],
-				players: { 	1: {name:'Player 1', pos: 1 }, 
-							2: {name:'Player 2', pos: 2 },  
-							3: {name:'Player 3', pos: 3 }, 
-							4: {name:'Player 4', pos: 4 }
+				players: { 	1: {name:'', pos: 1 }, 
+							2: {name:'', pos: 2 },  
+							3: {name:'', pos: 3 }, 
+							4: {name:'', pos: 4 }
 						},			
 				team: 	{
 							1: 	
@@ -415,22 +438,12 @@
 									appeals: 0,
 									injury: 0,
 									games: {
-										1: 	{
-												score: 0, gm: 1
-											}, 
-										2: {
-												score: 0, gm: 2
-											},
-										3: {
-												score: 0, gm: 3, 
-											},
-										4: {
-												score: 0, gm: 4, 
-											},
-										5: {
-												score: 0, gm: 5, 
-											},
-										}
+										1: {score: 0, gm: 1 }, 
+										2: {score: 0, gm: 2 },
+										3: {score: 0, gm: 3 },
+										4: {score: 0, gm: 4 },
+										5: {score: 0, gm: 5 },
+									}
 								},						
 							2: 	
 								{
@@ -440,25 +453,18 @@
 									appeals: 0,
 									injury: 0,
 									games: {
-										1: 	{
-												score: 0, gm: 1
-											}, 
-										2: {
-												score: 0, gm: 2
-											},
-										3: {
-												score: 0, gm: 3, 
-											},
-										4: {
-												score: 0, gm: 4, 
-											},
-										5: {
-												score: 0, gm: 5, 
-											},
-										}
+										1: {score: 0, gm: 1 }, 
+										2: {score: 0, gm: 2 },
+										3: {score: 0, gm: 3 },
+										4: {score: 0, gm: 4 },
+										5: {score: 0, gm: 5 },
+									}
 								}
 							}							
-			},								
+			},	
+			ready: function(){
+						
+			},							
 			computed: {
 				isDoubles: function(){	
 									
