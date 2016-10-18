@@ -79,6 +79,10 @@
 		.winner .modal-backdrop {
 	    	background-color: green;
 		}	
+		.btn-actions {
+			margin-top: 200px;			
+			margin-bottom: 10px;
+		}
 	</style>
 @stop
 
@@ -249,25 +253,9 @@
 					</tr>
 				</table>						
 			</div>
-			<div class="row">
-				<div class="col-xs-6">		
-					<button v-on:click="point" class="btn btn-block btn-success btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
-					<button v-on:click="sideout" class="btn btn-block btn-danger btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Out Serve</button>	
-				</div>
-				<div class="col-xs-6">	
-					<button v-on:click="fault" class="btn btn-block btn-warning btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
-					<button v-on:click="undo" class="btn btn-block btn-default btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>					
-				</div>
-			</div>
 			<div class="row">	
-				<div class="col-xs-12">
-					<br/>
-					<br/>
-					<br/>
-					<br/>
-					<br/>
-					<br/>
-					<div class="col-xs-6 text-center">
+				<div class="col-xs-12">					
+					<div class="col-xs-3 text-center">
 						<button v-on:click="endMatch" class="btn btn-danger btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Stop Match</button>
 					</div>
 					<!-- div class="col-xs-4">
@@ -276,10 +264,20 @@
 					<div class="col-xs-4 text-center">	
 						<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
 					</div>
-					<br/>
-					<br/>
 				</div>	
 			</div>
+			<div class="row btn-actions">
+				<div class="col-xs-6">		
+					<button v-on:click="point" class="btn btn-block btn-success btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
+					<button v-on:click="sideout" class="btn btn-block btn-danger btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Out Serve</button>	
+				</div>
+				
+				<div class="col-xs-6">	
+					<button v-on:click="fault" class="btn btn-block btn-warning btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
+					<button v-on:click="undo" class="btn btn-block btn-default btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>					
+				</div>
+			</div>
+			
 	</div>
 
 	<!-- Modal Team 1 Time out-->
