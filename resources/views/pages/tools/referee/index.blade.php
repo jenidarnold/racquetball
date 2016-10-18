@@ -79,9 +79,7 @@
 <div class="container">
 	<div id="myvue" class="col-xs-12 col-sm-8">
 		<div id="setup" v-if="showSetup">
-		<h3 class="text-center"><span class="text-primary">Auto Referee</span></h3>
-		<hr>
-			<form class="form-inline" role="form">	
+		<form class="form-inline" role="form">	
 					<div class="row">			
 				    	<h4><u>Setup Match</u></h4>
 				    	<div class="row">

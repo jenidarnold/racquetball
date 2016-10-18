@@ -97,7 +97,7 @@
   ga('send', 'pageview');
 </script>
 
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse hidden">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
