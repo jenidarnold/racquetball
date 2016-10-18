@@ -144,16 +144,11 @@
 			    <button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
 			</div>
 		</div>
-		<div class="panel panel-primary" v-show="isStarted">
-			<div class="panel-heading">	
-				<h3> 
-					@{{ match_title }}
-				</h3>
-			</div>
-			<div class="panel-body">
+		<div v-show="isStarted">	
+			<div class="row">
 				<table class="table col-xs-12">
 					<tr class="tr-games label-info ">
-						<th class="col-xs-9 th-games"></th>
+						<th class="col-xs-9 th-games">@{{ match_title }}</th>
 						<th class="col-xs- th-games"></th>
 						<th class="col-xs- th-games"><span v-if="game_num >= 1">1</span></th>
 						<th class="col-xs- th-games"><span v-if="game_num >= 2">2</span></th>
@@ -238,23 +233,22 @@
 						<td colspan="2" class=" th-games game-time"><span class="label label-success">Match: @{{ timer.match | secondsToTime }}</span></td>
 					</tr>
 				</table>						
-				
-				<div class="col-xs-12">
-					<div class="col-xs-6">		
-						<button v-on:click="point" class="btn btn-block btn-success btn-md" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
-						<button v-on:click="sideout" class="btn btn-block btn-danger btn-md" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
-					</div>
-					<div class="col-xs-6">	
-						<button v-on:click="fault" class="btn btn-block btn-warning btn-md" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
-						<button v-on:click="undo" class="btn btn-block btn-default btn-md" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo/Redo</button>					
-					</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">		
+					<button v-on:click="point" class="btn btn-block btn-success btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
+					<button v-on:click="sideout" class="btn btn-block btn-danger btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
 				</div>
-				<div class="row">	
-					<div class="col-xs-12 col-sm-offset-4">
-						<br/>
-						<button v-on:click="endMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
-						<button v-on:click="resetMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
-					</div>	
+				<div class="col-xs-6">	
+					<button v-on:click="fault" class="btn btn-block btn-warning btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
+					<button v-on:click="undo" class="btn btn-block btn-default btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo/Redo</button>					
+				</div>
+			</div>
+			<div class="row">	
+				<div class="col-xs-12 col-sm-offset-4">
+					<br/>
+					<button v-on:click="endMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
+					<button v-on:click="resetMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
 				</div>	
 			</div>
 	</div>
@@ -315,6 +309,23 @@
 	  </div>
 	</div>
 
+	<!-- Modal Score -->
+	<div id="scoreModal" class="score modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content modal-success">
+	      	<div class="modal-body">
+		      	<div class="row">
+					<center><h2>@{{ service  }} </h2></center>
+				</div>	
+	      	</div>
+	      	<div class="modal-footer">
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      	</div>
+	    </div>
+	  </div>
+	</div>
+
 	<!-- Modal Winner-->
 	<div id="winnerModal" class="winner modal fade" role="dialog" v-if="winner != ''">
 	  <div class="modal-dialog">
@@ -331,6 +342,8 @@
 	    </div>
 	  </div>
 	</div>
+
+
 	<template id="player-template">
 		<table>
 			<tr>			
@@ -383,6 +396,7 @@
 				score_steps: [],
 				game_num: 1,
 				match_title: '',
+				service:'',
 				timer: {
 						match: 0 , 
 						game: {
@@ -712,11 +726,15 @@
 					if (this.team[1].wins == this.game_max) {
 						this.winner = 'The winner is ' + this.players[0].name + ' & ' + this.players[1].name;
 						$('#winnerModal').modal('show');
+					} else {
+						this.showScore();
 					}
 
 					if (this.team[2].wins == this.game_max) {
 						this.winner = 'The winner is ' + this.players[2].name + ' & ' + this.players[3].name;
 						$('#winnerModal').modal('show');
+					} else {
+						this.showScore();
 					}
 				},
 				undoPoint: function (event){
@@ -739,6 +757,7 @@
 					else {
 						this.team[2].games[this.game_num].score = 1;
 					}
+					this.showScore();
 				},
 				fault: function (event){
 					this.faults +=1;
@@ -806,6 +825,7 @@
 							this.server = 1;
 						}
 					}
+					this.showScore();
 				},
 				undoSideout: function (event){				
 					this.restoreFault();
@@ -905,6 +925,15 @@
 						this.server  = 1;
 						this.initServer = 1;
 					}
+				},
+				showScore: function(event){
+					if (this.server < 3) {
+						this.service = this.team[1].games[this.game_num].score + " serving " + this.team[2].games[this.game_num].score;
+					}
+					else{
+						this.service = this.team[2].games[this.game_num].score + " serving " + this.team[1].games[this.game_num].score;
+					}
+					$('#scoreModal').modal('show');	
 				},
 				undo: function(){
 
