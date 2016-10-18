@@ -86,7 +86,7 @@
     }
 </style>
 <body class="white" style="background-image1: url('/images/grey-bg.jpg');">
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.1/vue.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

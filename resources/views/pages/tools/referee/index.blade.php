@@ -426,7 +426,7 @@
 @stop
 
 @section('script')
-	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+	<!--script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js"></script-->
 	<script>
 
 		var matchTimer;
