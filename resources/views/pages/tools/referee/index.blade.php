@@ -27,17 +27,21 @@
 		}
 		.th-games {
 			text-align: center;
-
+			color: white;
+		}
+		.nopadding {
+			padding: 0px !important;
 		}
 		td {
-			padding: 0px !important;
+			padding: 2px !important;
 		}
 		.tr-games {
 			font-weight: 300;
 			font-size: 9pt;
 		}
 		.game-time{
-			font-size: 10pt;
+			font-size: 8pt;
+			color:white;
 		}
 		.red {
 			color:red;
@@ -80,7 +84,7 @@
 
 @section('content')
 
-<div class="container">
+<div class="">
 	<div id="myvue" class="col-xs-12 col-sm-8">
 		<div id="setup" v-if="showSetup">
 		<form class="form-inline" role="form">	
@@ -155,9 +159,9 @@
 		<!-- Match Table -->
 		<div v-show="isStarted">	
 			<h4 class="text-center"><span class="text-primary">@{{ match_title }}</span></h4>
-			<div class="row">			
+			<div class="">			
 				<table class="table col-xs-12">					
-					<tr class="tr-games label-info ">
+					<tr class="tr-games label-primary ">
 						<th class="col-xs-9 th-games"></th>
 						<th class="col-xs- th-games"></th>
 						<th class="col-xs- th-games"><span v-if="game_num >= 1">1</span></th>
@@ -229,18 +233,18 @@
 								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>
 						</td>
 					</tr>
-					<tr class="tr-games label-info ">
+					<tr class="tr-games label-primary ">
 						<td></td>
 						<td class="th-games"></td>
-						<td class="th-games game-time"><span class="label label-primary" v-if="game_num >= 1" >@{{ timer.game[1] | secondsToTime }}</span></td>
-						<td class="th-games game-time"><span class="label label-primary" v-if="game_num >= 2" >@{{ timer.game[2] | secondsToTime }}</span></td>
-						<td class="th-games game-time"><span class="label label-primary" v-if="game_num >= 3" >@{{ timer.game[3] | secondsToTime }}</span></td>
-						<td class="th-games game-time"><span class="label label-primary" v-if="game_num >= 4" >@{{ timer.game[4] | secondsToTime }}</span></td>
+						<td class="th-games game-time"><span class="" v-if="game_num >= 1" >@{{ timer.game[1] | secondsToTime }}</span></td>
+						<td class="th-games game-time"><span class="" v-if="game_num >= 2" >@{{ timer.game[2] | secondsToTime }}</span></td>
+						<td class="th-games game-time"><span class="" v-if="game_num >= 3" >@{{ timer.game[3] | secondsToTime }}</span></td>
+						<td class="th-games game-time"><span class="" v-if="game_num >= 4" >@{{ timer.game[4] | secondsToTime }}</span></td>
 						<td class=" th-games game-time"><span class="" v-if="game_num >= 5" >@{{ timer.game[5] | secondsToTime }}</span></td>						
 					</tr>
-					<tr class="tr-games label-info ">
+					<tr class="tr-games label-info">
 						<td colspan="5">&nbsp;</td>
-						<td colspan="2" class=" th-games game-time"><span class="label label-success">Match: @{{ timer.match | secondsToTime }}</span></td>
+						<td colspan="2" class=" th-games game-time"><span class="">@{{ timer.match | secondsToTime }}</span></td>
 					</tr>
 				</table>						
 			</div>
@@ -399,7 +403,6 @@
 	  </div>
 	</div>
 
-
 	<template id="player-template">
 		<table>
 			<tr>			
@@ -490,11 +493,15 @@
 				winner: '',
 				game: [],
 				game_formats: [ 	
-							{id: 1, name:'2 games to 11; Tie to 7',  games:3,  points:11, tie:7, win_by: 1, timeouts:2, timeout_secs:5, intermission_norm:10, intermission_tb:15, injury_secs:10, appeals:3},
-							{id: 2, name:'2 games to 15; Tie to 11',  games:3,  points:15, tie:11, win_by: 1, timeouts:3, timeout_secs:6, intermission_norm:10, intermission_tb:15, injury_secs:15, appeals:3},
-							{id: 3, name:'Best of 5 games to 11', games:5,  points:11, tie:7, win_by: 2, timeouts:3, timeout_secs:7, intermission_norm:10, intermission_tb:15, injury_secs:20, appeals:3},
-							{id: 4, name:'1 game to 11', games:1,  points:11, tie:0, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0},
-							{id: 5, name:'1 game to 15', games:1,  points:15, tie:0, win_by: 1, timeouts:1, timeout_secs:9, intermission_norm:10, intermission_tb:15, injury_secs:0, appeals:0}
+							{id: 0, name:''},
+							{id: 1, name:'2 games to 11; Tie to 7',  
+								games:3,  points:11, tie:7, win_by: 1, timeouts:2, timeout_secs:30, intermission_norm:120, intermission_tb:300, injury_secs:900, appeals:2},
+							{id: 2, name:'2 games to 15; Tie to 11',  
+								games:3,  points:15, tie:11, win_by: 1, timeouts:3, timeout_secs:30, intermission_norm:120, intermission_tb:300, injury_secs:900, appeals:2},
+							{id: 3, name:'Best of 5 games to 11', 
+								games:5,  points:11, tie:7, win_by: 2, timeouts:3, timeout_secs:60, intermission_norm:120, intermission_tb:300, injury_secs:900, appeals:3},
+							{id: 4, name:'1 game to 11', games:1,  points:11, tie:0, win_by: 1, timeouts:1, timeout_secs:30, intermission_norm:0, intermission_tb:0, injury_secs:900, appeals:0},
+							{id: 5, name:'1 game to 15', games:1,  points:15, tie:0, win_by: 1, timeouts:1, timeout_secs:30, intermission_norm:0, intermission_tb:0, injury_secs:900, appeals:0}
 						],
 				players: { 	1: {name:'', pos: 1 }, 
 							2: {name:'', pos: 2 },  
@@ -564,7 +571,7 @@
 				},
 				isTiebreaker: function(){
 					if(this.game_num == this.total_games) {
-						this.score_max = this.tiebreaker;
+						this.score_max = this.game.tie;
 						return true;
 					}
 					else {
@@ -579,7 +586,7 @@
 						secs = secs.toString();
 						var date = new Date(null);
         				date.setSeconds(secs); // specify value for SECONDS here
-        				return date.toISOString().substr(11, 8);
+        				return date.toISOString().substr(12, 7);
         			} else if (secs == 0)
         			{
         				return "";
@@ -597,6 +604,7 @@
 					this.startTimer('game');
 					
 					this.total_games = this.game.games;
+					this.score_max = this.game.points;
 
 					//Team settings 
 					if (this.isDoubles){
@@ -647,18 +655,16 @@
 					this.max_players = 4;		
 					this.team[1].name ="Team 1";
 					this.team[2].name ="Team 2";
+					this.team[1].wins = 0;
+					this.team[2].wins = 0;
 					this.winner = '';
 					this.game_num = 1;
+					this.game = [];
+					this.score_steps = [],
 					this.match_title ='';
+					this.service = '';
 					this.clearTimer('game');
 					this.clearTimer('match');
-
-					this.team[1].serves = 1;
-					this.team[1].timeouts = this.game.timeouts;
-					this.team[1].appeals = this.game.appeals;
-					this.team[2].serves = 1;
-					this.team[2].timeouts = this.game.timeouts;
-					this.team[2].appeals = this.game.appeals;
 
 					for (var i = 1; i <= 5; i++) {
 						this.team[1].games[i].score = 0;
@@ -803,14 +809,14 @@
 					}
 
 					if (this.team[1].wins == this.game_max) {
-						this.winner = 'The winner is ' + this.players[0].name + ' & ' + this.players[1].name;
+						this.winner = 'The winner is ' + this.team[1].name;
 						$('#winnerModal').modal('show');
 					} else {
 						this.showScore();
 					}
 
 					if (this.team[2].wins == this.game_max) {
-						this.winner = 'The winner is ' + this.players[2].name + ' & ' + this.players[3].name;
+						this.winner = 'The winner is ' + this.players[2].name;
 						$('#winnerModal').modal('show');
 					} else {
 						this.showScore();

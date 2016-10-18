@@ -16,6 +16,7 @@ class AccountController extends Controller {
 
 
   // To redirect facebook
+  // Facebook App ID: 707155052773927
   public function facebook_redirect() {
     return Socialize::with('facebook')->redirect();
   }
