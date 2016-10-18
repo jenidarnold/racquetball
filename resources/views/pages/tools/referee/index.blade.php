@@ -78,80 +78,81 @@
 		}
 		.winner .modal-backdrop {
 	    	background-color: green;
-		}
+		}	
 	</style>
 @stop
 
 @section('content')
 
 <div class="">
-	<div id="myvue" class="col-xs-12 col-sm-8">
+	<div id="myvue" class="col-xs-12 col-sm-7">
 		<div id="setup" v-if="showSetup">
-		<form class="form-inline" role="form">	
-					<div class="row">			
-				    	<h4><u>Setup Match</u></h4>
-				    	<div class="row">
-						    <div class="col-xs-12 col-sm-4 form-group">
-								<label for="title" class="control-label lbl-team">Match Title:</label>
-								<input class="form-control" id="title" placeholder="Enter Match Title" v-model="match_title">
-						    </div>
-						</div>
-						<div class="row">	
-						    <div class="col-xs-12 col-sm-4 form-group">				    
-								<label for="game_format" class="control-label lbl-team">Game Format: </label>
-								<select v-model="game" id="game_format" class="form-control">
-								  	<option v-for="game in game_formats" v-bind:value="game">
-								    	@{{ game.name }}
-								  	</option>
-								</select>		
-							<!-- Show Timeouts and Appeals after select Game Format -->			
-							<!-- 
-								<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
-							 	<i class="fa fa-thumbs-down"></i> Appeals: @{{ game.appeals }}
-							-->
-							</div>
+			<form class="form-inline" role="form">	
+				<div class="row">			
+			    	<h4><u>Setup Match</u></h4>
+			    	<div class="row">
+					    <div class="col-xs-12 col-sm-4 form-group">
+							<label for="title" class="control-label lbl-team">Match Title:</label>
+							<input class="form-control" id="title" placeholder="Enter Match Title" v-model="match_title">
+					    </div>
+					</div>
+					<div class="row">	
+					    <div class="col-xs-12 col-sm-4 form-group">				    
+							<label for="game_format" class="control-label lbl-team">Game Format: </label>
+							<select v-model="game" id="game_format" class="form-control">
+							  	<option v-for="game in game_formats" v-bind:value="game">
+							    	@{{ game.name }}
+							  	</option>
+							</select>		
+						<!-- Show Timeouts and Appeals after select Game Format -->			
+						<!-- 
+							<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
+						 	<i class="fa fa-thumbs-down"></i> Appeals: @{{ game.appeals }}
+						-->
 						</div>
 					</div>
+				</div>
+				<div class="row">
+					<h4><u>Setup Players</u></h4>							
 					<div class="row">
-						<h4><u>Setup Players</u></h4>							
-						<div class="row">
-							<div class="col-xs-12 form-group">
-								<label class="radio-inline">
-							      	<input type="radio" id="singles" value="2" v-model="max_players">Singles
-							    </label>
-							    <label class="radio-inline">
-							      	<input type="radio" id="doubles" value="4" v-model="max_players">Doubles
-							    </label>
-							</div>
+						<div class="col-xs-12 form-group">
+							<label class="radio-inline">
+						      	<input type="radio" id="singles" value="2" v-model="max_players">Singles
+						    </label>
+						    <label class="radio-inline">
+						      	<input type="radio" id="doubles" value="4" v-model="max_players">Doubles
+						    </label>
 						</div>
-						<div class="row">			
-							<div class="col-xs-12 col-sm-6  form-group">
-								<label for="team1" class="control-label lbl-team ">@{{team[1].name}}:</label>
-							    <input class="form-control" id="team1" v-model="players[1].name" v-bind="{'placeholder':team[1].placeholder[0]}">
-							    <input class="form-control" v-model="players[2].name" v-bind="{'placeholder':team[1].placeholder[1]}" v-if="isDoubles == true">
-							</div>				
-							<div class="col-xs-12 col-sm-6  form-group">
-							    <label for="team2" class="control-label lbl-team ">@{{team[2].name}}:</label>
-							    <input class="form-control" id="team2" v-model="players[3].name" v-bind="{'placeholder':team[2].placeholder[0]}">
-							    <input class="form-control" v-model="players[4].name" v-bind="{'placeholder':team[2].placeholder[1]}"  v-if="isDoubles == true">
-							</div>	
-						</div>	
-						<div class="row">	
-							<div class="col-xs-12 col-sm-4 form-group">
-								<label for="server" class="control-label lbl-team">Starting Server: </label>
-								<select id="server" v-model="server" class="form-control col-xs-12 col-sm-12">
-								  	<option v-for="player in players" v-bind:value="player.pos">
-								    	@{{ player.name }}
-								  	</option>
-								</select>	
-							</div>
-						</div>	
 					</div>
-				</form>
+					<div class="row">			
+						<div class="col-xs-12 col-sm-6  form-group">
+							<label for="team1" class="control-label lbl-team ">@{{team[1].name}}:</label>
+						    <input class="form-control" id="team1" v-model="players[1].name" v-bind="{'placeholder':team[1].placeholder[0]}">
+						    <input class="form-control" v-model="players[2].name" v-bind="{'placeholder':team[1].placeholder[1]}" v-if="isDoubles == true">
+						</div>				
+						<div class="col-xs-12 col-sm-6  form-group">
+						    <label for="team2" class="control-label lbl-team ">@{{team[2].name}}:</label>
+						    <input class="form-control" id="team2" v-model="players[3].name" v-bind="{'placeholder':team[2].placeholder[0]}">
+						    <input class="form-control" v-model="players[4].name" v-bind="{'placeholder':team[2].placeholder[1]}"  v-if="isDoubles == true">
+						</div>	
+					</div>	
+					<div class="row">	
+						<div class="col-xs-12 col-sm-4 form-group">
+							<label for="server" class="control-label lbl-team">Starting Server: </label>
+							<br>					
+							<select id="server" v-model="server" class="form-control">
+							  	<option v-for="player in players" v-bind:value="player.pos">
+							    	@{{ player.name }}
+							  	</option>
+							</select>	
+						</div>
+					</div>
+				</div>	
+			</form>
 			<div class="row">
-				<div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-3 form-group">
-			    	<button class="btn btn-success" v-on:click="createMatch">Start Match</button>
-			    	<button class="btn btn-danger" v-on:click="resetMatch">Reset Settings</button>
+				<div class="col-xs-10 col-xs-offset-1 col-sm-offset-3 form-group">
+			    	<button class="btn btn-success" v-on:click="createMatch">Start</button>
+			    	<button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
 			    </div>
 			</div>
 		</div>
@@ -263,9 +264,20 @@
 					<br/>
 					<br/>
 					<br/>
-					<button v-on:click="endMatch" class="btn btn-danger btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Stop Match</button>
-					<button v-on:click="resumeMatch" class="btn btn-warning btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Resume Match</button>	
-					<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
+					<br/>
+					<br/>
+					<br/>
+					<div class="col-xs-6 text-center">
+						<button v-on:click="endMatch" class="btn btn-danger btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Stop Match</button>
+					</div>
+					<!-- div class="col-xs-4">
+						<button v-on:click="resumeMatch" class="btn btn-warning btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Resume Match</button>
+					</div -->
+					<div class="col-xs-4 text-center">	
+						<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
+					</div>
+					<br/>
+					<br/>
 				</div>	
 			</div>
 	</div>
