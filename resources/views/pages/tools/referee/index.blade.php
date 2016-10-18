@@ -150,10 +150,11 @@
 
 		<!-- Match Table -->
 		<div v-show="isStarted">	
-			<div class="row">
-				<table class="table col-xs-12">
+			<h4 class="text-center"><span class="text-primary">@{{ match_title }}</span></h4>
+			<div class="row">			
+				<table class="table col-xs-12">					
 					<tr class="tr-games label-info ">
-						<th class="col-xs-9 th-games">@{{ match_title }}</th>
+						<th class="col-xs-9 th-games"></th>
 						<th class="col-xs- th-games"></th>
 						<th class="col-xs- th-games"><span v-if="game_num >= 1">1</span></th>
 						<th class="col-xs- th-games"><span v-if="game_num >= 2">2</span></th>
@@ -246,7 +247,7 @@
 				</div>
 				<div class="col-xs-6">	
 					<button v-on:click="fault" class="btn btn-block btn-warning btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
-					<button v-on:click="undo" class="btn btn-block btn-default btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo/Redo</button>					
+					<button v-on:click="undo" class="btn btn-block btn-default btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>					
 				</div>
 			</div>
 			<div class="row">	
