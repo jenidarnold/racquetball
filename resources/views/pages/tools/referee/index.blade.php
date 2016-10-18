@@ -77,73 +77,80 @@
 @section('content')
 
 <div class="container">
-	<div id="myvue">
-		<div class="panel panel-primary" v-show="showSetup">			
-			<div class="panel-heading"><h3>Racquetball Score Keeper</h3></div>
-			<div class="panel-body">	
-				<form class="form-inline" role="form">	
+	<div id="myvue" class="col-xs-12 col-sm-8">
+		<div id="setup" v-if="showSetup">
+		<h3 class="text-center"><span class="text-primary">Auto Referee</span></h3>
+		<hr>
+			<form class="form-inline" role="form">	
 					<div class="row">			
-				    	<h3>Setup Match</h3>
-					    <div class="col-xs-12 col-sm-4 form-group">
-							<label for="title" class="control-label lbl-team">Match Title:</label>
-							<input class="form-control" id="title" placeholder="Enter Match Title" v-model="match_title">
-					    </div>
-					    <div class="col-xs-12 col-sm-4 form-group">				    
-							<label for="game_format" class="control-label lbl-team">Game Format: </label>
-							<select v-model="game" id="game_format" class="form-control">
-							  	<option v-for="game in game_formats" v-bind:value="game">
-							    	@{{ game.name }}
-							  	</option>
-							</select>		
-						<!-- Show Timeouts and Appeals after select Game Format -->			
-						<!-- 
-							<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
-						 	<i class="fa fa-thumbs-down"></i> Appeals: @{{ game.appeals }}
-						-->
+				    	<h4><u>Setup Match</u></h4>
+				    	<div class="row">
+						    <div class="col-xs-12 col-sm-4 form-group">
+								<label for="title" class="control-label lbl-team">Match Title:</label>
+								<input class="form-control" id="title" placeholder="Enter Match Title" v-model="match_title">
+						    </div>
+						</div>
+						<div class="row">	
+						    <div class="col-xs-12 col-sm-4 form-group">				    
+								<label for="game_format" class="control-label lbl-team">Game Format: </label>
+								<select v-model="game" id="game_format" class="form-control">
+								  	<option v-for="game in game_formats" v-bind:value="game">
+								    	@{{ game.name }}
+								  	</option>
+								</select>		
+							<!-- Show Timeouts and Appeals after select Game Format -->			
+							<!-- 
+								<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
+							 	<i class="fa fa-thumbs-down"></i> Appeals: @{{ game.appeals }}
+							-->
+							</div>
 						</div>
 					</div>
 					<div class="row">
-						<h3>Setup Players</h3>	
+						<h4><u>Setup Players</u></h4>							
 						<div class="row">
-							<div class="col-xs-12  col-sm-4 form-group">
+							<div class="col-xs-12 form-group">
 								<label class="radio-inline">
-							      	<input type="radio" name="optNumPlayers" value="2" >Singles
+							      	<input type="radio" id="singles" value="2" v-model="max_players">Singles
 							    </label>
 							    <label class="radio-inline">
-							      	<input type="radio" name="optNumPlayers" value="4" checked>Doubles
+							      	<input type="radio" id="doubles" value="4" v-model="max_players">Doubles
 							    </label>
 							</div>
 						</div>
 						<div class="row">			
-							<div class="col-xs-12  col-sm-4 form-group">
-								<label for="team1" class="control-label lbl-team ">Team 1:</label>
-							    <input class="form-control" id="team1" v-model="players[1].name" placeholder="Enter Player 1">
-							    <input class="form-control" v-model="players[2].name" placeholder="Enter Player 2">
+							<div class="col-xs-12 col-sm-6  form-group">
+								<label for="team1" class="control-label lbl-team ">@{{team[1].name}}:</label>
+							    <input class="form-control" id="team1" v-model="players[1].name" v-bind="{'placeholder':team[1].placeholder[0]}">
+							    <input class="form-control" v-model="players[2].name" v-bind="{'placeholder':team[1].placeholder[1]}" v-if="isDoubles == true">
 							</div>				
-							<div class="col-xs-12  col-sm-4 form-group">
-							    <label for="team2" class="control-label lbl-team ">Team 2:</label>
-							    <input class="form-control" id="team2" v-model="players[3].name" placeholder="Enter Player 1">
-							    <input class="form-control" v-model="players[4].name" placeholder="Enter Player 2">
+							<div class="col-xs-12 col-sm-6  form-group">
+							    <label for="team2" class="control-label lbl-team ">@{{team[2].name}}:</label>
+							    <input class="form-control" id="team2" v-model="players[3].name" v-bind="{'placeholder':team[2].placeholder[0]}">
+							    <input class="form-control" v-model="players[4].name" v-bind="{'placeholder':team[2].placeholder[1]}"  v-if="isDoubles == true">
 							</div>	
-						</div>				
+						</div>	
+						<div class="row">	
+							<div class="col-xs-12 col-sm-4 form-group">
+								<label for="server" class="control-label lbl-team">Starting Server: </label>
+								<select id="server" v-model="server" class="form-control col-xs-12 col-sm-12">
+								  	<option v-for="player in players" v-bind:value="player.pos">
+								    	@{{ player.name }}
+								  	</option>
+								</select>	
+							</div>
+						</div>	
 					</div>
-					<div class="row">	
-						<h3>Select Starting Server</h3>
-						<div class="col-xs-12 col-sm-4 form-group">
-							<select v-model="server" class="form-control col-xs-12 col-sm-12">
-							  	<option v-for="player in players" v-bind:value="player.pos">
-							    	@{{ player.name }}
-							  	</option>
-							</select>	
-						</div>
-					</div>	
 				</form>
-			</div>
-			<div class="panel-footer">
-			    <button class="btn btn-success" v-on:click="createMatch">Start</button>
-			    <button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
+			<div class="row">
+				<div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-3 form-group">
+			    	<button class="btn btn-success" v-on:click="createMatch">Start Match</button>
+			    	<button class="btn btn-danger" v-on:click="resetMatch">Reset Settings</button>
+			    </div>
 			</div>
 		</div>
+
+		<!-- Match Table -->
 		<div v-show="isStarted">	
 			<div class="row">
 				<table class="table col-xs-12">
@@ -314,13 +321,38 @@
 	  <div class="modal-dialog">
 	    <!-- Modal content-->
 	    <div class="modal-content modal-success">
-	      	<div class="modal-body">
+	      	<div class="modal-body alert-success">
 		      	<div class="row">
 					<center><h2>@{{ service  }} </h2></center>
 				</div>	
 	      	</div>
-	      	<div class="modal-footer">
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal Fault -->
+	<div id="faultModal" class="score modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content modal-success">
+	      	<div class="modal-body alert-warning">
+		      	<div class="row">
+					<center><h2>Fault</h2></center>
+				</div>	
+	      	</div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal Sideout/Handout -->
+	<div id="sideoutModal" class="score modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content modal-success">
+	      	<div class="modal-body alert-danger">
+		      	<div class="row">
+					<center><h2>@{{ sideout_type }}</h2></center>
+				</div>	
 	      	</div>
 	    </div>
 	  </div>
@@ -393,9 +425,11 @@
 				isStarted: false,
 				initServer: 1,
 				server: 1,
+				max_players: 4,
 				score_steps: [],
 				game_num: 1,
 				match_title: '',
+				sideout_type: 'Sideout',				
 				service:'',
 				timer: {
 						match: 0 , 
@@ -446,6 +480,8 @@
 				team: 	{
 							1: 	
 								{
+									name: 'Team 1',
+									placeholder: ['Enter Team Player 1', 'Enter Team Player 2'],
 									serves:1,
 									wins: 0,
 									timeouts: 0,
@@ -460,7 +496,9 @@
 									}
 								},						
 							2: 	
-								{
+								{	
+									name: 'Team 2',
+									placeholder: ['Enter Team Player 1', 'Enter Team Player 2'],
 									serves:1,
 									wins: 0,
 									timeouts: 0,
@@ -480,8 +518,19 @@
 						
 			},							
 			computed: {
-				isDoubles: function(){	
-									
+				isDoubles: function(){		
+					if(this.max_players == 2 ){
+						this.team[1].name ="Player 1";
+						this.team[2].name ="Player 2";
+						this.team[1].placeholder[0] = "Enter Player 1";
+						this.team[2].placeholder[0] = "Enter Player 2";
+					}else {
+						this.team[1].name ="Team 1";
+						this.team[2].name ="Team 2";
+						this.team[1].placeholder[0] = "Enter Team Player 1";
+						this.team[2].placeholder[0] = "Enter Team Player 1";	
+					}
+
 					if (this.max_players == 4) {
 						return true;
 					}
@@ -522,23 +571,7 @@
 					this.initServer = this.server;
 					this.startTimer('match');
 					this.startTimer('game');
-
-					//Set # of players
-					this.max_players = 0;
-					if (this.players[1].name != ''){
-						this.max_players+=1; 
-					}
-					if (this.players[2].name != ''){
-						this.max_players+=1; 
-					}
-					if (this.players[3].name != ''){
-						this.max_players+=1; 
-					}
-					if (this.players[4].name != ''){
-						this.max_players+=1; 
-					}	
-
-
+					
 					this.total_games = this.game.games;
 
 					//Team settings 
@@ -569,7 +602,7 @@
 						}
 					};
 
-				},
+				},				
 				resetMatch: function(event){ 
 					// disable point, sideout, fault, etc
 					this.isStarted = false;
@@ -760,6 +793,7 @@
 					this.showScore();
 				},
 				fault: function (event){
+
 					this.faults +=1;
 
 					if (this.faults == 2 ) {
@@ -767,7 +801,9 @@
 						this.sideout(event);
 					}else {
 					    this.score_steps.push('fault');
-					};
+					    $('#faultModal').modal('show');	
+					};					
+
 				},
 				undoFault: function (event){
 					this.faults = 0;
@@ -785,14 +821,14 @@
                     //this.score_steps.push(last_step);
 				},
 				sideout: function (event){
-					this.score_steps.push('sideout');
-					this.faults = 0;
-
+					
+					this.sideout_type = 'Sideout';
 					if ((this.server == 1) || this.server == 2){
 						this.team[1].serves -=1;
 						if (this.team[1].serves > 0) {
 							if (this.server == 1) {
 								this.server = 2;
+								this.sideout_type = 'Handout';
 							}
 							else{
 								this.server = 1;
@@ -811,6 +847,7 @@
 						if (this.team[2].serves > 0) {
 							if (this.server == 3) {
 								this.server = 4;
+								this.sideout_type = 'Handout';
 							}
 							else{
 								this.server = 3;
@@ -825,6 +862,10 @@
 							this.server = 1;
 						}
 					}
+
+					this.score_steps.push(this.sideout_type);
+					this.faults = 0;
+					$('#sideoutModal').modal('show');	
 					this.showScore();
 				},
 				undoSideout: function (event){				
@@ -925,16 +966,7 @@
 						this.server  = 1;
 						this.initServer = 1;
 					}
-				},
-				showScore: function(event){
-					if (this.server < 3) {
-						this.service = this.team[1].games[this.game_num].score + " serving " + this.team[2].games[this.game_num].score;
-					}
-					else{
-						this.service = this.team[2].games[this.game_num].score + " serving " + this.team[1].games[this.game_num].score;
-					}
-					$('#scoreModal').modal('show');	
-				},
+				},				
 				undo: function(){
 
 					var last_step = this.score_steps.pop();
@@ -950,7 +982,7 @@
 							last_step = this.score_steps.pop();
                             if (last_step == 'changeServingTeam'){
                             	this.undoServingTeam();
-                            }else if(last_step == 'sideout') {
+                            }else if(last_step == 'sideout' || last_step == 'handout') {
                             	this.undoSideout();
                             }	
 							break;
@@ -961,7 +993,16 @@
 
 							break;						
 					}
-				}
+				},
+				showScore: function(event){
+					if (this.server < 3) {
+						this.service = this.team[1].games[this.game_num].score + " serving " + this.team[2].games[this.game_num].score;
+					}
+					else{
+						this.service = this.team[2].games[this.game_num].score + " serving " + this.team[1].games[this.game_num].score;
+					}
+					$('#scoreModal').modal('show');	
+				},
 			}
 		});	
 	</script>
