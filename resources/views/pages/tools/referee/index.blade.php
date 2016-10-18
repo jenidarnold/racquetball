@@ -257,6 +257,8 @@
 			<div class="row">	
 				<div class="col-xs-12">
 					<br/>
+					<br/>
+					<br/>
 					<button v-on:click="endMatch" class="btn btn-danger btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Stop Match</button>
 					<button v-on:click="resumeMatch" class="btn btn-warning btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Resume Match</button>	
 					<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
@@ -658,6 +660,10 @@
 					this.team[2].timeouts = this.game.timeouts;
 					this.team[2].appeals = this.game.appeals;
 
+					for (var i = 1; i <= 5; i++) {
+						this.team[1].games[i].score = 0;
+						this.team[2].games[i].score = 0;
+					};					
 
 					this.endMatch();
 					$('#winnerModal').modal('show');
