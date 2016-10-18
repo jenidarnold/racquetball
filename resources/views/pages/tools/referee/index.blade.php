@@ -27,6 +27,10 @@
 		}
 		.th-games {
 			text-align: center;
+
+		}
+		td {
+			padding: 0px !important;
 		}
 		.tr-games {
 			font-weight: 300;
@@ -178,10 +182,10 @@
 								</span>
 							</div>
 							<div class="" v-show="isStarted">
-								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-md" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
+								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
 								  <span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[1].timeouts }}</span></button>
 								<span class="" v-show="isStarted">
-									<button v-on:click="appeal" class="btn btn-danger btn-md" v-bind:class="isStarted && team[1].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[1].appeals  }}</span>
+									<button v-on:click="appeal(1)" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[1].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[1].appeals  }}</span>
 									</button>
 								</span>
 							</div>	
@@ -211,10 +215,10 @@
 								</span>
 							</div>
 							<div class="" v-show="isStarted">
-								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-md" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
+								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal2" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
 								<span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[2].timeouts }}</span></button>							
 								<span class="col-xs" v-show="isStarted">
-									<button v-on:click="appeal" class="btn btn-danger btn-md" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals  }}</span></button>
+									<button v-on:click="appeal(2)" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals  }}</span></button>
 								</span>	
 							</div>
 						</td>
@@ -251,10 +255,11 @@
 				</div>
 			</div>
 			<div class="row">	
-				<div class="col-xs-12 col-sm-offset-4">
+				<div class="col-xs-12">
 					<br/>
-					<button v-on:click="endMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">End</button>	
-					<button v-on:click="resetMatch" class="btn btn-default btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">New</button>	
+					<button v-on:click="endMatch" class="btn btn-danger btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Stop Match</button>
+					<button v-on:click="resumeMatch" class="btn btn-warning btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Resume Match</button>	
+					<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
 				</div>	
 			</div>
 	</div>
@@ -369,6 +374,24 @@
 	      	</div>
 	      	<div class="modal-footer">
 	        	<button type="button" v-on:click="timeout(2)" class="btn btn-default" data-dismiss="modal">Close</button>
+	      	</div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal Confirm Reset -->
+	<div id="confirmResetModal" class="score modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content modal-success">
+	      	<div class="modal-body">
+		      	<div class="row">
+					<center><h3>Are you sure you want to start a new match?</h3></center>
+				</div>	
+				<div class="row">
+					<button type="button" v-on:click="resetMatch" class="btn btn-success" data-dismiss="modal">Yes</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+				</div>
 	      	</div>
 	    </div>
 	  </div>
@@ -582,10 +605,10 @@
 							this.team[2].serves = 2;
 						}
 
-						this.team[1].name = this.players[0].name + " & " + this.players[1].name;
-						this.team[2].name = this.players[2].name + " & " + this.players[3].name;
+						this.team[1].name = this.players[1].name + " & " + this.players[2].name;
+						this.team[2].name = this.players[3].name + " & " + this.players[4].name;
 					} else {
-						this.team[1].name = this.players[0].name;
+						this.team[1].name = this.players[1].name;
 						this.team[2].name = this.players[3].name;
 					}
 
@@ -607,7 +630,10 @@
 						}
 					};
 
-				},				
+				},	
+				confirmReset: function(){
+					$('#confirmResetModal').modal('show');
+				},			
 				resetMatch: function(event){ 
 					// disable point, sideout, fault, etc
 					this.isStarted = false;
@@ -615,12 +641,15 @@
 					this.players[1].name = '';
 					this.players[2].name = '';
 					this.players[3].name = '';
-					this.players[4].name = '';
+					this.players[4].name = '';					
 					this.max_players = 4;		
+					this.team[1].name ="Team 1";
+					this.team[2].name ="Team 2";
 					this.winner = '';
 					this.game_num = 1;
 					this.match_title ='';
-
+					this.clearTimer('game');
+					this.clearTimer('match');
 
 					this.team[1].serves = 1;
 					this.team[1].timeouts = this.game.timeouts;
@@ -629,12 +658,17 @@
 					this.team[2].timeouts = this.game.timeouts;
 					this.team[2].appeals = this.game.appeals;
 
+
 					this.endMatch();
 					$('#winnerModal').modal('show');
 				},	
 				endMatch: function(event){
 					this.stopTimer(gameTimer);
 					this.stopTimer(matchTimer);
+				},
+				resumeMatch:function(event){
+					this.starTimer(gameTimer);
+					this.starTimer(matchTimer);
 				},
 				endGame: function(event){
 					this.stopTimer(gameTimer);
@@ -922,8 +956,8 @@
 				undoTimeout: function(event){
 
 				},
-				appeal: function(event) {
-
+				appeal: function(teamNum) {
+					this.team[teamNum].appeals-=1;					
 				},
 				undoAppeal: function(event){
 
