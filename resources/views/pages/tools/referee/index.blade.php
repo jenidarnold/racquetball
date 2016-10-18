@@ -243,7 +243,7 @@
 			<div class="row">
 				<div class="col-xs-6">		
 					<button v-on:click="point" class="btn btn-block btn-success btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
-					<button v-on:click="sideout" class="btn btn-block btn-danger btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Side Out</button>	
+					<button v-on:click="sideout" class="btn btn-block btn-danger btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Out Serve</button>	
 				</div>
 				<div class="col-xs-6">	
 					<button v-on:click="fault" class="btn btn-block btn-warning btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
@@ -265,7 +265,7 @@
 	    <!-- Modal content-->
 	    <div class="modal-content">
 	      <div class="modal-header">
-	       	<h3 class="modal-title">Team 1 Time Out!</h3>
+	       	<h3 class="modal-title">@{{ team[1].name}} Time Out!</h3>
 	      </div>
 	      <div class="modal-body">
 	        <center>
@@ -285,7 +285,7 @@
 	    <!-- Modal content-->
 	    <div class="modal-content">
 	      <div class="modal-header">
-	      	 <h3 class="modal-title">Team 2 Time Out!</h3>
+	      	 <h3 class="modal-title">@{{ team[2].name}} Time Out!</h3>
 	      </div>
 	      <div class="modal-body">
 	        <center><h1><span class="label label-warning timer"> @{{timer.team[2].timeout | secondsToTime}}</h1></center>
@@ -581,6 +581,12 @@
 						else {
 							this.team[2].serves = 2;
 						}
+
+						this.team[1].name = this.players[0].name + " & " + this.players[1].name;
+						this.team[2].name = this.players[2].name + " & " + this.players[3].name;
+					} else {
+						this.team[1].name = this.players[0].name;
+						this.team[2].name = this.players[3].name;
 					}
 
 					this.team[1].timeouts = this.game.timeouts;
@@ -606,13 +612,14 @@
 					// disable point, sideout, fault, etc
 					this.isStarted = false;
 					this.showSetup = true;
-					this.players[0].name = 'Player 1';
-					this.players[1].name = 'Player 2';
-					this.players[2].name = 'Player 3';
-					this.players[3].name = 'Player 4';
-					this.max_players = 0;		
+					this.players[1].name = '';
+					this.players[2].name = '';
+					this.players[3].name = '';
+					this.players[4].name = '';
+					this.max_players = 4;		
 					this.winner = '';
 					this.game_num = 1;
+					this.match_title ='';
 
 
 					this.team[1].serves = 1;
