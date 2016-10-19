@@ -80,7 +80,7 @@
 	    	background-color: green;
 		}	
 		.btn-actions {
-			margin-top: 200px;			
+			margin-top: 150px;			
 			margin-bottom: 10px;
 		}
 	</style>
@@ -89,7 +89,7 @@
 @section('content')
 
 <div class="">
-	<div id="myvue" class="col-xs-12 col-sm-7">
+	<div id="myvue" class="col-xs-12 col-sm-7 col-md-6 col-lg-6">
 		<div id="setup" v-if="showSetup">
 			<form class="form-inline" role="form">	
 				<div class="row">			
@@ -260,9 +260,9 @@
 			</div>
 			<div class="row">	
 				<div class="col-xs-12">					
-					<div class="col-xs-3 text-center">
+					<!-- div class="col-xs-3 text-center">
 						<button v-on:click="endMatch" class="btn btn-danger btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Stop Match</button>
-					</div>
+					</div -->
 					<!-- div class="col-xs-4">
 						<button v-on:click="resumeMatch" class="btn btn-warning btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Resume Match</button>
 					</div -->
@@ -1063,14 +1063,47 @@
 				},
 				showScore: function(event){
 					if (this.server < 3) {
-						this.service = this.team[1].games[this.game_num].score + " serving " + this.team[2].games[this.game_num].score;
+						this.service = this.team[1].games[this.game_num].score + " - " + this.team[2].games[this.game_num].score;
 					}
 					else{
-						this.service = this.team[2].games[this.game_num].score + " serving " + this.team[1].games[this.game_num].score;
+						this.service = this.team[2].games[this.game_num].score + " - " + this.team[1].games[this.game_num].score;
 					}
 					$('#scoreModal').modal('show');	
 				},
 			}
 		});	
 	</script>
+
+	<script type="text/javascript">         //<![CDATA[
+     window.addEventListener('load', function() {
+          var maybePreventPullToRefresh = false;
+          var lastTouchY = 0;
+          var touchstartHandler = function(e) {
+            if (e.touches.length != 1) return;
+            lastTouchY = e.touches[0].clientY;
+            // Pull-to-refresh will only trigger if the scroll begins when the
+            // document's Y offset is zero.
+            maybePreventPullToRefresh =
+                window.pageYOffset == 0;
+          }
+
+          var touchmoveHandler = function(e) {
+            var touchY = e.touches[0].clientY;
+            var touchYDelta = touchY - lastTouchY;
+            lastTouchY = touchY;
+
+            if (maybePreventPullToRefresh) {
+              // To suppress pull-to-refresh it is sufficient to preventDefault the
+              // first overscrolling touchmove.
+              maybePreventPullToRefresh = false;
+              if (touchYDelta > 0) {
+                e.preventDefault();
+                return;
+              }
+            }
+          }
+
+          document.addEventListener('touchstart', touchstartHandler, false);
+          document.addEventListener('touchmove', touchmoveHandler, false);      });
+            //]]>    </script>
 @stop
