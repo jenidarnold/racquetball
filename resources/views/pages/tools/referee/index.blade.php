@@ -7,7 +7,7 @@
 			font-size: 14pt;
 		}
 		.player-sum {
-			font-weight: 200;
+			font-weight: 500;
 			font-size: 12pt;
 		}
 		.win {
@@ -168,7 +168,14 @@
 
 		<!-- Match Table -->
 		<div v-show="isStarted">	
-			<h4 class="text-center"><span class="text-primary">@{{ match_title }}</span></h4>
+			<div>
+				<h4 class="text-left">
+					<span class="text-primary">@{{ match_title }}</span>
+					<div style="float:right">	
+						<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
+					</div>
+				</h4>
+			</div>
 			<div class="">			
 				<table class="table col-xs-12">					
 					<tr class="tr-games label-primary ">
@@ -187,7 +194,7 @@
 									v-bind:class="[faults >= 1? classRed : classPurple]" 
 									v-show="server == players[1].pos">
 								</i> 
-								<span class="player-sum" v-show="players[2].name != ''">/</span>
+								<span class="player-sum" v-show="players[2].name != ''">&amp;</span>
 								<span class="player-sum" v-show="players[2].name != ''">@{{ players[2].name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classPurple]"  
@@ -220,7 +227,7 @@
 									v-bind:class="[faults >= 1? classRed : classPurple]" 
 									v-show="server == players[3].pos ">
 								</i>
-								<span class="player-sum" v-show="players[4].name != ''">/</span>
+								<span class="player-sum" v-show="players[4].name != ''">&amp;</span>
 								<span class="player-sum" v-show="players[4].name != ''">@{{ players[4].name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[faults >= 1? classRed : classPurple]" 
@@ -265,10 +272,7 @@
 					</div -->
 					<!-- div class="col-xs-4">
 						<button v-on:click="resumeMatch" class="btn btn-warning btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Resume Match</button>
-					</div -->
-					<div class="col-xs-4 text-center">	
-						<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
-					</div>
+					</div -->					
 				</div>	
 			</div>
 			<div class="row btn-actions">
@@ -383,6 +387,20 @@
 	  </div>
 	</div>
 
+	<!-- Modal Undo -->
+	<div id="undoModal" class="score modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content modal-default">
+	      	<div class="modal-body">
+		      	<div class="row">
+					<center><h2>Undo @{{ last_step}}</h2></center>
+				</div>	
+	      	</div>
+	    </div>
+	  </div>
+	</div>
+
 	<!-- Modal Winner-->
 	<div id="winnerModal" class="winner modal fade" role="dialog" v-if="winner != ''">
 	  <div class="modal-dialog">
@@ -473,6 +491,7 @@
 				match_title: '',
 				sideout_type: 'Sideout',				
 				service:'',
+				last_step:'',
 				timer: {
 						match: 0 , 
 						game: {
@@ -680,6 +699,7 @@
 					this.service = '';
 					this.clearTimer('game');
 					this.clearTimer('match');
+					this.last_step = '';
 
 					for (var i = 1; i <= 5; i++) {
 						this.team[1].games[i].score = 0;
@@ -1036,8 +1056,8 @@
 				},				
 				undo: function(){
 
-					var last_step = this.score_steps.pop();
-					switch (last_step) {
+					this.last_step = this.score_steps.pop();
+					switch (this.last_step) {
 						case "point":
 							this.undoPoint();                            
 							break;
@@ -1046,10 +1066,10 @@
 							break;
 						case "doublefault":
 							this.faults = 1;
-							last_step = this.score_steps.pop();
-                            if (last_step == 'changeServingTeam'){
+							this.last_step = this.score_steps.pop();
+                            if (this.last_step == 'changeServingTeam'){
                             	this.undoServingTeam();
-                            }else if(last_step == 'sideout' || last_step == 'handout') {
+                            }else if(this.last_step == 'sideout' || this.last_step == 'handout') {
                             	this.undoSideout();
                             }	
 							break;
@@ -1060,6 +1080,7 @@
 
 							break;						
 					}
+					$('#undoModal').modal('show');	
 				},
 				showScore: function(event){
 					if (this.server < 3) {
