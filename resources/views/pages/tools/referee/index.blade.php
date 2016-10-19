@@ -88,7 +88,7 @@
 
 @section('content')
 
-<div class="">
+<div class="col-xs-12">
 	<div id="myvue" class="col-xs-12 col-sm-7 col-md-6 col-lg-6">
 		<div id="setup" v-if="showSetup">
 			<form class="form-inline" role="form">	
@@ -327,6 +327,24 @@
 	  </div>
 	</div>
 
+	<!-- Modal Welcome -->
+	<div id="welcomeModal" class=" modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content alert-info">
+	      	<div class="modal-body">
+		      	<div class="row">
+					<center><h1><span class=""><i class="fa fa-circle purple"></i></span> Racquetball</h1></center>
+					<center><h1><span class="">Referee <i class="fa fa-street-view text-info"></i></span></h1></center>
+				</div>	
+				<div class="row">
+					<center><button type="button" class="btn btn-success" data-dismiss="modal">Get Started</button></center>
+				</div>
+	      	</div>
+	    </div>
+	  </div>
+	</div>
+
 	<!-- Modal Intermission -->
 	<div id="intermissionModal" class="intermission modal fade" role="dialog">
 	  <div class="modal-dialog">
@@ -408,7 +426,7 @@
 	    <div class="modal-content modal-success">
 	      	<div class="modal-body">
 		      	<div class="row">
-					<center><h2>@{{ winner }}</h2></center>
+					<center><h2><span class="text-danger"><i class="fa fa-trophy"></i></span></h2> @{{ winner }}</h2></center>
 				</div>	
 	      	</div>
 	      	<div class="modal-footer">
@@ -579,8 +597,9 @@
 								}
 							}							
 			},	
-			ready: function(){
-						
+			mounted: function(){
+				console.log('ready');
+				$('#welcomeModal').modal('show');
 			},							
 			computed: {
 				isDoubles: function(){		
