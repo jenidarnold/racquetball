@@ -93,7 +93,6 @@
 		<div id="setup" v-if="showSetup">
 			<form class="form-inline" role="form">	
 				<div class="row">			
-			    	<h4><u>Setup Match</u></h4>
 			    	<div class="row">
 					    <div class="col-xs-12 col-sm-4 form-group">
 							<label for="title" class="control-label lbl-team">Match Title:</label>
@@ -116,8 +115,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<h4><u>Setup Players</u></h4>							
+				<div class="row">							
 					<div class="row">
 						<div class="col-xs-12 form-group">
 							<label class="radio-inline">
@@ -154,10 +152,17 @@
 				</div>	
 			</form>
 			<div class="row">
-				<div class="col-xs-10 col-xs-offset-1 col-sm-offset-3 form-group">
-			    	<button class="btn btn-success" v-on:click="createMatch">Start</button>
-			    	<button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
-			    </div>
+				<div class="col-xs-12">
+					<div class="col-xs-3 col-xs-offset-3">
+				    	<button class="btn btn-success" v-on:click="createMatch">Start</button>
+				    </div>
+				    <div class="col-xs-3">
+				    	<button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
+				    </div>
+				</div>
+			</div>
+			<div class="row">
+				&nbsp;
 			</div>
 		</div>
 
