@@ -74,7 +74,7 @@
 			text-align: center;
 		}
 		.timeout .modal-backdrop {
-	    	background-color: red;
+	    	background-color: yellow;
 		}
 		.winner .modal-backdrop {
 	    	background-color: green;
@@ -293,19 +293,22 @@
 
 	<!-- Modal Team 1 Time out-->
 	<div id="timeoutModal1" class="timeout modal fade" role="dialog">
-	  <div class="modal-dialog">
+	  <div class="modal-dialog alert-warning">
 	    <!-- Modal content-->
 	    <div class="modal-content">
-	      <div class="modal-header">
-	       	<h3 class="modal-title">@{{ team[1].name}} Time Out!</h3>
-	      </div>
-	      <div class="modal-body">
+	      	<div class="modal-header">
+	       	 	<center>
+		       	 	<h3 class="modal-title"><i class="fa fa-clock-o"></i> Time Out</h3>
+		       	 	<h4>@{{ team[1].name}}</h4>
+		       	 </center>
+	      	</div>
+	      <div class="modal-body alert-warning">
 	        <center>
-    	    	<h1><span class="label label-warning timer"> @{{timer.team[1].timeout | secondsToTime}}</h1></span>
+    	    	<h1><span class="timer"> @{{timer.team[1].timeout | secondsToTime}}</h1></span>
             </center>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" v-on:click="timeout(1)" class="btn btn-default" data-dismiss="modal">Time In</button>
+	        	<button type="button" v-on:click="timeout(1)" class="btn btn-default" data-dismiss="modal">Time In</button>
 	      </div>
 	    </div>
 	  </div>
@@ -313,17 +316,20 @@
 
 	<!-- Modal Team 2 Time out-->
 	<div id="timeoutModal2" class="timeout modal fade" role="dialog">
-	  <div class="modal-dialog">
+	  <div class="modal-dialog alert-warning">
 	    <!-- Modal content-->
 	    <div class="modal-content">
-	      <div class="modal-header">
-	      	 <h3 class="modal-title">@{{ team[2].name}} Time Out!</h3>
-	      </div>
-	      <div class="modal-body">
-	        <center><h1><span class="label label-warning timer"> @{{timer.team[2].timeout | secondsToTime}}</h1></center>
+	      	<div class="modal-header">
+	      		<center>
+	      	 		<h3 class="modal-title"><i class="fa fa-clock-o"></i> Time Out</h3>
+	      	 		<h4>@{{ team[2].name}}</h4>
+	      	 	</center>
+	      	</div>
+	      <div class="modal-body alert-warning">
+	        <center><h1><span class="timer"> @{{timer.team[2].timeout | secondsToTime}}</h1></center>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" v-on:click="timeout(2)" class="btn btn-default" data-dismiss="modal">Close</button>
+	        	<button type="button" v-on:click="timeout(2)" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
 	  </div>
@@ -645,7 +651,7 @@
         				return date.toISOString().substr(12, 7);
         			} else if (secs == 0)
         			{
-        				return "";
+        				return "Time is Up!";
         			}	
 
 				}
