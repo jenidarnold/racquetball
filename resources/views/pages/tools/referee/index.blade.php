@@ -420,13 +420,13 @@
 	</div>
 
 	<!-- Modal Winner-->
-	<div id="winnerModal" class="winner modal fade" role="dialog" v-if="winner != ''">
+	<div id="winnerModal" class="winner modal fade" role="dialog">
 	  <div class="modal-dialog">
 	    <!-- Modal content-->
 	    <div class="modal-content modal-success">
 	      	<div class="modal-body">
 		      	<div class="row">
-					<center><h2><span class="text-danger"><i class="fa fa-trophy"></i></span></h2> @{{ winner }}</h2></center>
+					<center><h2><span class="text-warning"><i class="fa fa-trophy"></i></span></h2> @{{ winner }}</h2></center>
 				</div>	
 	      	</div>
 	      	<div class="modal-footer">
@@ -465,7 +465,7 @@
 @stop
 
 @section('script')
-	<!--script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js"></script-->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js"></script>
 	<script>
 
 		var matchTimer;
@@ -487,7 +487,7 @@
 			}
 		});		
 
-		new Vue({
+		var vm = new Vue({
 			el: '#myvue',
 			data: {	
 				debug: true,
@@ -742,12 +742,7 @@
 					this.team[1].timeouts = this.game.timeouts;
 					this.team[1].appeals = this.game.appeals;
 					this.team[2].timeouts = this.game.timeouts;
-					this.team[2].appeals = this.game.appeals;
-
-					if (this.game_num < this.total_games){
-						this.intermission('start');
-						$('#intermissionModal').modal('show');
-					}
+					this.team[2].appeals = this.game.appeals;			
 				},
 				startTimer: function(name, teamNum){
 					var that = this;			
@@ -824,16 +819,23 @@
 				        }
 				    }, 1000);
 				},
+				totalPoints: function(team) {
+					var total = 0;
+					for (var i = 1; i <= this.game_num ; i++) {
+						console.log('total points:' + total)
+						total += team.games[i].score;
+					};
+					console.log('total points:' + total)
+					return total;
+
+				},
 				changeInitServer: function(options){
 					this.initServer = options.pos;
 				},			
 				point: function (event){
 					this.faults = 0;
 					this.score_steps.push('point');
-
-					if (this.isTiebreaker){
-
-					}
+					
 
 					if (this.server < 3) {
 						this.team[1].games[this.game_num].score +=1;
@@ -842,39 +844,65 @@
 						this.team[2].games[this.game_num].score +=1;
 					}					
 
+					//Determine if the game is over
 					if ((this.team[1].games[this.game_num].score >= this.score_max) && 
 						((this.team[1].games[this.game_num].score - this.team[2].games[this.game_num].score) >= this.win_by))
 					{
 						//Game is over
 						this.endGame();
-						this.game_num+=1;
 						this.team[1].wins +=1;
 
-						//Change serving Team start of next game
-						this.changeServingTeam();
+						if (this.isMatchOver()) {
+							return true;
+						}else {							
+							this.intermission('start');
+							$('#intermissionModal').modal('show');
+							
+							this.game_num+=1;
+							//Change serving Team start of next game
+							this.changeServingTeam();
+						}
 					}
+
 					if ((this.team[2].games[this.game_num].score >= this.score_max) && 
 						((this.team[2].games[this.game_num].score - this.team[1].games[this.game_num].score) >= this.win_by))
 					{
-						this.game_num+= 1;
+						//Game is over
+						this.endGame();
 						this.team[2].wins += 1;
 
-						this.changeServingTeam();
-					}
+						if (this.isMatchOver()) {
+							return true;
+						}else {							
+							this.intermission('start');
+							$('#intermissionModal').modal('show');
 
+							this.game_num+=1;
+							//Change serving Team start of next game
+							this.changeServingTeam();
+						}
+					}
+					
+					this.showScore();
+					
+				},
+				isMatchOver:function (event){
+					console.log('team 1 wins:' + this.team[1].wins + ' needs: ' + this.game_max + " is:" +  (this.team[1].wins == this.game_max));
 					if (this.team[1].wins == this.game_max) {
+						console.log('show winner');
 						this.winner = 'The winner is ' + this.team[1].name;
 						$('#winnerModal').modal('show');
-					} else {
-						this.showScore();
+						this.endMatch();
+						return true;					
+					}
+					if (this.team[2].wins == this.game_max) {
+						this.winner = 'The winner is ' + this.team[2].name;
+						$('#winnerModal').modal('show');
+						this.endMatch();
+						return true;					
 					}
 
-					if (this.team[2].wins == this.game_max) {
-						this.winner = 'The winner is ' + this.players[2].name;
-						$('#winnerModal').modal('show');
-					} else {
-						this.showScore();
-					}
+					return false;
 				},
 				undoPoint: function (event){
 					//restore any faults
@@ -1029,32 +1057,30 @@
 
 				},
 				changeServingTeam: function(event){
-					//Change server start of next game
-					//tiebreaker							
-					for (var i in this.team[2].games)
-					{
-						//alert(i);
-						t1+= this.team[2].games[i].score;
-						//alert(t1);
+					//Change server start of next game					
+					if (this.isTiebreaker) {
+						//Team with most points previous game serves. and gets one service	
+						if (this.totalPoints(this.team[1]) > this.totalPoints(this.team[2])) {
+							console.log('team 1 serves tiebreaker');
+							this.server  = 1;
+							this.initServer = 1;
+						}
+						else{
+							console.log('team 2 serves tiebreaker');
+							this.server  = 3;
+							this.initServer = 3;
+						}											
 					}
-
-					if(this.game_num == this.total_games) {
-						var t1;
-						var t2;
-
-						for (var i in this.team[2].games)
-						{
-							t1+= this.team[2].games[i].score;
-						}						
-					}
-					//Alternate serving team
-					if (this.initServer == 1) {
-						this.server  = 3;
-						this.initServer = 3;
-					}
-					else{
-						this.server  = 1;
-						this.initServer = 1;
+					else {
+						//Alternate serving team
+						if (this.initServer == 1) {
+							this.server  = 3;
+							this.initServer = 3;
+						}
+						else{
+							this.server  = 1;
+							this.initServer = 1;
+						}
 					}
 					this.score_steps.push('changeServingTeam');
 				},
@@ -1112,6 +1138,7 @@
 				},
 			}
 		});	
+		window.vue = vm;
 	</script>
 
 	<script type="text/javascript">         //<![CDATA[
