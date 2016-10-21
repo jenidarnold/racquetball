@@ -474,6 +474,19 @@
 
 @section('script')
 	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js"></script>
+	<!-- Firebase --> 
+    <script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDOYjrE7msWmi09Qw6YHH5K_7OX6DJpHzk",
+        authDomain: "racquetballhub.firebaseapp.com",
+        databaseURL: "https://racquetballhub.firebaseio.com",
+        storageBucket: "racquetballhub.appspot.com",
+        messagingSenderId: "67100105837"
+      };
+      firebase.initializeApp(config);
+    </script>
 	<script>
 
 		var matchTimer;
@@ -483,6 +496,7 @@
 		var intermissionTimer; //timeout between games
 
 		Vue.config.debug = true;
+		Vue.config.devtools = true;
 
 		Vue.component('my-player', {
 			template:'#player-template',
@@ -494,6 +508,8 @@
 				}
 			}
 		});		
+
+		var matchesRef = firebase.database().ref('matches');
 
 		var vm = new Vue({
 			el: '#myvue',
@@ -515,6 +531,13 @@
 				score_steps: [],
 				game_num: 1,
 				match_title: '',
+				match: {
+						id: 0,
+						title: '',
+						date: '',
+						teams: [], 
+						winner:'',
+						},
 				sideout_type: 'Sideout',				
 				service:'',
 				last_step:'',
@@ -609,7 +632,10 @@
 			mounted: function(){
 				console.log('ready');
 				$('#welcomeModal').modal('show');
-			},							
+			},	
+			firebase:{
+				matches: matchesRef
+			},						
 			computed: {
 				isDoubles: function(){		
 					if(this.max_players == 2 ){
@@ -702,6 +728,12 @@
 						}
 					};
 
+					//Store to database
+					this.match.id = 1
+					this.match.title = this.match_title;
+					this.match.teams.push(this.team);
+
+					matchesRef.push(this.match)
 				},	
 				confirmReset: function(){
 					$('#confirmResetModal').modal('show');

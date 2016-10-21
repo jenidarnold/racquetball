@@ -237,5 +237,19 @@
             $('[data-toggle="popover"]').popover();          
         });
     </script>
+
+    <!-- Firebase --> 
+    <script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDOYjrE7msWmi09Qw6YHH5K_7OX6DJpHzk",
+        authDomain: "racquetballhub.firebaseapp.com",
+        databaseURL: "https://racquetballhub.firebaseio.com",
+        storageBucket: "racquetballhub.appspot.com",
+        messagingSenderId: "67100105837"
+      };
+      firebase.initializeApp(config);
+    </script>
 </body>
 </html>
