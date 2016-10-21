@@ -189,7 +189,7 @@
 					</tr>
 					<tr>
 						<td class="col-xs-9">
-							<div class="player-sum">@{{ players[1].name }}
+							<div class="player-sum">@{{ players[1].name }}								
 								<i class="fa fa-circle fa-xs" 
 									v-bind:class="[faults >= 1? classRed : classPurple]" 
 									v-show="server == players[1].pos">
@@ -201,6 +201,7 @@
 										v-show="server == players[2].pos">
 									</i>
 								</span>
+								<i v-show="isWinner[1]" class="fa fa-trophy text-warning"></i>
 							</div>
 							<div class="" v-show="isStarted">
 								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
@@ -212,12 +213,12 @@
 							</div>	
 						</td>
 						<td class="score">															
-							<div class="" v-show="game_num > 1">
+							<div class="" v-show="game_num > 1">								
 								<span class="badge">@{{ team[1].wins }}</span>
 							</div>
 						</td>
 						<td class="score" v-for="g in team[1].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
-								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>
+							<span v-if="game_num >= g.gm"> @{{ g.score }} </span>
 						</td>
 					</tr>
 					<tr>
@@ -234,6 +235,7 @@
 										v-show="server == players[4].pos ">
 									</i>
 								</span>
+								<i v-show="isWinner[2]" class="fa fa-trophy text-warning"></i>
 							</div>
 							<div class="" v-show="isStarted">
 								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal2" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
@@ -252,7 +254,7 @@
 					</tr>
 					<tr class="tr-games label-primary ">
 						<td></td>
-						<td class="th-games"></td>
+						<td class="th-games">&nbsp;</td>
 						<td class="th-games game-time"><span class="" v-if="game_num >= 1" >@{{ timer.game[1] | secondsToTime }}</span></td>
 						<td class="th-games game-time"><span class="" v-if="game_num >= 2" >@{{ timer.game[2] | secondsToTime }}</span></td>
 						<td class="th-games game-time"><span class="" v-if="game_num >= 3" >@{{ timer.game[3] | secondsToTime }}</span></td>
@@ -426,11 +428,11 @@
 	    <div class="modal-content modal-success">
 	      	<div class="modal-body">
 		      	<div class="row">
-					<center><h2><span class="text-warning"><i class="fa fa-trophy"></i></span></h2> @{{ winner }}</h2></center>
+					<center>
+						<h2><span class="text-warning"><i class="fa fa-trophy fa-3x"></i></span></h2>
+						<h1> @{{ winner }}</h1>
+					</center>
 				</div>	
-	      	</div>
-	      	<div class="modal-footer">
-	        	<button type="button" v-on:click="timeout(2)" class="btn btn-default" data-dismiss="modal">Close</button>
 	      	</div>
 	    </div>
 	  </div>
@@ -543,6 +545,7 @@
 				total_games: 3,  // 3 or 5
 				win_by: 1,       // 1 or 2
 				winner: '',
+				isWinner: [],
 				game: [],
 				game_formats: [ 	
 							{id: 0, name:''},
@@ -698,6 +701,8 @@
 					$('#confirmResetModal').modal('show');
 				},			
 				resetMatch: function(event){ 
+
+					this.endMatch();
 					// disable point, sideout, fault, etc
 					this.isStarted = false;
 					this.showSetup = true;
@@ -711,6 +716,7 @@
 					this.team[1].wins = 0;
 					this.team[2].wins = 0;
 					this.winner = '';
+					this.isWinner = [];
 					this.game_num = 1;
 					this.game = [];
 					this.score_steps = [],
@@ -725,12 +731,11 @@
 						this.team[2].games[i].score = 0;
 					};					
 
-					this.endMatch();
-					$('#winnerModal').modal('show');
 				},	
 				endMatch: function(event){
 					this.stopTimer(gameTimer);
 					this.stopTimer(matchTimer);
+					this.server = 0;
 				},
 				resumeMatch:function(event){
 					this.starTimer(gameTimer);
@@ -836,7 +841,7 @@
 					this.faults = 0;
 					this.score_steps.push('point');
 					
-
+					//Add point to serving team
 					if (this.server < 3) {
 						this.team[1].games[this.game_num].score +=1;
 					}
@@ -844,7 +849,7 @@
 						this.team[2].games[this.game_num].score +=1;
 					}					
 
-					//Determine if the game is over
+					//Did Team 1 win the game?
 					if ((this.team[1].games[this.game_num].score >= this.score_max) && 
 						((this.team[1].games[this.game_num].score - this.team[2].games[this.game_num].score) >= this.win_by))
 					{
@@ -863,7 +868,11 @@
 							this.changeServingTeam();
 						}
 					}
+					else {
+						this.showScore();
+					}
 
+					//Did Team 2 win the game?
 					if ((this.team[2].games[this.game_num].score >= this.score_max) && 
 						((this.team[2].games[this.game_num].score - this.team[1].games[this.game_num].score) >= this.win_by))
 					{
@@ -882,8 +891,9 @@
 							this.changeServingTeam();
 						}
 					}
-					
-					this.showScore();
+					else {					
+						this.showScore();
+					}
 					
 				},
 				isMatchOver:function (event){
@@ -891,12 +901,14 @@
 					if (this.team[1].wins == this.game_max) {
 						console.log('show winner');
 						this.winner = 'The winner is ' + this.team[1].name;
+						this.isWinner[1] = true;
 						$('#winnerModal').modal('show');
 						this.endMatch();
 						return true;					
 					}
 					if (this.team[2].wins == this.game_max) {
 						this.winner = 'The winner is ' + this.team[2].name;
+						this.isWinner[2] = true;
 						$('#winnerModal').modal('show');
 						this.endMatch();
 						return true;					
@@ -1033,7 +1045,7 @@
 							this.startTimer('timeout', teamNum);
 						}
 						else {
-							alert('No more timeouts');
+							console.log('No more timeouts');
 						}
 					}	
 				},
