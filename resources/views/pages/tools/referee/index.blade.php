@@ -733,7 +733,7 @@
 					this.match.title = this.match_title;
 					this.match.teams.push(this.team);
 
-					matchesRef.push(this.match)
+					matchesRef.push(this.match);
 				},	
 				confirmReset: function(){
 					$('#confirmResetModal').modal('show');
@@ -1222,5 +1222,6 @@
 
           document.addEventListener('touchstart', touchstartHandler, false);
           document.addEventListener('touchmove', touchmoveHandler, false);      });
-            //]]>    </script>
+            //]]>    
+    </script>
 @stop

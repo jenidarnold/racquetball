@@ -53,6 +53,7 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 
 	//Referee
 	Route::get('referee', 'RefereeController@index');
+	Route::get('referee/show', 'RefereeController@show');
 
 	//Shot Selection
 	Route::get('shotselection', 'ShotSelectionController@index');

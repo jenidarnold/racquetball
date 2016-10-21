@@ -54,10 +54,10 @@ class RefereeController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($user_id)
+	public function show()
 	{
 		
-		return view('pages/tools.referee.show', compact('user'));
+		return view('pages/tools.referee.show');
 	}
 
 
