@@ -19,7 +19,13 @@
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="{{ asset('/css/bootstrap-social.css') }}" rel="stylesheet">
 
-	<!--script src="http://code.jquery.com/jquery-2.1.4.min.js"></script-->
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js"></script>
+    <!-- Firebase --> 
+    <script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/vuefire/1.0.0/vuefire.min.js"></script>
+	
+    <!--script src="http://code.jquery.com/jquery-2.1.4.min.js"></script-->
     <!--script src="{{ asset('/js/datepicker.js') }}"></script-->
     
 	<!--script src="{{ asset('/js/select2.js') }}"></script>
@@ -239,7 +245,7 @@
     </script>
 
     <!-- Firebase --> 
-    <script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script>
+    <!--script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script>
     <script>
       // Initialize Firebase
       var config = {
@@ -250,6 +256,6 @@
         messagingSenderId: "67100105837"
       };
       firebase.initializeApp(config);
-    </script>
+    </script -->
 </body>
 </html>

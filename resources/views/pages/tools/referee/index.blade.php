@@ -473,9 +473,9 @@
 @stop
 
 @section('script')
-	<script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js"></script>
+	<!--script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js"></script>
 	<!-- Firebase --> 
-    <script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script>
+    <!--script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script -->
     <script>
       // Initialize Firebase
       var config = {
@@ -574,7 +574,7 @@
 				total_games: 3,  // 3 or 5
 				win_by: 1,       // 1 or 2
 				winner: '',
-				isWinner: [],
+				isWinner: [ {1:false}, {2:false}],
 				game: [],
 				game_formats: [ 	
 							{id: 0, name:''},
@@ -603,6 +603,7 @@
 									appeals: 0,
 									injury: 0,
 									games: {
+										0: {score: 0, gm: 0 }, 
 										1: {score: 0, gm: 1 }, 
 										2: {score: 0, gm: 2 },
 										3: {score: 0, gm: 3 },
@@ -620,6 +621,7 @@
 									appeals: 0,
 									injury: 0,
 									games: {
+										0: {score: 0, gm: 0 },
 										1: {score: 0, gm: 1 }, 
 										2: {score: 0, gm: 2 },
 										3: {score: 0, gm: 3 },
@@ -728,12 +730,21 @@
 						}
 					};
 
+					var newMatch = firebase.database().ref('matches');
+
+
 					//Store to database
 					this.match.id = 1
 					this.match.title = this.match_title;
-					this.match.teams.push(this.team);
-
-					matchesRef.push(this.match);
+					this.match.team = this.team;
+					this.match.players = this.players;
+					this.match.game_num = this.game_num;
+					this.match.score_max = this.score_max;
+					this.match.server = this.server;
+					this.match.faults = this.faults;
+					this.match.isWinner = this.isWinner;
+					this.match.timer = this.timer;
+					newMatch.push(this.match);
 				},	
 				confirmReset: function(){
 					$('#confirmResetModal').modal('show');
