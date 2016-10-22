@@ -1189,6 +1189,7 @@
 					$('#undoModal').modal('show');	
 				},
 				showScore: function(event){
+					console.log('show score');
 					if (this.server < 3) {
 						this.service = this.team[1].games[this.game_num].score + " - " + this.team[2].games[this.game_num].score;
 					}
