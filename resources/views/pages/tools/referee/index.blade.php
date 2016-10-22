@@ -217,7 +217,7 @@
 								<span class="badge">@{{ team[1].wins }}</span>
 							</div>
 						</td>
-						<td class="score" v-for="g in team[1].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
+						<td class="score" v-for="g in team[1].games" v-if="g.gm > 0" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
 							<span v-if="game_num >= g.gm"> @{{ g.score }} </span>
 						</td>
 					</tr>
@@ -248,7 +248,7 @@
 						<td class="score">
 							<div class="col-xs" v-show="game_num > 1"><span class="badge">@{{ team[2].wins }}</span></div>
 						</td>
-						<td class="score" v-for="g in team[2].games" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
+						<td class="score" v-for="g in team[2].games"  v-if="g.gm > 0" v-bind:class="[g.score < score_max && g.gm < game_num? classLoss: g.score >= score_max? classWin: '']">
 								<span v-if="game_num >= g.gm"> @{{ g.score }} </span>
 						</td>
 					</tr>
