@@ -12,6 +12,7 @@ Route::get('vuetest', function(){
 });
 
 Route::get('/', 'Tools\RefereeController@index');
+Route::get('/scores', 'Tools\RefereeController@show');
 Route::get('home', ['uses' => 'HomeController@index']);
 
 Route::group(['namespace' => 'Admin', 'prefix' =>'admin'], function()
