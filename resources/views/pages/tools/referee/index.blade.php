@@ -89,18 +89,18 @@
 @section('content')
 
 <div class="col-xs-12">
-	<div id="myvue" class="col-xs-12 col-sm-7 col-md-6 col-lg-6">
+	<div id="myvue" class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<div id="setup" v-if="showSetup">
 			<form class="form-inline" role="form">	
 				<div class="row">			
 			    	<div class="row">
-					    <div class="col-xs-12 col-sm-4 form-group">
+					    <div class="col-xs-12 col-sm-12 form-group">
 							<label for="title" class="control-label lbl-team">Match Title:</label>
 							<input class="form-control" id="title" placeholder="Enter Match Title" v-model="match_title">
 					    </div>
 					</div>
 					<div class="row">	
-					    <div class="col-xs-12 col-sm-4 form-group">				    
+					    <div class="col-xs-12 col-sm-12 form-group">				    
 							<label for="game_format" class="control-label lbl-team">Game Format: </label>
 							<select v-model="game" id="game_format" class="form-control">
 							  	<option v-for="game in game_formats" v-bind:value="game">
@@ -127,19 +127,19 @@
 						</div>
 					</div>
 					<div class="row">			
-						<div class="col-xs-12 col-sm-6  form-group">
+						<div class="col-xs-12 col-sm-12  form-group">
 							<label for="team1" class="control-label lbl-team ">@{{team[1].name}}:</label>
 						    <input class="form-control" id="team1" v-model="players[1].name" v-bind="{'placeholder':team[1].placeholder[0]}">
 						    <input class="form-control" v-model="players[2].name" v-bind="{'placeholder':team[1].placeholder[1]}" v-if="isDoubles == true">
 						</div>				
-						<div class="col-xs-12 col-sm-6  form-group">
+						<div class="col-xs-12 col-sm-12  form-group">
 						    <label for="team2" class="control-label lbl-team ">@{{team[2].name}}:</label>
 						    <input class="form-control" id="team2" v-model="players[3].name" v-bind="{'placeholder':team[2].placeholder[0]}">
 						    <input class="form-control" v-model="players[4].name" v-bind="{'placeholder':team[2].placeholder[1]}"  v-if="isDoubles == true">
 						</div>	
 					</div>	
 					<div class="row">	
-						<div class="col-xs-12 col-sm-4 form-group">
+						<div class="col-xs-12 col-sm-12 form-group">
 							<label for="server" class="control-label lbl-team">Starting Server: </label>
 							<br>					
 							<select id="server" v-model="server" class="form-control">
@@ -511,6 +511,8 @@
 
 		var matchesRef = firebase.database().ref('matches');
 
+		console.log(matchesRef);
+
 		var vm = new Vue({
 			el: '#myvue',
 			data: {	
@@ -743,11 +745,32 @@
 						}
 					};
 
-					var newMatch = firebase.database().ref('matches');
 
+					this.addMatchToDB();
+				
+				},	
+				addMatchToDB: function(){
 
-					//Store to database
-					this.match.id = 1
+					var newMatch = matchesRef; //firebase.database().ref('matches');
+  					var newMatchKey = firebase.database().ref().child('matches').push().key;
+					this.match.id = newMatchKey;
+
+  					this.updateMatchToDB();
+					//this.match.id = newMatchKey;
+					//this.match.title = this.match_title;
+					//this.match.team = this.team;
+					//this.match.players = this.players;
+					//this.match.game_num = this.game_num;
+					//this.match.score_max = this.score_max;
+					//this.match.server = this.server;
+					//this.match.faults = this.faults;
+					//this.match.isWinner = this.isWinner;
+					//this.match.timer = this.timer;
+					//newMatch.push(this.match);
+
+				},
+				updateMatchToDB: function(match){
+					console.log('updateMatchToDB');
 					this.match.title = this.match_title;
 					this.match.team = this.team;
 					this.match.players = this.players;
@@ -757,8 +780,11 @@
 					this.match.faults = this.faults;
 					this.match.isWinner = this.isWinner;
 					this.match.timer = this.timer;
-					newMatch.push(this.match);
-				},	
+
+					var updates = {};
+					updates['matches/'+ this.match.id] = this.match;
+					return firebase.database().ref().update(updates);
+				},
 				confirmReset: function(){
 					$('#confirmResetModal').modal('show');
 				},			
@@ -798,6 +824,7 @@
 					this.stopTimer(gameTimer);
 					this.stopTimer(matchTimer);
 					this.server = 0;
+					this.updateMatchToDB();		
 				},
 				resumeMatch:function(event){
 					this.starTimer(gameTimer);
@@ -809,7 +836,8 @@
 					this.team[1].timeouts = this.game.timeouts;
 					this.team[1].appeals = this.game.appeals;
 					this.team[2].timeouts = this.game.timeouts;
-					this.team[2].appeals = this.game.appeals;			
+					this.team[2].appeals = this.game.appeals;	
+					this.updateMatchToDB();		
 				},
 				startTimer: function(name, teamNum){
 					var that = this;			
@@ -956,6 +984,8 @@
 					else {					
 						this.showScore();
 					}
+
+					this.updateMatchToDB();
 					
 				},
 				isMatchOver:function (event){
@@ -999,6 +1029,7 @@
 						this.team[2].games[this.game_num].score = 1;
 					}
 					this.showScore();
+					this.updateMatchToDB();		
 				},
 				fault: function (event){
 
@@ -1011,10 +1042,11 @@
 					    this.score_steps.push('fault');
 					    $('#faultModal').modal('show');	
 					};					
-
+					this.updateMatchToDB();		
 				},
 				undoFault: function (event){
 					this.faults = 0;
+					this.updateMatchToDB();		
 				},
 				restoreFault: function(event){ 
 					//restore any faults
@@ -1075,6 +1107,7 @@
 					this.faults = 0;
 					$('#sideoutModal').modal('show');	
 					this.showScore();
+					this.updateMatchToDB();		
 				},
 				undoSideout: function (event){				
 					this.restoreFault();
@@ -1095,6 +1128,7 @@
 							this.server = 1;
 						}
 					};
+					this.updateMatchToDB();		
 				},
 				timeout: function(teamNum) {
 
@@ -1110,6 +1144,7 @@
 							console.log('No more timeouts');
 						}
 					}	
+					this.updateMatchToDB();		
 				},
 				intermission: function(action) {
 
@@ -1120,6 +1155,7 @@
 					} else {
 						this.startTimer('intermission');						
 					}	
+					this.updateMatchToDB();		
 				},
 				undoTimeout: function(event){
 
@@ -1157,6 +1193,7 @@
 						}
 					}
 					this.score_steps.push('changeServingTeam');
+					this.updateMatchToDB();		
 				},
 				undoServingTeam: function(event){
 					//Change server start of next game
@@ -1172,6 +1209,7 @@
 						this.server  = 1;
 						this.initServer = 1;
 					}
+					this.updateMatchToDB();		
 				},				
 				undo: function(){
 
@@ -1200,6 +1238,7 @@
 							break;						
 					}
 					$('#undoModal').modal('show');	
+					this.updateMatchToDB();		
 				},
 				showScore: function(event){
 					console.log('show score');

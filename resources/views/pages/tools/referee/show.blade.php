@@ -121,7 +121,7 @@
 										v-show="m.server == m.players[2].pos">
 									</i>
 								</span>
-								<i v-show="m.isWinner[1]" class="fa fa-trophy text-warning"></i>
+								<!--i v-show="m.isWinner[1]" class="fa fa-trophy text-warning"></i-->
 							</div>				
 							<div class="" >								
 								  <span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ m.team[1].timeouts }}</span>
@@ -155,7 +155,7 @@
 										v-show="m.server == m.players[4].pos ">
 									</i>
 								</span>
-								<i v-show="m.isWinner[2]" class="fa fa-trophy text-warning"></i>
+								<!--i v-show="m.isWinner[2]" class="fa fa-trophy text-warning"></i-->
 							</div>
 							<div class="">								
 								<span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ m.team[2].timeouts }}</span>							
@@ -233,7 +233,7 @@
 				matches: []
 			},
 			firebase: {
-				matches_fb: matchesRef.limitToLast(25)
+				matches: matchesRef.limitToLast(25)
 			},	
 			mounted: function(){
 				console.log('mounted');
@@ -242,7 +242,11 @@
 				matchesRef.on("child_added", function(snapshot, prevChildKey) {
 				  var match = snapshot.val();
 				  vm.matches.push(match);
-				  console.log(match);
+				});
+
+				matchesRef.on("value", function(data) {
+					console.log(data.val());
+					vm.matches = data.val();
 				});
 
 				//this.matches = matchesRef;
