@@ -304,7 +304,7 @@
 	      	</div>
 	      <div class="modal-body alert-warning">
 	        <center>
-    	    	<h1><span class="timer"> @{{timer.team[1].timeout | secondsToTime}}</h1></span>
+    	    	<h1><span class="timer"> @{{timer.team[1].timeout | timeoutToTime}}</h1></span>
             </center>
 	      </div>
 	      <div class="modal-footer">
@@ -326,7 +326,7 @@
 	      	 	</center>
 	      	</div>
 	      <div class="modal-body alert-warning">
-	        <center><h1><span class="timer"> @{{timer.team[2].timeout | secondsToTime}}</h1></center>
+	        <center><h1><span class="timer"> @{{timer.team[2].timeout | timeoutToTime}}</h1></center>
 	      </div>
 	      <div class="modal-footer">
 	        	<button type="button" v-on:click="timeout(2)" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -671,6 +671,19 @@
 			},
 			filters: {
 				secondsToTime: function(secs) {
+
+					if (secs){
+						secs = secs.toString();
+						var date = new Date(null);
+        				date.setSeconds(secs); // specify value for SECONDS here
+        				return date.toISOString().substr(12, 7);
+        			} else if (secs == 0)
+        			{
+        				return "";
+        			}	
+
+				},
+				timeoutToTime: function(secs) {
 
 					if (secs){
 						secs = secs.toString();
