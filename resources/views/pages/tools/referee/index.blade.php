@@ -201,7 +201,7 @@
 										v-show="server == players[2].pos">
 									</i>
 								</span>
-								<i v-show="isWinner[1]" class="fa fa-trophy text-warning"></i>
+								<i v-show="isWinner[1] ==true" class="fa fa-trophy text-warning"></i>
 							</div>
 							<div class="" v-show="isStarted">
 								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
@@ -235,7 +235,7 @@
 										v-show="server == players[4].pos ">
 									</i>
 								</span>
-								<i v-show="isWinner[2]" class="fa fa-trophy text-warning"></i>
+								<i v-show="isWinner[2] == true" class="fa fa-trophy text-warning"></i>
 							</div>
 							<div class="" v-show="isStarted">
 								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal2" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
