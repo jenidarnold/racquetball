@@ -548,6 +548,7 @@
 						teams: [], 
 						winner:'',
 						isComplete: false,
+						last_play: '',
 						},
 				sideout_type: 'Sideout',				
 				service:'',
@@ -790,7 +791,10 @@
 					this.match.faults = this.faults;
 					this.match.isWinner = this.isWinner;
 					this.match.timer = this.timer;
-
+					if (this.score_steps.length > 0) {
+						this.match.last_step = this.score_steps[this.score_steps.length - 1];
+					}
+					
 					var updates = {};
 					updates['matches/'+ this.match.id] = this.match;
 					return firebase.database().ref().update(updates);

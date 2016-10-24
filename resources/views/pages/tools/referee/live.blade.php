@@ -108,15 +108,15 @@
 			<table class="table table-condensed">
 			  <tr v-for="m in matches">
 			    <td>		    	
-			    	<div class="">		
-						<table class="table col-xs-12">
+			    	<div class="">	
+			    		<table class="table col-xs-12">
 							<caption>
 								<div class="col-xs-8">
 									<label class="text-primary h5">@{{ m.tournament.name}} </label>
 								</div>
 								<div class="col-xs-4">
 									<label class="text-default h6">@{{ m.date }}</label>
-								</div>
+								</div>								
 							</caption>					
 							<tr class="tr-games label-primary ">
 								<th class="col-xs-9 th-games">@{{ m.title}} </th>
@@ -202,8 +202,13 @@
 								<td class=" th-games game-time"><span class="" title="Game Time"  v-if="m.game_num >= 5" >@{{ m.timer.game[5] | secondsToTime }}</span></td>	
 							</tr>
 							<tr class="tr-games label-info">
-								<td colspan="5">&nbsp;</td>
+								<td colspan="5"><span class="game-time"></span></td>
 								<td colspan="2" class=" th-games game-time"><span class="" title="Match Time">@{{ m.timer.match | secondsToTime }}</span></td>
+							</tr>
+							<tr>
+							<td colspan="7" class="alert-success">	
+								<div class="">Last Play: @{{ m.last_step}}</div>
+							</td>
 							</tr>
 						</table>
 					</div>
