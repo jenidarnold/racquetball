@@ -4,6 +4,7 @@
 	<style>
 		
 	</style>
+	@parent	
 @stop
 
 @section('ref-content')

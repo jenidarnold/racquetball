@@ -93,13 +93,13 @@
 		<div id="setup" v-if="showSetup">
 			<form class="form-inline" role="form">	
 				<div class="row">			
-					<div class="row">
+					<!--div class="row">
 						 <div class="col-xs-12 col-sm-12 form-group">
 							<label for="title" class="control-label lbl-team">Tournament:</label>					
 							{!! Form::select('tournament_id', $tournaments, null, 
 							     array('class' => 'tournament form-control', 'v-bind:value' =>"tournament")) !!}	
 						</div>
-					</div>
+					</div-->
 			    	<div class="row">
 					    <div class="col-xs-12 col-sm-12 form-group">
 							<label for="title" class="control-label lbl-team">Match Title:</label>

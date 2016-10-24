@@ -83,7 +83,12 @@
 			margin-top: 150px;			
 			margin-bottom: 10px;
 		}
+		.brand-small {
+			font-size: 19pt !important;
+			font-weight: 700;
+		}
 	</style>
+	@parent	
 @stop
 
 @section('content')
@@ -103,7 +108,8 @@
 						</a>
 					</li>
 					<li>
-						<a class="navbar-brand" href="{{ url('/') }}">RacquetballHub.com</a>
+						<span class=""><i class="fa fa-circle fa-2x purple"></i> 
+							<a class="brand-small text-default" href="{{ url('/') }}">RacquetballHub.com</a></span>
 					</li>										
 				</ul>			
 			</div>
