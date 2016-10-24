@@ -83,10 +83,7 @@
 			margin-top: 150px;			
 			margin-bottom: 10px;
 		}
-		.brand-small {
-			font-size: 19pt !important;
-			font-weight: 700;
-		}
+		
 	</style>
 	@parent	
 @stop
@@ -108,24 +105,35 @@
 						</a>
 					</li>
 					<li>
-						<span class=""><i class="fa fa-circle fa-2x purple"></i> 
-							<a class="brand-small text-default" href="{{ url('/') }}">RacquetballHub.com</a></span>
+						<span class="navbar-brand brand"><i class="fa fa-circle fa-1.5x purple"></i> 
+							<a class="" href="{{ url('/') }}"><span class="text-default">RacquetballHub</span></a>
+						</span>
 					</li>										
 				</ul>			
 			</div>
 		<!-- 2nd Nav menu -->
 			<div class="collapse navbar-collapse" id="refNavBar">
-				<ul class="nav navbar-nav">               
-					<li><a class="navbar-link" href="{{ url('/scores/referee') }}"> 
-						<i class="fa fa-home1" style="color:black1"></i> Score a Match</a></li>
-					<li><a class="navbar-link" href="{{ url('/scores/live') }}"> 
-						<i class="fa fa-home1" style="color:black1"></i> Live Matches </a></li>
-					<li><a class="navbar-link" href="{{ url('/scores/recent') }}">
-						<i class="fa fa-trophy1"></i> Recent Matches</i></a></li>
-					<li><a class="navbar-link" href="{{ url('/scores/archived') }}">
-						<i class="fa fa-users1"></i> Archived Matches</a></li>		
-					<li><a class="navbar-link" href="{{ url('/scores/about') }}"> 
-						<i class="fa fa-home1" style="color:black1"></i> About this App</a></li>			
+
+				<ul class="nav navbar-nav">    
+					@if (Auth::guest())
+						<li><a class="navbar-link" href="{{ url('/auth/login') }}">Login</a></li>
+						<li><a class="navbar-link" href="{{ url('/auth/register') }}">Register</a></li>								
+					@else    					          
+						<li><a class="navbar-link" href="{{ url('/scores/match') }}"> 
+							<i class="fa fa-plus-square" style="color:black1"></i> Referee a New Match</a></li>
+						<li><a class="navbar-link" href="{{ url('/scores/{user_id}/show') }}"> 
+							<i class="fa fa-user" style="color:black1"></i> My Ref'd Matches</a></li>
+					@endif	
+						<li><a class="navbar-link" href="{{ url('/scores/live') }}"> 
+							<i class="fa fa-spinner fa-spin1" style="color:black1"></i> Live Matches </a></li>
+						<li><a class="navbar-link" href="{{ url('/scores/completed') }}">
+							<i class="fa fa-trophy"></i> Completed Matches</i></a></li>
+						<li><a class="navbar-link" href="{{ url('/scores/{user_id}/show') }}"> 
+							<i class="fa fa-info-circle" style="color:black1"></i> About this App</a></li>	
+					@if (!Auth::guest())
+						<li><a class="navbar-link" href="{{ url('/auth/logout') }}">
+							<i class="fa fa-power-off" style="color:black1"></i> Sign Out</a></li>
+					@endif				
                </ul>
             </div>
         </div>

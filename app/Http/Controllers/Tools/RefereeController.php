@@ -70,22 +70,22 @@ class RefereeController extends Controller {
 	}
 
 	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return Response
+	 */
+	public function show($user_id)
+	{
+		
+		return view('pages/tools.referee.user.show');
+	}
+
+	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @return Response
 	 */
 	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function live()
 	{
 		
 		return view('pages/tools.referee.show');
@@ -97,10 +97,10 @@ class RefereeController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function recent()
+	public function live()
 	{
 		
-		return view('pages/tools.referee.recent');
+		return view('pages/tools.referee.live');
 	}
 
 	/**
@@ -109,12 +109,12 @@ class RefereeController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function archived()
+	public function completed()
 	{
 		
-		return view('pages/tools.referee.archived');
+		return view('pages/tools.referee.completed');
 	}
-
+	
 	/**
 	 * Show the form for editing the specified resource.
 	 *

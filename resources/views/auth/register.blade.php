@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('pages.tools.layouts.referee')
 
-@section('content')
-<div class="container-fluid">
+@section('ref-content')
+<div class="container">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<div class="panel panel-default">
@@ -62,4 +62,4 @@
 		</div>
 	</div>
 </div>
-@endsection
+@stop

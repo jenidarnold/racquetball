@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('pages.tools.layouts.referee')
 
 @section('style')
 	<style type="text/css">
@@ -7,14 +7,15 @@
 		font-weight: 400;
 		text-align: center;
 	}
+
 	</style>
 @stop
 
-@section('content')
+@section('ref-content')
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<div class="panel panel-info">
+			<!--div class="panel panel-info">
 				<div class="panel-heading cred"><span class="cred">Login using one of your social media accounts</span></div>
 				<div class="panel-body">
 					<div class="col-md-3 col-md-offset-2">
@@ -33,9 +34,10 @@
  						</a>
 					</div>
 				</div>
-			</div>
+			</div-->
+			<br>
 			<div class="panel panel-warning">
-				<div class="panel-heading cred"><span class="cred">Or Enter Your Login Credentials</span></div>
+				<div class="panel-heading cred"><span class="cred">Enter Your Login Credentials</span></div>
 				<div class="panel-body">
 					@if (count($errors) > 0)
 						<div class="alert alert-danger">
@@ -78,8 +80,7 @@
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
 								<button type="submit" class="btn btn-primary">Login</button>
-
-								<a class="btn btn-link" href="{{ url('/password/email') }}">Forgot Your Password?</a>
+								<a class="btn btn-link small" href="{{ url('/password/email') }}">Forgot Your Password?</a>
 							</div>
 						</div>
 
@@ -93,4 +94,4 @@
 		</div>
 	</div>
 </div>
-@endsection
+@stop

@@ -206,7 +206,7 @@
                                 @if (Auth::user()->hasPermission(1))
 								<li><a href="{{ url('/admin/scraper') }}">Admin</a></li>
 								@endif
-								<li><a href="{{ url('/auth/logout') }}">Logout</a></li>
+								<li><a href="{{ url('/auth/logout') }}">Sign Out</a></li>
 							</ul>
 						</li>                         
 					@endif

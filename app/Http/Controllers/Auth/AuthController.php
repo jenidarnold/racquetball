@@ -55,7 +55,7 @@ class AuthController extends Controller {
 	 */
 	public function create(array $data)
 	{
-		\Event::fire(new UserWasRegistered($data));
+		/*\Event::fire(new UserWasRegistered($data)); */
 
 		return User::create([
 			'name' => $data['name'],

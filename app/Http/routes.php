@@ -13,10 +13,14 @@ Route::get('vuetest', function(){
 
 Route::get('/', 'Tools\RefereeController@index');
 Route::get('/scores/referee', 'Tools\RefereeController@match');
+Route::get('/scores/match', 'Tools\RefereeController@match');
 Route::get('/scores/live', 'Tools\RefereeController@live');
-Route::get('/scores/recent', 'Tools\RefereeController@recent');
-Route::get('/scores/archived', 'Tools\RefereeController@archived');
+Route::get('/scores/complete', 'Tools\RefereeController@complete');
 Route::get('/scores/about', 'Tools\RefereeController@about');
+Route::get('/scores/match/edit', 'Tools\RefereeController@edit');
+Route::get('/scores/{user_id}/show', 'Tools\RefereeController@show');
+Route::get('/scores/{user_id}/edit', 'Tools\RefereeController@edit');
+Route::get('/scores/login', 'Tools\RefereeController@login');
 
 
 Route::get('home', ['uses' => 'HomeController@index']);

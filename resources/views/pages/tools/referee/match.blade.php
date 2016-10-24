@@ -176,9 +176,8 @@
 		<!-- Match Table -->
 		<div v-show="isStarted">	
 			<div>
-				<h3>@{{ tournament}}</h3>
 				<h4 class="text-left">
-					<span class="text-primary">@{{ match_title }}</span>
+					<span class="text-primary">@{{ tournament.name }}</span>
 					<div style="float:right">	
 						<button v-on:click="editMatch" class="btn btn-info btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Edit Match</button>	
 						<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
@@ -188,7 +187,7 @@
 			<div class="">			
 				<table class="table col-xs-12">					
 					<tr class="tr-games label-primary ">
-						<th class="col-xs-9 th-games"></th>
+						<th class="col-xs-9 th-games">@{{ match_title }}</th>
 						<th class="col-xs- th-games"></th>
 						<th class="col-xs- th-games"><span v-if="game_num >= 1">1</span></th>
 						<th class="col-xs- th-games"><span v-if="game_num >= 2">2</span></th>
@@ -540,7 +539,7 @@
 				max_players: 4,
 				score_steps: [],
 				game_num: 1,
-				tournament: '',
+				tournament: {id:0, name:''},
 				match_title: '',				
 				match: {
 						id: 0,
@@ -548,6 +547,7 @@
 						date: '',
 						teams: [], 
 						winner:'',
+						isComplete: false,
 						},
 				sideout_type: 'Sideout',				
 				service:'',
@@ -781,6 +781,7 @@
 				updateMatchToDB: function(match){
 					console.log('updateMatchToDB');
 					this.match.title = this.match_title;
+					this.match.tournament = this.tournament;
 					this.match.team = this.team;
 					this.match.players = this.players;
 					this.match.game_num = this.game_num;
@@ -836,6 +837,7 @@
 					this.stopTimer(gameTimer);
 					this.stopTimer(matchTimer);
 					this.server = 0;
+					this.isComplete = true;
 					this.updateMatchToDB();		
 				},
 				resumeMatch:function(event){

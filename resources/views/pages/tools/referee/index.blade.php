@@ -13,17 +13,20 @@
 	<div id="myvue" class="">
 		<div class="jumbotron">
 		  <h3>Racquetball Auto-Referee</h3>
-		  <p>Automated scorekeeping and match management system.
+		  	<p>Automated scorekeeping and match management system.
 		     All you do is click the action, so you can pay attention to the action!
 		     Live scores are available as the match is being played for fans to follow.
-		   </p>
-		   <div class="row">
-		   	<div class="col-xs-5 col-xs-offset-2">
-		   		<a href="{{ url('/scores/referee') }}" class="btn btn-success">Start a Match</a>
+		   	</p>
+		   	<div class="row">
+		   		<div class="col-xs-10 col-xs-offset-2">
+		   			<a href="{{ url('/auth/login') }}" class="btn btn-success btn-block">Login In </a>
+		   		</div>
 		   	</div>
-	   		<div class="col-xs-5">
-		   		<a href="{{ url('/scores/live') }}" class="btn btn-info">Live Scores</a>
-		   	</div>
+		   	<br>
+		   	<div class="row">
+	   			<div class="col-xs-10 col-xs-offset-2">
+		   			<a href="{{ url('/scores/live') }}" class="btn btn-info btn-block">View Live Scores</a>
+		   		</div>
 		   </div>
 		</div>	
 

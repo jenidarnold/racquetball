@@ -92,24 +92,34 @@
 	<div id="myvue" class="col-xs-12 col-sm-7 col-md-6 col-lg-6">
 		
 		<div class="col-xs-12">
-			<h3>Completed Matches</h3>
+			<h3>My Referee'd Matches</h3>
 		</div>
-		<div class="col-xs-12">
+		<div class="col-xs-10">
 			<div class="input-group">
 				<span class="input-group-addon"><i class="fa fa-search" for="search"></i></span>								
-				<input type="text" id="search" class="form-control input-sm" placeholder="Search"></input>
+				<input type="text" id="search" class="form-control input-sm" placeholder="Search"></input>				
 			</div>
-			<br>
 		</div>
+		<div>
+			<button id="btnSearch" class="btn btn-sm btn-default" >GO</button>
+		</div>
+		<br>
 		<div class="row">
 			<table class="table table-condensed">
 			  <tr v-for="m in matches">
 			    <td>		    	
 			    	<div class="">		
 						<table class="table col-xs-12">
-							<caption><label class="text-primary">@{{ m.date }} @{{ m.title}} </label></caption>					
+							<caption>
+								<div class="col-xs-8">
+									<label class="text-primary h5">@{{ m.tournament.name}} </label>
+								</div>
+								<div class="col-xs-4">
+									<label class="text-default h6">@{{ m.date }}</label>
+								</div>
+							</caption>					
 							<tr class="tr-games label-primary ">
-								<th class="col-xs-9 th-games"></th>
+								<th class="col-xs-9 th-games">@{{ m.title}} </th>
 								<th class="col-xs- th-games"></th>
 								<th class="col-xs- th-games"><span v-if="m.game_num >= 1">1</span></th>
 								<th class="col-xs- th-games"><span v-if="m.game_num >= 2">2</span></th>
@@ -135,9 +145,9 @@
 										<!--i v-show="m.isWinner[1]" class="fa fa-trophy text-warning"></i-->
 									</div>				
 									<div class="" >								
-										  <span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ m.team[1].timeouts }}</span>
+										  <span class="badge label-warning" title="timeouts"><i class="fa fa-clock-o fa-xs"></i> @{{ m.team[1].timeouts }}</span>
 										<span class="" >
-											<span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ m.team[1].appeals  }}</span>
+											<span class="badge label-danger" title="appeals"><i class="fa fa-thumbs-down fa-xs"></i> @{{ m.team[1].appeals  }}</span>
 										</span>
 									</div>	
 								</td>					
@@ -169,9 +179,9 @@
 										<!--i v-show="m.isWinner[2]" class="fa fa-trophy text-warning"></i-->
 									</div>
 									<div class="">								
-										<span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ m.team[2].timeouts }}</span>							
+										<span class="badge label-warning" title="timeouts"><i class="fa fa-clock-o fa-xs"></i> @{{ m.team[2].timeouts }}</span>							
 										<span class="col-xs" >
-											<span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ m.team[2].appeals  }}</span>
+											<span class="badge label-danger" title="appeaks"><i class="fa fa-thumbs-down fa-xs"></i> @{{ m.team[2].appeals  }}</span>
 										</span>	
 									</div>
 								</td>
@@ -182,20 +192,19 @@
 										<span v-if="m.game_num >= g.gm"> @{{ g.score }} </span>
 								</td>
 							</tr>
-							<!--<tr class="tr-games label-primary ">
+							<tr class="tr-games label-primary ">
 								<td></td>
 								<td class="th-games">&nbsp;</td>
-								<!--td class="th-games game-time"><span class="" v-if="m.game_num >= 1" >@{{ m.timer.game[1] | secondsToTime }}</span></td>
-								<td class="th-games game-time"><span class="" v-if="m.game_num >= 2" >@{{ m.timer.game[2] | secondsToTime }}</span></td>
-								<td class="th-games game-time"><span class="" v-if="m.game_num >= 3" >@{{ m.timer.game[3] | secondsToTime }}</span></td>
-								<td class="th-games game-time"><span class="" v-if="m.game_num >= 4" >@{{ m.timer.game[4] | secondsToTime }}</span></td>
-								<td class=" th-games game-time"><span class="" v-if="m.game_num >= 5" >@{{ m.timer.game[5] | secondsToTime }}</span></td>	
+								<td class="th-games game-time"><span class="" title="Game Time" v-if="m.game_num >= 1" >@{{ m.timer.game[1] | secondsToTime }}</span></td>
+								<td class="th-games game-time"><span class="" title="Game Time"  v-if="m.game_num >= 2" >@{{ m.timer.game[2] | secondsToTime }}</span></td>
+								<td class="th-games game-time"><span class="" title="Game Time"  v-if="m.game_num >= 3" >@{{ m.timer.game[3] | secondsToTime }}</span></td>
+								<td class="th-games game-time"><span class="" title="Game Time"  v-if="m.game_num >= 4" >@{{ m.timer.game[4] | secondsToTime }}</span></td>
+								<td class=" th-games game-time"><span class="" title="Game Time"  v-if="m.game_num >= 5" >@{{ m.timer.game[5] | secondsToTime }}</span></td>	
 							</tr>
 							<tr class="tr-games label-info">
 								<td colspan="5">&nbsp;</td>
-								<td colspan="2" class=" th-games game-time"><span class="">@{{ m.timer.match | secondsToTime }}</span></td>
+								<td colspan="2" class=" th-games game-time"><span class="" title="Match Time">@{{ m.timer.match | secondsToTime }}</span></td>
 							</tr>
-							-->
 						</table>
 					</div>
 				</td>
@@ -263,7 +272,22 @@
 				});
 
 				//this.matches = matchesRef;
-			},				
+			},	
+			filters: {
+				secondsToTime: function(secs) {
+
+					if (secs){
+						secs = secs.toString();
+						var date = new Date(null);
+        				date.setSeconds(secs); // specify value for SECONDS here
+        				return date.toISOString().substr(12, 7);
+        			} else if (secs == 0)
+        			{
+        				return "";
+        			}	
+
+				},	
+			},		
 		});	
 	</script>
 @stop
