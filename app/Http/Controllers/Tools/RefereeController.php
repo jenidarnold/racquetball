@@ -2,9 +2,11 @@
 
 use Input;
 use App\Http\Requests;
+use App\Tournament;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
+use JavaScript;
 
 class RefereeController extends Controller {
 
@@ -18,14 +20,43 @@ class RefereeController extends Controller {
 		//$this->middleware('auth');
 	}
 	
+
+	/**
+	 *  Display decsription of Referee App
+	 *
+	 * @return Response
+	 */
+	public function index()
+	{		
+		return view('pages/tools.referee.index');
+	}
+
+	/**
+	 *  Display decsription of Referee App
+	 *
+	 * @return Response
+	 */
+	public function about()
+	{		
+		return view('pages/tools.referee.index');
+	}
+
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function match()
 	{
-		return view('pages/tools.referee.index');
+		$tournaments = Tournament::selectRaw('CONCAT(name, " (", start_date, ")") as name, tournament_id')
+			->orderBy('start_date', 'desc')
+			->lists('name','tournament_id');
+		
+		JavaScript::put([
+        	'tournaments' => $tournaments 
+ 		]);
+
+		return view('pages/tools.referee.match', compact('tournaments'));
 	}
 
 	/**
@@ -54,12 +85,35 @@ class RefereeController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show()
+	public function live()
 	{
 		
 		return view('pages/tools.referee.show');
 	}
 
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function recent()
+	{
+		
+		return view('pages/tools.referee.recent');
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function archived()
+	{
+		
+		return view('pages/tools.referee.archived');
+	}
 
 	/**
 	 * Show the form for editing the specified resource.

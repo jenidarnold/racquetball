@@ -12,7 +12,13 @@ Route::get('vuetest', function(){
 });
 
 Route::get('/', 'Tools\RefereeController@index');
-Route::get('/scores', 'Tools\RefereeController@show');
+Route::get('/scores/referee', 'Tools\RefereeController@match');
+Route::get('/scores/live', 'Tools\RefereeController@live');
+Route::get('/scores/recent', 'Tools\RefereeController@recent');
+Route::get('/scores/archived', 'Tools\RefereeController@archived');
+Route::get('/scores/about', 'Tools\RefereeController@about');
+
+
 Route::get('home', ['uses' => 'HomeController@index']);
 
 Route::group(['namespace' => 'Admin', 'prefix' =>'admin'], function()
