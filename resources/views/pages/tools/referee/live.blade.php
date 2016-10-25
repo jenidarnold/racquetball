@@ -104,12 +104,13 @@
 			<button id="btnSearch" class="btn btn-sm btn-default" >GO</button>
 		</div>
 		<br>
+		<!-- List of Matches -->
 		<div class="row">
 			<table class="table table-condensed">
-			  <tr v-for="m in matches">
-			    <td>		    	
-			    	<div class="">	
-			    		<table class="table col-xs-12">
+			  	<tr v-for="m in matches">
+			    	<td>		    	
+			    		<div class="">	
+			    			<table class="table col-xs-12">
 							<caption>
 								<div class="col-xs-8">
 									<label class="text-primary h5">@{{ m.tournament.name}} </label>
@@ -142,7 +143,7 @@
 												v-show="m.server == m.players[2].pos">
 											</i>
 										</span>
-										<!--i v-show="m.isWinner[1]" class="fa fa-trophy text-warning"></i-->
+										<i v-show="m.isWinner == 1" class="fa fa-trophy text-warning"></i>
 									</div>				
 									<div class="" >								
 										  <span class="badge label-warning" title="timeouts"><i class="fa fa-clock-o fa-xs"></i> @{{ m.team[1].timeouts }}</span>
@@ -176,7 +177,7 @@
 												v-show="m.server == m.players[4].pos ">
 											</i>
 										</span>
-										<!--i v-show="m.isWinner[2]" class="fa fa-trophy text-warning"></i-->
+										<i v-show="m.isWinner == 2" class="fa fa-trophy text-warning"></i>
 									</div>
 									<div class="">								
 										<span class="badge label-warning" title="timeouts"><i class="fa fa-clock-o fa-xs"></i> @{{ m.team[2].timeouts }}</span>							
@@ -202,7 +203,7 @@
 								<td class=" th-games game-time"><span class="" title="Game Time"  v-if="m.game_num >= 5" >@{{ m.timer.game[5] | secondsToTime }}</span></td>	
 							</tr>
 							<tr class="tr-games label-info">
-								<td colspan="5"><span class="game-time"></span></td>
+								<td colspan="5"><span class="game-time">Ref: @{{ m.referee.name }}</span></td>
 								<td colspan="2" class=" th-games game-time"><span class="" title="Match Time">@{{ m.timer.match | secondsToTime }}</span></td>
 							</tr>
 							<tr>
@@ -210,14 +211,15 @@
 								<div class="">Last Play: @{{ m.last_step}}</div>
 							</td>
 							</tr>
-						</table>
-					</div>
-				</td>
-			</tr>
-		</table>		
+							</table>
+						</div>					
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<!-- end list of matches -->
 	</div>
 </div>
-
 @stop
 
 @section('script')
@@ -243,7 +245,7 @@
 		Vue.config.debug = true;
 		Vue.config.devtools = true;		
 
-		var matchesRef = firebase.database().ref('matches').orderByChild('date');
+		var matchesRef = firebase.database().ref('matches').orderByChild('isComplete').equalTo(false);
 
 		var vm = new Vue({
 			el: '#myvue',

@@ -132,7 +132,7 @@
 					@endif	
 						<li><a class="navbar-link" href="{{ url('/scores/live') }}"> 
 							<i class="fa fa-spinner fa-spin text-info" style="color:black1"></i> Live Matches </a></li>
-						<li><a class="navbar-link text-warning" href="{{ url('/scores/completed') }}">
+						<li><a class="navbar-link text-warning" href="{{ url('/scores/complete') }}">
 							<i class="fa fa-trophy text-warning"></i> Completed Matches</i></a></li>
 						<li><a class="navbar-link" href="{{ url('/scores/{user_id}/show') }}"> 
 							<i class="fa fa-info-circle" style="color:black1"></i> About this App</a></li>	

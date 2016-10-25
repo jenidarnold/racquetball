@@ -219,7 +219,7 @@
 										v-show="server == players[2].pos">
 									</i>
 								</span>
-								<i v-show="isWinner[1] ==true" class="fa fa-trophy text-warning"></i>
+								<i v-show="isWinner == 1" class="fa fa-trophy text-warning"></i>
 							</div>
 							<div class="" v-show="isStarted">
 								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
@@ -253,7 +253,7 @@
 										v-show="server == players[4].pos ">
 									</i>
 								</span>
-								<i v-show="isWinner[2] == true" class="fa fa-trophy text-warning"></i>
+								<i v-show="isWinner == 2" class="fa fa-trophy text-warning"></i>
 							</div>
 							<div class="" v-show="isStarted">
 								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal2" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
@@ -601,7 +601,7 @@
 				total_games: 3,  // 3 or 5
 				win_by: 1,       // 1 or 2
 				winner: '',
-				isWinner: [ {1:false}, {2:false}],
+				isWinner: 0,
 				game: [],
 				game_formats: [ 	
 							{id: 0, name:''},
@@ -836,7 +836,7 @@
 					this.team[1].wins = 0;
 					this.team[2].wins = 0;
 					this.winner = '';
-					this.isWinner = [];
+					this.isWinner = 0;
 					this.game_num = 1;
 					this.game = [];
 					this.score_steps = [],
@@ -1026,14 +1026,14 @@
 					if (this.team[1].wins == this.game_max) {
 						console.log('show winner');
 						this.winner = 'The winner is ' + this.team[1].name;
-						this.isWinner[1] = true;
+						this.isWinner=1;
 						$('#winnerModal').modal('show');
 						this.endMatch();
 						return true;					
 					}
 					if (this.team[2].wins == this.game_max) {
 						this.winner = 'The winner is ' + this.team[2].name;
-						this.isWinner[2] = true;
+						this.isWinner=2;
 						$('#winnerModal').modal('show');
 						this.endMatch();
 						return true;					

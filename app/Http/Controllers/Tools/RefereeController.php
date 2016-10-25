@@ -111,10 +111,11 @@ class RefereeController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function completed()
+	public function complete()
 	{
 		
-		return view('pages/tools.referee.completed');
+		$user = new User;
+		return view('pages/tools.referee.complete', compact('user'));
 	}
 	
 	/**

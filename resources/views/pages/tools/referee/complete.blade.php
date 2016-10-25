@@ -92,33 +92,32 @@
 	<div id="myvue" class="col-xs-12 col-sm-7 col-md-6 col-lg-6">
 		
 		<div class="col-xs-12">
-			<h3>My Referee'd Matches</h3>
+			<h3>Completed Matches</h3>
 		</div>
-		<div class="col-xs-10">
+		<div class="col-xs-12">
 			<div class="input-group">
 				<span class="input-group-addon"><i class="fa fa-search" for="search"></i></span>								
-				<input type="text" id="search" class="form-control input-sm" placeholder="Search"></input>				
+				<input type="text" id="search" class="form-control input-sm" placeholder="Search"></input>
 			</div>
+			<br>
 		</div>
-		<div>
-			<button id="btnSearch" class="btn btn-sm btn-default" >GO</button>
-		</div>
-		<br>
+
+		<!-- List of Matches -->
 		<div class="row">
 			<table class="table table-condensed">
-			  <tr v-for="m in matches">
-			    <td>		    	
-			    	<div class="">		
-						<table class="table col-xs-12">
+			  	<tr v-for="m in matches">
+			    	<td>		    	
+			    		<div class="">	
+			    			<table class="table col-xs-12">
 							<caption>
 								<div class="col-xs-8">
 									<label class="text-primary h5">@{{ m.tournament.name}} </label>
 								</div>
 								<div class="col-xs-4">
-									<label class="text-default h6">@{{ m.date }}</label>
-								</div>
+									<label class="text-default h6">@{{ m.date}}</label>
+								</div>								
 							</caption>					
-							<tr class="tr-games label-primary ">
+							<tr class="tr-games label-success ">
 								<th class="col-xs-9 th-games">@{{ m.title}} </th>
 								<th class="col-xs- th-games"></th>
 								<th class="col-xs- th-games"><span v-if="m.game_num >= 1">1</span></th>
@@ -192,7 +191,7 @@
 										<span v-if="m.game_num >= g.gm"> @{{ g.score }} </span>
 								</td>
 							</tr>
-							<tr class="tr-games label-primary ">
+							<tr class="tr-games label-success ">
 								<td></td>
 								<td class="th-games">&nbsp;</td>
 								<td class="th-games game-time"><span class="" title="Game Time" v-if="m.game_num >= 1" >@{{ m.timer.game[1] | secondsToTime }}</span></td>
@@ -202,14 +201,16 @@
 								<td class=" th-games game-time"><span class="" title="Game Time"  v-if="m.game_num >= 5" >@{{ m.timer.game[5] | secondsToTime }}</span></td>	
 							</tr>
 							<tr class="tr-games label-info">
-								<td colspan="5">&nbsp;</td>
+								<td colspan="5"><span class="game-time">Ref: @{{ m.referee.name }}</span></td>
 								<td colspan="2" class=" th-games game-time"><span class="" title="Match Time">@{{ m.timer.match | secondsToTime }}</span></td>
-							</tr>
-						</table>
-					</div>
-				</td>
-			</tr>
-		</table>		
+							</tr>							
+							</table>
+						</div>					
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<!-- end list of matches -->	
 	</div>
 </div>
 
@@ -238,9 +239,8 @@
 		Vue.config.debug = true;
 		Vue.config.devtools = true;		
 
-		var ref_id = {{ $user->id}};
+		var matchesRef = firebase.database().ref('matches').orderByChild('isComplete').equalTo(true);
 
-		var matchesRef = firebase.database().ref('matches').orderByChild("referee/id").equalTo(ref_id);
 
 		var vm = new Vue({
 			el: '#myvue',
@@ -262,11 +262,6 @@
 			mounted: function(){
 				console.log('mounted');
 
-				// Filter by Ref
-				//matchesRef.child('players').orderByChild("last_step").on('value', function(data){
-			//		console.log( data.val());
-			//	})
-
 				// Retrieve new posts as they are added to our database
 				matchesRef.on("child_added", function(snapshot, prevChildKey) {
 				  var match = snapshot.val();
@@ -279,25 +274,7 @@
 				});
 
 				//this.matches = matchesRef;
-			},	
-			methods: {
-				
-			},
-			filters: {
-				secondsToTime: function(secs) {
-
-					if (secs){
-						secs = secs.toString();
-						var date = new Date(null);
-        				date.setSeconds(secs); // specify value for SECONDS here
-        				return date.toISOString().substr(12, 7);
-        			} else if (secs == 0)
-        			{
-        				return "";
-        			}	
-
-				},	
-			},		
+			},				
 		});	
 	</script>
 @stop
