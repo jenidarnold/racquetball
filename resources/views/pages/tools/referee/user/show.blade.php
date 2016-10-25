@@ -92,7 +92,7 @@
 	<div id="myvue" class="col-xs-12 col-sm-7 col-md-6 col-lg-6">
 		
 		<div class="col-xs-12">
-			<h3>My Referee'd Matches</h3>
+			<h3>My Created Matches</h3>
 		</div>
 		<div class="col-xs-10">
 			<div class="input-group">
@@ -205,7 +205,24 @@
 								<td colspan="5">&nbsp;</td>
 								<td colspan="2" class=" th-games game-time"><span class="" title="Match Time">@{{ m.timer.match | secondsToTime }}</span></td>
 							</tr>
+							<tr>
+								<td colspan="7">
+									<!-- Match Actions -->
+									<div class="1row">
+										<div class="col-xs-3"> 
+											<button class="btn btn-success btn-xs btn-block">Resume</button>
+										</div>
+										<div class="col-xs-3"> 
+											<button class="btn btn-warning btn-xs btn-block">Edit</button>
+										</div>
+										<div class="col-xs-3"> 
+											<button class="btn btn-danger btn-xs btn-block">Delete</button>
+										</div>
+									</div>
+								</td>
+							</tr>							
 						</table>
+						
 					</div>
 				</td>
 			</tr>
