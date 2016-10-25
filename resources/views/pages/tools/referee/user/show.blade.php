@@ -238,7 +238,9 @@
 		Vue.config.debug = true;
 		Vue.config.devtools = true;		
 
-		var matchesRef = firebase.database().ref('matches').orderByChild('date');
+		var ref_id = {{ $user->id}};
+
+		var matchesRef = firebase.database().ref('matches').orderByChild("referee/id").equalTo(ref_id);
 
 		var vm = new Vue({
 			el: '#myvue',
@@ -260,6 +262,11 @@
 			mounted: function(){
 				console.log('mounted');
 
+				// Filter by Ref
+				//matchesRef.child('players').orderByChild("last_step").on('value', function(data){
+			//		console.log( data.val());
+			//	})
+
 				// Retrieve new posts as they are added to our database
 				matchesRef.on("child_added", function(snapshot, prevChildKey) {
 				  var match = snapshot.val();
@@ -273,6 +280,9 @@
 
 				//this.matches = matchesRef;
 			},	
+			methods: {
+				
+			},
 			filters: {
 				secondsToTime: function(secs) {
 
