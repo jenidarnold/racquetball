@@ -96,12 +96,12 @@
 		</div>
 		<div class="col-xs-10">
 			<div class="input-group">
-				<span class="input-group-addon"><i class="fa fa-search" for="search"></i></span>								
-				<input type="text" id="search" class="form-control input-sm" placeholder="Search"></input>				
+				<span class="input-group-addon"><i class="fa fa-search" for="search"></i></span>							
+				<input type="text" id="search" v-model="searchText" class="form-control input-sm" placeholder="Search"></input>				
 			</div>
 		</div>
 		<div>
-			<button id="btnSearch" class="btn btn-sm btn-default" >GO</button>
+			<button id="btnSearch" class="btn btn-sm btn-default" v-on:click="search">GO</button>
 		</div>
 		<br>
 		<!-- List of Matches -->
@@ -259,7 +259,9 @@
 				classEnabled: 'active',
 				classDisabled: 'disabled',
 				message: 'List of Live Matches',
-				matches: []
+				matches: [],
+				matches_all: [],
+				searchText: '',
 			},
 			firebase: {
 				//matches: matchesRef.limitToLast(3)
@@ -271,11 +273,13 @@
 				matchesRef.on("child_added", function(snapshot, prevChildKey) {
 				  var match = snapshot.val();
 				  vm.matches.push(match);
+				  vm.matches_all.push(match);
 				});
 
 				//Updates any changes all matches
 				matchesRef.on("value", function(data) {
 					vm.matches = data.val();
+					vm.matches_all = data.val();
 				});
 
 				//this.matches = matchesRef;
@@ -294,7 +298,41 @@
         			}	
 
 				},					
-			},		
+			},	
+			methods: {
+				search: function(){
+
+					if (this.searchText == '') {
+						results = this.matches_all;
+					}
+					else {
+						console.log('search for ' + this.searchText);
+						var results = [];
+						var that = this;
+
+						$.each(this.matches_all, function(key, match) {
+
+							//Todo: Search Tournament
+							//Search Match Title
+							if ( match.title.toLowerCase().indexOf(that.searchText.toLowerCase()) >=0 ) {
+								results.push(match); 
+							}
+							else {
+								//Search Player Names
+								for (var i = match.players.length-1; i >= 1; i--) {
+									if ( match.players[i].name.toLowerCase().indexOf(that.searchText.toLowerCase()) >=0 ) {
+										results.push(match); 
+										break;										
+									}
+								}
+							}		
+						});
+					}
+
+					this.matches = results;
+
+				},
+			}	
 		});	
 	</script>
 @stop
