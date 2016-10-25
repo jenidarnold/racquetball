@@ -39,7 +39,7 @@ class RedirectIfUserAccountNotLinked {
 		$today = date_create(date("Y/m/d"));
 
 
-		return new RedirectResponse(url('scores/{user_id}/show', array($user->id)));
+		return new RedirectResponse(route('scores.user.show', array($user->id)));
 
 		//If player go to Player Profile page
 		if ($user->player_id > 0){

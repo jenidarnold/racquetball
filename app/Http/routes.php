@@ -7,10 +7,6 @@ use App\Player;
 use App\Ranking;
 use App\Location;
 
-Route::get('vuetest', function(){
-	return view('pages/players/journal/vue');
-});
-
 Route::get('/', 'Tools\RefereeController@index');
 Route::get('/scores/referee', 'Tools\RefereeController@match');
 Route::get('/scores/match', 'Tools\RefereeController@match');
@@ -18,7 +14,7 @@ Route::get('/scores/live', 'Tools\RefereeController@live');
 Route::get('/scores/complete', 'Tools\RefereeController@complete');
 Route::get('/scores/about', 'Tools\RefereeController@about');
 Route::get('/scores/match/edit', 'Tools\RefereeController@edit');
-Route::get('/scores/{user_id}/show', 'Tools\RefereeController@show');
+Route::get('/scores/{user_id}/show', array('as' => 'scores.user.show', 'uses' => 'Tools\RefereeController@show'));
 Route::get('/scores/{user_id}/edit', 'Tools\RefereeController@edit');
 Route::get('/scores/login', 'Tools\RefereeController@login');
 
