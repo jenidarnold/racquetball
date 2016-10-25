@@ -115,7 +115,7 @@
 									<label class="text-primary h5">@{{ m.tournament.name}} </label>
 								</div>
 								<div class="col-xs-4">
-									<label class="text-default h6">@{{ m.date }}</label>
+									<label class="text-default h6">@{{ m.date}}</label>
 								</div>								
 							</caption>					
 							<tr class="tr-games label-primary ">
@@ -291,7 +291,7 @@
         				return "";
         			}	
 
-				},	
+				},					
 			},		
 		});	
 	</script>

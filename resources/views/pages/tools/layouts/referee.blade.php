@@ -82,7 +82,7 @@
 		.btn-actions {
 			margin-top: 150px;			
 			margin-bottom: 10px;
-		}
+		}		
 		
 	</style>
 	@parent	
@@ -114,25 +114,32 @@
 		<!-- 2nd Nav menu -->
 			<div class="collapse navbar-collapse" id="refNavBar">
 
-				<ul class="nav navbar-nav">    
+				<ul class="nav navbar-nav pointer">    
 					@if (Auth::guest())
 						<li><a class="navbar-link" href="{{ url('/auth/login') }}">Login</a></li>
-						<li><a class="navbar-link" href="{{ url('/auth/register') }}">Register</a></li>								
-					@else    					          
-						<li><a class="navbar-link" href="{{ url('/scores/match') }}"> 
-							<i class="fa fa-plus-square" style="color:black1"></i> Referee a New Match</a></li>
-						<li><a class="navbar-link" href="{{ url('/scores/{user_id}/show') }}"> 
-							<i class="fa fa-user" style="color:black1"></i> My Ref'd Matches</a></li>
+						<li><a class="navbar-link" href="{{ url('/auth/register') }}">Register</a>	
+					@else   
+						@if(isset($user))
+						<li><a class="navbar-link">
+							<i class="fa fa-user-circle text-primary"></i>								
+							{{ $user->first_name }} {{ $user->last_name}}</a></li>
+						@endif
+						<li class="divider"></li>	
+						<li><a class="navbar-link" href="{{ route('scores.user.match', [$user->id]) }}"> 
+							<i class="fa fa-plus-square text-success" style="color:black1"></i> Referee a New Match</a></li>
+						<li><a class="navbar-link" href="{{ route('scores.user.show', [$user->id]) }}"> 
+							<i class="fa fa-address-card text-danger" style="color:black1"></i> My Ref'd Matches</a></li>
 					@endif	
 						<li><a class="navbar-link" href="{{ url('/scores/live') }}"> 
-							<i class="fa fa-spinner fa-spin1" style="color:black1"></i> Live Matches </a></li>
-						<li><a class="navbar-link" href="{{ url('/scores/completed') }}">
-							<i class="fa fa-trophy"></i> Completed Matches</i></a></li>
+							<i class="fa fa-spinner fa-spin text-info" style="color:black1"></i> Live Matches </a></li>
+						<li><a class="navbar-link text-warning" href="{{ url('/scores/completed') }}">
+							<i class="fa fa-trophy text-warning"></i> Completed Matches</i></a></li>
 						<li><a class="navbar-link" href="{{ url('/scores/{user_id}/show') }}"> 
 							<i class="fa fa-info-circle" style="color:black1"></i> About this App</a></li>	
 					@if (!Auth::guest())
+						<li class="divider"></li>	
 						<li><a class="navbar-link" href="{{ url('/auth/logout') }}">
-							<i class="fa fa-power-off" style="color:black1"></i> Sign Out</a></li>
+							<i class="fa fa-power-off text-danger" style="color:black1"></i> Sign Out</a></li>
 					@endif				
                </ul>
             </div>

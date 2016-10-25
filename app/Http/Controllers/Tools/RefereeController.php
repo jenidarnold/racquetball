@@ -46,17 +46,17 @@ class RefereeController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function match()
+	public function match($user_id)
 	{
 		$tournaments = Tournament::selectRaw('CONCAT(name, " (", start_date, ")") as name, tournament_id')
 			->orderBy('start_date', 'desc')
 			->lists('name','tournament_id');
-		
-		JavaScript::put([
-        	'tournaments' => $tournaments 
- 		]);
+			
+		//var_dump($tournaments);
 
-		return view('pages/tools.referee.match', compact('tournaments'));
+		$user = User::find($user_id);
+
+		return view('pages/tools.referee.match', compact('tournaments', 'user'));
 	}
 
 	/**
@@ -77,7 +77,8 @@ class RefereeController extends Controller {
 	public function show($user_id)
 	{
 		
-		return view('pages/tools.referee.user.show');
+		$user = User::find($user_id);
+		return view('pages/tools.referee.user.show',  compact('user'));
 	}
 
 	/**
@@ -100,7 +101,8 @@ class RefereeController extends Controller {
 	public function live()
 	{
 		
-		return view('pages/tools.referee.live');
+		$user = new User;
+		return view('pages/tools.referee.live', compact('user'));
 	}
 
 	/**

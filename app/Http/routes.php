@@ -9,7 +9,7 @@ use App\Location;
 
 Route::get('/', 'Tools\RefereeController@index');
 Route::get('/scores/referee', 'Tools\RefereeController@match');
-Route::get('/scores/match', 'Tools\RefereeController@match');
+Route::get('/scores/{user_id}/match', array('as' => 'scores.user.match', 'uses' => 'Tools\RefereeController@match'));
 Route::get('/scores/live', 'Tools\RefereeController@live');
 Route::get('/scores/complete', 'Tools\RefereeController@complete');
 Route::get('/scores/about', 'Tools\RefereeController@about');

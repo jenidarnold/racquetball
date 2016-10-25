@@ -93,17 +93,27 @@
 		<div id="setup" v-if="showSetup">
 			<form class="form-inline" role="form">	
 				<div class="row">			
-					<!--div class="row">
+					<div class="row">
 						 <div class="col-xs-12 col-sm-12 form-group">
 							<label for="title" class="control-label lbl-team">Tournament:</label>					
-							{!! Form::select('tournament_id', $tournaments, null, 
-							     array('class' => 'tournament form-control', 'v-bind:value' =>"tournament")) !!}	
+							<select v-model="tournament" id="ddlTournaments" class="form-control">
+							  	<option v-for="t in tournaments" v-bind:value="tournament">
+							    	@{{ t.name }}
+							  	</option>
+							</select>	
 						</div>
-					</div-->
+					</div>
+					
 			    	<div class="row">
 					    <div class="col-xs-12 col-sm-12 form-group">
 							<label for="title" class="control-label lbl-team">Match Title:</label>
 							<input class="form-control" id="title" placeholder="Enter Match Title" v-model="match_title">
+					    </div>
+					</div>
+					<div class="row">
+					    <div class="col-xs-12 col-sm-12 form-group">
+							<label for="title" class="control-label lbl-team">Referee:</label>
+							<input class="form-control" id="referee" v-model="match.referee.name">
 					    </div>
 					</div>
 					<div class="row">	
@@ -539,10 +549,15 @@
 				max_players: 4,
 				score_steps: [],
 				game_num: 1,
+				tournaments: {id:0, name:''}, //[ {{ $tournaments}} ],
 				tournament: {id:0, name:''},
 				match_title: '',				
 				match: {
 						id: 0,
+						referee: {
+									id: {{ $user->id}}, 
+									name: '{{ $user->first_name}} {{ $user->last_name}}', 
+								 },
 						title: '',
 						date: '',
 						teams: [], 
@@ -794,7 +809,7 @@
 					if (this.score_steps.length > 0) {
 						this.match.last_step = this.score_steps[this.score_steps.length - 1];
 					}
-					
+
 					var updates = {};
 					updates['matches/'+ this.match.id] = this.match;
 					return firebase.database().ref().update(updates);

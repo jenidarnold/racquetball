@@ -16,7 +16,7 @@
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 	<!-- Fontawesome -->
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="{{ asset('/css/bootstrap-social.css') }}" rel="stylesheet">
 
 
@@ -48,6 +48,7 @@
 	.navbar-link {
 		font-size: 14pt;
 		font-weight: 500;
+        color: white !important;
 	}
 	.logo {
 		height: 35px;
