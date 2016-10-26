@@ -165,11 +165,14 @@
 			</form>
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="col-xs-3 col-xs-offset-3">
-				    	<button class="btn btn-success" v-on:click="createMatch">Start</button>
-				    </div>
+					<div class="col-xs-3 col-xs-offset-1">
+				    	<button class="btn btn-info" v-on:click="createMatch">Save</button>
+				    </div>					
 				    <div class="col-xs-3">
 				    	<button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
+				    </div>
+				    <div class="col-xs-3">
+				    	<button class="btn btn-success" v-on:click="createMatch">Start</button>
 				    </div>
 				</div>
 			</div>
@@ -557,6 +560,7 @@
 						date: '',
 						teams: [], 
 						winner:'',
+						isStarted: false,
 						isComplete: false,
 						completeDate: '',
 						last_play: '',
@@ -720,13 +724,17 @@
 				}
 			},				
 			methods: {
-				createMatch: function(event){ 
-					// enable point, sideout, fault, etc
+				startMatch: function(event){
 					this.isStarted = true;
 					this.showSetup = false;
-					this.initServer = this.server;
 					this.startTimer('match');
 					this.startTimer('game');
+
+					this.match.isStarted = true;
+					this.updateMatchToDB();
+				},
+				createMatch: function(event){ 
+					// enable point, sideout, fault, etc					
 					
 					this.total_games = this.game.games;
 					this.score_max = this.game.points;
@@ -776,17 +784,6 @@
 					this.match.id = newMatchKey;
 
   					this.updateMatchToDB();
-					//this.match.id = newMatchKey;
-					//this.match.title = this.match_title;
-					//this.match.team = this.team;
-					//this.match.players = this.players;
-					//this.match.game_num = this.game_num;
-					//this.match.score_max = this.score_max;
-					//this.match.server = this.server;
-					//this.match.faults = this.faults;
-					//this.match.isWinner = this.isWinner;
-					//this.match.timer = this.timer;
-					//newMatch.push(this.match);
 
 				},
 				updateMatchToDB: function(){

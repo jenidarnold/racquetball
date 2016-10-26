@@ -208,7 +208,7 @@
 							<tr>
 								<td colspan="7">
 									<!-- Match Actions -->
-									<div class="1row">
+									<div class="">
 										<div class="col-xs-3"> 
 											<button class="btn btn-success btn-xs btn-block">Resume</button>
 										</div>
@@ -216,8 +216,25 @@
 											<button class="btn btn-warning btn-xs btn-block">Edit</button>
 										</div>
 										<div class="col-xs-3"> 
-											<button class="btn btn-danger btn-xs btn-block">Delete</button>
+											<button class="btn btn-danger btn-xs btn-block" v-on:click="confirmDelete(m)">Delete</button>
 										</div>
+									</div>
+									<!-- Modal Confirm Reset -->
+									<div id="confirmDeleteModal" class="score modal fade" role="dialog">
+									  <div class="modal-dialog">
+									    <!-- Modal content-->
+									    <div class="modal-content modal-success">
+									      	<div class="modal-body">
+										      	<div class="row">
+													<center><h3>Are you sure you want to delete match @{{ delete_title }} ?</h3></center>
+												</div>	
+												<div class="row">
+													<button type="button" v-on:click="deleteMatch(delete_id)" class="btn btn-success" data-dismiss="modal">Yes</button>
+													<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+												</div>
+									      	</div>
+									    </div>
+									  </div>
 									</div>
 								</td>
 							</tr>							
@@ -228,6 +245,8 @@
 			</tr>
 		</table>		
 	</div>
+
+	
 </div>
 
 @stop
@@ -274,6 +293,8 @@
 				matches: [],
 				matches_all: [],
 				searchText: '',
+				delete_id: null,
+				delete_title: '',
 			},
 			firebase: {
 				//matches: matchesRef.limitToLast(3)
@@ -317,6 +338,21 @@
 				},	
 			},		
 			methods: {
+				confirmDelete: function(match){
+					this.delete_id = match.id,
+					this.delete_title = match.title;
+					$('#confirmDeleteModal').modal('show');
+				},
+				deleteMatch: function(key){
+					console.log('delete: ' + key);
+
+					var ref = firebase.database().ref('matches').orderByChild("id").equalTo(key);
+					console.log(ref);
+
+					var updates = {};
+					updates['matches/'+ key] = null;
+					return firebase.database().ref().update(updates);
+				},
 				search: function(){
 
 					if (this.searchText == '') {

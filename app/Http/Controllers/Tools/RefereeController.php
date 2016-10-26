@@ -98,10 +98,13 @@ class RefereeController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function live()
+	public function live($user_id)
 	{
-		
-		$user = new User;
+		if(isset($user_id)) {
+			$user = User::find($user_id);
+		}else{
+			$user = new User;
+		}
 		return view('pages/tools.referee.live', compact('user'));
 	}
 
@@ -111,10 +114,13 @@ class RefereeController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function complete()
+	public function complete($user_id)
 	{
-		
-		$user = new User;
+		if(isset($user_id)) {
+			$user = User::find($user_id);
+		}else{
+			$user = new User;
+		}
 		return view('pages/tools.referee.complete', compact('user'));
 	}
 	

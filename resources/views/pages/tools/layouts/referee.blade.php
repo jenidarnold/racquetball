@@ -116,8 +116,16 @@
 
 				<ul class="nav navbar-nav pointer">    
 					@if (Auth::guest())
-						<li><a class="navbar-link" href="{{ url('/auth/login') }}">Login</a></li>
-						<li><a class="navbar-link" href="{{ url('/auth/register') }}">Register</a>	
+						<li><a class="navbar-link" href="{{ url('/auth/login') }}">
+							<i class="fa fa-sign-in text-success"></i> Sign-in</a></li>
+						<li><a class="navbar-link" href="{{ url('/auth/register') }}">
+							<i class="fa fa-keyboard-o text-default"></i> Register</a></li>	
+						<li><a class="navbar-link" href="{{ route('scores.live', [0]) }}"> 
+							<i class="fa fa-spinner fa-spin text-info"></i> Live Matches </a></li>
+						<li><a class="navbar-link text-warning" href="{{ route('scores.complete', [0]) }}">
+							<i class="fa fa-trophy text-warning"></i> Completed Matches</i></a></li>
+						<li><a class="navbar-link" href="{{ url('/') }}"> 
+							<i class="fa fa-info-circle "></i> About this App</a></li>	
 					@else   
 						@if(isset($user))
 						<li><a class="navbar-link">
@@ -126,20 +134,20 @@
 						@endif
 						<li class="divider"></li>	
 						<li><a class="navbar-link" href="{{ route('scores.user.match', [$user->id]) }}"> 
-							<i class="fa fa-plus-square text-success" style="color:black1"></i> Referee a New Match</a></li>
+							<i class="fa fa-plus-square text-success"></i> Create a Match</a></li>
 						<li><a class="navbar-link" href="{{ route('scores.user.show', [$user->id]) }}"> 
-							<i class="fa fa-address-card text-danger" style="color:black1"></i> My Ref'd Matches</a></li>
-					@endif	
-						<li><a class="navbar-link" href="{{ url('/scores/live') }}"> 
-							<i class="fa fa-spinner fa-spin text-info" style="color:black1"></i> Live Matches </a></li>
-						<li><a class="navbar-link text-warning" href="{{ url('/scores/complete') }}">
+							<i class="fa fa-address-card text-danger"></i> My Created Matches</a></li>				
+						<li><a class="navbar-link" href="{{ route('scores.live', [$user->id]) }}"> 
+							<i class="fa fa-spinner fa-spin text-info"></i> Live Matches </a></li>
+						<li><a class="navbar-link text-warning" href="{{ route('scores.complete', [$user->id]) }}">
 							<i class="fa fa-trophy text-warning"></i> Completed Matches</i></a></li>
-						<li><a class="navbar-link" href="{{ url('/scores/{user_id}/show') }}"> 
-							<i class="fa fa-info-circle" style="color:black1"></i> About this App</a></li>	
+						<li><a class="navbar-link" href="{{ url('/') }}"> 
+							<i class="fa fa-info-circle"></i> About this App</a></li>	
+					@endif
 					@if (!Auth::guest())
 						<li class="divider"></li>	
 						<li><a class="navbar-link" href="{{ url('/auth/logout') }}">
-							<i class="fa fa-power-off text-danger" style="color:black1"></i> Sign Out</a></li>
+							<i class="fa fa-sign-out text-danger" style="color:black1"></i> Sign Out</a></li>
 					@endif				
                </ul>
             </div>
