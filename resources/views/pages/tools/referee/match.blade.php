@@ -95,7 +95,7 @@
 				<div class="row">			
 					<div class="row">
 						 <div class="col-xs-12 col-sm-12 form-group">
-							<label for="title" class="control-label lbl-team">Tournament:</label>					
+							<label for="title" class="control-label lbl-team">Tournament:</label>				
 							<select v-model="tournament" id="ddlTournaments" class="form-control">
 							  	<option v-for="t in tournaments" v-bind:value="tournament">
 							    	@{{ t.name }}
@@ -123,12 +123,7 @@
 							  	<option v-for="game in game_formats" v-bind:value="game">
 							    	@{{ game.name }}
 							  	</option>
-							</select>		
-						<!-- Show Timeouts and Appeals after select Game Format -->			
-						<!-- 
-							<i class="fa fa-clock-o"></i> Time outs: @{{ game.timeouts }}
-						 	<i class="fa fa-thumbs-down"></i> Appeals: @{{ game.appeals }}
-						-->
+							</select>								
 						</div>
 					</div>
 				</div>
@@ -563,6 +558,7 @@
 						teams: [], 
 						winner:'',
 						isComplete: false,
+						completeDate: '',
 						last_play: '',
 						},
 				sideout_type: 'Sideout',				
@@ -770,7 +766,6 @@
 					};
 
 					this.match.date = new Date();
-					console.log('date: ' + this.match.date);
 					this.addMatchToDB();
 				
 				},	
@@ -794,25 +789,28 @@
 					//newMatch.push(this.match);
 
 				},
-				updateMatchToDB: function(match){
-					console.log('updateMatchToDB');
-					this.match.title = this.match_title;
-					this.match.tournament = this.tournament;
-					this.match.team = this.team;
-					this.match.players = this.players;
-					this.match.game_num = this.game_num;
-					this.match.score_max = this.score_max;
-					this.match.server = this.server;
-					this.match.faults = this.faults;
-					this.match.isWinner = this.isWinner;
-					this.match.timer = this.timer;
-					if (this.score_steps.length > 0) {
-						this.match.last_step = this.score_steps[this.score_steps.length - 1];
+				updateMatchToDB: function(){
+					try{
+						this.match.title = this.match_title;
+						this.match.tournament = this.tournament;
+						this.match.team = this.team;
+						this.match.players = this.players;
+						this.match.game_num = this.game_num;
+						this.match.score_max = this.score_max;
+						this.match.server = this.server;
+						this.match.faults = this.faults;
+						this.match.isWinner = this.isWinner;
+						this.match.timer = this.timer;
+						if (this.score_steps.length > 0) {
+							this.match.last_step = this.score_steps[this.score_steps.length - 1];
+						}
+						var updates = {};
+						updates['matches/'+ this.match.id] = this.match;
+						return firebase.database().ref().update(updates);
 					}
-
-					var updates = {};
-					updates['matches/'+ this.match.id] = this.match;
-					return firebase.database().ref().update(updates);
+					catch (e){ 
+						console.log('Error updateMatchToDB:' + err.message)
+					}
 				},
 				editMatch: function(){
 
@@ -820,16 +818,24 @@
 				confirmReset: function(){
 					$('#confirmResetModal').modal('show');
 				},			
-				resetMatch: function(event){ 
-
+				resetMatch: function(event){ 					
 					this.endMatch();
+					this.tournament = {id:0, name:''};
+					this.match = {};
+
+					this.match.referee = {
+									id: {{ $user->id}}, 
+									name: '{{ $user->first_name}} {{ $user->last_name}}', 
+								 };
+
 					// disable point, sideout, fault, etc
 					this.isStarted = false;
 					this.showSetup = true;
 					this.players[1].name = '';
 					this.players[2].name = '';
 					this.players[3].name = '';
-					this.players[4].name = '';					
+					this.players[4].name = '';		
+		
 					this.max_players = 4;		
 					this.team[1].name ="Team 1";
 					this.team[2].name ="Team 2";
@@ -852,12 +858,18 @@
 					};					
 
 				},	
+				completeMatch: function(event){
+					this.endMatch();
+
+					this.match.isComplete = true;	
+					this.match.completeDate = new Date();										
+					
+					this.updateMatchToDB();	
+				},
 				endMatch: function(event){
 					this.stopTimer(gameTimer);
 					this.stopTimer(matchTimer);
-					this.server = 0;
-					this.isComplete = true;
-					this.updateMatchToDB();		
+					this.server = 0;					
 				},
 				resumeMatch:function(event){
 					this.starTimer(gameTimer);
@@ -1028,14 +1040,14 @@
 						this.winner = 'The winner is ' + this.team[1].name;
 						this.isWinner=1;
 						$('#winnerModal').modal('show');
-						this.endMatch();
+						this.completeMatch();
 						return true;					
 					}
 					if (this.team[2].wins == this.game_max) {
 						this.winner = 'The winner is ' + this.team[2].name;
 						this.isWinner=2;
 						$('#winnerModal').modal('show');
-						this.endMatch();
+						this.completeMatch();
 						return true;					
 					}
 

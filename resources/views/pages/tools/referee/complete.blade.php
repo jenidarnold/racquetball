@@ -92,7 +92,7 @@
 	<div id="myvue" class="col-xs-12 col-sm-7 col-md-6 col-lg-6">
 		
 		<div class="col-xs-12">
-			<h3>Completed Matches</h3>
+			<h4>Completed Matches</h4>
 		</div>
 		<div class="col-xs-10">
 			<div class="input-group">
