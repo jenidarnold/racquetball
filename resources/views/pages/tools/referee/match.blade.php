@@ -541,7 +541,7 @@
 				classEnabled: 'active',
 				classDisabled: 'disabled',
 				showSetup: true,
-				isStarted: false,
+				isLive: false,
 				initServer: 1,
 				server: 1,
 				max_players: 4,
@@ -730,7 +730,7 @@
 					this.startTimer('match');
 					this.startTimer('game');
 
-					this.match.isStarted = true;
+					this.match.isLive = true;
 					this.updateMatchToDB();
 				},
 				createMatch: function(event){ 
@@ -845,6 +845,7 @@
 					this.score_steps = [],
 					this.match_title ='';
 					this.service = '';
+					this.server = 0;
 					this.clearTimer('game');
 					this.clearTimer('match');
 					this.last_step = '';
@@ -859,14 +860,19 @@
 					this.endMatch();
 
 					this.match.isComplete = true;	
+					this.match.isLive = false;
 					this.match.completeDate = new Date();										
 					
 					this.updateMatchToDB();	
 				},
 				endMatch: function(event){
+					this.match.isLive = false;
+					this.score_steps.push('Matched Ended');
+
 					this.stopTimer(gameTimer);
 					this.stopTimer(matchTimer);
-					this.server = 0;					
+
+					this.updateMatchToDB();					
 				},
 				resumeMatch:function(event){
 					this.starTimer(gameTimer);

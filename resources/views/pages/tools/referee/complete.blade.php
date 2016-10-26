@@ -106,9 +106,7 @@
 		<br>
 		<!-- List of Matches -->
 		<div class="row">
-			<table class="table table-condensed">
-			  	<tr v-for="m in matches">
-			    	<td>		    	
+		  	<template v-for="m in matches">			    	
 			    		<div class="">	
 			    			<table class="table col-xs-12">
 							<caption>
@@ -207,10 +205,8 @@
 								<td colspan="2" class=" th-games game-time"><span class="" title="Match Time">@{{ m.timer.match | secondsToTime }}</span></td>
 							</tr>							
 							</table>
-						</div>					
-					</td>
-				</tr>
-			</table>		
+						</div>	
+			</template>	
 		</div>
 		<!-- end list of matches -->	
 	</div>
