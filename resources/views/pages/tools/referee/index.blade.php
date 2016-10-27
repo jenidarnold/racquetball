@@ -25,7 +25,7 @@
 		   	<br>
 		   	<div class="row">
 	   			<div class="col-xs-10 col-xs-offset-2">
-		   			<a href="{{ url('/scores/live') }}" class="btn btn-info btn-block">View Live Scores</a>
+		   			<a href="{{ url('/scores/0/live') }}" class="btn btn-info btn-block">View Live Scores</a>
 		   		</div>
 		   </div>
 		</div>	

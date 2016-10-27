@@ -115,7 +115,7 @@
 							<label class="text-default h6">@{{ m.date }}</label>
 						</div>
 					</caption>					
-					<tr class="tr-games" v-bind:class="{'label-primary': m.isLive, 'label-success': m.isComplete, 'label-danger': !m.isLive && !m.isComplete}">
+					<tr class="tr-games" v-bind:class="{'label-primary': m.isLive, 'label-success': m.isComplete, 'label-warning': !m.isLive && !m.isComplete}">
 						<th class="col-xs-9 th-games">@{{ m.title}} </th>
 						<th class="col-xs- th-games"></th>
 						<th class="col-xs- th-games"><span v-if="m.game_num >= 1">1</span></th>
@@ -189,7 +189,7 @@
 								<span v-if="m.game_num >= g.gm"> @{{ g.score }} </span>
 						</td>
 					</tr>
-					<tr class="tr-games" v-bind:class="{'label-primary': m.isLive, 'label-success': m.isComplete, 'label-danger': !m.isLive && !m.isComplete}">
+					<tr class="tr-games" v-bind:class="{'label-primary': m.isLive, 'label-success': m.isComplete, 'label-warning': !m.isLive && !m.isComplete}">
 						<td></td>
 						<td class="th-games">&nbsp;</td>
 						<td class="th-games game-time"><span class="" title="Game Time" v-if="m.game_num >= 1" >@{{ m.timer.game[1] | secondsToTime }}</span></td>
@@ -206,15 +206,21 @@
 						<td colspan="7">
 							<!-- Match Actions -->
 							<div class="">
-								<div class="col-xs-3"> 
-									<button class="btn btn-success btn-xs btn-block">Resume</button>
-								</div>
-								<div class="col-xs-3"> 
-									<button class="btn btn-warning btn-xs btn-block">Edit</button>
-								</div>
-								<div class="col-xs-3"> 
-									<button class="btn btn-danger btn-xs btn-block" v-on:click="confirmDelete(m)">Delete</button>
-								</div>
+								<div class="btn-group col-xs-4">
+									<a class="btn btn-default btn-xs" title="Edit Match" href="{{ route('scores.user.match', [$user->id]) }}">
+										<i class="fa fa-step-backward"></i></a>
+
+									<a class="btn btn-default btn-xs" v-bind:class="{'disabled': m.isComplete || m.isLive}" href="{{ route('scores.user.match', [$user->id]) }}">
+									<i class="fa fa-play"></i></a>
+
+									<a class="btn btn-default btn-xs" title="Pause Match" v-bind:class="{'disabled': m.isComplete || (!m.isLive && !m.isComplete) }" href="{{ route('scores.user.match', [$user->id]) }}">
+									<i class="fa fa-pause"></i></a>
+										
+									<button class="btn btn-default btn-xs" title="Delete Match" v-on:click="confirmDelete(m)"><i class="fa fa-times"></i></button>
+								</div>	
+								<div class="btn-group col-xs-4">
+									<sspan class="text-primary">Match is Live</span>
+								</div>													
 							</div>
 							<!-- Modal Confirm Reset -->
 							<div id="confirmDeleteModal" class="score modal fade" role="dialog">
@@ -342,6 +348,9 @@
 					var updates = {};
 					updates['matches/'+ key] = null;
 					return firebase.database().ref().update(updates);
+				},
+				resumeMatch: function(match){
+
 				},
 				search: function(){
 
