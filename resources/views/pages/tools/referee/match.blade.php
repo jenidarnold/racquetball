@@ -187,12 +187,12 @@
 				<h4 class="text-left">
 					<span class="text-primary">@{{ tournament.name }}</span>
 					<div style="float:right">	
-						<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
+						<button v-on:click="confirmReset" class="btn btn-success btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
 					</div>
 				</h4>
 			</div>
 			<div class="">			
-				<table class="table col-xs-12">					
+				<table class="table col-xs-12 well">					
 					<tr class="tr-games label-primary ">
 						<th class="col-xs-9 th-games">@{{ match_title }}</th>
 						<th class="col-xs- th-games"></th>
@@ -219,10 +219,10 @@
 								<i v-show="isWinner == 1" class="fa fa-trophy text-warning"></i>
 							</div>
 							<div class="" v-show="isStarted">
-								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
+								<button v-on:click="timeout(1)" data-toggle="modal" data-target="#timeoutModal1" class="btn btn-warning btn-sm" v-bind:class="isStarted && (team[1].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
 								  <span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[1].timeouts }}</span></button>
 								<span class="" v-show="isStarted">
-									<button v-on:click="appeal(1)" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[1].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[1].appeals  }}</span>
+									<button v-on:click="appeal(1)" class="btn btn-danger btn-sm" v-bind:class="isStarted && team[1].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[1].appeals  }}</span>
 									</button>
 								</span>
 							</div>	
@@ -253,10 +253,10 @@
 								<i v-show="isWinner == 2" class="fa fa-trophy text-warning"></i>
 							</div>
 							<div class="" v-show="isStarted">
-								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal2" class="btn btn-warning btn-xs" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
+								<button v-on:click="timeout(2)" data-toggle="modal" data-target="#timeoutModal2" class="btn btn-warning btn-sm" v-bind:class="isStarted && (team[2].timeouts > 0 || timeoutTimer) ? classEnabled : classDisabled">
 								<span class="badge"><i class="fa fa-clock-o fa-xs"></i> @{{ team[2].timeouts }}</span></button>							
 								<span class="col-xs" v-show="isStarted">
-									<button v-on:click="appeal(2)" class="btn btn-danger btn-xs" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals  }}</span></button>
+									<button v-on:click="appeal(2)" class="btn btn-danger btn-sm" v-bind:class="isStarted && team[2].appeals > 0? classEnabled : classDisabled"><span class="badge"><i class="fa fa-thumbs-down fa-xs"></i> @{{ team[2].appeals  }}</span></button>
 								</span>	
 							</div>
 						</td>
@@ -284,19 +284,19 @@
 						<td colspan="7">
 							<!-- Match Actions -->
 							<div class="">
-								<div class="btn-group col-xs-5">
-									<a class="btn btn-default btn-xs" title="Edit Match" href="{{ route('scores.user.match', [$user->id]) }}">
+								<div class="btn-group col-xs-7">
+									<a class="btn btn-default btn-sm" title="Edit Match" href="{{ route('scores.user.match', [$user->id]) }}">
 										<i class="fa fa-step-backward"></i></a>
 
-									<button class="btn btn-default btn-xs" v-bind:class="{'disabled': match.isComplete || match.isLive}" v-on:click="playMatch(match);">
+									<button class="btn btn-default btn-sm" v-bind:class="{'disabled': match.isComplete || match.isLive}" v-on:click="playMatch(match);">
 									<i class="fa fa-play"></i></button>
 
-									<button class="btn btn-default btn-xs" title="Pause Match" v-bind:class="{'disabled': match.isComplete || (!match.isLive && !match.isComplete) }" v-on:click="pauseMatch(match);">
+									<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'disabled': match.isComplete || (!match.isLive && !match.isComplete) }" v-on:click="pauseMatch(match);">
 									<i class="fa fa-pause"></i></button>
 										
-									<button class="btn btn-default btn-xs" title="Delete Match" v-on:click="confirmDelete(match)"><i class="fa fa-times"></i></button>
+									<button class="btn btn-default btn-sm" title="Delete Match" v-on:click="confirmDelete(match)"><i class="fa fa-times"></i></button>
 								</div>	
-								<div class="btn-group col-xs-7">
+								<div class="btn-group col-xs-5">
 									<label class=" label label-danger" v-show="match.isLive">Match is Live</label>
 									<label class=" label label-success" v-show="match.isComplete">Match is Complete</label>
 									<label class=" label label-default" v-show="!match.isLive && !match.isComplete">Match is Paused</label>
@@ -326,10 +326,10 @@
 			<div class="row">	
 				<div class="col-xs-12">					
 					<!-- div class="col-xs-3 text-center">
-						<button v-on:click="endMatch" class="btn btn-danger btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Stop Match</button>
+						<button v-on:click="endMatch" class="btn btn-danger btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">Stop Match</button>
 					</div -->
 					<!-- div class="col-xs-4">
-						<button v-on:click="resumeMatch" class="btn btn-warning btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Resume Match</button>
+						<button v-on:click="resumeMatch" class="btn btn-warning btn-sm" v-bind:class="isStarted? classEnabled : classDisabled">Resume Match</button>
 					</div -->					
 				</div>	
 			</div>

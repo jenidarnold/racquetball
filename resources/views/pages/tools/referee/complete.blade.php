@@ -108,7 +108,7 @@
 		<div class="row">
 		  	<template v-for="m in matches">			    	
 			    		<div class="">	
-			    			<table class="table col-xs-12">
+			    			<table class="table col-xs-12 well">
 							<caption>
 								<div class="col-xs-8">
 									<label class="text-primary h5">@{{ m.tournament.name}} </label>
