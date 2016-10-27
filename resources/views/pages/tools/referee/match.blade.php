@@ -166,13 +166,13 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="col-xs-3 col-xs-offset-1">
-				    	<button class="btn btn-info" v-on:click="createMatch">Save</button>
-				    </div>					
-				    <div class="col-xs-3">
-				    	<button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
+				    	<button class="btn btn-info" v-on:click="createMatch" v-bind:class="{'disabled':match_title == ''}">Save</button>
 				    </div>
 				    <div class="col-xs-3">
-				    	<button class="btn btn-success" v-on:click="createMatch">Start</button>
+				    	<button class="btn btn-success" v-on:click="startMatch" v-bind:class="{'disabled':match_title == ''}">Start</button>
+				    </div>		
+				    <div class="col-xs-3">
+				    	<button class="btn btn-danger" v-on:click="resetMatch">Reset</button>
 				    </div>
 				</div>
 			</div>
@@ -281,6 +281,45 @@
 						<td colspan="5">&nbsp;</td>
 						<td colspan="2" class=" th-games game-time"><span class="">@{{ timer.match | secondsToTime }}</span></td>
 					</tr>
+					<tr>
+						<td colspan="7">
+							<!-- Match Actions -->
+							<div class="">
+								<div class="btn-group col-xs-4">
+									<a class="btn btn-default btn-xs" title="Edit Match" href="{{ route('scores.user.match', [$user->id]) }}">
+										<i class="fa fa-step-backward"></i></a>
+
+									<a class="btn btn-default btn-xs" v-bind:class="{'disabled': match.isComplete || match.isLive}" href="{{ route('scores.user.match', [$user->id]) }}">
+									<i class="fa fa-play"></i></a>
+
+									<a class="btn btn-default btn-xs" title="Pause Match" v-bind:class="{'disabled': match.isComplete || (!match.isLive && !match.isComplete) }" href="{{ route('scores.user.match', [$user->id]) }}">
+									<i class="fa fa-pause"></i></a>
+										
+									<button class="btn btn-default btn-xs" title="Delete Match" v-on:click="confirmDelete(match)"><i class="fa fa-times"></i></button>
+								</div>	
+								<div class="btn-group col-xs-4">
+									<sspan class="text-primary">Match is Live</span>
+								</div>													
+							</div>
+							<!-- Modal Confirm Reset -->
+							<div id="confirmDeleteModal" class="score modal fade" role="dialog">
+							  <div class="modal-dialog">
+							    <!-- Modal content-->
+							    <div class="modal-content modal-success">
+							      	<div class="modal-body">
+								      	<div class="row">
+											<center><h3>Are you sure you want to delete match @{{ delete_title }} ?</h3></center>
+										</div>	
+										<div class="row">
+											<button type="button" v-on:click="deleteMatch(delete_id)" class="btn btn-success" data-dismiss="modal">Yes</button>
+											<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+										</div>
+							      	</div>
+							    </div>
+							  </div>
+							</div>
+						</td>
+					</tr>			
 				</table>						
 			</div>
 			<div class="row">	
@@ -541,6 +580,7 @@
 				classEnabled: 'active',
 				classDisabled: 'disabled',
 				showSetup: true,
+				isStarted: false,
 				isLive: false,
 				initServer: 1,
 				server: 1,
@@ -549,7 +589,9 @@
 				game_num: 1,
 				tournaments: {id:0, name:''}, //[ {{ $tournaments}} ],
 				tournament: {id:0, name:''},
-				match_title: '',				
+				match_title: '',	
+				delete_id: null,
+				delete_title: '',			
 				match: {
 						id: 0,
 						referee: {
@@ -808,6 +850,24 @@
 					catch (e){ 
 						console.log('Error updateMatchToDB:' + err.message)
 					}
+				},
+				confirmDelete: function(match){
+					this.delete_id = match.id,
+					this.delete_title = match.title;
+					$('#confirmDeleteModal').modal('show');
+				},
+				deleteMatch: function(key){
+					console.log('delete: ' + key);
+
+					var ref = firebase.database().ref('matches').orderByChild("id").equalTo(key);
+					console.log(ref);
+
+					var updates = {};
+					updates['matches/'+ key] = null;
+					return firebase.database().ref().update(updates);
+				},
+				resumeMatch: function(match){
+
 				},
 				editMatch: function(){
 
