@@ -187,7 +187,6 @@
 				<h4 class="text-left">
 					<span class="text-primary">@{{ tournament.name }}</span>
 					<div style="float:right">	
-						<button v-on:click="editMatch" class="btn btn-info btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">Edit Match</button>	
 						<button v-on:click="confirmReset" class="btn btn-success btn-xs" v-bind:class="isStarted? classEnabled : classDisabled">New Match</button>	
 					</div>
 				</h4>
@@ -285,20 +284,22 @@
 						<td colspan="7">
 							<!-- Match Actions -->
 							<div class="">
-								<div class="btn-group col-xs-4">
+								<div class="btn-group col-xs-5">
 									<a class="btn btn-default btn-xs" title="Edit Match" href="{{ route('scores.user.match', [$user->id]) }}">
 										<i class="fa fa-step-backward"></i></a>
 
-									<a class="btn btn-default btn-xs" v-bind:class="{'disabled': match.isComplete || match.isLive}" href="{{ route('scores.user.match', [$user->id]) }}">
-									<i class="fa fa-play"></i></a>
+									<button class="btn btn-default btn-xs" v-bind:class="{'disabled': match.isComplete || match.isLive}" v-on:click="playMatch(match);">
+									<i class="fa fa-play"></i></button>
 
-									<a class="btn btn-default btn-xs" title="Pause Match" v-bind:class="{'disabled': match.isComplete || (!match.isLive && !match.isComplete) }" href="{{ route('scores.user.match', [$user->id]) }}">
-									<i class="fa fa-pause"></i></a>
+									<button class="btn btn-default btn-xs" title="Pause Match" v-bind:class="{'disabled': match.isComplete || (!match.isLive && !match.isComplete) }" v-on:click="pauseMatch(match);">
+									<i class="fa fa-pause"></i></button>
 										
 									<button class="btn btn-default btn-xs" title="Delete Match" v-on:click="confirmDelete(match)"><i class="fa fa-times"></i></button>
 								</div>	
-								<div class="btn-group col-xs-4">
-									<sspan class="text-primary">Match is Live</span>
+								<div class="btn-group col-xs-7">
+									<label class=" label label-danger" v-show="match.isLive">Match is Live</label>
+									<label class=" label label-success" v-show="match.isComplete">Match is Complete</label>
+									<label class=" label label-default" v-show="!match.isLive && !match.isComplete">Match is Paused</label>
 								</div>													
 							</div>
 							<!-- Modal Confirm Reset -->
@@ -334,13 +335,13 @@
 			</div>
 			<div class="row btn-actions">
 				<div class="col-xs-6">		
-					<button v-on:click="point" class="btn btn-block btn-success btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
-					<button v-on:click="sideout" class="btn btn-block btn-danger btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Out Serve</button>	
+					<button v-on:click="point" class="btn btn-block btn-success btn-lg" v-bind:class="isStarted && match.isLive? classEnabled : classDisabled"><i class="fa fa-check"></i> Point</button>
+					<button v-on:click="sideout" class="btn btn-block btn-danger btn-lg" v-bind:class="isStarted && match.isLive? classEnabled : classDisabled"><i class="fa fa-refresh"></i> Out Serve</button>	
 				</div>
 				
 				<div class="col-xs-6">	
-					<button v-on:click="fault" class="btn btn-block btn-warning btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
-					<button v-on:click="undo" class="btn btn-block btn-default btn-lg" v-bind:class="isStarted? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>					
+					<button v-on:click="fault" class="btn btn-block btn-warning btn-lg" v-bind:class="isStarted && match.isLive? classEnabled : classDisabled"><i class="fa fa-exclamation"></i> Fault</button>	
+					<button v-on:click="undo" class="btn btn-block btn-default btn-lg" v-bind:class="isStarted && match.isLive? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>					
 				</div>
 			</div>
 			
@@ -860,14 +861,32 @@
 					console.log('delete: ' + key);
 
 					var ref = firebase.database().ref('matches').orderByChild("id").equalTo(key);
-					console.log(ref);
+					
+					//back to setup
+					this.resetMatch();
 
+					//delete from database
 					var updates = {};
 					updates['matches/'+ key] = null;
 					return firebase.database().ref().update(updates);
 				},
-				resumeMatch: function(match){
+				pauseMatch: function(match){
+					console.log('pause: ' + match.title);
 
+					match.isLive = false;
+
+					var updates = {};
+					updates['matches/'+ match.id] = match;
+					return firebase.database().ref().update(updates);
+				},
+				playMatch: function(match){
+					console.log('play: ' + match.title);
+
+					match.isLive = true;
+
+					var updates = {};
+					updates['matches/'+ match.id] = match;
+					return firebase.database().ref().update(updates);
 				},
 				editMatch: function(){
 
