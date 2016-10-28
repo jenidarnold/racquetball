@@ -133,7 +133,7 @@
 							{{ $user->first_name }} {{ $user->last_name}}</a></li>
 						@endif
 						<li class="divider"></li>	
-						<li><a class="navbar-link" href="{{ route('scores.user.match', [$user->id]) }}"> 
+						<li><a class="navbar-link" href="{{ route('scores.user.match', [$user->id, 0]) }}"> 
 							<i class="fa fa-plus-square text-success"></i> Create a Match</a></li>
 						<li><a class="navbar-link" href="{{ route('scores.user.show', [$user->id]) }}"> 
 							<i class="fa fa-address-card text-danger"></i> My Created Matches</a></li>				

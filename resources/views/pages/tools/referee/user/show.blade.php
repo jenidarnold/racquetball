@@ -204,43 +204,43 @@
 					</tr>
 					<tr>
 						<td colspan="7">
-							<!-- Match Actions -->
-							<div class="">
-								<div class="btn-group col-xs-7">
-									<a class="btn btn-default btn-sm" title="Edit Match" href="{{ route('scores.user.match', [$user->id]) }}">
-										<i class="fa fa-step-backward"></i></a>
+							<!-- Match Actions -->							
+								<div class="">
+									<div class="btn-group col-xs-7">
+										<a class="btn btn-default btn-sm" title="Edit Match" href="{{ route('scores.user.match', [$user->id]) }}">
+											<i class="fa fa-step-backward"></i></a>
 
-									<button class="btn btn-default btn-sm" v-bind:class="{'disabled': m.isComplete || m.isLive}" v-on:click="playMatch(m);">
-									<i class="fa fa-play"></i></button>
+										<button class="btn btn-default btn-sm" v-bind:class="{'disabled': m.isComplete || m.isLive}" v-on:click="playMatch(m);">
+										<i class="fa fa-play"></i></button>
 
-									<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'disabled': m.isComplete || (!m.isLive && !m.isComplete) }" v-on:click="pauseMatch(m);">
-									<i class="fa fa-pause"></i></button>
-										
-									<button class="btn btn-default btn-sm" title="Delete Match" v-on:click="confirmDelete(m)"><i class="fa fa-times"></i></button>
-								</div>	
-								<div class="btn-group col-xs-5">
-									<label class=" label label-danger" v-show="m.isLive">Match is Live</label>
-									<label class=" label label-success" v-show="m.isComplete">Match is Complete</label>
-									<label class=" label label-default" v-show="!m.isLive && !m.isComplete">Match is Paused</label>
-								</div>													
-							</div>
-							<!-- Modal Confirm Reset -->
-							<div id="confirmDeleteModal" class="score modal fade" role="dialog">
-							  <div class="modal-dialog">
-							    <!-- Modal content-->
-							    <div class="modal-content modal-success">
-							      	<div class="modal-body">
-								      	<div class="row">
-											<center><h3>Are you sure you want to delete match @{{ delete_title }} ?</h3></center>
-										</div>	
-										<div class="row">
-											<button type="button" v-on:click="deleteMatch(delete_id)" class="btn btn-success" data-dismiss="modal">Yes</button>
-											<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-										</div>
-							      	</div>
-							    </div>
-							  </div>
-							</div>
+										<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'disabled': m.isComplete || (!m.isLive && !m.isComplete) }" v-on:click="pauseMatch(m);">
+										<i class="fa fa-pause"></i></button>
+											
+										<button class="btn btn-default btn-sm" title="Delete Match" v-on:click="confirmDelete(m)"><i class="fa fa-times"></i></button>
+									</div>	
+									<div class="btn-group col-xs-5">
+										<label class=" label label-danger" v-show="m.isLive">Match is Live</label>
+										<label class=" label label-success" v-show="m.isComplete">Match is Complete</label>
+										<label class=" label label-default" v-show="!m.isLive && !m.isComplete">Match is Paused</label>
+									</div>		
+								</div>
+								<!-- Modal Confirm Reset -->
+								<div id="confirmDeleteModal" class="score modal fade" role="dialog">
+								  <div class="modal-dialog">
+								    <!-- Modal content-->
+								    <div class="modal-content modal-success">
+								      	<div class="modal-body">
+									      	<div class="row">
+												<center><h3>Are you sure you want to delete match @{{ delete_title }} ?</h3></center>
+											</div>	
+											<div class="row">
+												<button type="button" v-on:click="deleteMatch(delete_id)" class="btn btn-success" data-dismiss="modal">Yes</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+											</div>
+								      	</div>
+								    </div>
+								  </div>
+								</div>
 						</td>
 					</tr>							
 				</table>
@@ -274,9 +274,9 @@
 		Vue.config.debug = true;
 		Vue.config.devtools = true;		
 
-		var ref_id = {{ $user->id}};
+		var user_id = {{ $user->id}};
 
-		var matchesRef = firebase.database().ref('matches').orderByChild("referee/id").equalTo(ref_id);
+		var matchesRef = firebase.database().ref('matches').orderByChild("referee/id").equalTo(user_id);
 
 		var vm = new Vue({
 			el: '#myvue',
@@ -298,12 +298,15 @@
 				searchText: '',
 				delete_id: null,
 				delete_title: '',
+				user_id: 0,
 			},
 			firebase: {
 				//matches: matchesRef.limitToLast(3)
 			},	
 			mounted: function(){
 				console.log('mounted');			
+
+				this.user_id = user_id;
 
 				// Retrieve new posts as they are added to our database
 				matchesRef.on("child_added", function(snapshot, prevChildKey) {
@@ -364,7 +367,9 @@
 
 					var updates = {};
 					updates['matches/'+ match.id] = match;
-					return firebase.database().ref().update(updates);
+					firebase.database().ref().update(updates);
+
+					window.location.href="/scores/" + this.user_id + "/match/"  + match.id;
 				},
 				search: function(){
 
