@@ -90,7 +90,7 @@
 
 <div class="col-xs-12">
 	<div id="myvue" class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-		<div id="setup" v-if="showSetup">
+		<div id="setup" v-if="match.showSetup">
 			<form class="form-inline" role="form">	
 				<div class="row">			
 					<div class="row">
@@ -154,11 +154,11 @@
 						<div class="col-xs-12 col-sm-12 form-group">
 							<label for="server" class="control-label lbl-team">Starting Server: </label>
 							<br>					
-							<select id="server" v-model="server" class="form-control">
+							{{-- <select id="server" v-model="server" class="form-control">
 							  	<option v-for="player in match.players" v-bind:value="player.pos">
 							    	@{{ player.name }}
 							  	</option>
-							</select>	
+							</select>	 --}}
 						</div>
 					</div>
 				</div>	
@@ -182,7 +182,7 @@
 		</div>
 
 		<!-- Match Table -->
-		<div v-show="match.isStarted">	
+		<div v-show="match.isStarted && !match.showSetup">	
 			<div>
 				<h4 class="text-left">
 					<span class="text-primary">@{{ match.tournament.name }}</span>
@@ -207,13 +207,13 @@
 							<div class="player-sum">@{{ match.players[1].name }}								
 								<i class="fa fa-circle fa-xs" 
 									v-bind:class="[match.faults >= 1? classRed : classPurple]" 
-									v-show="server == match.players[1].pos">
+									v-show="match.server == match.players[1].pos">
 								</i> 
 								<span class="player-sum" v-show="match.players[2].name != ''">&amp;</span>
 								<span class="player-sum" v-show="match.players[2].name != ''">@{{ match.players[2].name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[match.faults >= 1? classRed : classPurple]"  
-										v-show="server == match.players[2].pos">
+										v-show="match.server == match.players[2].pos">
 									</i>
 								</span>
 								<i v-show="match.isWinner == 1" class="fa fa-trophy text-warning"></i>
@@ -241,13 +241,13 @@
 							<div class="player-sum">@{{ match.players[3].name }}
 								<i class="fa fa-circle fa-xs" 
 									v-bind:class="[match.faults >= 1? classRed : classPurple]" 
-									v-show="server == match.players[3].pos ">
+									v-show="match.server == match.players[3].pos ">
 								</i>
 								<span class="player-sum" v-show="match.players[4].name != ''">&amp;</span>
 								<span class="player-sum" v-show="match.players[4].name != ''">@{{ match.players[4].name }}
 									<i class="fa fa-circle fa-xs" 
 										v-bind:class="[match.faults >= 1? classRed : classPurple]" 
-										v-show="server == match.players[4].pos ">
+										v-show="match.server == match.players[4].pos ">
 									</i>
 								</span>
 								<i v-show="match.isWinner == 2" class="fa fa-trophy text-warning"></i>
@@ -565,6 +565,25 @@
 			}
 		});		
 
+		function removeNullsInObject(obj) {
+		    if( typeof obj === 'string' ){ return; }
+		    $.each(obj, function(key, value){
+		        if ( value === null){
+		            delete obj[key];
+		        } else if ($.isArray(value)) {
+		            if( value.length === 0 ){ delete obj[key]; return; }
+		            $.each(value, function (k,v) {
+		                removeNullsInObject(v);
+		            });
+		        } else if (typeof value === 'object') {
+		            if( Object.keys(value).length === 0 ){ 
+		                delete obj[key]; return; 
+		            }
+		            removeNullsInObject(value);
+		        }
+		    }); 
+		 }
+
 		var match_id = '{{ $match_id}}';
 		var user_id = {{ $user->id }};
 
@@ -582,8 +601,7 @@
 				classBlack: 'black',
 				classPurple: 'purple',
 				classEnabled: 'active',
-				classDisabled: 'disabled',
-				showSetup: true,										
+				classDisabled: 'disabled',							
 				tournaments: {id:0, name:''}, //[ {{ $tournaments}} ],												
 				game_formats: [ 	
 							{id: 0, name:''},
@@ -610,6 +628,7 @@
 						title: '',
 						date: '', 
 						winner:'',
+						showSetup: true,
 						isStarted: false,
 						isComplete: false,
 						isLive: false,
@@ -709,9 +728,10 @@
 				if(match_id != 0) {
 					// Retrieve new posts as they are added to our database
 					matchRef.on("child_added", function(snapshot, prevChildKey) {					
-						vm.match = JSON.stringify(snapshot.val());
+						vm.match = snapshot.val();
+						//vm.match = removeNullsInObject(vm.match);
 						console.log('Load match:');
-						console.log(vm.match);
+						console.log(JSON.stringify(vm.match));
 					});					
 				}
 			},	
@@ -777,7 +797,7 @@
 			},				
 			methods: {
 				startMatch: function(event){
-					this.showSetup = false;
+					this.match.showSetup = false;
 
 					console.log('Start Match');
 					//this.dumpMatch();
@@ -911,7 +931,7 @@
 					this.endMatch();
 
 					//General variables
-				    this.showSetup = true;
+				    this.match.showSetup = true;
 					this.clearTimer('game');
 					this.clearTimer('match');
 
