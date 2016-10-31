@@ -285,10 +285,9 @@
 							<!-- Match Actions -->
 							<div class="">
 								<div class="btn-group col-xs-7">
-									<a class="btn btn-default btn-sm" title="Edit Match" href="{{ route('scores.user.match', [$user->id]) }}">
-										<i class="fa fa-step-backward"></i></a>
-
-									<button class="btn btn-default btn-sm" v-bind:class="{'disabled': match.isComplete || match.isLive}" v-on:click="playMatch(match);">
+									<button class="btn btn-default btn-sm" v-on:click="editMatch(match);">
+										<i class="fa fa-step-backward"></i></button>
+									<button class="btn btn-default btn-sm" v-bind:class="{'disabled': match.isComplete || match.isLive}" v-on:click="playmatch(match);">
 									<i class="fa fa-play"></i></button>
 
 									<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'disabled': match.isComplete || (!match.isLive && !match.isComplete) }" v-on:click="pauseMatch(match);">
@@ -921,7 +920,15 @@
 					updates['matches/'+ match.id] = match;
 					return firebase.database().ref().update(updates);
 				},
-				editMatch: function(){
+				editMatch: function(match){
+					console.log('edit: ' + match.title);
+					this.pauseMatch(match);
+					
+					match.showSetup = true;
+
+					var updates = {};
+					updates['matches/'+ match.id] = match;
+					firebase.database().ref().update(updates);
 
 				},
 				confirmReset: function(){

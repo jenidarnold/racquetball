@@ -114,7 +114,7 @@
 									<label class="text-primary h5">@{{ m.tournament.name}} </label>
 								</div>
 								<div class="col-xs-4">
-									<label class="text-default h6">@{{ m.date}}</label>
+									<label class="text-default h6">@{{ new Date(m.date).toLocaleString() }}</label>
 								</div>								
 							</caption>					
 							<tr class="tr-games label-success ">
@@ -289,7 +289,12 @@
         			{
         				return "";
         			}	
+				},	
+				tolocalDate: function(utc) {
 
+					var date = new Date(utc);
+					console.log('date:' + date)
+    				return date.toLocaleString();
 				},	
 			},	
 			methods: {

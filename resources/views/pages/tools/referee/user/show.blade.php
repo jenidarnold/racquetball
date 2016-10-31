@@ -112,7 +112,7 @@
 							<label class="text-primary h5">@{{ m.tournament.name}} </label>
 						</div>
 						<div class="col-xs-4">
-							<label class="text-default h6">@{{ m.date }}</label>
+							<label class="text-default h6">@{{ new Date(m.date).toLocaleString() }}</label>
 						</div>
 					</caption>					
 					<tr class="tr-games" v-bind:class="{'label-danger': m.isLive, 'label-success': m.isComplete, 'label-default': !m.isLive && !m.isComplete}">
@@ -334,7 +334,13 @@
         			{
         				return "";
         			}	
+				},	
+				tolocalDate: function(utc) {
 
+					console.log('utc:' + utc);
+					var date = new Date(utc);
+					console.log('date:' + date);
+    				return date.toLocaleString();
 				},	
 			},		
 			methods: {
@@ -363,6 +369,7 @@
 					console.log('play: ' + match.title);
 
 					match.isLive = true;
+					match.showSetup = false;
 
 					var updates = {};
 					updates['matches/'+ match.id] = match;
