@@ -98,7 +98,7 @@
 							<label for="title" class="control-label lbl-team">Tournament:</label>				
 							<select v-model="match.tournament" id="ddlTournaments" class="form-control">
 							  	<option v-for="t in tournaments" v-bind:value="match.tournament">
-							    	@{{ t.name }}
+							    	@{{ t }}
 							  	</option>
 							</select>	
 						</div>
@@ -185,7 +185,7 @@
 		<div v-show="match.isStarted && !match.showSetup">	
 			<div>
 				<h4 class="text-left">
-					<span class="text-primary">@{{ match.tournament.name }}</span>
+					<span class="text-primary">@{{ match.tournament }}</span>
 					<div style="float:right">	
 						<button v-on:click="confirmReset" class="btn btn-success btn-sm" v-bind:class="match.isStarted? classEnabled : classDisabled">New Match</button>	
 					</div>
@@ -588,7 +588,8 @@
 
 		var matchesRef = firebase.database().ref('matches');
 		var matchRef = firebase.database().ref('matches').orderByChild("id").equalTo(match_id);
-
+		var t = JSON.parse(JSON.stringify({!! $tournaments !!} ));
+		
 		var vm = new Vue({
 			el: '#myvue',
 			data: {	
@@ -601,7 +602,7 @@
 				classPurple: 'purple',
 				classEnabled: 'active',
 				classDisabled: 'disabled',							
-				tournaments: {id:0, name:''}, //[ {{ $tournaments}} ],												
+				tournaments: t  ,												
 				game_formats: [ 	
 							{id: 0, name:''},
 							{id: 1, name:'2 games to 11; Tie to 7',  
@@ -619,7 +620,7 @@
 				//Match Specific	
 				match: {
 						id: '{{ $match_id}}',
-						tournament: {id:0, name:''},
+						tournament: {},
 						referee: {
 									id: {{ $user->id}}, 
 									name: '{{ $user->first_name}} {{ $user->last_name}}', 
@@ -649,6 +650,7 @@
 						completeDate: '',
 						last_play: '',
 						game: [],
+						score_steps: [],
 						players: 
 								{ 	1: {name:'', pos: 1 }, 
 									2: {name:'', pos: 2 },  
@@ -724,13 +726,15 @@
 			},	
 			mounted: function(){
 				console.log('mounted');
+
 				if(match_id != 0) {
 					// Retrieve new posts as they are added to our database
 					matchRef.on("child_added", function(snapshot, prevChildKey) {					
 						vm.match = snapshot.val();
 						//vm.match = removeNullsInObject(vm.match);
 						console.log('Load match:');
-						console.log(JSON.stringify(vm.match));
+						//console.log(JSON.stringify(vm.match));
+						vm.game = vm.match.game;
 					});					
 				}
 			},	
@@ -812,9 +816,12 @@
 				saveMatch: function(event){ 
 					// enable point, sideout, fault, etc					
 					
-					this.match.game = this.game;
-					this.match.total_games = this.game.games;
-					this.match.score_max = this.game.points;
+					//New match, save variables not set in match from game_format
+					if (this.match.id == 0 ) {
+						this.match.game = this.game;
+						this.match.total_games = this.game.games;
+						this.match.score_max = this.game.points;
+					}
 
 					//Team settings 
 					if (this.match.isDoubles){
@@ -850,11 +857,15 @@
 						}
 					};
 
-					console.log('save Match:');
-					this.dumpMatch();
-
-					this.match.date = new Date();
-					this.addMatchToDB();
+					console.log('save Match:' + this.match.id);
+				
+					if (this.match.id == '0') {
+						console.log('Add new Match');
+						this.match.date = new Date();
+						this.addMatchToDB();
+					}else {
+						this.updateMatchToDB();
+					}
 				
 				},	
 				dumpMatch: function(){

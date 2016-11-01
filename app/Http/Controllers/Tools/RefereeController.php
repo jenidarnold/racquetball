@@ -4,6 +4,7 @@ use Input;
 use App\Http\Requests;
 use App\Tournament;
 use App\Http\Controllers\Controller;
+use App\Repositories\TournamentRepository;
 use Illuminate\Http\Request;
 use App\User;
 use JavaScript;
@@ -15,11 +16,11 @@ class RefereeController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct()
-	{
-		//$this->middleware('auth');
-	}
-	
+	//public function __construct(TournamentRepository $tournaments)
+	//{
+	//	$this->middleware('auth');
+       // $this->tournaments = $tournaments;
+	//}
 
 	/**
 	 *  Display decsription of Referee App
@@ -50,10 +51,9 @@ class RefereeController extends Controller {
 	{
 
 		$tournaments = Tournament::selectRaw('CONCAT(name, " (", start_date, ")") as name, tournament_id')
+			->where('start_date', '>=', '2016-10-01')
 			->orderBy('start_date', 'desc')
 			->lists('name','tournament_id');
-			
-		//var_dump($tournaments);
 
 		$user = User::find($user_id);
 
