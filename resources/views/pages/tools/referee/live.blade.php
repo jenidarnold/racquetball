@@ -110,7 +110,7 @@
 	    			<table class="table col-xs-12 well">
 						<caption>
 							<div class="col-xs-8">
-								<label class="text-primary h5">@{{ m.tournament.name}} </label>
+								<!-- label class="text-primary h5">@{{ m.tournament.name}} </label-->
 							</div>
 							<div class="col-xs-4">
 								<label class="text-default h6">@{{ m.date | toLocalDate}}</label>
@@ -218,10 +218,10 @@
 			<template v-for="m in matches">
     			<table class="table col-xs-12 well">
 					<caption>
-						<div class="col-xs-8">
-							<label class="text-primary h5">@{{ m.tournament.name}} </label>
+						<div class="col-xs-6">
+							<!--label class="text-primary h5">@{{ m.tournament.name}} </label-->
 						</div>
-						<div class="col-xs-4">
+						<div class="col-xs-6">
 							<label class="text-default h6">@{{ m.date | tolocalDate}}</label>
 						</div>								
 					</caption>					

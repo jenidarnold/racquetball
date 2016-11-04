@@ -108,10 +108,10 @@
 			<template v-for="m in matches">	
 				<table class="table col-xs-12 well">
 					<caption>
-						<div class="col-xs-8">
-							<label class="text-primary h5">@{{ m.tournament}} </label>
+						<div class="col-xs-6">
+							<!--label class="text-primary h5">@{{ m.tournament}} </label-->
 						</div>
-						<div class="col-xs-4">
+						<div class="col-xs-6">
 							<label class="text-default h6">@{{ new Date(m.date).toLocaleString() }}</label>
 						</div>
 					</caption>					
@@ -209,10 +209,10 @@
 									<div class="btn-group col-xs-7">
 										<button class="btn btn-default btn-sm" v-on:click="editMatch(m);">
 										<i class="fa fa-step-backward"></i></button>
-										<button class="btn btn-default btn-sm" v-bind:class="{'disabled': m.isComplete || m.isLive}" v-on:click="playMatch(m);">
+										<button class="btn btn-default btn-sm" v-bind:class="{'hidden': m.isComplete || m.isLive}" v-on:click="playMatch(m);">
 										<i class="fa fa-play"></i></button>
 
-										<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'disabled': m.isComplete || (!m.isLive && !m.isComplete) }" v-on:click="pauseMatch(m);">
+										<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'hidden': m.isComplete || (!m.isLive && !m.isComplete) }" v-on:click="pauseMatch(m);">
 										<i class="fa fa-pause"></i></button>
 											
 										<button class="btn btn-default btn-sm" title="Delete Match" v-on:click="confirmDelete(m)"><i class="fa fa-times"></i></button>

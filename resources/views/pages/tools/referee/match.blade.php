@@ -93,7 +93,7 @@
 		<div id="setup" v-if="match.showSetup">
 			<form class="form-inline" role="form">	
 				<div class="row">			
-					<div class="row">
+					<!--div class="row">
 						 <div class="col-xs-12 col-sm-12 form-group">
 							<label for="title" class="control-label lbl-team">Tournament:</label>				
 							<select v-model="match.tournament" id="ddlTournaments" class="form-control">
@@ -102,8 +102,7 @@
 							  	</option>
 							</select>	
 						</div>
-					</div>
-					
+					</div-->					
 			    	<div class="row">
 					    <div class="col-xs-12 col-sm-12 form-group">
 							<label for="title" class="control-label lbl-team">Match Title:</label>
@@ -183,14 +182,14 @@
 
 		<!-- Match Table -->
 		<div v-show="match.isStarted && !match.showSetup">	
-			<div>
+			<!--div>
 				<h4 class="text-left">
 					<span class="text-primary">@{{ match.tournament }}</span>
 					<div style="float:right">	
 						<button v-on:click="confirmReset" class="btn btn-success btn-sm" v-bind:class="match.isStarted? classEnabled : classDisabled">New Match</button>	
 					</div>
 				</h4>
-			</div>
+			</div-->
 			<div class="">			
 				<table class="table col-xs-12 well">					
 					<tr class="tr-games label-primary ">
@@ -287,10 +286,10 @@
 								<div class="btn-group col-xs-7">
 									<button class="btn btn-default btn-sm" v-on:click="editMatch(match);">
 										<i class="fa fa-step-backward"></i></button>
-									<button class="btn btn-default btn-sm" v-bind:class="{'disabled': match.isComplete || match.isLive}" v-on:click="playmatch(match);">
+									<button class="btn btn-default btn-sm" v-bind:class="{'hidden': match.isComplete || match.isLive}" v-on:click="playMatch(match);">
 									<i class="fa fa-play"></i></button>
 
-									<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'disabled': match.isComplete || (!match.isLive && !match.isComplete) }" v-on:click="pauseMatch(match);">
+									<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'hidden': match.isComplete || (!match.isLive && !match.isComplete) }" v-on:click="pauseMatch(match);">
 									<i class="fa fa-pause"></i></button>
 										
 									<button class="btn btn-default btn-sm" title="Delete Match" v-on:click="confirmDelete(match)"><i class="fa fa-times"></i></button>
@@ -953,7 +952,7 @@
 					this.clearTimer('game');
 					this.clearTimer('match');
 
-					this.match = {};
+					//this.match = {};
 
 					//Match Defaults
 					
@@ -963,14 +962,13 @@
 									name: '{{ $user->first_name}} {{ $user->last_name}}', 
 								 };
 
-					this.matchisStarted = false;
+					this.match.isStarted = false;
 				
 					this.match.players[1].name = '';
 					this.match.players[2].name = '';
 					this.match.players[3].name = '';
 					this.match.players[4].name = '';		
 		
-					this.match.max_players = 4;		
 					this.match.team[1].name ="Team 1";
 					this.match.team[2].name ="Team 2";
 					this.match.team[1].wins = 0;
@@ -1124,11 +1122,13 @@
 						this.match.team[2].games[this.match.game_num].score +=1;
 					}					
 
+
 					//Did Team 1 win the game?
 					if ((this.match.team[1].games[this.match.game_num].score >= this.match.score_max) && 
-						((this.match.team[1].games[this.match.game_num].score - this.match.team[2].games[this.match.game_num].score) >= this.win_by))
+						((this.match.team[1].games[this.match.game_num].score - this.match.team[2].games[this.match.game_num].score) >= this.match.win_by))
 					{
 						//Game is over
+						console.log('Game over');
 						this.endGame();
 						this.match.team[1].wins +=1;
 
@@ -1149,7 +1149,7 @@
 
 					//Did Team 2 win the game?
 					if ((this.match.team[2].games[this.match.game_num].score >= this.match.score_max) && 
-						((this.match.team[2].games[this.match.game_num].score - this.match.team[1].games[this.match.game_num].score) >= this.win_by))
+						((this.match.team[2].games[this.match.game_num].score - this.match.team[1].games[this.match.game_num].score) >= this.match.win_by))
 					{
 						//Game is over
 						this.endGame();
@@ -1424,7 +1424,6 @@
 					this.updateMatchToDB();		
 				},
 				showScore: function(event){
-					console.log('show score');
 					if (this.match.server < 3) {
 						this.match.service = this.match.team[1].games[this.match.game_num].score + " - " + this.match.team[2].games[this.match.game_num].score;
 					}
