@@ -104,6 +104,13 @@
 			<button id="btnSearch" class="btn btn-sm btn-default" v-on:click="search">GO</button>
 		</div>
 		<br>
+		<!-- Facebook -->
+		<div
+		  class="fb-like"
+		  data-share="true"
+		  data-width="450"
+		  data-show-faces="true">
+		</div>
 		<!-- List of Recently Completed Matches -->
 		<div class="row">
 		  	<template v-for="m in complete_matches">			    	

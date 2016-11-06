@@ -14,8 +14,9 @@
 @section('ref-content')
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<!--div class="panel panel-info">
+		<div class="col-md-8 col-md-offset-2">			
+		<!--
+			<div class="panel panel-info">
 				<div class="panel-heading cred"><span class="cred">Login using one of your social media accounts</span></div>
 				<div class="panel-body">
 					<div class="col-md-3 col-md-offset-2">
@@ -34,7 +35,8 @@
  						</a>
 					</div>
 				</div>
-			</div-->
+			</div>
+			-->			
 			<br>
 			<div class="panel panel-warning">
 				<div class="panel-heading cred"><span class="cred">Enter Your Login Credentials</span></div>
@@ -94,4 +96,5 @@
 		</div>
 	</div>
 </div>
+
 @stop

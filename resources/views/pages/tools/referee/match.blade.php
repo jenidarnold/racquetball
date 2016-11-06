@@ -88,6 +88,12 @@
 
 @section('ref-content')
 
+<div id="fb-root"></div>
+<div class="row">		   		
+	<div class="fb-login-button col-xs-10 col-xs-offset-2" data-max-rows="1" data-size="large" 
+	scope="public_profile,publish_actions, email,user_friends" data-show-faces="true" data-auto-logout-link="true">				
+</div>
+<div id="status"></div>
 <div class="col-xs-12">
 	<div id="myvue" class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<div id="setup" v-if="match.showSetup">
@@ -291,7 +297,10 @@
 
 									<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'hidden': match.isComplete || (!match.isLive && !match.isComplete) }" v-on:click="pauseMatch(match);">
 									<i class="fa fa-pause"></i></button>
-										
+									
+									<button class="btn btn-default btn-sm" title="Pause Match" v-bind:class="{'hidden': match.isComplete || (!match.isLive && !match.isComplete) }" v-on:click="goLiveFB(match);">
+									<i class="fa fa-circle text-danger"></i></button>
+									
 									<button class="btn btn-default btn-sm" title="Delete Match" v-on:click="confirmDelete(match)"><i class="fa fa-times"></i></button>
 								</div>	
 								<div class="btn-group col-xs-5">
@@ -619,6 +628,7 @@
 				//Match Specific	
 				match: {
 						id: '{{ $match_id}}',
+						fb_id: 0,
 						tournament: {},
 						referee: {
 									id: {{ $user->id}}, 
@@ -811,6 +821,11 @@
 
 					this.match.isLive = true;
 					this.updateMatchToDB();
+					if (this.match.fb_id == 0 ) {
+						this.createFacebookPost();
+					}else {
+						this.updateFacebookPost();
+					}
 				},
 				saveMatch: function(event){ 
 					// enable point, sideout, fault, etc					
@@ -879,8 +894,40 @@
 					console.log('key:' + newMatchKey);
   					this.updateMatchToDB();
 
+				},			
+				createFacebookPost: function(){
+					var that = this;
+					this.match.post = this.match.title + ": " + this.match.team[1].name + ' vs ' + this.match.team[2].name;
+
+					FB.api('/me/feed', 'post', {message: that.match.post},
+					 function(response) {
+					  if (!response || response.error) {
+					    console.log('Error occured posting to FB ' + response.error);
+					  } else {
+					     console.log('Post ID: ' + response.id);
+					     that.match.fb_id = response.id;
+					  }
+					});
+				},
+				updateFacebookPost: function(){
+					this.match.post = this.match.title + '\n' 
+					                + this.match.team[1].name + ' ' + this.match.team[1].games[this.match.game_num].score + '\n '
+					                + this.match.team[2].name + ' ' + this.match.team[2].games[this.match.game_num].score;
+
+					var that = this;
+					FB.api('/me/feed', 'post', {message: that.match.post }, function(response) {
+					  if (!response || response.error) {
+					    console.log('Error occured posting to FB ' + that.match.post);
+					    console.log(response.error);
+					  } else {
+					     console.log('Post ID: ' + response.id);
+					  }
+					});
 				},				
 				updateMatchToDB: function(){
+
+					this.updateFacebookPost();
+
 					try{
 						
 						//console.log('updateMatchToDB:' + this.match.id);
@@ -893,6 +940,7 @@
 					catch (e){ 
 						console.log('Error updateMatchToDB:' + e.message)
 					}
+					
 				},
 				confirmDelete: function(match){
 					this.delete_id = match.id,
@@ -920,6 +968,27 @@
 					var updates = {};
 					updates['matches/'+ match.id] = match;
 					return firebase.database().ref().update(updates);
+				},
+				goLiveFB: function(match){
+					 FB.ui({
+					    display: 'popup',
+					    method: 'live_broadcast',
+					    phase: 'create',
+					}, function(response) {
+					    if (!response.id) {
+					       console.log('dialog canceled');
+					      return;
+					    }
+					    console.log('stream url:' + response.secure_stream_url);
+					    FB.ui({
+					      display: 'popup',
+					      method: 'live_broadcast',
+					      phase: 'publish',
+					      broadcast_data: response,
+					    }, function(response) {
+					     console.log("video status: \n" + response.status);
+					    });
+					  });
 				},
 				playMatch: function(match){
 					console.log('play: ' + match.title);
@@ -1470,4 +1539,84 @@
           document.addEventListener('touchmove', touchmoveHandler, false);      });
             //]]>    
     </script>
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=707155052773927";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<script>
+// This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+// This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });    
+  }
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '707155052773927',
+      xfbml      : true,
+      version    : 'v2.8'
+    });
+
+    FB.getLoginStatus(function(response) {
+    	statusChangeCallback(response);
+  	});
+
+  	FB.Event.subscribe('auth.login', function(resp) {
+        window.location = '/auth/login/';
+    });
+  };
+
+
+// Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Hey, Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });      
+  }
+</script>
 @stop
