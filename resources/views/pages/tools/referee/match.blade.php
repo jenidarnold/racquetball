@@ -196,7 +196,7 @@
 					</div>
 				</h4>
 			</div-->
-			<div class="">			
+			<div id="divMatch" class="">			
 				<table class="table col-xs-12 well">					
 					<tr class="tr-games label-primary ">
 						<th class="col-xs-9 th-games">@{{ match.title }}</th>
@@ -351,8 +351,9 @@
 					<button v-on:click="undo" class="btn btn-block btn-default btn-lg" v-bind:class="match.isStarted && match.isLive? classEnabled : classDisabled"><i class="fa fa-rotate-left"></i> Undo</button>					
 				</div>
 			</div>
-			
-	</div>
+		
+		<canvas id="canvas"  width="500" height="300"></canvas>
+
 
 	<!-- Modal Team 1 Time out-->
 	<div id="timeoutModal1" class="timeout modal fade" role="dialog">
@@ -539,6 +540,8 @@
 	<!--script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js"></script>
 	<!-- Firebase --> 
     <!--script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/canvas2image/0.1/canvas2image.min.js"></script>
     <script>
       // Initialize Firebase
       var config = {
@@ -821,7 +824,9 @@
 
 					this.match.isLive = true;
 					this.updateMatchToDB();
+					console.log('Start match fb id: ' + this.match.fb_id);
 					if (this.match.fb_id == 0 ) {
+						console.log('Call createFacebookPost');
 						this.createFacebookPost();
 					}else {
 						this.updateFacebookPost();
@@ -897,36 +902,84 @@
 				},			
 				createFacebookPost: function(){
 					var that = this;
-					this.match.post = this.match.title + ": " + this.match.team[1].name + ' vs ' + this.match.team[2].name;
+					this.match.post = this.match.title + "\n"
+					                + this.match.team[1].name + ' vs ' + this.match.team[2].name; // + 
+					              // + 'http://racquetballhub.com/scores/0/live';
 
-					FB.api('/me/feed', 'post', {message: that.match.post},
+					FB.api('/me/feed', 'post', {message: that.match.post, privacy:{value:'SELF'}},
 					 function(response) {
 					  if (!response || response.error) {
-					    console.log('Error occured posting to FB ' + response.error);
+					    console.log('Error occured in createFacebookPost posting to FB ' + response.error);
 					  } else {
-					     console.log('Post ID: ' + response.id);
+					     console.log('New Post ID: ' + response.id);
 					     that.match.fb_id = response.id;
+					     console.log('New Match Post ID: ' + that.match.fb_id.toString()) ;
 					  }
 					});
 				},
 				updateFacebookPost: function(){
-					this.match.post = this.match.title + '\n' 
-					                + this.match.team[1].name + ' ' + this.match.team[1].games[this.match.game_num].score + '\n '
-					                + this.match.team[2].name + ' ' + this.match.team[2].games[this.match.game_num].score;
+					console.log('updateFacebookPost post: ' + this.match.fb_id.toString());
+
+					//Match Title
+					this.match.post = this.match.title + '\n';
+
+					//Team 1 scores
+					this.match.post += this.match.team[1].name + '   ' ;
+					for (var i = 1; i <= this.match.game_max + 1; i++) {
+						this.match.post += this.match.team[1].games[i].score + '  ';
+					};
+					this.match.post += '\n';
+					//Team 1 scores
+					this.match.post += this.match.team[2].name + '   ' ;
+					for (var i = 1 ; i <= this.match.game_max + 1; i++) {
+						this.match.post += this.match.team[2].games[i].score  + '  ';
+					};
+					this.match.post += '\n';
+
+					// Live Link
+					this.match.post += '\n\nAll Live Scores @ racquetballhub.com/scores/0/live';
 
 					var that = this;
-					FB.api('/me/feed', 'post', {message: that.match.post }, function(response) {
+					FB.api(that.match.fb_id.toString(), 'post', {message: that.match.post }, function(response) {
 					  if (!response || response.error) {
-					    console.log('Error occured posting to FB ' + that.match.post);
+					    console.log('Error occured updating Post ' + that.match.fb_id.toString());
 					    console.log(response.error);
 					  } else {
-					     console.log('Post ID: ' + response.id);
+					     console.log('Current Post ID: ' + response.id);
+					     console.log('Current Match Post ID: ' + that.match.fb_id.toString()) ;
 					  }
 					});
-				},				
-				updateMatchToDB: function(){
 
+					this.addFaceBookComment();
+				},	
+				addFaceBookComment: function(){
+					var that = this;
+					var game_time = this.match.timer.game[this.match.game_num];
+
+					if (game_time){
+						game_time = game_time.toString();
+						var date = new Date(null);
+        				date.setSeconds(game_time); // specify value for SECONDS here
+        				game_time= date.toISOString().substr(12, 7);
+        			}
+
+
+					var comment =  '[Gm ' + this.match.game_num + ' ' + game_time + '] ' + this.match.last_step;
+
+					FB.api(that.match.fb_id.toString()+ '/comments/', 'post', {message: comment }, function(response) {
+					  if (!response || response.error) {
+					    console.log('Error occured adding comment to Post ' + that.match.fb_id.toString());
+					    console.log(response.error);
+					  } else {
+					     console.log('Current Match Post ID: ' + that.match.fb_id.toString()) ;
+					  }
+					});
+				},
+				updateMatchToDB: function(){
+					this.match.last_step = this.match.score_steps.pop();
 					this.updateFacebookPost();
+					//Fix me
+					//this.saveToImage();
 
 					try{
 						
@@ -941,6 +994,18 @@
 						console.log('Error updateMatchToDB:' + e.message)
 					}
 					
+				},
+				//Workin Progress
+				saveToImage: function(){
+				  	html2canvas($("#divMatch"), {
+			            onrendered: function(canvas) {
+			                theCanvas = canvas;
+			               // Convert and download as image 
+			                var link = document.getElementById("canvas").toDataURL();
+			                console.log(link);
+			            	}
+			        	}
+			    	)
 				},
 				confirmDelete: function(match){
 					this.delete_id = match.id,
@@ -1102,7 +1167,7 @@
 					if (name == 'game') {
 						gameTimer = setInterval(function(){
 							//Todo: fix. why is this undefined
-							//that.match.timer.game[that.match.game_num ] +=1;
+							that.match.timer.game[that.match.game_num ] +=1;
 						}, 1000);	
 					}	
 
