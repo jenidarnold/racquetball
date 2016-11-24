@@ -106,8 +106,6 @@ class RefereeController extends Controller {
 		}else{
 			$user = new User;
 		}
-
-		var_dump($user_id);
 		return view('pages/tools.referee.live', compact('user'));
 	}
 

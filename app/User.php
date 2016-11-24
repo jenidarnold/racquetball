@@ -74,6 +74,16 @@ class User extends Model implements AuthenticatableContract,
 		//echo $body;
 
 	}
+
+	/**
+	 * Link FB account to User Account; probablyy move to another loca
+	 * @param  [type] $userId   [description]
+	 * @return [type]           [description]
+	 */
+	public static function link_account($fb_id) {
+	
+
+	}
 		  
 	/**
 	 * User's permissions

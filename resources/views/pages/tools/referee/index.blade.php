@@ -2,7 +2,14 @@
 
 @section('style')
 	<style>
-		
+		.fb_iframe_widget, .fb_iframe_widget span, .fb_iframe_widget span iframe[style] {
+    width: 100% !important;
+    }
+    .buttons{
+      width: 290px !important;
+      font-family:  Helvetica, Arial, sans-serif;
+      font-weight: bold;
+    }
 	</style>
 	@parent	
 @stop
@@ -18,22 +25,30 @@
 		     Live scores are available as the match is being played for fans to follow.
 		   	</p>
 	   	 	<div class="row">
-	   			<div class="col-xs-10 col-xs-offset-2">
-		   			<a href="{{ url('/scores/0/live') }}" class="btn btn-info btn-block">View Live Scores</a>
+	   			<div class="col-xs-10 col-xs-offset-1">
+		   			<a href="{{ url('/scores/0/live') }}" class="btn btn-info  buttons">View Live Scores</a>
 		   		</div>
 		    </div>
+        <br>
+        <div class="row">         
+          <div class="fb-login-button fb_iframe_widget col-xs-10 col-xs-offset-1" data-max-rows="1" data-size="xlarge" 
+            login_text="Login with Facebook" 
+            scope="public_profile, publish_actions, email,user_friends, user_about_me" data-show-faces="false" data-auto-logout-link="true">        
+         </div>
+        </div> 
+        <br>
+        <div class="row">
+          <div class="col-xs-10 col-xs-offset-1">            
+            <a href="{{ url('/auth/register') }}" class="btn btn-default buttons"><i class="fa fa-envelope-o text-center"></i> Sign up using Email</a>
+          </div>
+        </div>  
 		    <br>
 		   	<div class="row">
-		   		<div class="col-xs-10 col-xs-offset-2">
-		   			<a href="{{ url('/auth/login') }}" class="btn btn-success btn-block">Login In with Email</a>
+		   		<div class="col-xs-10 col-xs-offset-1 text-center">
+		   			<h5> Have an Account? <a href="{{ url('/auth/login') }}" class="text-primary bold"> Login </a></h5>
 		   		</div>
 		   	</div>
-		    <br>
-		   	<div class="row">		   		
-				  <div class="fb-login-button col-xs-10 col-xs-offset-2" data-max-rows="1" data-size="large" 
-				    scope="public_profile,publish_actions, email,user_friends" data-show-faces="true" data-auto-logout-link="true">				
-			   </div>
-		  </div>	
+		   
 	</div>
 </div>
 
@@ -63,16 +78,17 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      testAPI();
+     var access_token =   FB.getAuthResponse()['accessToken'];
+      getFBUserInfo(access_token);
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
+      //document.getElementById('status').innerHTML = 'Please log ' +
+      //  'into this app.';
     } else {
       // The person is not logged into Facebook, so we're not sure if
       // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
+      //document.getElementById('status').innerHTML = 'Please log ' +
+      //  'into Facebook.';
     }
   }
 
@@ -96,8 +112,10 @@
     	statusChangeCallback(response);
   	});
 
+    //After being logged in, redirect to match page
   	FB.Event.subscribe('auth.login', function(resp) {
-        window.location = '/auth/login/';
+      // console.log(resp);
+      //  window.location = '/auth/fb?id='+resp.id;
     });
   };
 
@@ -113,18 +131,13 @@
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
+  function getFBUserInfo(access_token) {
     console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Hey, Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
+    FB.api('/me?fields=id,name,email', function(response) {
+      //console.log(response);
+      window.location = '/auth/fb?id='+response.id + '&name=' + response.name + '&email=' + response.email + '&token=' + access_token; 
     });
   }  
-
-     //window.location = '/auth/login/';
-
-  }
 </script>
     <script>
       // Initialize Firebase
