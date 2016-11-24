@@ -45,20 +45,31 @@ class AuthenticateWithFacebook {
 			$fb_user->name = $request->name;
 			$fb_user->email = $request->email;
 			$fb_user->token = $request->token;
-
 			$fb_user->save();
 		}
 
-		//$user = \Auth::user();
-		$user = New User;
-		$user->id = 17; //$fb_user->id;
-		$user->first_name = $fb_user->name;
+		// Look up fb id in users
+		// if found, authenticate and goto app		
+		
+		//dd($fb_user->id);
+		$link = $fb_user->user();		
+		if(! is_null($link)) {
+			$user = User::find($link->id);
+			\Auth::login($user);
+			return new RedirectResponse(route('scores.user.show', array($link->id)));
+		} else {
+			// Goto page to link accounts
+			// See example : https://support.runkeeper.com/hc/en-us/articles/201109976-How-to-link-your-account-to-Facebook
 
-		//$lastLogin = date_create("2015/9/1");
-		//$today = date_create(date("Y/m/d"));
+		}
+		
+		//$user = User::find($user_id);
+		//$user = Auth::loginUsingId($userID);
+		//return new RedirectResponse(route('scores.user.show', array($user->id)));
+	
 
-
-		return new RedirectResponse(route('scores.user.show', array($user->id)));
+		//$user = \Auth::login($user);
+		//return new RedirectResponse(route('scores.user.show', array($user->id)));
 
 		////If player go to Player Profile page
 		//if ($user->player_id > 0){

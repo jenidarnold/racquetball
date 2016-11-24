@@ -13,6 +13,8 @@ class FacebookUser extends Model
 	 */
 	protected $table = 'fb_users';
 
+	public $primaryKey = 'id';
+
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -27,5 +29,16 @@ class FacebookUser extends Model
 	 */
 	protected $hidden = ['token'];
 
+	public function user()
+	{
+		//return $this->hasManyThrough('App\User','App\AccountLink', 
+		//	                          'user_id', 'id', 'app_user_id');
 
+		$user=  \DB::table('users')
+			->join('account_links', 'users.id', '=', 'account_links.user_id')
+			->where('account_links.app_user_id', '=', $this->id)
+			->first();
+
+		return $user;
+	}
 }
