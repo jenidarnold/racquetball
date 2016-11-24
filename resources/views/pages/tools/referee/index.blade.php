@@ -119,8 +119,8 @@
       console.log('Hey, Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
-    });    
-	});
+    });
+  }  
 
      //window.location = '/auth/login/';
 
