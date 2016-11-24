@@ -182,6 +182,26 @@ Route::get('facebook', 'AccountController@facebook_redirect');
 // Get back to redirect url
 Route::get('account/facebook', 'AccountController@facebook');
 
+
+//WebHooks
+Route::get('webhooks', function(){
+
+	$challenge = Request::get('hub_challenge');	
+	$mode = Request::get('hub_mode');	
+	$token = Request::get('hub_verify_token');	
+
+	//dd($token);
+ 	if ($mode == 'subscribe' &&  $token == 'splat') {
+		return response($challenge, 200);
+  	} else {
+  	 
+    echo "Failed validation. Make sure the validation tokens match.";
+    return response("content", 403);
+  }  
+});
+
+
+
 //APIs
 Route::get('api/profile/download', function(){
 	$player_id = (int)Input::get('playerID');

@@ -30,10 +30,10 @@
 		   	</div>
 		    <br>
 		   	<div class="row">		   		
-				<div class="fb-login-button col-xs-10 col-xs-offset-2" data-max-rows="1" data-size="large" 
-				scope="public_profile,publish_actions, email,user_friends" data-show-faces="true" data-auto-logout-link="true">				
-			</div>
-		</div>	
+				  <div class="fb-login-button col-xs-10 col-xs-offset-2" data-max-rows="1" data-size="large" 
+				    scope="public_profile,publish_actions, email,user_friends" data-show-faces="true" data-auto-logout-link="true">				
+			   </div>
+		  </div>	
 	</div>
 </div>
 
@@ -119,13 +119,7 @@
       console.log('Hey, Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
-    });
-    FB.api('/me/feed', 'post', {message: 'Jennifer Arnold, this is a test'}, function(response) {
-	  if (!response || response.error) {
-	    alert('Error occured');
-	  } else {
-	    alert('Post ID: ' + response.id);
-	  }
+    });    
 	});
 
      //window.location = '/auth/login/';

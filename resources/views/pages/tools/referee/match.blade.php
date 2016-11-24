@@ -352,7 +352,7 @@
 				</div>
 			</div>
 		
-		<canvas id="canvas"  width="500" height="300"></canvas>
+		<canvas id="canvas" width="300" height="300" style="border:1px solid      #d3d3d3;">
 
 
 	<!-- Modal Team 1 Time out-->
@@ -821,6 +821,7 @@
 					
 					this.startTimer('match');
 					this.startTimer('game');
+					this.match.score_steps = [];
 
 					this.match.isLive = true;
 					this.updateMatchToDB();
@@ -976,7 +977,9 @@
 					});
 				},
 				updateMatchToDB: function(){
-					this.match.last_step = this.match.score_steps.pop();
+					if (this.match.score_steps ) {
+						this.match.last_step = this.match.score_steps.pop();
+					}
 					this.updateFacebookPost();
 					//Fix me
 					//this.saveToImage();
@@ -997,13 +1000,12 @@
 				},
 				//Workin Progress
 				saveToImage: function(){
-				  	html2canvas($("#divMatch"), {
+				  	html2canvas(document.getElementById("divMatch"), {
 			            onrendered: function(canvas) {
-			                theCanvas = canvas;
-			               // Convert and download as image 
-			                var link = document.getElementById("canvas").toDataURL();
-			                console.log(link);
-			            	}
+			                document.body.appendChild(canvas);
+			            	},
+			            	width: 300,
+			            	height: 300
 			        	}
 			    	)
 				},
