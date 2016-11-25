@@ -5,6 +5,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use App\FacebookUser;
 use App\User;
+use App\AccountLink;
 
 class AuthenticateWithFacebook {
 
@@ -38,9 +39,9 @@ class AuthenticateWithFacebook {
 	
 		$fb_user = FacebookUser::find($request->id);
 
+		//Create FB User if not exists
 		if (is_null($fb_user)) {
 			$fb_user = New FacebookUser;
-			//Create FB User		
 			$fb_user->id = $request->id;
 			$fb_user->name = $request->name;
 			$fb_user->email = $request->email;
@@ -48,21 +49,40 @@ class AuthenticateWithFacebook {
 			$fb_user->save();
 		}
 
-		// Look up fb id in users
-		// if found, authenticate and goto app		
-		
-		//dd($fb_user->id);
+		// if fb user found in accounts link, retrieve user and authenticate 	
 		$link = $fb_user->user();		
-		if(! is_null($link)) {
+		if( ! is_null($link)) {
 			$user = User::find($link->id);
 			\Auth::login($user);
 			return new RedirectResponse(route('scores.user.show', array($link->id)));
-		} else {
-			// Goto page to link accounts
-			// See example : https://support.runkeeper.com/hc/en-us/articles/201109976-How-to-link-your-account-to-Facebook
+		} 
+		// if fb user email found in user table, add fb to accounts link and authenticate	
+		// Future option: Goto page to link accounts
+		// See example : https://support.runkeeper.com/hc/en-us/articles/201109976-How-to-link-your-account-to-Facebook
+		else { 
+			$user = User::where('email','=', $fb_user->email)->first();
+			if (is_null($user)) {
+			// fb user not in accounts link, nor user table, so create a new account
+				$user = New User();
+				$user->first_name = $request->name;
+				$user->email = $request->email;
+				$user->save();
+			}
 
+			//Create an Account link fb <-> user
+			$link = New AccountLink;
+			$link->user_id = $user->id;
+			$link->app_type_id = 2; // from table acount_types;
+			$link->app_user_id = $fb_user->id;
+			$link->save();
+
+			// Authenticate
+			\Auth::login($user);
 		}
-		
+
+		// Go to  user's landing page
+		return new RedirectResponse(route('scores.user.show', array($user->id)));
+
 		//$user = User::find($user_id);
 		//$user = Auth::loginUsingId($userID);
 		//return new RedirectResponse(route('scores.user.show', array($user->id)));
