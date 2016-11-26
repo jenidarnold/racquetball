@@ -29,7 +29,8 @@ class RefereeController extends Controller {
 	 */
 	public function index()
 	{		
-		return view('pages/tools.referee.index');
+		$user = New User;
+		return view('pages/tools.referee.index', compact('user'));
 	}
 
 	/**

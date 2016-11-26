@@ -18,7 +18,7 @@ Route::get('/scores/{user_id}/show', array('as' => 'scores.user.show', 'uses' =>
 Route::get('/scores/{user_id}/edit', 'Tools\RefereeController@edit');
 Route::get('/scores/login', 'Tools\RefereeController@login');
 
-Route::get('/auth/fb', ['middleware' => 'auth.fb', 'uses' => 'Users\FacebookController@index']);
+Route::post('/auth/fb', ['middleware' => 'auth.fb', 'uses' => 'Users\FacebookController@index']);
 
 Route::get('home', ['uses' => 'HomeController@index']);
 

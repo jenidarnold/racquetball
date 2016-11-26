@@ -6,6 +6,7 @@ use Illuminate\Http\RedirectResponse;
 use App\FacebookUser;
 use App\User;
 use App\AccountLink;
+use Request;
 
 class AuthenticateWithFacebook {
 
@@ -36,7 +37,8 @@ class AuthenticateWithFacebook {
 	 */
 	public function handle($request, Closure $next)
 	{
-	
+		//dd($request->name);
+
 		$fb_user = FacebookUser::find($request->id);
 
 		//Create FB User if not exists
@@ -45,7 +47,7 @@ class AuthenticateWithFacebook {
 			$fb_user->id = $request->id;
 			$fb_user->name = $request->name;
 			$fb_user->email = $request->email;
-			$fb_user->token = $request->token;
+			$fb_user->token = $request->access_token;
 			$fb_user->save();
 		}
 
@@ -53,8 +55,6 @@ class AuthenticateWithFacebook {
 		$link = $fb_user->user();		
 		if( ! is_null($link)) {
 			$user = User::find($link->id);
-			\Auth::login($user);
-			return new RedirectResponse(route('scores.user.show', array($link->id)));
 		} 
 		// if fb user email found in user table, add fb to accounts link and authenticate	
 		// Future option: Goto page to link accounts
@@ -74,14 +74,15 @@ class AuthenticateWithFacebook {
 			$link->user_id = $user->id;
 			$link->app_type_id = 2; // from table acount_types;
 			$link->app_user_id = $fb_user->id;
-			$link->save();
-
-			// Authenticate
-			\Auth::login($user);
+			$link->save();	
 		}
 
+		// Authenticate
+		\Auth::login($user);	
 		// Go to  user's landing page
-		return new RedirectResponse(route('scores.user.show', array($user->id)));
+		return "/scores/". $user->id."/show";
+
+		//return new RedirectResponse(route('scores.user.show', array($user->id)));
 
 		//$user = User::find($user_id);
 		//$user = Auth::loginUsingId($userID);

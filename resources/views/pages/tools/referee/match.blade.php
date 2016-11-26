@@ -87,13 +87,6 @@
 @stop
 
 @section('ref-content')
-
-<div id="fb-root"></div>
-<div class="row">		   		
-	<div class="fb-login-button col-xs-10 col-xs-offset-2" data-max-rows="1" data-size="large" 
-	scope="public_profile,publish_actions, email,user_friends" data-show-faces="true" data-auto-logout-link="true">				
-</div>
-<div id="status"></div>
 <div class="col-xs-12">
 	<div id="myvue" class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<div id="setup" v-if="match.showSetup">
@@ -290,6 +283,8 @@
 							<!-- Match Actions -->
 							<div class="">
 								<div class="btn-group col-xs-7">
+									<button class="btn btn-default btn-sm" v-on:click="shareMatch(match);">
+										<i class="fa fa-share-alt-square"></i></button>									
 									<button class="btn btn-default btn-sm" v-on:click="editMatch(match);">
 										<i class="fa fa-step-backward"></i></button>
 									<button class="btn btn-default btn-sm" v-bind:class="{'hidden': match.isComplete || match.isLive}" v-on:click="playMatch(match);">
@@ -304,6 +299,7 @@
 									<button class="btn btn-default btn-sm" title="Delete Match" v-on:click="confirmDelete(match)"><i class="fa fa-times"></i></button>
 								</div>	
 								<div class="btn-group col-xs-5">
+									<label class=" label label-danger" v-show="match.fb_id > 0">Shared on FB</label>
 									<label class=" label label-danger" v-show="match.isLive">Match is Live</label>
 									<label class=" label label-success" v-show="match.isComplete">Match is Complete</label>
 									<label class=" label label-default" v-show="!match.isLive && !match.isComplete">Match is Paused</label>
@@ -352,7 +348,7 @@
 				</div>
 			</div>
 		
-		<canvas id="canvas" width="300" height="300" style="border:1px solid      #d3d3d3;">
+		<!--canvas id="canvas" width="300" height="300" style="border:1px solid      #d3d3d3;"-->
 
 
 	<!-- Modal Team 1 Time out-->
@@ -824,14 +820,7 @@
 					this.match.score_steps = [];
 
 					this.match.isLive = true;
-					this.updateMatchToDB();
-					console.log('Start match fb id: ' + this.match.fb_id);
-					if (this.match.fb_id == 0 ) {
-						console.log('Call createFacebookPost');
-						this.createFacebookPost();
-					}else {
-						this.updateFacebookPost();
-					}
+					this.updateMatchToDB();					
 				},
 				saveMatch: function(event){ 
 					// enable point, sideout, fault, etc					
@@ -1056,6 +1045,14 @@
 					     console.log("video status: \n" + response.status);
 					    });
 					  });
+				},
+				shareMatch: function(match){
+					if (this.match.fb_id == 0 ) {
+						console.log('Call createFacebookPost');
+						this.createFacebookPost();
+					}else {
+						this.updateFacebookPost();
+					}
 				},
 				playMatch: function(match){
 					console.log('play: ' + match.title);
@@ -1607,83 +1604,4 @@
             //]]>    
     </script>
 
-
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=707155052773927";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-<script>
-// This is called with the results from from FB.getLoginStatus().
-  function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
-    // The response object is returned with a status field that lets the
-    // app know the current login status of the person.
-    // Full docs on the response object can be found in the documentation
-    // for FB.getLoginStatus().
-    if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      testAPI();
-    } else if (response.status === 'not_authorized') {
-      // The person is logged into Facebook, but not your app.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
-    } else {
-      // The person is not logged into Facebook, so we're not sure if
-      // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
-    }
-  }
-
-// This function is called when someone finishes with the Login
-  // Button.  See the onlogin handler attached to it in the sample
-  // code below.
-  function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });    
-  }
-
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '707155052773927',
-      xfbml      : true,
-      version    : 'v2.8'
-    });
-
-    FB.getLoginStatus(function(response) {
-    	statusChangeCallback(response);
-  	});
-
-  	FB.Event.subscribe('auth.login', function(resp) {
-        window.location = '/auth/login/';
-    });
-  };
-
-
-// Load the SDK asynchronously
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-
-  // Here we run a very simple test of the Graph API after login is
-  // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Hey, Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
-    });      
-  }
-</script>
 @stop

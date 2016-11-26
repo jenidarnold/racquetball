@@ -78,8 +78,8 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-     var access_token =   FB.getAuthResponse()['accessToken'];
-      getFBUserInfo(access_token);
+     //var access_token =   FB.getAuthResponse()['accessToken'];
+      //getFBUserInfo(access_token);
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       //document.getElementById('status').innerHTML = 'Please log ' +
@@ -116,6 +116,8 @@
   	FB.Event.subscribe('auth.login', function(resp) {
       // console.log(resp);
       //  window.location = '/auth/fb?id='+resp.id;
+      var access_token =   FB.getAuthResponse()['accessToken'];
+      getFBUserInfo(access_token);
     });
   };
 
@@ -134,10 +136,24 @@
   function getFBUserInfo(access_token) {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me?fields=id,name,email', function(response) {
-      //console.log(response);
-      window.location = '/auth/fb?id='+response.id + '&name=' + response.name + '&email=' + response.email + '&token=' + access_token; 
-    });
-  }  
+        //console.log(response);
+        //window.location = '/auth/fb?id='+response.id + '&name=' + response.name + '&email=' + response.email + '&token=' + access_token; 
+
+        $.post("/auth/fb",
+        {
+            _token: '{{ csrf_token() }}',
+            id: response.id,
+            name: response.name,
+            email: response.email, 
+            access_token: access_token
+        },
+        function(data, status){
+          console.log(data);
+          window.location = data;
+        });
+      });    
+    }
+   
 </script>
     <script>
       // Initialize Firebase

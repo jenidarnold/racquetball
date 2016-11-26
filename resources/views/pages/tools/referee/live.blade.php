@@ -97,23 +97,17 @@
 		<div class="col-xs-10">
 			<div class="input-group">
 				<span class="input-group-addon"><i class="fa fa-search" for="search"></i></span>							
-				<input type="text" id="search" v-model="searchText" class="form-control input-sm" placeholder="Search"></input>				
+				<input type="text" id="search" v-model="searchText" class="form-control input-sm" placeholder="Search"></input>	
 			</div>
 		</div>
 		<div>
 			<button id="btnSearch" class="btn btn-sm btn-default" v-on:click="search">GO</button>
 		</div>
-		<br>
-		<!-- Facebook -->
-		<div
-		  class="fb-like"
-		  data-share="true"
-		  data-width="450"
-		  data-show-faces="true">
-		</div>
+		<br>		
 		<!-- List of Recently Completed Matches -->
 		<div class="row">
-		  	<template v-for="m in complete_matches">			    	
+		  	<template v-for="m in complete_matches">
+		  				    	
 	    			<table class="table col-xs-12 well">
 						<caption>
 							<div class="col-xs-8">
@@ -124,7 +118,7 @@
 							</div>								
 						</caption>					
 						<tr class="tr-games label-success">
-							<th class="col-xs-9 th-games">@{{ m.title}} </th>
+							<th class="col-xs-9 th-games"><a v-bind:name="m.id"></a>@{{ m.title}}</th>
 							<th class="col-xs- th-games"></th>
 							<th class="col-xs- th-games"><span v-if="m.game_num >= 1">1</span></th>
 							<th class="col-xs- th-games"><span v-if="m.game_num >= 2">2</span></th>
@@ -211,9 +205,15 @@
 							<td colspan="2" class=" th-games game-time"><span class="" title="Match Time">@{{ m.timer.match | secondsToTime }}</span></td>
 						</tr>
 						<tr>
-						<td colspan="7" class="alert-success">	
-							<div class="">Last Play: @{{ m.last_step}}</div>
-						</td>
+							<td colspan="7" class="alert-success">	
+								<div class="">Last Play: @{{ m.last_step}}</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="7" class="alert-default">
+								<button class="btn btn-primary btn-sm" v-on:click="likeMatch(match);"><i class="fa fa-thumbs-up"></i></button>
+								<button class="btn btn-primary btn-sm" v-on:click="shareMatch(match);"><i class="fa fa-share-alt-square"></i></button>	
+							</td>
 						</tr>
 						</table>
 					</div>					
@@ -222,7 +222,7 @@
 
 		<!-- List of Live Matches -->
 		<div class="row">
-			<template v-for="m in matches">
+			<template v-for="m in matches">				
     			<table class="table col-xs-12 well">
 					<caption>
 						<div class="col-xs-6">
@@ -233,7 +233,7 @@
 						</div>								
 					</caption>					
 					<tr class="tr-games label-primary ">
-						<th class="col-xs-9 th-games">@{{ m.title}} </th>
+						<th class="col-xs-9 th-games"><a v-bind:name="m.id"></a>@{{ m.title}}</th>
 						<th class="col-xs- th-games"></th>
 						<th class="col-xs- th-games"><span v-if="m.game_num >= 1">1</span></th>
 						<th class="col-xs- th-games"><span v-if="m.game_num >= 2">2</span></th>
@@ -320,10 +320,16 @@
 						<td colspan="2" class=" th-games game-time"><span class="" title="Match Time">@{{ m.timer.match | secondsToTime }}</span></td>
 					</tr>
 					<tr>
-					<td colspan="7" class="alert-success">	
-						<div class="">Last Play: @{{ m.last_step}}</div>
-					</td>
-				</tr>
+						<td colspan="7" class="alert-success">	
+							<div class="">Last Play: @{{ m.last_step}}</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="7" class="alert-default">
+							<button class="btn btn-primary btn-sm" v-on:click="likeMatch(match);"><i class="fa fa-thumbs-up"></i></button>
+							<button class="btn btn-primary btn-sm" v-on:click="shareMatch(match);"><i class="fa fa-share-alt-square"></i></button>	
+						</td>
+					</tr>
 			</table>
 		</template>
 		<!-- end list of matches -->
@@ -438,6 +444,12 @@
 				},					
 			},	
 			methods: {
+				shareMatch:function(match){
+
+				},
+				likeMatch:function(match){
+
+				},
 				search: function(){
 
 					if (this.searchText == '') {
