@@ -1,6 +1,5 @@
-@extends('pages.tools.layouts.referee')
-
-@section('ref-content')
+<!--@extends('pages.tools.layouts.referee') -->
+@section('content')
 <div class="container">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">

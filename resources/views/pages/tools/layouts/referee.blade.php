@@ -98,10 +98,9 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<ul class="nav navbar-nav">
+				<!--ul class="nav navbar-nav">
 					<li>
-						<a class="navbar-brand" href="#">					
-							<!-- img class="logo" src="{{ asset('/images/racquet-right.png') }}" -->				
+						<a class="navbar-brand" href="#">									
 						</a>
 					</li>
 					<li>
@@ -109,17 +108,22 @@
 							<a class="" href="{{ url('/') }}"><span class="text-default">RacquetballHub</span></a>
 						</span>
 					</li>										
-				</ul>			
+				</ul-->
+					
 			</div>
 		<!-- 2nd Nav menu -->
 			<div class="collapse navbar-collapse" id="refNavBar">
 
 				<ul class="nav navbar-nav pointer">    
 					@if (Auth::guest())
+					<!--
 						<li><a class="navbar-link" href="{{ url('/auth/login') }}">
 							<i class="fa fa-sign-in text-success"></i> Sign-in</a></li>
 						<li><a class="navbar-link" href="{{ url('/auth/register') }}">
 							<i class="fa fa-keyboard-o text-default"></i> Register</a></li>	
+				   -->
+				   		<li><a class="navbar-link" href="{{ route('scores.user.match', [17, 0]) }}"> 
+							<i class="fa fa-plus-square text-success"></i> Create a Match</a></li>
 						<li><a class="navbar-link" href="{{ route('scores.live', [0]) }}"> 
 							<i class="fa fa-spinner fa-spin text-info"></i> Live Matches </a></li>
 						<li><a class="navbar-link text-warning" href="{{ route('scores.complete', [0]) }}">
@@ -141,9 +145,10 @@
 							<i class="fa fa-spinner fa-spin text-info"></i> Live Matches </a></li>
 						<li><a class="navbar-link text-warning" href="{{ route('scores.complete', [$user->id]) }}">
 							<i class="fa fa-trophy text-warning"></i> Completed Matches</i></a></li>
-						<li><a class="navbar-link" href="{{ url('/') }}"> 
-							<i class="fa fa-info-circle"></i> About this App</a></li>	
+						<!--li><a class="navbar-link" href="{{ url('/') }}"> 
+							<i class="fa fa-info-circle"></i> About this App</a></li-->	
 					@endif
+
 					@if (!Auth::guest())
 						<li class="divider"></li>	
 						<li><a class="navbar-link" href="{{ url('/auth/logout') }}">

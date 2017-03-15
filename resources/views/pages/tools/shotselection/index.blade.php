@@ -52,7 +52,7 @@
 	<div id="myvue">
 		<div class="row title">
 		<h2>Shot Selection</h2>
-		</div>
+		</div>		
 		<div class="row">
 			<div class="col-xs-12 subtitle"><h3>You + Ball + Opponent + Score = Shot Selection</h3></div>
 		</div>
@@ -239,9 +239,12 @@
 				</div>	
 			</form>
 		</div>
+		<div class="row>">
+		<h3>This interactive tool is based on information found in the book <a href="http://frandavisracquetball.com" target="frandavis">Championship Racquetball</a> by Fran Davis and Jason Mannino. </a>
+		</div>
 
 		<!-- Debug Panel -->
-		<div class="panel panel-default">
+		<div class="panel panel-default" v-show="debug">
 			<div class="panel-body">
 				<div class="row col-xs-12">
 					<input type="checkbox" id="chkDebug" v-model="debug">
@@ -267,7 +270,7 @@
 		new Vue({
 			el: '#myvue',
 			data: {	
-				debug: true,
+				debug: false,
 				off_position: '',
 				def_position: '',
 				show_shot_type: '',

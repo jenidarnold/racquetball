@@ -1,5 +1,4 @@
-@extends('pages.tools.layouts.referee')
-
+<!--@extends('pages.tools.layouts.referee')-->
 @section('style')
 	<style type="text/css">
 	.cred {
@@ -11,7 +10,7 @@
 	</style>
 @stop
 
-@section('ref-content')
+@section('content')
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">			

@@ -40,6 +40,7 @@ class AuthenticateWithFacebook {
 		//dd($request->name);
 
 		$fb_user = FacebookUser::find($request->id);
+     	\Session::put('facebook_access_token', $request->access_token);
 
 		//Create FB User if not exists
 		if (is_null($fb_user)) {
@@ -79,6 +80,7 @@ class AuthenticateWithFacebook {
 
 		// Authenticate
 		\Auth::login($user);	
+
 		// Go to  user's landing page
 		return "/scores/". $user->id."/show";
 

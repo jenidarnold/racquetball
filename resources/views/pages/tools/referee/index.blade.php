@@ -78,8 +78,7 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-     //var access_token =   FB.getAuthResponse()['accessToken'];
-      //getFBUserInfo(access_token);
+     var access_token =  FB.getAuthResponse()['accessToken'];
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       //document.getElementById('status').innerHTML = 'Please log ' +
@@ -114,8 +113,6 @@
 
     //After being logged in, redirect to match page
   	FB.Event.subscribe('auth.login', function(resp) {
-      // console.log(resp);
-      //  window.location = '/auth/fb?id='+resp.id;
       var access_token =   FB.getAuthResponse()['accessToken'];
       getFBUserInfo(access_token);
     });
@@ -135,10 +132,7 @@
   // successful.  See statusChangeCallback() for when this call is made.
   function getFBUserInfo(access_token) {
     console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me?fields=id,name,email', function(response) {
-        //console.log(response);
-        //window.location = '/auth/fb?id='+response.id + '&name=' + response.name + '&email=' + response.email + '&token=' + access_token; 
-
+    FB.api('/me?fields=id,name,email', function(response) {       
         $.post("/auth/fb",
         {
             _token: '{{ csrf_token() }}',

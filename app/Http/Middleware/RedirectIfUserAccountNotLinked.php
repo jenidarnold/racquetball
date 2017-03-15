@@ -38,8 +38,8 @@ class RedirectIfUserAccountNotLinked {
 		$lastLogin = date_create("2015/9/1");
 		$today = date_create(date("Y/m/d"));
 
-
-		return new RedirectResponse(route('scores.user.show', array($user->id)));
+        // for Referee Tool
+		//return new RedirectResponse(route('scores.user.show', array($user->id)));
 
 		//If player go to Player Profile page
 		if ($user->player_id > 0){

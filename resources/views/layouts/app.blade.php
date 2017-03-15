@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Racquetball Referee</title>
+	<title>RacquetballHub.com</title>
 
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Josefin+Slab">	
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
@@ -122,7 +122,7 @@
    }(document, 'script', 'facebook-jssdk'));
 </script>
 
-	<nav class="navbar navbar-inverse hidden">
+	<nav class="navbar navbar-inverse ">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -138,7 +138,7 @@
 						</a>
 					</li>
 					<li>
-						<a class="navbar-brand hidden-xs" href="{{ url('/') }}">RacquetBall Hub</a>
+						<a class="navbar-brand hidden-xs" href="{{ url('/') }}">RacquetballHub</a>
 						<a class="navbar-brand hidden-sm hidden-md hidden-lg" href="{{ url('/') }}">RBH</a>
 					</li>										
 				</ul>			
@@ -151,7 +151,8 @@
                     <!--li><a class="navbar-link" href="{{ url('/demo') }}"> 
                         <i class="fa fa-home" style="color:black1"></i> Demo</a></li-->
                 @else
-					<li><a class="navbar-link" href="{{ url('/') }}"> 
+				<!--
+                	<li><a class="navbar-link" href="{{ url('/') }}"> 
 						<i class="fa fa-home" style="color:black1"></i> Home</a></li>
 					<li><a class="navbar-link" href="{{ url('/tournaments') }}">
 						<i class="fa fa-trophy" style="color:gold1"></i> Tournaments</i></a></li>
@@ -164,25 +165,31 @@
 						<i class="fa fa-user-plus" style="color:green1"></i>
 						<i class="fa fa-user" style="color:green1"></i> 
 						 Matchups</a></li>
+
+                         -->
                 @endif
 				</ul>
 
-                @if (Auth::guest())
-                @else
 				<ul class="nav navbar-nav zeroed secondary-nav--left">                
                     <!-- Tools -->
-                    <li class="dropdown">
-                        <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
-                            Tools <b class="caret"></b>
+                   <!--<li class="dropdown">
+                        <a href="/tools" class="navbar-link dropdown-toggle" data-toggle="dropdown">
+                           Interactive Tools <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class=""><a href="{{ url('/tools/referee') }}">Referee</a></li>
+                    -->
+                            <li class=""><a href="{{ url('/tools/referee') }}">Auto Referee</a></li>
                             <li class=""><a href="{{ url('/tools/shotselection') }}">Shot Selection</a></li>
                             <li class=""><a href="{{ url('/tools/league') }}">Leagues</a></li>
+                            <li class=""><a href="{{ url('/matchups') }}">Head 2 Head</a></li>
+                            <!--li class=""><a href="{{ url('/tools/doublesmatcher') }}">Doubles Match Maker</a></li -->
+                            <li class=""><a href="{{ url('/bitstrips') }}">Bitstrips</a></li>
+                   <!--
                         </ul>
+                    -->
                     </li>    
                     <!-- Social Media -->
-                    <li class="dropdown">
+                    <!--<li class="dropdown">
                         <a href="/discuss" class="navbar-link dropdown-toggle" data-toggle="dropdown">
                             Socialize <b class="caret"></b>
                         </a>
@@ -191,19 +198,20 @@
                             <li><a href="http://facebook.com/rballstats">Facebook</a></li>
                             <li><a href="http://twitter.com/rballstats">Twitter</a></li>
                         </ul>
-                    </li>                            
+                    </li> 
+                    -->                           
                     <!-- Shop -->
+                    <!--
                     <li class="navbar-link dropdown-toggle" data-toggle="dropdown">
                         <a href="/shop" class="navbar-link dropdown-toggle" data-toggle="dropdown">
                         Shop <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                             <li><a href="https://www.advocare.com/150450372/default.aspx" target="blank">Advocare</a></li>
-                             <li><a href="http://www.ektelon.com/" target="_blank">Ektelon</a></li>
+                             <li><a href="https://www.advocare.com/150450372/default.aspx" target="blank">Advocare</a></li                             
                              <li><a href="http://www.racquetballwarehouse.com" target="blank">Racquetball Warehouse</a></li>
                         </ul>
                     </li>
-        	   	</ul>  
-                @endif      
+                    -->
+        	   	</ul>      
 				<!-- Login -->
 				<ul class="nav navbar-nav navbar-right">
                    {{--  @if((true) && (get_headers('http://www.r2sports.com/tourney/imageGallery/gallery/player/'.Auth::user()->player_id.'_normal.jpg')[0] != 'HTTP/1.1 404 Not Found' ))                                    
@@ -220,11 +228,13 @@
                             {{ Auth::user()->name }} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/users/'.Auth::user()->id) }}">My Account</a></li>
-                                <li><a href="{{ url('/players/'.Auth::user()->player_id) }}">Player Page</a></li>
+                                <!--<li><a href="{{ url('/players/'.Auth::user()->player_id) }}">Player Page</a></li>
                                 <li><a href="{{ url('/players/') }}">Favorites</a></li>
+                                -->
                                 @if (Auth::user()->hasPermission(1))
 								<li><a href="{{ url('/admin/scraper') }}">Admin</a></li>
 								@endif
+
 								<li><a href="{{ url('/auth/logout') }}">Sign Out</a></li>
 							</ul>
 						</li>                         

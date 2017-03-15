@@ -36,8 +36,8 @@ class RedirectIfAuthenticated {
 
 		if ($this->auth->check())
 		{
-			/* return new RedirectResponse(url('/home')); */
-			return new RedirectResponse(url('/scores/referee'));
+			return new RedirectResponse(url('/home')); 
+			/*return new RedirectResponse(url('/scores/referee')); */
 		}
 		
 		return $next($request);		

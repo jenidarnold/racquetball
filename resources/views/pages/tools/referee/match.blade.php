@@ -628,6 +628,7 @@
 				match: {
 						id: '{{ $match_id}}',
 						fb_id: 0,
+						facebook_access_token : '{{ Session::get('facebook_access_token') }}',
 						tournament: {},
 						referee: {
 									id: {{ $user->id}}, 
@@ -896,10 +897,11 @@
 					                + this.match.team[1].name + ' vs ' + this.match.team[2].name; // + 
 					              // + 'http://racquetballhub.com/scores/0/live';
 
-					FB.api('/me/feed', 'post', {message: that.match.post, privacy:{value:'SELF'}},
+					FB.api('/me/feed?access_token='+ that.facebook_access_token, 'post', {message: that.match.post, privacy:{value:'SELF'}},
 					 function(response) {
 					  if (!response || response.error) {
-					    console.log('Error occured in createFacebookPost posting to FB ' + response.error);
+					    console.log('Error occured in createFacebookPost posting to FB ');
+					    console.log(response);
 					  } else {
 					     console.log('New Post ID: ' + response.id);
 					     that.match.fb_id = response.id;
@@ -930,7 +932,7 @@
 					this.match.post += '\n\nAll Live Scores @ racquetballhub.com/scores/0/live';
 
 					var that = this;
-					FB.api(that.match.fb_id.toString(), 'post', {message: that.match.post }, function(response) {
+					FB.api(that.match.fb_id.toString() + '?access_token='+ that.facebook_access_token, 'post', {message: that.match.post }, function(response) {
 					  if (!response || response.error) {
 					    console.log('Error occured updating Post ' + that.match.fb_id.toString());
 					    console.log(response.error);
@@ -969,7 +971,10 @@
 					if (this.match.score_steps ) {
 						this.match.last_step = this.match.score_steps.pop();
 					}
-					this.updateFacebookPost();
+
+					if (this.match.fb_id > 0) {
+						this.updateFacebookPost();
+					}
 					//Fix me
 					//this.saveToImage();
 

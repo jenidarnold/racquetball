@@ -20,7 +20,7 @@ class MatchupsController extends Controller {
 	 */
 	public function __construct()
 	{
-		$this->middleware('auth');
+		//$this->middleware('auth');
 	}
 
 	/**
@@ -90,7 +90,7 @@ class MatchupsController extends Controller {
 		$skills = Skill::orderby('skill_id')
 			->get();
 
-		$voter_id = \Auth::user()->id;
+		$voter_id = 1; //  \Auth::user()->id;
 
 		return view('pages/matchups.show', compact('players_list', 'player1', 'player2', 'head2head', 'skills', 'votes', 'voter_id'));
 	}

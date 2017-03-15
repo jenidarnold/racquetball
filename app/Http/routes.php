@@ -7,7 +7,13 @@ use App\Player;
 use App\Ranking;
 use App\Location;
 
-Route::get('/', 'Tools\RefereeController@index');
+
+Route::get('/', ['uses' => 'WelcomeController@index']);
+
+
+Route::get('/bitstrips', ['uses' => 'BitstripController@index']);
+Route::get('/bitstrips/{video_id}/', ['uses' => 'BitstripController@show']);
+/*Route::get('/', 'Tools\RefereeController@index');*/
 Route::get('/scores/referee', 'Tools\RefereeController@match');
 Route::get('/scores/{user_id}/match/{match_id}', array('as' => 'scores.user.match', 'uses' => 'Tools\RefereeController@match'));
 Route::get('/scores/{user_id}/live',  array('as' => 'scores.live', 'uses' => 'Tools\RefereeController@live'));
@@ -79,6 +85,9 @@ Route::group(['namespace' => 'Tools', 'prefix' =>'tools'], function()
 
 Route::get('matchups', 'MatchupsController@index');
 Route::post('matchups', 'MatchupsController@show');
+
+Route::get('tools/head2head', 'MatchupsController@index');
+Route::post('tools/head2head', 'MatchupsController@show');
 //Route::get('admin/participants/create', 'Admin\ScreenScrapeController@participants');
 //Route::get('admin/participants/{tournament_id}', 'Admin\ScreenScrapeController@participants');
 
